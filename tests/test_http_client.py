@@ -1,7 +1,9 @@
 """Tests for HttpClient — Scrapling-backed HTTP client."""
 
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
+
 from clawithme.engine.http_client import HttpClient, HttpResponse
 
 

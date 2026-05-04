@@ -1,6 +1,7 @@
 """Smoke tests for CLI entry point."""
 
 import pytest
+
 from clawithme.cli import load_all_sites
 
 

@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 from clawithme.crawler.client import (
     CrawlerClient,
     _check_dynamic,
+    _last_request_at,
     random_user_agent,
 )
 
@@ -31,9 +32,9 @@ class TestCheckDynamic:
 class TestCrawlerClient:
     def test_rate_limit_enforces_min_delay(self):
         client = CrawlerClient(min_delay_ms=100)
-        t0 = client._last_request_at
+        t0 = _last_request_at
         client._wait_if_needed()
-        assert client._last_request_at >= t0
+        assert _last_request_at >= t0
 
     @patch("clawithme.crawler.client.HttpClient")
     def test_fetch_static_with_retry(self, mock_http_cls):
@@ -68,11 +69,8 @@ class TestCrawlerClient:
         mock_http_cls.return_value = mock_http
 
         client = CrawlerClient(max_retries=1, min_delay_ms=0, backoff_base_ms=1)
-        try:
-            client.fetch_static("http://example.com")
-            assert False, "Should have raised"
-        except OSError:
-            pass
+        resp = client.fetch_static("http://example.com")
+        assert resp is None
 
     def test_default_values(self):
         client = CrawlerClient()

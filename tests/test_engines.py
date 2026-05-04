@@ -1,9 +1,10 @@
 """Tests for Engine — detection logic with template sandbox."""
 
-import pytest
 from unittest.mock import MagicMock, patch
-from clawithme.engine.engines import Engine, EngineResult
 
+import pytest
+
+from clawithme.engine.engines import Engine, EngineResult
 
 ZHIHU_SITE = {
     "id": "zhihu",
@@ -37,7 +38,6 @@ class TestEngineTemplateSubstitution:
         assert result == "https://bob.example.com/status/404"
 
     def test_unknown_var_raises_value_error(self):
-        import pytest
         with pytest.raises(ValueError, match="Unknown template variable"):
             Engine._substitute(
                 "https://example.com/{unknown_var}", {}, "test"

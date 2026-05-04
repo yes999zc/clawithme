@@ -1,8 +1,9 @@
 """Smoke tests for engine loader."""
 
 import pytest
-from clawithme.engine.loader import load_engines, get_engine_for_site
+
 from clawithme.engine.engines import Engine
+from clawithme.engine.loader import get_engine_for_site, load_engines
 
 
 class TestLoadEngines:

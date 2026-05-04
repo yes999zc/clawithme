@@ -31,6 +31,21 @@ class TestProfile:
                      extra={"custom_key": "value"})
         assert p.extra["custom_key"] == "value"
 
+    def test_zero_followers_not_empty(self):
+        p = Profile(site_id="t", site_name="T", url="http://x",
+                     username="u", follower_count=0)
+        assert p.empty is False
+
+    def test_only_following_count_not_empty(self):
+        p = Profile(site_id="t", site_name="T", url="http://x",
+                     username="u", following_count=5)
+        assert p.empty is False
+
+    def test_only_avatar_hash_not_empty(self):
+        p = Profile(site_id="t", site_name="T", url="http://x",
+                     username="u", avatar_hash="abc123")
+        assert p.empty is False
+
 
 class FakeExtractor(ProfileExtractor):
     site_id = "fake"

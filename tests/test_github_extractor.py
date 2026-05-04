@@ -1,6 +1,7 @@
 """Tests for GithubExtractor."""
 
 from unittest.mock import MagicMock, patch
+
 from clawithme.crawler.extractors.github import GithubExtractor
 from clawithme.crawler.utils import parse_count
 

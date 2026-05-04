@@ -21,7 +21,7 @@ class Profile:
     display_name: str | None = None
     bio: str | None = None
     avatar_url: str | None = None
-    avatar_hash: str | None = None  # sha256 of avatar image
+    avatar_hash: str | None = None  # sha256 of avatar image (Phase 4: computed by signals/)
     location: str | None = None
     joined_date: str | None = None
     post_count: int | None = None
@@ -34,8 +34,9 @@ class Profile:
         """True if no meaningful data beyond site id/name/url/username."""
         return not any([
             self.display_name, self.bio, self.avatar_url,
-            self.location, self.joined_date, self.post_count,
-            self.follower_count, self.extra,
+            self.avatar_hash, self.location, self.joined_date,
+            self.post_count, self.follower_count is not None,
+            self.following_count is not None, self.extra,
         ])
 
 
@@ -53,11 +54,16 @@ class ProfileExtractor(ABC):
     requires_dynamic: bool = False
 
     @abstractmethod
-    def can_handle(self, site: dict) -> bool:
-        """Return True if this extractor can handle the given site dict."""
-        ...
-
-    @abstractmethod
     def extract(self, site: dict, username: str) -> Profile:
         """Crawl the site and return a Profile."""
         ...
+
+    # ── Default dispatch logic ─────────────────────────────────
+
+    def can_handle(self, site: dict) -> bool:
+        """Return True if this extractor matches the site.
+
+        Default: checks site['id'] == self.site_id.
+        Override for complex routing (e.g. match by engine or category).
+        """
+        return site.get("id") == self.site_id

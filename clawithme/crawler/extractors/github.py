@@ -16,9 +16,6 @@ class GithubExtractor(ProfileExtractor):
     site_id = "github"
     requires_dynamic = False
 
-    def can_handle(self, site: dict) -> bool:
-        return site.get("id") == "github"
-
     def extract(self, site: dict, username: str) -> Profile:
         url = f"https://github.com/{username}"
         profile = Profile(
@@ -31,8 +28,9 @@ class GithubExtractor(ProfileExtractor):
         client = CrawlerClient(timeout_ms=15000)
         response = client.fetch_static(url)
 
-        if response.status != 200:
-            logger.warning("github_bad_status", username=username, status=response.status)
+        if response is None or response.status != 200:
+            logger.warning("github_bad_status", username=username,
+                          status=getattr(response, "status", None))
             return profile
 
         # Display name

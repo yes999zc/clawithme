@@ -18,6 +18,11 @@ logger = get_logger()
 # Lazy import — Playwright is heavy
 _DYNAMIC_AVAILABLE: bool | None = None
 
+# Remove navigator.webdriver flag (standard headless detection vector)
+# NOTE: DynamicFetcher init_script expects a file path, not inline code.
+# For stealth, extractors can pass page_setup callable via **kwargs.
+_STEALTH_INIT_SCRIPT = None  # placeholder — needs file-based approach for Scrapling
+
 # Common User-Agent strings for rotation
 _USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
@@ -46,11 +51,18 @@ def random_user_agent() -> str:
     return random.choice(_USER_AGENTS)
 
 
+# Module-level — shared across all CrawlerClient instances
+_last_request_at: float = 0.0
+
+
 class CrawlerClient:
     """HTTP client for profile extraction with rate limiting and UA rotation.
 
     Delegates static fetching to engine's HttpClient.
     Adds DynamicFetcher for JS-rendered pages (lazy init).
+
+    Rate limiting is global — all CrawlerClient instances share
+    a single inter-request delay timer to prevent burst patterns.
     """
 
     def __init__(
@@ -64,18 +76,18 @@ class CrawlerClient:
         self._min_delay_ms = min_delay_ms
         self._max_retries = max_retries
         self._backoff_base_ms = backoff_base_ms
-        self._last_request_at: float = 0.0
         self._http: HttpClient | None = None
         self._dynamic = None  # DynamicFetcher, lazy
 
     # ── Rate limiting ────────────────────────────────────────
 
     def _wait_if_needed(self):
-        """Enforce minimum delay between requests."""
-        elapsed = (time.monotonic() - self._last_request_at) * 1000
+        """Enforce minimum delay between requests (global, across instances)."""
+        global _last_request_at
+        elapsed = (time.monotonic() - _last_request_at) * 1000
         if elapsed < self._min_delay_ms:
             time.sleep((self._min_delay_ms - elapsed) / 1000)
-        self._last_request_at = time.monotonic()
+        _last_request_at = time.monotonic()
 
     # ── HttpClient access ────────────────────────────────────
 
@@ -96,16 +108,19 @@ class CrawlerClient:
 
     # ── Fetch methods ────────────────────────────────────────
 
-    def fetch_static(self, url: str) -> Response:
-        """Fetch a page using static Fetcher, with rate limiting + backoff."""
+    def fetch_static(self, url: str) -> Response | None:
+        """Fetch a page using static Fetcher, with rate limiting + backoff.
+
+        Returns None if all retries are exhausted.
+        """
         self._wait_if_needed()
 
-        last_error = None
+        headers = {"User-Agent": random_user_agent()}
+
         for attempt in range(self._max_retries + 1):
             try:
-                return self.http.static.get(url)
-            except (OSError, TimeoutError) as e:
-                last_error = e
+                return self.http.static.get(url, headers=headers)
+            except (OSError, TimeoutError):
                 if attempt < self._max_retries:
                     backoff = self._backoff_base_ms * (2 ** attempt) / 1000
                     logger.debug(
@@ -114,7 +129,8 @@ class CrawlerClient:
                     )
                     time.sleep(backoff)
 
-        raise last_error  # type: ignore[misc]
+        logger.error("fetch_static_exhausted", url=url, retries=self._max_retries)
+        return None
 
     def fetch_dynamic(
         self,
@@ -123,9 +139,13 @@ class CrawlerClient:
         wait_selector: str | None = None,
         disable_resources: bool = True,
         block_ads: bool = True,
+        headless: bool = True,
         **kwargs,
     ) -> Response | None:
-        """Fetch using DynamicFetcher, with rate limiting + backoff."""
+        """Fetch using DynamicFetcher, with rate limiting + backoff.
+
+        Returns None if DynamicFetcher is unavailable or all retries are exhausted.
+        """
         self._wait_if_needed()
 
         df = self.dynamic
@@ -133,19 +153,21 @@ class CrawlerClient:
             logger.error("dynamic_fetcher_unavailable_for_url", url=url)
             return None
 
-        last_error = None
         for attempt in range(self._max_retries + 1):
             try:
-                return df.fetch(
-                    url,
+                fetch_kwargs = dict(
                     timeout=self._timeout_ms,
+                    useragent=random_user_agent(),
+                    headless=headless,
                     disable_resources=disable_resources,
                     block_ads=block_ads,
                     wait_selector=wait_selector,
                     **kwargs,
                 )
-            except (OSError, TimeoutError) as e:
-                last_error = e
+                if _STEALTH_INIT_SCRIPT is not None:
+                    fetch_kwargs["init_script"] = _STEALTH_INIT_SCRIPT
+                return df.fetch(url, **fetch_kwargs)
+            except (OSError, TimeoutError):
                 if attempt < self._max_retries:
                     backoff = self._backoff_base_ms * (2 ** attempt) / 1000
                     logger.debug(
@@ -154,4 +176,5 @@ class CrawlerClient:
                     )
                     time.sleep(backoff)
 
-        raise last_error  # type: ignore[misc]
+        logger.error("fetch_dynamic_exhausted", url=url, retries=self._max_retries)
+        return None
