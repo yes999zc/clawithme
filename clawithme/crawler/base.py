@@ -22,6 +22,8 @@ class Profile:
     bio: str | None = None
     avatar_url: str | None = None
     avatar_phash: str | None = None  # perceptual hash for cross-platform avatar matching (Phase 4)
+    email: str | None = None  # Phase 4.3 — from leak sources or extractors
+    phone: str | None = None  # Phase 4.3 — from leak sources or extractors
     location: str | None = None
     joined_date: str | None = None
     post_count: int | None = None
