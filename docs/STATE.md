@@ -7,12 +7,13 @@
 OSINT tool. Input: username → Output: identity panorama across social platforms.
 Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
-## Current Code State (audit round 2 cleared)
+## Current Code State (architecture isolation ✅)
 
 ```
-1360 lines Python, 21 .py files, 20 tests (all passing)
+~1850 lines Python, 23 .py files, 30 tests (all passing)
 48 site JSONs (37 active, 11 deprecated), all validate green
 6 engines, 3 classifiers (status_code/message/headers)
+1 plugin repo: clawithme-cn (ZhihuExtractor skeleton)
 ```
 
 ### Key files to know
@@ -99,10 +100,19 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 - All 20 tests pass, 48 sites validate green
 - Git commit: 7fc4f57
 
+### Architecture Isolation ✅ — Plugin System
+- Created `clawithme-cn` plugin repo: github.com/yes999zc/clawithme-cn
+- Main repo: `Profile` dataclass + `ProfileExtractor` ABC + `discover_extractors()` registry
+- Plugin discovery via `importlib.metadata` entry_points group `clawithme.extractors`
+- First extractor: `ZhihuExtractor` (skeleton, returns Profile)
+- End-to-end verified: install `clawithme-cn` → `discover_extractors()` returns 1 extractor
+- 10 new tests (crawler_base 8 + crawler_registry 2), 30 total all green
+- Git commits: 2ea951d (main), 8105952 (clawithme-cn)
+
 ## Next: Phase 3 — Deep Crawler
 
 **Goal**: Crawl public info from discovered profiles (avatar hash, bio, posts).
-**Dependency**: Phase 2 ✅, Audit Round 1 ✅, Audit Round 2 ✅
+**Dependency**: Phase 2 ✅, Audit ✅, Architecture Isolation ✅
 
 ### Tasks (from docs/todo.md)
 
@@ -115,10 +125,10 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 
 ### Key architectural decisions for Phase 3
 
-- **CRITICAL**: Before writing first extractor, create `clawithme-cn` plugin repo for China site code isolation
+- ~~**CRITICAL**: Before writing first extractor, create `clawithme-cn` plugin repo for China site code isolation~~ ✅ DONE
+- Plugin system active: `discover_extractors()` finds 1 extractor (ZhihuExtractor)
 - DynamicFetcher needed for: B站, 微博, 虎扑, NGA, 少数派, 百度知道, 开源中国, 思否, 站酷
 - Phase 2 established pattern: one extractor per site, same file-per-site approach as JSONs
-- Empty packages waiting: `crawler/`, `signals/`, `report/`
 
 ## Phase 4-5 (future)
 
@@ -153,7 +163,7 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 
 ## Unresolved Items
 
-- Architecture isolation (China site plugin) — must happen before Phase 3 extractors
+- ~~Architecture isolation (China site plugin)~~ ✅ — clawithme-cn repo created, plugin system active
 - WeChat weak signal experiment — not started
 - Chat slang fingerprint library — v2
 - Monitoring liveness probe — Phase 2.3.3 listed but not deployed
