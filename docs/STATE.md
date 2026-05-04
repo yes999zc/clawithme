@@ -9,7 +9,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
 ## Current Code State (architecture isolation ✅)
 
-```\n~2800 lines Python, 32 .py files, 60 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (7 tests), ZhihuExtractor (7 tests), both output avatar_phash\nPhase 4.1: perceptual hashing (imagehash + Pillow), E2E verified\nRate limiting: 200ms global min delay, exponential backoff, 429/503 retry\nUA rotation: 6-browser pool, wired into static + dynamic fetchers\nDynamicFetcher: headless control, page_setup anti-webdriver, proxy passthrough\nCrawlerClient: proxy support, robots.txt compliance, context manager\nRuff: 0 errors\n```
+```\n~3500 lines Python, 37 .py files, 86 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (email+phash), ZhihuExtractor (phash)\nPhase 4 FULL: phash → matching → correlation engine → extraction → CLI pipeline\n93 total tests, Ruff 0\n```
 
 ### Key files to know
 
@@ -184,7 +184,27 @@ Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
 - Tests: 12 extraction + 72 existing = 84 (main) + 7 (plugin) = 91
 - Git commit: d6e0523 (main)
 
-### 4.5 CLI Integration — Pipeline All Signals (next)
+### 4.5 CLI Integration Pipeline ✅
+
+- `clawithme search` runs full 4-phase pipeline: probe → extract → leaks → correlate
+- Profile objects flow end-to-end (no data loss from dict conversion)
+- Leak records converted to Profile with email/phone → participate in correlation
+- Output: multi-profile clusters with confidence + signal types
+- Simulated E2E: github+zhihu(phash)+adobe(email)+linkedin(phone) → 1 cluster, 0.92
+- Tests: 2 pipeline + 84 existing = 86 (main) + 7 (plugin) = 93
+- Git commit: d7a879e (main)
+
+### Phase 4 Complete 🎉
+
+```
+Phase 4.1 ✅ avatar phash        — compute_phash()
+Phase 4.2 ✅ avatar matching     — hamming_distance(), compare_avatars()
+Phase 4.3 ✅ correlation engine  — Union-Find, 3-signal clustering
+Phase 4.4 ✅ extraction          — extract_emails(), extract_phones()
+Phase 4.5 ✅ CLI pipeline        — full integration in 'clawithme search'
+```
+
+### Phase 5: Panorama Report (next)
 
 ## v2 Scope (deferred)
 
