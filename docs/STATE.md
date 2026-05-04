@@ -153,10 +153,17 @@ Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
 - Tests: 3 (same/diff/invalid) + existing 60 = 63 total
 - Git commit: 0e6ca02 (main), 62984e4 (clawithme-cn)
 
-### 4.2 Avatar Cross-Platform Matching (next)
+### 4.2 Avatar Cross-Platform Matching ✅
 
-- Phase 4: Multi-signal association (email/phone/avatar hash linking)
-- Phase 5: Panorama report (Geist web UI + export)
+- `hamming_distance(phash1, phash2) → int` via XOR + `int.bit_count()`
+- `compare_avatars(phash1, phash2, threshold=10) → {distance, is_match}`
+- None-safe: either pHash is None → distance=-1, is_match=False
+- Verified: Linus vs Karpathy distance=28 (>>threshold 10), same hash distance=0
+- Tests: 8 avatar tests (3 compute + 2 hamming + 3 compare)
+- Total: 65 (main) + 7 (plugin) = 72
+- Git commit: 2f35ec6 (main)
+
+### 4.3 Multi-Signal Correlation Engine (next)
 
 ## v2 Scope (deferred)
 
