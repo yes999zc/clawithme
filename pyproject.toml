@@ -37,6 +37,9 @@ dev = [
 [project.scripts]
 clawithme = "clawithme.cli:main"
 
+[project.entry-points."clawithme.extractors"]
+github = "clawithme.crawler.extractors.github:GithubExtractor"
+
 [tool.setuptools.packages.find]
 include = ["clawithme*"]
 
