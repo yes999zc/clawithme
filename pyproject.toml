@@ -68,3 +68,4 @@ ignore = [
 "clawithme/engine/engines.py" = ["PLC0415"]
 "clawithme/leak_sources/__init__.py" = ["PLC0415"]
 "clawithme/logging.py" = ["PLC0415"]
+"clawithme/report/generator.py" = ["E501"]  # CSS in template strings

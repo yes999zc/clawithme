@@ -35,8 +35,11 @@ def load_all_sites() -> list[dict]:
     return sites
 
 
-def search(username: str):
-    """Run a full search: site probes → profile extraction → leak database."""
+def search(username: str, *, report_path: str | None = None):
+    """Run a full search: site probes → profile extraction → leak database.
+
+    If report_path is given, write an HTML panorama report to that path.
+    """
     trace_id = new_trace_id()
     log = get_logger(trace_id=trace_id, username=username)
 
@@ -175,13 +178,21 @@ def search(username: str):
              leaks=len(leak_records))
     print(f"trace_id: {trace_id}")
 
+    # ── Report (optional) ──
+    if report_path:
+        from clawithme.report.generator import generate_report
+        html = generate_report(hits, profiles, clusters, username, trace_id=trace_id)
+        Path(report_path).write_text(html)
+        log.info("report_written", path=report_path)
+        print(f"\n📄 Report: {report_path}")
+
 
 def main():
     """CLI entry point."""
     setup_logging()
 
     if len(sys.argv) < 2:
-        print("Usage: clawithme search <username>")
+        print("Usage: clawithme search <username> [--report <path>]")
         print("       clawithme verify")
         sys.exit(1)
 
@@ -189,10 +200,15 @@ def main():
 
     if command == "search":
         if len(sys.argv) < 3:
-            print("Usage: clawithme search <username>")
+            print("Usage: clawithme search <username> [--report <path>]")
             sys.exit(1)
         username = sys.argv[2]
-        search(username)
+        report_path = None
+        if "--report" in sys.argv:
+            idx = sys.argv.index("--report")
+            if idx + 1 < len(sys.argv):
+                report_path = sys.argv[idx + 1]
+        search(username, report_path=report_path)
 
     elif command == "verify":
         # Delegate to verify_site.py
