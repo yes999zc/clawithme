@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -20,6 +21,9 @@ from clawithme.logging import get_logger, new_trace_id, setup_logging
 from clawithme.signals.correlation import CorrelationEngine
 
 logger = get_logger()
+
+# Most platforms allow letters, digits, dots, underscores, hyphens in usernames.
+_USERNAME_RE = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 
 def load_all_sites() -> list[dict]:
@@ -40,6 +44,13 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
     If report_path is given, write an HTML panorama report to that path.
     """
+    # Validate username against common pattern
+    if not _USERNAME_RE.match(username):
+        log = get_logger()
+        log.error("invalid_username", username=username)
+        print(f"❌ Invalid username: {username!r} (allowed: letters, digits, . _ -)")
+        return
+
     trace_id = new_trace_id()
     log = get_logger(trace_id=trace_id, username=username)
 
@@ -187,7 +198,13 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             from clawithme.report.generator import generate_report
             output = generate_report(hits, profiles, clusters, username, trace_id=trace_id)
         try:
-            Path(report_path).write_text(output)
+            safe_path = Path(report_path).resolve()
+            cwd = Path.cwd().resolve()
+            if not str(safe_path).startswith(str(cwd)):
+                log.error("report_path_traversal", path=report_path)
+                print("\n❌ Report path must be within current directory")
+                return
+            safe_path.write_text(output)
             log.info("report_written", path=report_path, format=report_format)
             print(f"\n📄 Report ({report_format}): {report_path}")
         except OSError as e:

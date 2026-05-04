@@ -110,3 +110,7 @@ class HttpClient:
             headers=dict(page.headers) if page.headers else {},
             body=page.body if page.body else b"",
         )
+
+    def close(self) -> None:
+        """Release underlying resources (no-op — Scrapling Fetcher is ephemeral)."""
+        pass

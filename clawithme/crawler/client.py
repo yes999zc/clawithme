@@ -5,7 +5,7 @@ Includes rate limiting, exponential backoff, and User-Agent rotation.
 
 from __future__ import annotations
 
-import random
+import secrets
 import time
 from urllib.parse import urlparse
 
@@ -51,7 +51,7 @@ def _check_dynamic() -> bool:
 
 def random_user_agent() -> str:
     """Return a random User-Agent string from the rotation pool."""
-    return random.choice(_USER_AGENTS)
+    return secrets.choice(_USER_AGENTS)
 
 
 _RETRYABLE_STATUSES = frozenset({429, 503})
@@ -128,7 +128,7 @@ class CrawlerClient:
 
     # ── Robots.txt compliance (optional, opt-in per extractor) ─
 
-    _robots_cache: dict[str, set[str]] = {}  # domain → disallowed path prefixes
+    _robots_cache: dict[str, set[str]] = {}  # domain → disallowed path prefixes (shared class-level)
 
     def _parse_robots(self, text: str) -> set[str]:
         """Extract Disallow rules from User-agent: * section."""

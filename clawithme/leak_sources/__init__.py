@@ -174,7 +174,5 @@ class CavalierSource(LeakSource):
         return -1
 
     async def close(self):
-        """Clean up HTTP client resources."""
-        if self._http and hasattr(self._http, "close"):
-            await asyncio.to_thread(self._http.close)
+        """Release HTTP client reference."""
         self._http = None
