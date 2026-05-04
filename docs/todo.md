@@ -17,6 +17,7 @@
   - `clawithme/` 包结构（`engine/`, `crawler/`, `report/`, `leak_sources/`, `signals/`）
   - `pyproject.toml` + 依赖声明 + `config.example.toml`
   - `tests/` 目录 + pytest 配置
+  - **依赖**：`structlog`（结构化日志）、`pydantic`（BreachRecord）
   - 验收：`pip install -e .` 成功
 
 - [ ] **1.1.2** Scrapling 封装层
@@ -36,6 +37,11 @@
 - [ ] **1.1.5** HTTP 代理配置
   - `config.example.toml`：代理地址、API keys
   - 验收：配置加载器能读取并注入到 Scrapling Fetcher
+
+- [ ] **1.1.6** 结构化日志初始化
+  - `structlog` 配置：每层绑 `trace_id`，入口（CLI/API）生成 UUID
+  - `grep <trace_id>` 可看到完整请求链路
+  - 验收：一次 `search` 命令产生连贯的日志流
 
 ### 1.2 中国站验证
 
@@ -61,6 +67,7 @@
   - 读取站点 JSON 中的 `check.probe_url`，发 HTTP GET
   - 比较 `check.expected` 与实际 status_code
   - Engine 变量替换：`{username}`, `{e_code}`, `{probe_url}` 等
+  - **模板沙箱**：手写字典替换（`str.replace`），不用 Jinja2；变量白名单制
   - 验收：对 GitHub、知乎（API 端点）返回正确结果
 
 - [ ] **1.3.2** `engines.json` 结构定义
@@ -74,10 +81,12 @@
 
 ### 1.4 LeakSource 接口
 
-- [ ] **1.4.1** 定义 `BreachRecord` dataclass ★
+- [ ] **1.4.1** 定义 `BreachRecord` Pydantic Model ★
+  - 使用 `pydantic.BaseModel`（非 dataclass），构造时自动校验类型
   - 字段全部 Optional：`email, username, phone, password_sha256, domain, source, breach_date`
+  - `model_dump()` 一步序列化
   - 不包含明文密码
-  - 验收：dataclass 创建和序列化正常
+  - 验收：Model 创建和序列化正常，非法类型抛 ValidationError
 
 - [ ] **1.4.2** 定义 `LeakSource` 抽象基类 ★
   - `search_by_username(username) → list[BreachRecord]`
@@ -155,6 +164,11 @@
   - 站点提交模板 + 示例
   - 新增站点的步骤说明 + schema 校验要求
   - 验收：按文档操作可无歧义完成站点贡献
+
+- [ ] **2.3.3** 监控存活探针 ★
+  - 部署 healthchecks.io 或自建 cron 定时 ping 采集器状态
+  - 中国站隔离路径独立健康检查
+  - 验收：采集器离线 5 分钟内收到告警
 
 ---
 

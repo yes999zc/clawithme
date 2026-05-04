@@ -248,6 +248,8 @@ Engine 运行时变量替换：
 {url_subpath}   → 站点 subpath（论坛子路径等）
 ```
 
+**安全约束**：模板引擎必须加沙箱保护。不使用 Jinja2 的 `|attr()`/`|import` 等危险过滤器，或改用手写字典替换（`str.replace`），防止外部数据触发模板注入。变量白名单制：只有上述 7 个变量可替换。
+
 #### 3.2.3 反爬能力绑定
 
 | 级别 | 工具 | 能力 | 适用 |
@@ -266,6 +268,20 @@ Engine 运行时变量替换：
 **用途**：替代 maigret 原生的 requests/httpx，作为所有站点探测的 HTTP 底层。
 
 **新增**：HTTP 代理配置（`config.toml`），国内访问海外 API 时使用。
+
+---
+
+### 3.3.1 可观测性 — 结构化日志
+
+**工具**：`structlog` + Trace Context 传播。
+
+```
+每条日志携带: breach_id / trace_id / site_id
+structlog.bind(trace_id=...) → 后续所有日志自动携带
+grep 一个 trace_id → 看到完整请求链路
+```
+
+入口层（CLI/API）生成 `trace_id`，经过编排层、Engine、爬虫、LeakSource 时逐层传递。
 
 ---
 
@@ -306,9 +322,11 @@ Engine 运行时变量替换：
 统一抽象接口，三层数据源：
 
 ```python
-@dataclass
-class BreachRecord:
-    """所有字段 Optional — 不同数据源返回字段不同"""
+from pydantic import BaseModel
+
+class BreachRecord(BaseModel):
+    """所有字段 Optional — 不同数据源返回字段不同。
+    使用 Pydantic 替代 dataclass：构造时自动校验类型，model_dump() 一步序列化。"""
     email: str | None = None
     username: str | None = None
     phone: str | None = None
@@ -497,6 +515,7 @@ class LeakSource(ABC):
 | IP 被封禁 | 🔴 | 代理配置 + 频率控制 + 不可逆操作前人工确认 |
 | 反爬对抗持续升级 | 🟡 | Scrapling 多层兜底 + 频率控制 |
 | 维护人力枯竭 | 🟡 | 聚焦 50+ 中国站，2000 全球站推至 v2 |
+| **监控系统自身失效** | 🟡 | Phase 2 部署存活探针（healthchecks.io 或自建 cron 定时 ping 采集器），中国站隔离路径独立检查 |
 | 自建泄露库刑事责任 | 🔴 | 推至 v2 scope 独立评估；v1 用 API 聚合 |
 | 开源后数据库被抄 | 🟡 | 站点配置可抄，探测经验（anti_bot 策略、API 端点）是隐性知识 |
 
@@ -508,11 +527,14 @@ class LeakSource(ABC):
 |------|------|------|
 | 站点存储格式 | 一个站点一个 JSON | Git PR 零冲突，diff 清晰 |
 | Engine 存储 | 独立 engines.json | 数据/逻辑分离，Engine 升级所有站点受益 |
+| **BreachRecord** | **Pydantic BaseModel（非 dataclass）** | 构造时自动校验，model_dump() 一步序列化 |
+| **模板引擎** | **手写字典替换（非 Jinja2）** | 沙箱安全，变量白名单制 |
+| **日志系统** | **structlog + trace_id 传播** | 全链路可追溯 |
 | **检测类型归属** | **Engine 的 classifier 唯一决定，站点不声明 type** | 避免冗余和矛盾 |
 | 分类体系 | identity_type + geo_region + user_scale + tags | 正交维度 + 灵活标签 |
 | **identity_type 第五类** | **新增 public_social**（微博/小红书） | 解决半实名平台分类模糊 |
 | HTTP 底层 | Scrapling 替代 requests/httpx | 绕过 Cloudflare，指纹伪装 |
-| 泄露数据库集成 | 统一 LeakSource 抽象接口 + BreachRecord dataclass | 多数据源可插拔 |
+| 泄露数据库集成 | 统一 LeakSource 抽象接口 + BreachRecord Pydantic Model | 多数据源可插拔 |
 | **密码存储** | **只存 password_sha256，绝不存明文** | 合规底线 |
 | 中国站代码位置 | 独立插件仓库（clawithme-cn），主线不含 | 法律风险隔离 |
 | **Phase 3 & 4 顺序** | **深度爬虫（3）→ 多信号关联（4）** | 关联依赖爬虫数据 |
