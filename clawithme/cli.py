@@ -35,7 +35,7 @@ def load_all_sites() -> list[dict]:
     return sites
 
 
-def search(username: str, *, report_path: str | None = None):
+def search(username: str, *, report_path: str | None = None, report_format: str = "html"):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.
@@ -180,11 +180,19 @@ def search(username: str, *, report_path: str | None = None):
 
     # ── Report (optional) ──
     if report_path:
-        from clawithme.report.generator import generate_report
-        html = generate_report(hits, profiles, clusters, username, trace_id=trace_id)
-        Path(report_path).write_text(html)
-        log.info("report_written", path=report_path)
-        print(f"\n📄 Report: {report_path}")
+        if report_format == "json":
+            from clawithme.report.generator import export_json
+            output = export_json(hits, profiles, clusters, username, trace_id=trace_id)
+        else:
+            from clawithme.report.generator import generate_report
+            output = generate_report(hits, profiles, clusters, username, trace_id=trace_id)
+        try:
+            Path(report_path).write_text(output)
+            log.info("report_written", path=report_path, format=report_format)
+            print(f"\n📄 Report ({report_format}): {report_path}")
+        except OSError as e:
+            log.error("report_write_failed", path=report_path, error=str(e))
+            print(f"\n❌ Failed to write report: {e}")
 
 
 def main():
@@ -204,11 +212,16 @@ def main():
             sys.exit(1)
         username = sys.argv[2]
         report_path = None
+        report_format = "html"
         if "--report" in sys.argv:
             idx = sys.argv.index("--report")
             if idx + 1 < len(sys.argv):
                 report_path = sys.argv[idx + 1]
-        search(username, report_path=report_path)
+        if "--format" in sys.argv:
+            idx = sys.argv.index("--format")
+            if idx + 1 < len(sys.argv):
+                report_format = sys.argv[idx + 1]
+        search(username, report_path=report_path, report_format=report_format)
 
     elif command == "verify":
         # Delegate to verify_site.py

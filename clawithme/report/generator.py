@@ -7,7 +7,11 @@ Geist-style grayscale design, no external dependencies.
 
 from __future__ import annotations
 
+import json
+from dataclasses import asdict
 from datetime import UTC, datetime
+
+from clawithme.signals.correlation import Cluster
 
 
 def generate_report(
@@ -32,6 +36,40 @@ def generate_report(
         cluster_section=_render_clusters(clusters),
         trace_id=trace_id,
     )
+
+
+def export_json(
+    hits: list[dict],
+    profiles: list[dict],
+    clusters: list,
+    username: str,
+    *,
+    trace_id: str = "",
+) -> str:
+    """Return a JSON report as a string."""
+    data = {
+        "tool": "clawithme",
+        "username": username,
+        "timestamp": datetime.now(UTC).isoformat(),
+        "trace_id": trace_id,
+        "summary": {
+            "sites_found": len(hits),
+            "profiles_extracted": len(profiles),
+            "clusters": len(clusters),
+        },
+        "hits": hits,
+        "profiles": profiles,
+        "clusters": [
+            {
+                "profiles": [asdict(p) for p in c.profiles],
+                "confidence": c.confidence,
+                "signals": c.signals,
+            }
+            if isinstance(c, Cluster) else c
+            for c in clusters
+        ],
+    }
+    return json.dumps(data, ensure_ascii=False, indent=2)
 
 
 # ── HTML template ──────────────────────────────────────────────
@@ -86,13 +124,22 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 .cluster-badge {{ font-size: 12px; padding: 2px 8px; border-radius: 4px; }}
 .badge-high {{ background: #e8f5e9; color: #2e7d32; }}
 .badge-mid {{ background: #fff3e0; color: #e65100; }}
+.badge-low {{ background: #fce4ec; color: #c62828; }}
 .cluster-signals {{ display: flex; gap: 6px; margin-top: 12px; }}
 .signal-tag {{ font-size: 11px; padding: 2px 8px; background: #f5f5f5; border-radius: 4px; color: #666; font-family: monospace; }}
 .cluster-list {{ font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px; }}
 .cluster-site {{ font-size: 12px; padding: 2px 8px; background: #f5f5f5; border-radius: 4px; }}
+.cluster-evidence {{ font-size: 12px; color: #666; margin-top: 4px; padding: 2px 0; }}
 
 /* ── Footer ──────────────────────────────────── */
 .footer {{ margin-top: 48px; padding-top: 16px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #aaa; }}
+
+/* ── Mobile ─────────────────────────────────── */
+@media (max-width: 480px) {{
+  .container {{ padding: 24px 16px; }}
+  .card-grid {{ grid-template-columns: 1fr; }}
+  h1 {{ font-size: 22px; }}
+}}
 </style>
 </head>
 <body>
@@ -142,9 +189,9 @@ def _render_sites(hits: list[dict]) -> str:
         url = h.get("url", "")
         rows.append(
             f'<tr>'
-            f'<td>{h["site_name"]}</td>'
+            f'<td>{h.get("site_name", "")}</td>'
             f'<td class="url">{url}</td>'
-            f'<td class="status-ok">{h["status"]}</td>'
+            f'<td class="status-ok">{h.get("status", "")}</td>'
             f'</tr>'
         )
     return (
@@ -190,10 +237,25 @@ def _render_clusters(clusters: list) -> str:
     for i, c in enumerate(clusters, 1):
         sites = ", ".join(p.site_id for p in c.profiles)
         conf = c.confidence
-        badge_cls = "badge-high" if conf >= 0.9 else "badge-mid"
+        if conf >= 0.9:
+            badge_cls = "badge-high"
+        elif conf >= 0.7:
+            badge_cls = "badge-mid"
+        else:
+            badge_cls = "badge-low"
         sig_tags = "".join(
             f'<span class="signal-tag">{s}</span>' for s in c.signals
         )
+        evidence_lines = []
+        if c.evidence:
+            for sig, details in c.evidence.items():
+                for d in details[:3]:  # max 3 per signal
+                    evidence_lines.append(
+                        f'<div class="cluster-evidence">'
+                        f'<span class="signal-tag">{sig}</span> {_esc(d)}'
+                        f'</div>'
+                    )
+        evidence_html = "".join(evidence_lines) if evidence_lines else ""
         blocks.append(
             f'<div class="cluster">'
             f'<div class="cluster-hd">'
@@ -202,6 +264,7 @@ def _render_clusters(clusters: list) -> str:
             f'</div>'
             f'<div class="cluster-list">{sites}</div>'
             f'<div class="cluster-signals">{sig_tags}</div>'
+            f'{evidence_html}'
             f'</div>'
         )
     return "".join(blocks)

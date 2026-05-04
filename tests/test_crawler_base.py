@@ -46,6 +46,16 @@ class TestProfile:
                      username="u", avatar_phash="abc123")
         assert p.empty is False
 
+    def test_only_email_not_empty(self):
+        p = Profile(site_id="t", site_name="T", url="http://x",
+                     username="u", email="a@b.com")
+        assert p.empty is False
+
+    def test_only_phone_not_empty(self):
+        p = Profile(site_id="t", site_name="T", url="http://x",
+                     username="u", phone="13800001234")
+        assert p.empty is False
+
 
 class FakeExtractor(ProfileExtractor):
     site_id = "fake"

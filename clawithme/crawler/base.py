@@ -36,7 +36,8 @@ class Profile:
         """True if no meaningful data beyond site id/name/url/username."""
         return not any([
             self.display_name, self.bio, self.avatar_url,
-            self.avatar_phash, self.location, self.joined_date,
+            self.avatar_phash, self.email, self.phone,
+            self.location, self.joined_date,
             self.post_count, self.follower_count is not None,
             self.following_count is not None, self.extra,
         ])

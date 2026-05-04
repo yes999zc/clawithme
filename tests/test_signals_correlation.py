@@ -5,7 +5,7 @@ from clawithme.signals.correlation import Cluster, CorrelationEngine
 
 
 def _profile(site_id: str, **kw) -> Profile:
-    defaults = dict(site_name=site_id, url=f"https://{site_id}.com/user", username="test")
+    defaults = dict(site_name=site_id, url=f"https://{site_id}.com/user", username=site_id)
     defaults.update(kw)
     return Profile(site_id=site_id, **defaults)
 
@@ -76,3 +76,21 @@ class TestCorrelationEngine:
         d = _profile("stackoverflow", email="bob@example.com")
         clusters = engine.correlate([a, b, c, d])
         assert len(clusters) == 2
+
+    def test_detected_signals_only_actual_matches(self):
+        """Profiles with different avatars matched by email → signals = [email] only."""
+        engine = CorrelationEngine()
+        a = _profile("github", avatar_phash="c60c9933d19bcccd", email="alice@ex.com")
+        b = _profile("zhihu", avatar_phash="8c857bd4b24bc999", email="alice@ex.com")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 1
+        assert clusters[0].signals == ["email"]
+
+    def test_username_similarity_match(self):
+        """alice on GitHub vs alice_cn on Zhihu → same cluster via username."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="alice")
+        b = _profile("zhihu", username="alice_cn")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 1
+        assert "username" in clusters[0].signals

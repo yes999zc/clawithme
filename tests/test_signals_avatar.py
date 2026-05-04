@@ -4,7 +4,7 @@ import io
 
 from PIL import Image, ImageDraw
 
-from clawithme.signals.avatar import compare_avatars, compute_phash, hamming_distance
+from clawithme.signals.avatar import AvatarMatch, compare_avatars, compute_phash, hamming_distance
 
 
 def _make_red_block() -> bytes:
@@ -66,14 +66,15 @@ class TestHammingDistance:
 class TestCompareAvatars:
     def test_match_same_hash(self):
         r = compare_avatars("a3f8c2d1e4b5a3f8", "a3f8c2d1e4b5a3f8")
-        assert r == {"distance": 0, "is_match": True}
+        assert r.distance == 0
+        assert r.is_match is True
 
     def test_no_match_different_people(self):
         r = compare_avatars("c60c9933d19bcccd", "8c857bd4b24bc999")
-        assert r["distance"] > 10
-        assert r["is_match"] is False
+        assert r.distance > 10
+        assert r.is_match is False
 
     def test_either_none_returns_no_match(self):
-        assert compare_avatars(None, "c60c9933d19bcccd") == {"distance": -1, "is_match": False}
-        assert compare_avatars("c60c9933d19bcccd", None) == {"distance": -1, "is_match": False}
-        assert compare_avatars(None, None) == {"distance": -1, "is_match": False}
+        assert compare_avatars(None, "c60c9933d19bcccd") == AvatarMatch(distance=-1, is_match=False)
+        assert compare_avatars("c60c9933d19bcccd", None) == AvatarMatch(distance=-1, is_match=False)
+        assert compare_avatars(None, None) == AvatarMatch(distance=-1, is_match=False)

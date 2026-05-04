@@ -1,7 +1,9 @@
 """Tests for report/generator.py — HTML report generation."""
 
+import json
+
 from clawithme.crawler.base import Profile
-from clawithme.report.generator import generate_report
+from clawithme.report.generator import export_json, generate_report
 from clawithme.signals.correlation import CorrelationEngine
 
 
@@ -85,3 +87,20 @@ class TestGenerateReport:
         assert "<script>" not in html
         assert "&lt;script&gt;" in html
         assert "&amp;" in html
+
+
+class TestExportJson:
+    def test_returns_valid_json(self):
+        clusters = _sample_clusters()
+        result = export_json(_sample_hits(), _sample_profiles(), clusters, "alice")
+        data = json.loads(result)
+        assert data["tool"] == "clawithme"
+        assert data["username"] == "alice"
+
+    def test_includes_clusters(self):
+        clusters = _sample_clusters()
+        result = export_json([], [], clusters, "alice")
+        data = json.loads(result)
+        assert len(data["clusters"]) == 1
+        assert data["clusters"][0]["confidence"] == 0.8
+        assert "avatar_phash" in data["clusters"][0]["signals"]

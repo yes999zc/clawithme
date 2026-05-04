@@ -10,6 +10,17 @@ import re
 
 # ── Email ──────────────────────────────────────────────────────
 
+# Domains commonly used for disposable/temporary email addresses.
+_DISPOSABLE_DOMAINS = frozenset({
+    "mailinator.com", "guerrillamail.com", "10minutemail.com",
+    "tempmail.com", "temp-mail.org", "throwaway.email",
+    "sharklasers.com", "yopmail.com", "trashmail.com",
+    "maildrop.cc", "getnada.com", "inboxalias.com",
+    "dispostable.com", "mailnesia.com", "spamgourmet.com",
+    "anonaddy.com", "simplelogin.com", "33mail.com",
+    "example.com", "test.com", "localhost",
+})
+
 # Matches standard email addresses.  Excludes:
 #   - quoted local-parts (e.g. "john doe"@example.com)
 #   - IP-literal domains (rare in public profiles)
@@ -30,6 +41,10 @@ def extract_emails(text: str) -> list[str]:
         lower = addr.lower()
         if lower in seen:
             continue
+        # Skip disposable/temporary email domains
+        domain = lower.split("@", 1)[-1] if "@" in lower else ""
+        if domain in _DISPOSABLE_DOMAINS:
+            continue
         seen.add(lower)
         results.append(lower)
     return results
@@ -37,13 +52,22 @@ def extract_emails(text: str) -> list[str]:
 
 # ── Phone ──────────────────────────────────────────────────────
 
+def normalize_phone(s: str) -> str:
+    """Strip non-digits and normalize country-code prefixes.
+
+    E.g. '+86 138-0000-1234' → '13800001234'
+    """
+    digits = "".join(c for c in s if c.isdigit())
+    if digits.startswith("86") and len(digits) >= 13:
+        digits = digits[2:]
+    return digits
+
+
 # Matches Chinese mobile numbers: 1[3-9]XXXXXXXXX (11 digits).
 # Also matches with common separators and country codes.
 _PHONE_RE = re.compile(
     r"(?:(?:\+?86)[\s-]*)?1[3-9]\d[\s-]?\d{4}[\s-]?\d{4}"
 )
-
-_PHONE_DIGITS_RE = re.compile(r"\D")
 
 
 def extract_phones(text: str) -> list[str]:
@@ -55,10 +79,7 @@ def extract_phones(text: str) -> list[str]:
     seen: set[str] = set()
     results: list[str] = []
     for raw in matches:
-        digits = _PHONE_DIGITS_RE.sub("", raw)
-        # Strip Chinese country code if present
-        if digits.startswith("86") and len(digits) >= 13:
-            digits = digits[2:]
+        digits = normalize_phone(raw)
         if len(digits) != 11:
             continue  # skip non-standard lengths
         if digits in seen:

@@ -1,11 +1,11 @@
 """Tests for signals/extraction.py — email/phone regex extraction."""
 
-from clawithme.signals.extraction import extract_emails, extract_phones
+from clawithme.signals.extraction import extract_emails, extract_phones, normalize_phone
 
 
 class TestExtractEmails:
     def test_single_email(self):
-        assert extract_emails("contact me at alice@example.com") == ["alice@example.com"]
+        assert extract_emails("contact me at alice@gmail.com") == ["alice@gmail.com"]
 
     def test_multiple_emails(self):
         text = "alice@foo.com and bob@bar.org"
@@ -18,11 +18,18 @@ class TestExtractEmails:
         assert extract_emails("no email here") == []
 
     def test_case_insensitive(self):
-        assert extract_emails("Alice@Example.COM") == ["alice@example.com"]
+        assert extract_emails("Alice@Gmail.COM") == ["alice@gmail.com"]
 
     def test_email_in_bio_style_text(self):
         bio = "Full-stack dev | Rust & Python | reach me: dev@mycompany.io"
         assert extract_emails(bio) == ["dev@mycompany.io"]
+
+    def test_disposable_email_filtered(self):
+        assert extract_emails("user@mailinator.com") == []
+        assert extract_emails("test@example.com") == []
+
+    def test_real_email_passes_filter(self):
+        assert extract_emails("alice@gmail.com") == ["alice@gmail.com"]
 
 
 class TestExtractPhones:
@@ -45,3 +52,14 @@ class TestExtractPhones:
 
     def test_non_standard_length_skipped(self):
         assert extract_phones("12345") == []
+
+
+class TestNormalizePhone:
+    def test_strips_non_digits(self):
+        assert normalize_phone("+86 138-0000-1234") == "13800001234"
+
+    def test_no_country_code(self):
+        assert normalize_phone("13800001234") == "13800001234"
+
+    def test_non_chinese_number_preserved(self):
+        assert normalize_phone("+1 555-000-1234") == "15550001234"
