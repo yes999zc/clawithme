@@ -1,0 +1,29 @@
+{
+  "id": "medium",
+  "name": "Medium",
+  "primary": "blog",
+  "canonical_url": "https://medium.com/@{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 80000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://medium.com/@{username}",
+    "expected": 200,
+    "known_accounts": [
+      "ev"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

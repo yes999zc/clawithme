@@ -1,0 +1,35 @@
+{
+  "id": "github",
+  "name": "GitHub",
+  "primary": "devtools",
+  "canonical_url": "https://github.com/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 100000000,
+    "tags": [
+      "coding",
+      "open-source"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 58
+  },
+  "check": {
+    "probe_url": "https://github.com/{username}",
+    "expected": 200,
+    "regex": "^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$",
+    "known_accounts": [
+      "torvalds"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

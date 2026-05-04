@@ -1,0 +1,29 @@
+{
+  "id": "producthunt",
+  "name": "Product Hunt",
+  "primary": "devtools",
+  "canonical_url": "https://www.producthunt.com/@{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 5000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.producthunt.com/@{username}",
+    "expected": 200,
+    "known_accounts": [
+      "rrhoover"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

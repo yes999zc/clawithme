@@ -1,0 +1,29 @@
+{
+  "id": "hackernews",
+  "name": "Hacker News",
+  "primary": "forum",
+  "canonical_url": "https://news.ycombinator.com/user?id={username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 10000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://news.ycombinator.com/user?id={username}",
+    "expected": 200,
+    "known_accounts": [
+      "pg"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

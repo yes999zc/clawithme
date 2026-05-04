@@ -1,0 +1,38 @@
+{
+  "id": "unknown",
+  "name": "unknown",
+  "canonical_url": "https://community.spotify.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "music"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://community.spotify.com/t5/forums/searchpage/tab/user?q={username}",
+    "regex": "^[a-zA-Z0-9_.]+$",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "error_flags": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "0 results",
+      "No search results found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-04T11:03:42.464491+00:00"
+}

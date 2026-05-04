@@ -1,0 +1,23 @@
+{
+  "id": "smzdm",
+  "name": "什么值得买",
+  "primary": "ecommerce",
+  "canonical_url": "",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "ecommerce",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 0,
+    "tags": []
+  },
+  "check": {
+    "probe_url": "",
+    "error_flags": {
+      "blocked": "202 — JS-rendered"
+    }
+  },
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

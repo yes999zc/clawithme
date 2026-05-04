@@ -1,0 +1,29 @@
+{
+  "id": "telegram",
+  "name": "Telegram",
+  "primary": "social",
+  "canonical_url": "https://t.me/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 500000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://t.me/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "telegram"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "spotify",
+  "name": "Spotify",
+  "primary": "music",
+  "canonical_url": "https://open.spotify.com/user/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 200000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://open.spotify.com/user/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "spotify"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

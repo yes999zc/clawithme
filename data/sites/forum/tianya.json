@@ -1,0 +1,23 @@
+{
+  "id": "tianya",
+  "name": "天涯社区",
+  "primary": "forum",
+  "canonical_url": "",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 0,
+    "tags": []
+  },
+  "check": {
+    "probe_url": "",
+    "error_flags": {
+      "blocked": "Timeout"
+    }
+  },
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

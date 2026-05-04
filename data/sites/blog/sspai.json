@@ -1,0 +1,27 @@
+{
+  "id": "sspai",
+  "name": "少数派",
+  "primary": "blog",
+  "canonical_url": "",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 10000000,
+    "tags": [
+      "digital",
+      "lifestyle"
+    ]
+  },
+  "check": {
+    "probe_url": "",
+    "error_flags": {
+      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

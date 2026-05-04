@@ -1,0 +1,34 @@
+{
+  "id": "cnblogs",
+  "name": "博客园",
+  "primary": "blog",
+  "canonical_url": "https://www.cnblogs.com/{username}/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "professional",
+    "geo_region": "cn",
+    "user_scale": 20000000,
+    "tags": [
+      "tech",
+      "blog"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 800
+  },
+  "check": {
+    "probe_url": "https://www.cnblogs.com/{username}/",
+    "expected": 200,
+    "known_accounts": [
+      "artech"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

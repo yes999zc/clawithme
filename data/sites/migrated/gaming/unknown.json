@@ -1,0 +1,36 @@
+{
+  "id": "unknown",
+  "name": "unknown",
+  "canonical_url": "https://tracr.co/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://tracr.co/users/1/{username}",
+    "regex": "^[A-Za-z0-9]{2,32}$",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "error_flags": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "No search results"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-04T11:03:41.949428+00:00"
+}

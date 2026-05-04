@@ -1,0 +1,29 @@
+{
+  "id": "quora",
+  "name": "Quora",
+  "primary": "social",
+  "canonical_url": "https://www.quora.com/profile/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 100000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.quora.com/profile/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "Adam-DAngelo"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

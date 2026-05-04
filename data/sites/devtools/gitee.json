@@ -1,0 +1,23 @@
+{
+  "id": "gitee",
+  "name": "Gitee",
+  "primary": "devtools",
+  "canonical_url": "",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "cn",
+    "user_scale": 0,
+    "tags": []
+  },
+  "check": {
+    "probe_url": "",
+    "error_flags": {
+      "blocked": "403 blocked"
+    }
+  },
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

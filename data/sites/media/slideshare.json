@@ -1,0 +1,29 @@
+{
+  "id": "slideshare",
+  "name": "SlideShare",
+  "primary": "media",
+  "canonical_url": "https://www.slideshare.net/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 10000000,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.slideshare.net/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "SlideShare"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}
