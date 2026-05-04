@@ -10,10 +10,10 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 ## Current Code State (architecture isolation ✅)
 
 ```
-~1850 lines Python, 23 .py files, 30 tests (all passing)
+~2200 lines Python, 26 .py files, 45 tests (all passing)
 48 site JSONs (37 active, 11 deprecated), all validate green
 6 engines, 3 classifiers (status_code/message/headers)
-1 plugin repo: clawithme-cn (ZhihuExtractor skeleton)
+2 extractors: GithubExtractor (working), ZhihuExtractor (auth wall)
 ```
 
 ### Key files to know
@@ -116,19 +116,20 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 
 ### Tasks (from docs/todo.md)
 
-1. **3.1.1** Generic crawler framework (`crawler/base.py`)
-2. **3.1.2** Site-specific extractors (zhihu.py, github.py, etc.)
-3. **3.1.3** Scrapling DynamicFetcher integration (Playwright Chromium for JS pages)
-4. **3.2.1** Rate limiting + backoff
-5. **3.2.2** User-Agent rotation
-6. **3.3.1** Unified Profile dataclass
+1. ✅ **3.1.1** Generic crawler framework (`crawler/base.py` + `client.py` + `registry.py`)
+2. ✅ **3.1.2** Site-specific extractors — GithubExtractor (working), ZhihuExtractor (auth wall)
+3. ✅ **3.1.3** Scrapling DynamicFetcher integration (via CrawlerClient, lazy init)
+4. ✅ **3.3.1** Unified Profile dataclass
+5. **3.2.1** Rate limiting + backoff
+6. **3.2.2** User-Agent rotation
 
 ### Key architectural decisions for Phase 3
 
 - ~~**CRITICAL**: Before writing first extractor, create `clawithme-cn` plugin repo for China site code isolation~~ ✅ DONE
-- Plugin system active: `discover_extractors()` finds 1 extractor (ZhihuExtractor)
+- Plugin system active: `discover_extractors()` finds 2 extractors (GithubExtractor + ZhihuExtractor)
 - DynamicFetcher needed for: B站, 微博, 虎扑, NGA, 少数派, 百度知道, 开源中国, 思否, 站酷
 - Phase 2 established pattern: one extractor per site, same file-per-site approach as JSONs
+- Static Fetcher suitable for: GitHub, GitLab, StackOverflow, etc. (server-rendered HTML)
 
 ## Phase 4-5 (future)
 
