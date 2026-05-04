@@ -56,10 +56,9 @@ def map_tags_to_classification(tags: list[str]) -> dict:
     }
 
 
-def migrate_site(maigret_site: dict) -> dict | None:
+def migrate_site(name: str, maigret_site: dict) -> dict | None:
     """Convert a single maigret-format site to clawithme format."""
     try:
-        name = maigret_site.get("name", "unknown")
         site_id = name.lower().replace(" ", "_").replace("/", "_")
 
         check_type = maigret_site.get("checkType", "status_code")
@@ -121,22 +120,22 @@ def main():
     # Handle both dict and list formats
     if isinstance(raw, dict):
         if "sites" in raw:
-            sites_list = list(raw["sites"].values())
+            sites_items = list(raw["sites"].items())
         else:
-            sites_list = list(raw.values())
+            sites_items = list(raw.items())
     else:
-        sites_list = raw
+        sites_items = [(s.get("name", f"site_{i}"), s) for i, s in enumerate(raw)]
 
-    print(f"Migrating {len(sites_list)} sites from maigret format...")
+    print(f"Migrating {len(sites_items)} sites from maigret format...")
 
     migrated = 0
     skipped = 0
     out_dir = SITES_DIR / "migrated"
 
-    for site in sites_list:
+    for name, site in sites_items:
         if not isinstance(site, dict):
             continue
-        claw_site = migrate_site(site)
+        claw_site = migrate_site(name, site)
         if claw_site is None:
             skipped += 1
             continue

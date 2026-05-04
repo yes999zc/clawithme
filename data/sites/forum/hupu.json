@@ -2,7 +2,7 @@
   "id": "hupu",
   "name": "虎扑",
   "primary": "forum",
-  "canonical_url": "",
+  "canonical_url": "https://my.hupu.com/{username}",
   "engine_ref": "base_http_message",
   "classification": {
     "primary": "forum",
@@ -15,7 +15,7 @@
     ]
   },
   "check": {
-    "probe_url": "",
+    "probe_url": "https://my.hupu.com/{username}",
     "error_flags": {
       "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
     }

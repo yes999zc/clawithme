@@ -2,7 +2,7 @@
   "id": "baidu_zhidao",
   "name": "百度知道",
   "primary": "forum",
-  "canonical_url": "",
+  "canonical_url": "https://zhidao.baidu.com/usercenter?uid={username}",
   "engine_ref": "base_http_message",
   "classification": {
     "primary": "forum",
@@ -14,7 +14,7 @@
     ]
   },
   "check": {
-    "probe_url": "",
+    "probe_url": "https://zhidao.baidu.com/usercenter?uid={username}",
     "error_flags": {
       "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
     }

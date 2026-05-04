@@ -8,12 +8,11 @@ Implements:
 
 from __future__ import annotations
 
+import asyncio
 from abc import ABC, abstractmethod
 from typing import Optional
 
-import httpx
-from pydantic import BaseModel
-
+from clawithme.engine.http_client import HttpClient, HttpResponse
 from clawithme.logging import get_logger
 
 logger = get_logger()
@@ -97,21 +96,33 @@ class CavalierSource(LeakSource):
 
     def __init__(self, base_url: str | None = None):
         self._base = base_url or CAVALIER_BASE
-        self._client: httpx.AsyncClient | None = None
+        self._http: HttpClient | None = None
 
-    async def _get_client(self) -> httpx.AsyncClient:
-        if self._client is None:
-            self._client = httpx.AsyncClient(timeout=15)
-        return self._client
+    def _get_client(self) -> HttpClient:
+        if self._http is None:
+            self._http = HttpClient(timeout_ms=15000)
+        return self._http
+
+    async def _async_get(self, url: str, params: dict | None = None) -> HttpResponse:
+        """Run HttpClient.get in a thread to preserve async API."""
+        client = self._get_client()
+        full_url = url
+        if params:
+            query = "&".join(f"{k}={v}" for k, v in params.items())
+            full_url = f"{url}?{query}"
+        return await asyncio.to_thread(client.get, full_url)
 
     async def search_by_username(self, username: str) -> list[BreachRecord]:
         """Query Cavalier for infostealer records by username."""
         url = f"{self._base}/osint-tools/search-by-username"
-        client = await self._get_client()
         try:
-            resp = await client.get(url, params={"username": username})
-            resp.raise_for_status()
-            data = resp.json()
+            resp = await self._async_get(url, params={"username": username})
+            if not resp.ok:
+                logger.warning("cavalier_http_error", status=resp.status_code, username=username)
+                return []
+
+            import json
+            data = json.loads(resp.text)
 
             records: list[BreachRecord] = []
             for stealer in data.get("stealers", []):

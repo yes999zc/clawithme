@@ -2,7 +2,7 @@
   "id": "sspai",
   "name": "少数派",
   "primary": "blog",
-  "canonical_url": "",
+  "canonical_url": "https://sspai.com/u/{username}/",
   "engine_ref": "base_http_message",
   "classification": {
     "primary": "blog",
@@ -15,7 +15,7 @@
     ]
   },
   "check": {
-    "probe_url": "",
+    "probe_url": "https://sspai.com/u/{username}/",
     "error_flags": {
       "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
     }
