@@ -35,7 +35,7 @@ def discover_extractors() -> dict[str, type[ProfileExtractor]]:
                 continue
             extractors[cls.site_id] = cls
             logger.debug("extractor_discovered", site_id=cls.site_id, name=ep.name)
-        except Exception as e:
+        except (ImportError, TypeError, ValueError) as e:
             logger.warning("extractor_load_failed", entry_point=ep.name, error=str(e))
 
     logger.info("extractors_discovered", count=len(extractors))

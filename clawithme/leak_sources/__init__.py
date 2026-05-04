@@ -10,9 +10,9 @@ from __future__ import annotations
 
 import asyncio
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from pydantic import BaseModel
+
 from clawithme.engine.http_client import HttpClient, HttpResponse
 from clawithme.logging import get_logger
 
@@ -144,7 +144,7 @@ class CavalierSource(LeakSource):
             )
             return records
 
-        except Exception as e:
+        except (OSError, ValueError, TimeoutError) as e:
             logger.warning("cavalier_error", username=username, error=str(e))
             return []
 
@@ -166,7 +166,7 @@ class CavalierSource(LeakSource):
                 params={"username": "test"},
             )
             return resp.status_code == 200
-        except Exception:
+        except (OSError, ValueError, TimeoutError):
             return False
 
     async def rate_limit_remaining(self) -> int:
@@ -174,6 +174,7 @@ class CavalierSource(LeakSource):
         return -1
 
     async def close(self):
-        """Clean up HTTP client."""
-        if self._http:
-            self._http = None
+        """Clean up HTTP client resources."""
+        if self._http and hasattr(self._http, "close"):
+            await asyncio.to_thread(self._http.close)
+        self._http = None

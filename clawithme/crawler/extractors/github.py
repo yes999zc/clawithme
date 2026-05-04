@@ -4,31 +4,10 @@ from __future__ import annotations
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
+from clawithme.crawler.utils import first_text, parse_count
 from clawithme.logging import get_logger
 
 logger = get_logger()
-
-
-def _first_text(response, selectors: list[str]) -> str | None:
-    """Try each CSS selector, return the first non-empty text (stripped)."""
-    for sel in selectors:
-        result = response.css(sel)
-        if result:
-            text = " ".join(e.text.strip() for e in result if e.text).strip()
-            if text:
-                return text
-    return None
-
-
-def _parse_count(text: str) -> int | None:
-    """Parse '301k', '1.2k', '123' → int. Returns None on failure."""
-    text = text.strip().lower().replace(",", "")
-    try:
-        if text.endswith("k"):
-            return int(float(text[:-1]) * 1000)
-        return int(text)
-    except (ValueError, IndexError):
-        return None
 
 
 class GithubExtractor(ProfileExtractor):
@@ -57,18 +36,12 @@ class GithubExtractor(ProfileExtractor):
             return profile
 
         # Display name
-        name = _first_text(response, [
-            "span.p-name",
-            ".vcard-fullname",
-        ])
+        name = first_text(response, ["span.p-name", ".vcard-fullname"])
         if name:
             profile.display_name = name
 
         # Bio
-        bio = _first_text(response, [
-            "div.p-note",
-            ".user-profile-bio",
-        ])
+        bio = first_text(response, ["div.p-note", ".user-profile-bio"])
         if bio:
             profile.bio = bio
 
@@ -82,7 +55,7 @@ class GithubExtractor(ProfileExtractor):
                     break
 
         # Location
-        location = _first_text(response, [
+        location = first_text(response, [
             "li[itemprop=\"homeLocation\"] .p-label",
             "span.p-label[itemprop=\"homeLocation\"]",
         ])
@@ -90,20 +63,20 @@ class GithubExtractor(ProfileExtractor):
             profile.location = location
 
         # Follower count
-        follower_text = _first_text(response, [
+        follower_text = first_text(response, [
             "a[href*=\"followers\"] span.text-bold",
             "a[href*=\"followers\"] span",
         ])
         if follower_text:
-            profile.follower_count = _parse_count(follower_text)
+            profile.follower_count = parse_count(follower_text)
 
         # Following count
-        following_text = _first_text(response, [
+        following_text = first_text(response, [
             "a[href*=\"following\"] span.text-bold",
             "a[href*=\"following\"] span",
         ])
         if following_text:
-            profile.following_count = _parse_count(following_text)
+            profile.following_count = parse_count(following_text)
 
         logger.info("github_extracted", username=username, display_name=profile.display_name)
         return profile

@@ -36,11 +36,12 @@ class TestEngineTemplateSubstitution:
         )
         assert result == "https://bob.example.com/status/404"
 
-    def test_unknown_var_unchanged(self):
-        result = Engine._substitute(
-            "https://example.com/{unknown_var}", {}, "test"
-        )
-        assert result == "https://example.com/{unknown_var}"
+    def test_unknown_var_raises_value_error(self):
+        import pytest
+        with pytest.raises(ValueError, match="Unknown template variable"):
+            Engine._substitute(
+                "https://example.com/{unknown_var}", {}, "test"
+            )
 
 
 class TestEngineProbe:

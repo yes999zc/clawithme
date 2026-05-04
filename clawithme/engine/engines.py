@@ -18,10 +18,10 @@ from clawithme.logging import get_logger
 
 logger = get_logger()
 
-# Allowed template variables (whitelist)
+# Allowed template variables (whitelist) — enforced in _substitute()
 _ALLOWED_VARS = {
     "{username}", "{e_code}", "{e_string}", "{m_string}",
-    "{e_headers}", "{probe_url}", "{url_subpath}",
+    "{probe_url}", "{url_subpath}",
 }
 
 
@@ -80,7 +80,7 @@ class Engine:
                 classifier=self.classifier,
                 details={"body_len": len(resp.text) if resp.text else 0},
             )
-        except Exception as e:
+        except (OSError, ValueError, TimeoutError) as e:
             self._log.error("probe_failed", site_id=site["id"], error=str(e))
             return EngineResult(
                 site_id=site["id"],
@@ -120,15 +120,34 @@ class Engine:
 
     @staticmethod
     def _substitute(template: str, check: dict, username: str) -> str:
-        """Safely substitute template variables. Whitelist enforced."""
+        """Safely substitute template variables. Whitelist enforced.
+
+        Raises ValueError if template contains unknown {variable} patterns.
+        """
+        # Validate: no unknown template variables
+        import re
+        found = set(re.findall(r"\{(\w+)\}", template))
+        allowed_names = {v.strip("{}") for v in _ALLOWED_VARS}
+        unknown = found - allowed_names
+        if unknown:
+            raise ValueError(
+                f"Unknown template variable(s): {unknown}. "
+                f"Allowed: {allowed_names}"
+            )
+
         subs = {
             "{username}": username,
             "{e_code}": str(check.get("expected", 200)),
-            "{e_string}": str(check.get("presence_strs", [""])[0]) if check.get("presence_strs") else "",
-            "{m_string}": str(check.get("absence_strs", [""])[0]) if check.get("absence_strs") else "",
+            "{e_string}": (
+                str(check.get("presence_strs", [""])[0])
+                if check.get("presence_strs") else ""
+            ),
+            "{m_string}": (
+                str(check.get("absence_strs", [""])[0])
+                if check.get("absence_strs") else ""
+            ),
             "{probe_url}": check.get("probe_url", template),
             "{url_subpath}": check.get("subpath", ""),
-            "{e_headers}": str(check.get("headers", {})),
         }
         result = template
         for var, val in subs.items():

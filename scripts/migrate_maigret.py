@@ -4,9 +4,10 @@
 Usage: python scripts/migrate_maigret.py <maigret_data.json>
 """
 
-import json, sys, os
+import json
+import sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, timezone
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -92,7 +93,7 @@ def migrate_site(name: str, maigret_site: dict) -> dict | None:
             "nsfw": maigret_site.get("tags", []) and "nsfw" in " ".join(maigret_site.get("tags", [])).lower(),
             "deprecated": False,
             "source": "maigret_migration",
-            "last_updated": datetime.now(timezone.utc).isoformat(),
+            "last_updated": datetime.now(UTC).isoformat(),
         }
 
         if check_type == "message":

@@ -55,6 +55,11 @@ class HttpClient:
         self._fetcher = Fetcher(**fetcher_kwargs)
         self._timeout_ms = timeout_ms
 
+    @property
+    def static(self) -> Fetcher:
+        """Underlying Scrapling Fetcher instance (for raw Response access)."""
+        return self._fetcher
+
     def get(self, url: str, headers: dict[str, str] | None = None) -> HttpResponse:
         """HTTP GET with anti-bot fingerprinting."""
         self._log.debug("http.get", url=url)
@@ -66,7 +71,11 @@ class HttpClient:
         return self._to_response(page)
 
     def head(self, url: str, headers: dict[str, str] | None = None) -> HttpResponse:
-        """HTTP HEAD — fallback to GET if Scrapling doesn't support HEAD."""
+        """HTTP HEAD — uses GET as fallback (Scrapling has no native HEAD).
+
+        For our use case (presence detection), GET with lightweight response
+        handling is functionally equivalent to HEAD.
+        """
         self._log.debug("http.head", url=url)
         timeout = max(1, self._timeout_ms // 1000)
         kwargs: dict[str, Any] = {"timeout": timeout}

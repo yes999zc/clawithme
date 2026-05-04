@@ -10,8 +10,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from clawithme.logging import setup_logging, new_trace_id
 from clawithme.engine.http_client import HttpClient
+from clawithme.logging import new_trace_id, setup_logging
 
 setup_logging()
 
@@ -38,6 +38,8 @@ except Exception as e:
 
 # 3. Cavalier API reachable (async)
 import asyncio
+
+
 async def check_cavalier():
     from clawithme.leak_sources import CavalierSource
     src = CavalierSource()

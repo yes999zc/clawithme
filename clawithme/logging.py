@@ -1,6 +1,7 @@
 """Structured logging with structlog + trace_id propagation."""
 
 import uuid
+
 import structlog
 
 
@@ -11,6 +12,8 @@ def setup_logging(level: str = "INFO") -> None:
         logger = logger.bind(trace_id=str(uuid.uuid4()))
     All subsequent calls from that logger carry the trace_id.
     """
+    import logging
+    logging.getLogger().setLevel(getattr(logging, level.upper(), logging.INFO))
     structlog.configure(
         processors=[
             structlog.processors.TimeStamper(fmt="iso"),

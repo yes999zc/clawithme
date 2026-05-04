@@ -2,8 +2,8 @@
 """Statistics for clawithme site database."""
 
 import json
-from pathlib import Path
 from collections import Counter
+from pathlib import Path
 
 SITES_DIR = Path(__file__).resolve().parent.parent / "data" / "sites"
 

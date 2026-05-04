@@ -1,10 +1,10 @@
-"""Unified crawler HTTP client — wraps Scrapling Fetcher + DynamicFetcher."""
+"""Crawler HTTP client — delegates static fetching to engine's HttpClient."""
 
 from __future__ import annotations
 
-from scrapling import Fetcher
 from scrapling.engines.toolbelt.custom import Response
 
+from clawithme.engine.http_client import HttpClient
 from clawithme.logging import get_logger
 
 logger = get_logger()
@@ -28,23 +28,24 @@ def _check_dynamic() -> bool:
 class CrawlerClient:
     """HTTP client for profile extraction.
 
-    Two modes:
-    - static: Scrapling Fetcher (curl_cffi, anti-bot fingerprinting)
-    - dynamic: Scrapling DynamicFetcher (Playwright Chromium, for JS pages)
+    Delegates static fetching to engine's HttpClient (single Scrapling Fetcher instance).
+    Adds DynamicFetcher support for JS-rendered pages (lazy init).
 
-    Dynamic mode is lazily initialized — Playwright only loaded when first used.
+    Returns raw Scrapling Response objects — extractors use .css() selectors directly.
+    This is a known coupling; future work may abstract to a ParsedResponse wrapper.
     """
 
     def __init__(self, timeout_ms: int = 30000):
         self._timeout_ms = timeout_ms
-        self._static: Fetcher | None = None
+        self._http: HttpClient | None = None
         self._dynamic = None  # DynamicFetcher, lazy
 
     @property
-    def static(self) -> Fetcher:
-        if self._static is None:
-            self._static = Fetcher()
-        return self._static
+    def http(self) -> HttpClient:
+        """Get or create the shared HttpClient (delegates to engine layer)."""
+        if self._http is None:
+            self._http = HttpClient(timeout_ms=self._timeout_ms)
+        return self._http
 
     @property
     def dynamic(self):
@@ -57,8 +58,11 @@ class CrawlerClient:
         return self._dynamic
 
     def fetch_static(self, url: str) -> Response:
-        """Fetch a page using static Fetcher (no JS rendering)."""
-        return self.static.get(url)
+        """Fetch a page using static Fetcher (no JS rendering).
+
+        Returns raw Scrapling Response for CSS selector access.
+        """
+        return self.http.static.get(url)
 
     def fetch_dynamic(
         self,

@@ -5,15 +5,16 @@ Usage: python scripts/verify_site.py <site_id>
        python scripts/verify_site.py --all
 """
 
-import json, sys, os, argparse
+import argparse
+import json
+import sys
 from pathlib import Path
-from jsonschema import validate
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from clawithme.engine.http_client import HttpClient
-from clawithme.logging import setup_logging, new_trace_id, get_logger
+from clawithme.logging import get_logger, setup_logging
 
 
 def load_site(site_id: str) -> dict:

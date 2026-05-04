@@ -2,8 +2,10 @@
 """Validate all site JSON files against the schema."""
 
 import json
+import sys
 from pathlib import Path
-from jsonschema import validate, ValidationError
+
+from jsonschema import ValidationError, validate
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = ROOT / "data" / "schema.json"
@@ -31,7 +33,7 @@ def main():
     if errors:
         for name, err in errors:
             print(f"  ❌ {name}: {err}")
-        exit(1)
+        sys.exit(1)
     else:
         print("✅ All sites valid")
 
