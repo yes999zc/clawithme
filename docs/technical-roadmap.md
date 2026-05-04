@@ -1,7 +1,18 @@
-# clawithme — 技术路线 v2
+# clawithme — 技术路线 v3
 
-> 综合调研 + 陪审团头脑风暴 + 9 哥修正后的最终路线。
+> v2 + 陪审团第二轮评审修正。Phase 3&4 互换、schema 前移、去冗余字段、安全合规加固。
 > 2026-05-04
+
+---
+
+## 版本说明
+
+| 版本 | 变更 |
+|------|------|
+| v1 | 初始路线（maigret 研究 + fork 对比） |
+| v2 | 陪审团第一轮 + 9 哥修正（多信号关联、Scrapling、泄露数据库） |
+| **v3** | 陪审团第二轮修正（Phase 重排、schema 去冗余、安全加固） |
+| v2 scope | Phase 5（泄露自建）和 2000 全球站迁移 → v2 远期范围 |
 
 ---
 
@@ -17,7 +28,7 @@
 │  开源 OSINT 工具                                  │
 │  输入 → 全网身份发现 → 全景报告                    │
 │                                                   │
-│  护城河：中国站探测知识 + 泄露数据库                │
+│  护城河：中国站探测知识 + 泄露数据库查询            │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -29,7 +40,7 @@
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                     clawithme 架构                         │
+│                     clawithme 架构 v3                      │
 ├──────────────────────────────────────────────────────────┤
 │                                                            │
 │  ┌──────────┐   ┌──────────┐   ┌──────────────────────┐  │
@@ -49,6 +60,7 @@
 │  ┌───────────────────────────────────────────────────┐   │
 │  │              多信号关联引擎                          │   │
 │  │  用户名 ↔ 邮箱 ↔ 手机号 ↔ 头像哈希 ↔ 平台账号       │   │
+│  │  (依赖爬虫抓回的数据 + 泄露数据库查询结果)           │   │
 │  └───────────────────────┬───────────────────────────┘   │
 │                          ▼                                │
 │  ┌───────────────────────────────────────────────────┐   │
@@ -59,10 +71,19 @@
 │  ┌───────────────────────────────────────────────────┐   │
 │  │              数据层                                  │   │
 │  │  ┌──────────────┐  ┌──────────────┐                │   │
-│  │  │ 站点数据库     │  │ 泄露数据库    │                │   │
-│  │  │ sites/*.json  │  │ PostgreSQL   │                │   │
-│  │  │ engines.json  │  │ (自建/NAS)   │                │   │
+│  │  │ 站点数据库     │  │ 泄露查询接口  │                │   │
+│  │  │ sites/*.json  │  │ LeakSource   │                │   │
+│  │  │ engines.json  │  │ (API聚合层)  │                │   │
 │  │  └──────────────┘  └──────────────┘                │   │
+│  └───────────────────────────────────────────────────┘   │
+│                                                            │
+│  ┌───────────────────────────────────────────────────┐   │
+│  │              插件层（外部、分支维护）                 │   │
+│  │  ┌─────────────────────────────────────────────┐  │   │
+│  │  │ 中国站探测插件 (clawithme-cn)                  │  │   │
+│  │  │ 含中国站 JSON + 专属抽取器 + 反爬策略          │  │   │
+│  │  │ 主线仓库不含中国站爬取实现，用户自行加载        │  │   │
+│  │  └─────────────────────────────────────────────┘  │   │
 │  └───────────────────────────────────────────────────┘   │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -71,13 +92,11 @@
 
 ## 三、核心模块
 
-### 3.1 站点数据库 — 核心护城河
+### 3.1 站点数据库
 
 **定位**：中国站探测知识是护城河，数据库是存储形式。
 
-#### 3.1.1 站点 Schema
-
-每个站点一个 JSON 文件，按 `primary` 分类存放在 `data/sites/<primary>/` 下。
+#### 3.1.1 站点 Schema（v3 修正）
 
 ```json
 {
@@ -89,16 +108,20 @@
     "primary": "social",
     "identity_type": "virtual_social",
     "geo_region": "cn",
-    "user_scale": 100000000
+    "user_scale": 100000000,
+    "tags": ["qa", "knowledge"]
   },
   "rankings": {
-    "similarweb_global": 120,
-    "alexa": 80
+    "similarweb_global": 120
   },
   "check": {
-    "type": "status_code",
+    "method": "GET",
     "probe_url": "https://www.zhihu.com/api/v4/members/{username}",
     "expected": 200,
+    "regex": "^[a-zA-Z0-9_-]{2,30}$",
+    "presence_strs": [],
+    "absence_strs": [],
+    "error_flags": {},
     "known_accounts": ["zhangjiawei"],
     "known_unclaimed": ["thisuserdoesnotexist99999"],
     "headers": {}
@@ -110,11 +133,19 @@
 }
 ```
 
-#### 3.1.2 分类维度
+**v3 修正点**：
+- ❌ 删除 `check.type` — 检测类型由 Engine 的 `classifier` 唯一决定，避免冗余和矛盾
+- ✅ 新增 `check.regex` — 用户名合法性校验（继承自 maigret）
+- ✅ 新增 `check.error_flags` — 站点特有错误（地区限制、登录要求等）
+- ✅ 新增 `classification.tags` — 保留 maigret 的标签过滤能力
+- ✅ 新增 `check.presence_strs` / `check.absence_strs` — 明确命名，替代含糊的 e_string/m_string
+
+#### 3.1.2 分类维度（v3 修正）
 
 | 字段 | 含义 | 取值 |
 |------|------|------|
 | `identity_type` | 身份性质 | `real_social` — 真实身份社交（微信、QQ空间、LinkedIn） |
+| | | `public_social` — **公开社交**（微博、小红书—半实名可搜索） |
 | | | `virtual_social` — 虚拟身份社交（B站、知乎、豆瓣） |
 | | | `anonymous` — 匿名社交（贴吧、Mojitianqi） |
 | | | `professional` — 职业身份（GitHub、LinkedIn、掘金） |
@@ -122,44 +153,56 @@
 | `user_scale` | 用户量（约） | 整数，用于优先级排序 |
 | `primary` | 功能分类 | `social` / `devtools` / `forum` / `media` / `ecommerce` / `gaming` / `music` / `blog` / `academic` |
 
-#### 3.1.3 中国站探测可行性（预分类）
+**v3 修正**：新增 `public_social` 分类，解决微博/小红书等半实名平台的分类模糊问题。
+
+#### 3.1.3 中国站探测可行性
 
 **可直接探测**（HTTP 公开，无需登录）：
-知乎（API）、豆瓣（RSS）、V2EX、掘金、CSDN、简书、网易云音乐（JSONP）、GitHub（全球）、B站（部分接口）
+知乎（API 端点）、豆瓣（RSS）、V2EX、掘金、CSDN、简书、网易云音乐（JSONP）、GitHub（全球）、B站（部分接口）
 
 **需反爬对抗**（有反爬但可尝试）：
 微博（mobile 版接口较宽松）、贴吧、B站（主站）
 
-**高难度/不可行**（需登录或强反爬）：
-抖音、小红书、QQ空间、微信
+**实验性探测**（弱信号，低成功率但不放弃）：
+微信（搜一搜/公众号名称/视频号—间接探测定性为"可能存在"）
 
-#### 3.1.4 目录结构
+**高难度/不可行**（需登录或强反爬）：
+抖音、小红书、QQ空间（标记 skip，待反爬技术突破）
+
+#### 3.1.4 架构隔离原则
+
+中国站探测代码**不在主线仓库内**。主线仅包含：
+- 全球站点 JSON（不含中国站—geo_region ≠ cn）
+- 站点 schema 定义（分类枚举含 `cn`，但不含站点数据）
+- LeakSource 抽象接口（数据源无关）
+
+中国站相关代码放在独立仓库/分支 `clawithme-cn`：
+- 中国站 JSON 文件
+- 中国站专属抽取器（zhihu_crawler.py 等）
+- 微信弱信号探测实验模块
+- 用户自行安装插件后承担合规责任
+
+#### 3.1.5 目录结构
 
 ```
 data/
-├── schema.json              # JSON Schema 校验（CI gate）
-├── taxonomy.json            # 分类树定义
+├── schema.json              # JSON Schema 校验（Phase 1 即编写，CI gate）
+├── taxonomy.json            # 分类树定义（Phase 1 即编写）
 ├── engines.json             # Engine 规则定义
-└── sites/
+└── sites/                   # 一个站点一个 JSON（全球站，不含 cn）
     ├── social/              # 按 primary 分类
-    │   ├── zhihu.json
-    │   ├── weibo.json
-    │   └── douban.json
     ├── devtools/
-    │   ├── github.json
-    │   └── juejin.json
-    ├── forum/
-    │   └── v2ex.json
+    ├── forum/               # 统一单数
     ├── media/
-    │   └── bilibili.json
     └── ...
 ```
 
 ---
 
-### 3.2 Engine 系统
+### 3.2 Engine 系统（v3 修正）
 
 **设计原则**：数据/逻辑分离。Engine 定义"怎么查"，站点只写"参数值"。
+**关键规则**：检测类型由 Engine 的 `classifier` **唯一决定**，站点不声明类型。
 
 #### 3.2.1 Engine 定义
 
@@ -191,13 +234,21 @@ data/
 }
 ```
 
-支持的 CMS Engine（优先级）：
-- XenForo、phpBB、Discourse、vBulletin（全球论坛）
-- Discuz!、WordPress（中国论坛/博客常见）
+#### 3.2.2 变量模板（v3 补充）
 
-#### 3.2.2 反爬能力绑定
+Engine 运行时变量替换：
 
-每个 Engine 必须指定 `anti_bot` 级别：
+```
+{username}      → 用户输入的用户名
+{e_code}        → 站点 check.expected（期望状态码）
+{e_string}      → 站点 check.presence_strs（存在特征串）
+{m_string}      → 站点 check.absence_strs（不存在特征串）
+{e_headers}     → 站点 check.headers（自定义请求头）
+{probe_url}     → 站点 check.probe_url
+{url_subpath}   → 站点 subpath（论坛子路径等）
+```
+
+#### 3.2.3 反爬能力绑定
 
 | 级别 | 工具 | 能力 | 适用 |
 |------|------|------|------|
@@ -210,78 +261,97 @@ data/
 
 ### 3.3 反爬层 — Scrapling
 
-已安装 Scrapling v0.4.7，三级能力：
-
-```
-Fetcher ──────────► curl_cffi 指纹伪装 → 绕过 Cloudflare
-AsyncFetcher ─────► 同上 + 异步并发    → 批量站点探测
-DynamicFetcher ───► Playwright Chromium → JS 渲染/SPA
-```
+已安装 Scrapling v0.4.7，三级能力。
 
 **用途**：替代 maigret 原生的 requests/httpx，作为所有站点探测的 HTTP 底层。
+
+**新增**：HTTP 代理配置（`config.toml`），国内访问海外 API 时使用。
 
 ---
 
 ### 3.4 深度爬虫
 
 对命中站点抓取公开信息：
-- 头像 URL / 头像哈希
+- 头像 URL → 计算 perceptual hash（pHash）
 - 个人简介文字
 - 公开帖子标题/摘要
 - 关注数/粉丝数
 - 最后活跃时间
 
 **工具链**：Scrapling（反爬）+ CSS Selector / XPath（提取）
+**策略**：Phase 2 每新增一个站点，同步编写其专属抽取器，不攒到后面补。
+
+#### 统一 Profile 结构
+
+```json
+{
+  "platform": "github",
+  "username": "yes999zc",
+  "display_name": "9哥",
+  "avatar_url": "https://...",
+  "avatar_hash": "a3f8c2d...",
+  "bio": "...",
+  "url": "https://github.com/yes999zc",
+  "joined_date": "2018-03-15",
+  "last_active": "2026-05-01",
+  "follower_count": 42,
+  "recent_posts": ["title1", "title2"]
+}
+```
 
 ---
 
-### 3.5 泄露数据库集成
+### 3.5 泄露数据库集成（v3 修正）
 
-三层架构，统一抽象接口：
+统一抽象接口，三层数据源：
 
+```python
+@dataclass
+class BreachRecord:
+    """所有字段 Optional — 不同数据源返回字段不同"""
+    email: str | None = None
+    username: str | None = None
+    phone: str | None = None
+    password_sha256: str | None = None   # 只存 SHA256，绝不存明文
+    domain: str | None = None
+    source: str | None = None
+    breach_date: str | None = None
+
+class LeakSource(ABC):
+    @abstractmethod
+    async def search_by_username(self, username: str) -> list[BreachRecord]: ...
+    @abstractmethod
+    async def search_by_email(self, email: str) -> list[BreachRecord]: ...
+    @abstractmethod
+    async def search_by_phone(self, phone: str) -> list[BreachRecord]: ...
+    async def is_available(self) -> bool: ...           # 健康检查
+    async def rate_limit_remaining(self) -> int: ...    # 速率余量
 ```
-LeakSource (抽象基类)
-├── search_by_username(username) → [{email, phone, source, date}]
-├── search_by_email(email)       → [{username, source, date}]
-└── search_by_phone(phone)       → [{username, email, source, date}]
 
 具体实现：
+```
 ├── CavalierSource      ← 免费 API，已验证可用
 ├── HIBPSource          ← HaveIBeenPwned API v3
 ├── DehashedSource      ← 付费 API（$5+/月）
-├── SelfHostedSource    ← PostgreSQL 自建（NAS）
-└── (更多数据源可扩展)
+└── SelfHostedSource    ← v2 scope: NAS PostgreSQL 自建
 ```
 
-#### 自建数据库（远期）
-
-| 数据集 | 规模 | 格式 |
-|--------|------|------|
-| BreachCompilation | 基础合集 | email:password |
-| Collection #1 | 大合集 | email:password |
-| Collection #2-5 + Antipublic | 最大合集 | email:password |
-| COMB | 32 亿唯一条目 | email:password |
-
-**技术栈**：PostgreSQL + GIN Trigram 索引
-- BTree 索引 email/domain → 毫秒级精确搜索
-- GIN Trigram 索引 username → 50ms 模糊搜索
-- 存储估算：300-500GB（含索引）
-- 部署位置：NAS（192.168.5.170）
-
-**法律声明**：自建数据库仅用于授权的安全研究和自我账号审计。
+**v3 安全修正**：密码字段绝不存明文，只存 `password_sha256`。
 
 ---
 
 ### 3.6 多信号关联引擎
 
-**核心思路**（来自陪审团建议 #1）：
-
-不要执着于 "username 是否存在"，而是把多个信号串起来：
+**输入依赖**：爬虫抓回的头像/简介数据 + 泄露数据库查询结果。
+**因此 Phase 顺序**：先爬虫（Phase 3）→ 再关联（Phase 4）。
 
 ```
 输入: 用户名 "zhangsan"
     │
     ├─→ 站点探测: 知乎 ✅  GitHub ✅  V2EX ❌
+    │
+    ├─→ 深度爬虫: GitHub头像 → hash a3f8...
+    │             知乎头像 → hash b7e2...
     │
     ├─→ 泄露数据库: zhangsan → zhangsan@gmail.com / 138****1234
     │       │
@@ -290,10 +360,11 @@ LeakSource (抽象基类)
     │
     ├─→ 搜索引擎: site:v2ex.com "zhangsan"
     │
-    └─→ 头像哈希: GitHub头像 vs 知乎头像 → 匹配确认
+    └─→ 头像哈希匹配: a3f8 == b7e2? → 否 → 非同一人
 ```
 
 **信号权重**：
+
 | 信号 | 强度 | 说明 |
 |------|------|------|
 | 用户名精确匹配 | 中 | 同一用户名 ≠ 同一人（知乎昵称可重复） |
@@ -302,147 +373,149 @@ LeakSource (抽象基类)
 | 头像哈希匹配 | 高 | 同一头像 → 同一人的概率极高 |
 | 搜索引擎结果 | 低 | 辅助信号，需人工判断 |
 
+**已知账号自动验证**（v3 新增）：CI 每日对 `known_accounts` 执行探测验证，检测规则失效。这是防止站点数据库腐烂的唯一手段，从 Phase 1 就开始跑。
+
 ---
 
 ### 3.7 全景报告
 
-最终交付物，对标 nuwa.world 的 Deep Research：
+最终交付物，对标 nuwa.world 的 Deep Research。Geist 灰白风，无渐变无 emoji。
 
-```
-┌─────────────────────────────────────────┐
-│          Identity Panorama               │
-│          "zhangsan"                       │
-├─────────────────────────────────────────┤
-│  ┌──────────────────────────────────┐   │
-│  │  📊 平台分布                      │   │
-│  │  GitHub ✅  知乎 ✅  CSDN ✅       │   │
-│  │  豆瓣 ✅  V2EX ❌  微博 ❌          │   │
-│  │  命中率: 4/6                       │   │
-│  └──────────────────────────────────┘   │
-│  ┌──────────────────────────────────┐   │
-│  │  🔗 关联信号                      │   │
-│  │  邮箱: z***@gmail.com            │   │
-│  │  手机: 138**** (中国移动)         │   │
-│  │  头像哈希: a3f8c2d...            │   │
-│  └──────────────────────────────────┘   │
-│  ┌──────────────────────────────────┐   │
-│  │  🕐 活跃时间线                    │   │
-│  │  GitHub: 2018-至今               │   │
-│  │  知乎: 2020-2024                 │   │
-│  └──────────────────────────────────┘   │
-│  ┌──────────────────────────────────┐   │
-│  │  🗂️ 泄露记录                     │   │
-│  │  数据源: BreachCompilation       │   │
-│  │  ⚠️ 2021年 LinkedIn 泄露         │   │
-│  └──────────────────────────────────┘   │
-├─────────────────────────────────────────┤
-│  完整度: 72%   数据源: 6   信号: 4      │
-└─────────────────────────────────────────┘
-```
-
-**设计风格**：Geist 灰白风，无渐变无 emoji（内部使用图标由字符替换），纯结构感。
+**v3 交付物明确化**：
+- 可独立运行的 Web 应用（非仅 CLI 输出）
+- 自包含 HTML 报告（CSS 内联，可分享/打印）
+- 结构化 JSON 导出（供下游工具消费）
 
 ---
 
-## 四、分阶段路线图
+## 四、分阶段路线图（v3 重排）
 
-### Phase 1：基础验证（当前阶段）
+### Phase 1：基础验证（当前阶段）🔴
 
-**目标**：验证技术可行性，不求完整。
+**目标**：验证技术可行性 + 建立 schema 约束 + CI 门禁。
 
-- [ ] 用 Scrapling 手动探测 10 个中国核心平台
-- [ ] 为每个可探测站点写一个 JSON（按上述 schema）
-- [ ] 实现基础 Engine 系统（base_http_status + 1 个 CMS engine）
-- [ ] 实现 Cavalier LeakSource（免费 API 先行验证）
+- [ ] 项目骨架 + `pyproject.toml` + pytest
+- [ ] Scrapling HTTP 封装层
+- [ ] **`data/schema.json`** — 站点 JSON 校验（schema-first，Phase 1 就写）
+- [ ] **`data/taxonomy.json`** — 分类树定义
+- [ ] HTTP 代理配置（`config.example.toml`）
+- [ ] 手动验证 10 个中国核心站（含微信弱信号实验）
+- [ ] 为可探测站点写 JSON（需通过 schema 校验）
+- [ ] 实现 `base_http_status` + 1 个 CMS Engine
+- [ ] `engines.json` 结构 + 引擎加载器
+- [ ] **`LeakSource` 抽象接口**（3 个方法 + BreachRecord dataclass）
+- [ ] `CavalierSource` 实现
+- [ ] **known_accounts 自动验证 CI**（每日 cron，Phase 1 就跑）
+- [ ] CLI 入口：`clawithme search <username>`
 
-**交付物**：一个能探测 10 个中国站 + 查询 Cavalier 的 CLI 工具。
+**交付物**：能探测 10 个中国站 + 查询 Cavalier 的 CLI 工具。schema + CI 已就位。
 
 ---
 
 ### Phase 2：站点数据库扩展
 
-**目标**：建站护城河。
+**目标**：建立护城河。
 
-- [ ] 扩展至 50+ 中国站
-- [ ] 引入 maigret 的 3156 站点（删减后保留活跃站点）
-- [ ] 实现所有 Engine（XenForo/phpBB/Discourse/Discuz!/WordPress）
-- [ ] JSON Schema CI 校验
+- [ ] 扩展至 50+ 中国站（含虎扑/NGA/少数派/什么值得买/AcFun/酷安/站酷/花瓣/LOFTER/百度知道/天涯社区）
+- [ ] maigret 站点迁移脚本（maigret format → clawithme schema）
+- [ ] 实现全部 CMS Engine（XenForo/phpBB/Discourse/vBulletin/Discuz!/WordPress）
+- [ ] GitHub Actions CI：PR 自动运行 `validate.py`
+- [ ] CONTRIBUTING.md
+- [ ] **v2 scope**：2000 全球站迁移（非 Phase 2 必须）
 
-**交付物**：完整的站点数据库 + Engine 系统。
-
----
-
-### Phase 3：多信号关联
-
-**目标**：从 "用户名枚举" 升级到 "多信号关联"。
-
-- [ ] 实现邮箱/手机号 → 平台关联
-- [ ] 实现头像哈希跨平台匹配
-- [ ] 集成搜索引擎 site: 辅助
-- [ ] 集成 HIBP API
-
-**交付物**：多信号关联引擎。
+**交付物**：50+ 中国站 JSON + Engine 系统 + CI 门禁。
 
 ---
 
-### Phase 4：深度爬虫
+### Phase 3：深度爬虫（原 Phase 4，提前）
 
-**目标**：获取详细信息。
+**目标**：获取多信号关联所需的原始数据。**在 Phase 4 多信号关联之前完成。**
 
-- [ ] 对命中站点抓取公开信息
-- [ ] Scrapling DynamicFetcher 处理 SPA
-- [ ] 反爬策略捆绑到 Engine
+- [ ] 通用爬虫框架（`crawler/base.py`）
+- [ ] 站点专属抽取器（zhihu/github 等，与 Phase 2 站点扩展同步编写）
+- [ ] Scrapling DynamicFetcher 集成（SPA/JS 渲染）
+- [ ] 频率控制 + User-Agent 轮换
+- [ ] 统一 Profile 结构定义
+- [ ] **已知账号验证 CI**（持续运行，监控规则腐烂）
 
-**交付物**：深度爬虫模块。
-
----
-
-### Phase 5：泄露数据库自建（远期）
-
-**目标**：真正的护城河。
-
-- [ ] NAS 部署 PostgreSQL
-- [ ] 下载至少一个泄露数据集
-- [ ] 建立 GIN Trigram 索引
-- [ ] 实现 SelfHostedSource
-
-**交付物**：本地泄露数据库查询服务。
+**交付物**：至少 5 个站点能抓取简介 + 头像。爬虫模块可独立运行。
 
 ---
 
-### Phase 6：全景报告
+### Phase 4：多信号关联（原 Phase 3，后移）
 
-**目标**：对标的终局。
+**目标**：从「用户名枚举」升级为「多信号身份关联」。
+**前置依赖**：Phase 3（爬虫数据）+ Phase 1（LeakSource）。
 
-- [ ] 身份全景报告引擎
-- [ ] Geist 灰白风 Web UI
-- [ ] 导出 PDF / JSON / HTML
+- [ ] 邮箱 → 平台关联
+- [ ] 手机号 → 平台关联（含归属地查询）
+- [ ] 头像哈希跨平台匹配（依赖 Phase 3 抓回的头像）
+- [ ] 搜索引擎 site: 辅助
+- [ ] 信号聚合器 + 置信度评分
+- [ ] HIBP API 集成
+- [ ] LeakSource 管理器（多源优先级 + 降级）
 
-**交付物**：完整产品。
+**交付物**：多信号关联引擎，输出 `{email, phone, platforms, confidence}`。
 
 ---
 
-## 五、风险与应对
+### Phase 5：全景报告（终局）
+
+**目标**：对标 nuwa.world Deep Research。
+
+- [ ] 报告数据聚合（站点探测 + 爬虫 + 泄露 + 关联信号）
+- [ ] 完整度计算
+- [ ] 平台分布图、活跃时间线、关联信号图
+- [ ] Geist 灰白风 Web UI + 搜索交互
+- [ ] 自包含 HTML 报告导出
+- [ ] JSON 结构化导出
+
+**交付物**：完整的独立 Web 应用 + 报告导出。
+
+---
+
+### v2 Scope（远期）
+
+以下功能从主线 Phase 移入 v2 范围：
+
+- **泄露数据库自建**（原 Phase 5）：NAS PostgreSQL + 泄露数据导入
+  - 法律风险需独立评估（中国《刑法》第285条）
+  - 当前阶段以 Cavalier + HIBP + Dehashed API 聚合替代
+- **2000+ 全球站点迁移**（原 Phase 2 子任务）
+  - 团队资源不足以维护 2000+ 站点的持续验证
+  - v1 聚焦中国站，v2 扩展到全球
+
+---
+
+## 五、风险与应对（v3 补充）
 
 | 风险 | 等级 | 应对 |
 |------|------|------|
 | 中国站探测大面积不可行 | 🔴 | Phase 1 优先验证，不可行的直接标记 skip |
+| 站点数据库规则腐烂 | 🔴 | **Phase 1 即启动 known_accounts 每日自动验证 CI** |
+| 法律合规（个人信息保护法） | 🔴 | 中国站代码架构隔离为外部插件，主线不含爬取实现 |
+| IP 被封禁 | 🔴 | 代理配置 + 频率控制 + 不可逆操作前人工确认 |
 | 反爬对抗持续升级 | 🟡 | Scrapling 多层兜底 + 频率控制 |
-| 法律合规（个人信息保护法） | 🔴 | 文档声明仅限授权使用；默认关闭批量中国站扫描 |
-| 泄露数据库存储成本 | 🟡 | NAS 已有基础设施；按需下载子集 |
-| 开源后数据库被抄 | 🟡 | 站点配置可抄，但中国站探测经验（anti_bot 策略、API 端点发现）是隐性知识 |
-| 站点规则失效（URL 变更） | 🟡 | known_accounts 自动验证 + CI 死链检测 |
+| 维护人力枯竭 | 🟡 | 聚焦 50+ 中国站，2000 全球站推至 v2 |
+| 自建泄露库刑事责任 | 🔴 | 推至 v2 scope 独立评估；v1 用 API 聚合 |
+| 开源后数据库被抄 | 🟡 | 站点配置可抄，探测经验（anti_bot 策略、API 端点）是隐性知识 |
 
 ---
 
-## 六、设计决策记录
+## 六、设计决策记录（v3 修订）
 
 | 决策 | 结论 | 理由 |
 |------|------|------|
 | 站点存储格式 | 一个站点一个 JSON | Git PR 零冲突，diff 清晰 |
 | Engine 存储 | 独立 engines.json | 数据/逻辑分离，Engine 升级所有站点受益 |
-| 分类体系 | identity_type + geo_region + user_scale | 三个正交维度，互不重叠 |
+| **检测类型归属** | **Engine 的 classifier 唯一决定，站点不声明 type** | 避免冗余和矛盾 |
+| 分类体系 | identity_type + geo_region + user_scale + tags | 正交维度 + 灵活标签 |
+| **identity_type 第五类** | **新增 public_social**（微博/小红书） | 解决半实名平台分类模糊 |
 | HTTP 底层 | Scrapling 替代 requests/httpx | 绕过 Cloudflare，指纹伪装 |
-| 泄露数据库集成 | 统一 LeakSource 抽象接口 | 多数据源可插拔，不锁死单一供应商 |
-| 部署优先级 | 本地/NAS 优先，不追 Vercel | Vercel 的 Serverless 限制不适合长扫描任务 |
+| 泄露数据库集成 | 统一 LeakSource 抽象接口 + BreachRecord dataclass | 多数据源可插拔 |
+| **密码存储** | **只存 password_sha256，绝不存明文** | 合规底线 |
+| 中国站代码位置 | 独立插件仓库（clawithme-cn），主线不含 | 法律风险隔离 |
+| **Phase 3 & 4 顺序** | **深度爬虫（3）→ 多信号关联（4）** | 关联依赖爬虫数据 |
+| 部署优先级 | 本地/NAS 优先，不追 Vercel | Serverless 限制不适合长扫描 |
 | 设计风格 | Geist 灰白风 | 9 哥偏好，技术报告用极简结构感 |
+| **CI 门禁时机** | **Phase 1 即部署 schema 校验 + known_accounts 每日验证** | 防止数据库早衰 |
