@@ -1,0 +1,37 @@
+{
+  "base_http_status": {
+    "name": "HTTP Status Code Check",
+    "version": "1.0",
+    "classifier": "status_code",
+    "description": "Probe a URL and check HTTP status code. 200 = account exists, 404/other = not found.",
+    "params": {
+      "expected": "{e_code}",
+      "timeout_ms": 5000,
+      "follow_redirects": true
+    },
+    "anti_bot": "scrapling_fetcher"
+  },
+  "base_http_message": {
+    "name": "HTTP Body Message Check",
+    "version": "1.0",
+    "classifier": "message",
+    "description": "Probe a URL and check response body for presence/absence strings.",
+    "params": {
+      "presence_strings": ["{e_string}"],
+      "absence_strings": ["{m_string}"],
+      "timeout_ms": 8000
+    },
+    "anti_bot": "scrapling_fetcher"
+  },
+  "base_http_headers": {
+    "name": "HTTP Headers Check",
+    "version": "1.0",
+    "classifier": "headers",
+    "description": "Probe a URL and check response headers for expected patterns.",
+    "params": {
+      "expected_headers": {},
+      "timeout_ms": 5000
+    },
+    "anti_bot": "scrapling_fetcher"
+  }
+}
