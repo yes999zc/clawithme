@@ -1,0 +1,22 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install jsonschema
+      - name: Validate all site JSONs
+        run: python scripts/validate.py
+      - name: Stats
+        run: python scripts/stats.py

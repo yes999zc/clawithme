@@ -33,5 +33,41 @@
       "timeout_ms": 5000
     },
     "anti_bot": "scrapling_fetcher"
+  },
+  "xenforo": {
+    "name": "XenForo Forum",
+    "version": "1.0",
+    "classifier": "message",
+    "description": "Generic XenForo forum engine. Covers hundreds of XenForo-based forums.",
+    "params": {
+      "presence_strings": ["{e_string}"],
+      "absence_strings": ["{m_string}"],
+      "timeout_ms": 8000
+    },
+    "anti_bot": "scrapling_fetcher"
+  },
+  "discourse": {
+    "name": "Discourse Forum",
+    "version": "1.0",
+    "classifier": "message",
+    "description": "Discourse forum engine. Presence: user profile elements. Absence: 'not found' messages.",
+    "params": {
+      "presence_strings": ["{e_string}"],
+      "absence_strings": ["{m_string}"],
+      "timeout_ms": 8000
+    },
+    "anti_bot": "scrapling_fetcher"
+  },
+  "wordpress_author": {
+    "name": "WordPress Author Page",
+    "version": "1.0",
+    "classifier": "status_code",
+    "description": "WordPress author archive pages. 200 = author has posts.",
+    "params": {
+      "expected": "{e_code}",
+      "timeout_ms": 5000,
+      "follow_redirects": true
+    },
+    "anti_bot": "scrapling_fetcher"
   }
 }
