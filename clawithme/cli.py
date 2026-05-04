@@ -12,10 +12,12 @@ import json
 import sys
 from pathlib import Path
 
+from clawithme.crawler.base import Profile
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import get_engine_for_site, load_engines
 from clawithme.leak_sources import CavalierSource
 from clawithme.logging import get_logger, new_trace_id, setup_logging
+from clawithme.signals.correlation import CorrelationEngine
 
 logger = get_logger()
 
@@ -71,6 +73,7 @@ def search(username: str):
 
     # ── Phase 2: Profile extraction (crawler) ──
     profiles: list[dict] = []
+    profile_objects: list[Profile] = []  # kept for Phase 4 correlation
     for hit in hits:
         site_id = hit["site_id"]
         extractor_cls = extractors.get(site_id)
@@ -80,6 +83,7 @@ def search(username: str):
         try:
             extractor = extractor_cls()
             profile = extractor.extract(hit["site_def"], username)
+            profile_objects.append(profile)
             if not profile.empty:
                 profiles.append({
                     "site_id": profile.site_id,
@@ -107,6 +111,20 @@ def search(username: str):
     except (OSError, ValueError, TimeoutError, RuntimeError) as e:
         log.warning("leak_query_failed", error=str(e))
         leak_records = []
+
+    # ── Phase 4: Correlation ──
+    for r in leak_records:
+        profile_objects.append(Profile(
+            site_id=f"leak:{r.source or 'unknown'}",
+            site_name=r.source or "Leak DB",
+            url="",
+            username=r.username or username,
+            email=r.email,
+            phone=r.phone,
+        ))
+
+    engine = CorrelationEngine()
+    clusters = engine.correlate(profile_objects)
 
     # ── Output ──
     print()
@@ -140,6 +158,17 @@ def search(username: str):
             print(f"   ⚠️  {r}")
     else:
         print("🔓 Leak records: 0 (no known breaches)")
+
+    if len(clusters) > 0:
+        print()
+        multi = sum(1 for c in clusters if len(c.profiles) > 1)
+        print(f"🔗 Identity clusters: {len(clusters)} total, {multi} multi-profile")
+        for i, c in enumerate(clusters, 1):
+            if len(c.profiles) == 1:
+                continue  # skip singletons for cleaner output
+            sites = [p.site_id.replace("leak:", "🔓") for p in c.profiles]
+            print(f"   Cluster {i}: {', '.join(sites)}")
+            print(f"      confidence={c.confidence}  signals={c.signals}")
 
     print()
     log.info("search_done", hits=len(hits), profiles=len(profiles),
