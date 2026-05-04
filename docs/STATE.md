@@ -1,17 +1,17 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-04
+> Handoff document for fresh session. Last updated: 2026-05-05
 
 ## What is clawithme
 
 OSINT tool. Input: username → Output: identity panorama across social platforms.
 Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
-## Current Code State (post-audit cleanup)
+## Current Code State (audit round 2 cleared)
 
 ```
-1302 lines Python, 19 .py files, 13 tests (all passing)
-48 site JSONs (37 active, 11 deprecated)
+1360 lines Python, 21 .py files, 20 tests (all passing)
+48 site JSONs (37 active, 11 deprecated), all validate green
 6 engines, 3 classifiers (status_code/message/headers)
 ```
 
@@ -91,10 +91,18 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 - Fixed Claude-introduced bugs (missing BaseModel import, async bugs)
 - Git commits: 2a95db1 → 3aaf4e5
 
+### Audit Round 2 ✅ — Dependency & Stub Cleanup
+- Removed unused httpx/aiohttp from dependencies (never imported)
+- Deleted 7 unknown.json migration artifacts in data/sites/migrated/
+- Marked 4 empty __init__.py stubs with TODO: Phase N markers
+- Added smoke tests: test_loader.py (4) + test_cli.py (3) → 13→20 total
+- All 20 tests pass, 48 sites validate green
+- Git commit: 7fc4f57
+
 ## Next: Phase 3 — Deep Crawler
 
 **Goal**: Crawl public info from discovered profiles (avatar hash, bio, posts).
-**Dependency**: Phase 2 complete ✅
+**Dependency**: Phase 2 ✅, Audit Round 1 ✅, Audit Round 2 ✅
 
 ### Tasks (from docs/todo.md)
 
@@ -149,4 +157,4 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 - WeChat weak signal experiment — not started
 - Chat slang fingerprint library — v2
 - Monitoring liveness probe — Phase 2.3.3 listed but not deployed
-- Empty packages: crawler/, signals/, report/ — waiting for Phase 3/4/5
+- Phase 3/4/5 packages: crawler/, signals/, report/ — stubs marked, implementation pending
