@@ -1,0 +1,33 @@
+# clawithme configuration example
+# Copy to config.toml and fill in your values
+
+[proxy]
+# HTTP proxy for accessing overseas APIs from China
+http = ""
+https = ""
+
+[apis]
+# Hudson Rock Cavalier — free, no key required
+# cavalier_base_url = "https://cavalier.hudsonrock.com/api/json/v2"
+
+# HaveIBeenPwned (Phase 4)
+hibp_api_key = ""
+
+# Dehashed (Phase 4, paid)
+dehashed_api_key = ""
+dehashed_email = ""
+
+[scanning]
+# Default timeout per site probe (ms)
+default_timeout_ms = 5000
+
+# Max concurrent probes
+max_concurrency = 10
+
+# Minimum interval between requests to same site (ms)
+min_interval_ms = 500
+
+[logging]
+level = "INFO"
+# Set to DEBUG for trace-level output
+# level = "DEBUG"

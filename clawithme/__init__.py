@@ -1,1 +1,2 @@
-from .engine.maigret import search, main, run
+# clawithme — open-source OSINT identity mapping tool
+__version__ = "0.1.0"
