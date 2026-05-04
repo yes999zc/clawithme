@@ -30,3 +30,25 @@ def compute_phash(image_bytes: bytes) -> str | None:
     except (OSError, ValueError) as e:
         logger.warning("phash_compute_failed", error=str(e))
         return None
+
+
+def hamming_distance(phash1: str, phash2: str) -> int:
+    """Count differing bits between two pHash hex strings."""
+    return (int(phash1, 16) ^ int(phash2, 16)).bit_count()
+
+
+def compare_avatars(
+    phash1: str | None,
+    phash2: str | None,
+    threshold: int = 10,
+) -> dict:
+    """Compare two avatar pHashes via Hamming distance.
+
+    Returns {"distance": int, "is_match": bool}.
+    is_match is True when distance <= threshold.
+    Returns distance=-1, is_match=False if either pHash is None.
+    """
+    if phash1 is None or phash2 is None:
+        return {"distance": -1, "is_match": False}
+    dist = hamming_distance(phash1, phash2)
+    return {"distance": dist, "is_match": dist <= threshold}
