@@ -6,6 +6,7 @@ from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
 from clawithme.crawler.utils import first_text, parse_count
 from clawithme.logging import get_logger
+from clawithme.signals.avatar import compute_phash
 
 logger = get_logger()
 
@@ -51,6 +52,12 @@ class GithubExtractor(ProfileExtractor):
                 if src and not src.startswith("data:"):
                     profile.avatar_url = src
                     break
+
+        # Compute perceptual hash from avatar image
+        if profile.avatar_url:
+            avatar_resp = client.fetch_static(profile.avatar_url)
+            if avatar_resp is not None and avatar_resp.status == 200:
+                profile.avatar_phash = compute_phash(avatar_resp.body)
 
         # Location
         location = first_text(response, [

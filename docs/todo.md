@@ -209,7 +209,7 @@
 
 - [ ] **3.3.1** 统一 Profile 结构
   - `crawler/schema.py`：定义 `Profile` dataclass
-  - 字段：platform, username, display_name, avatar_url, avatar_hash, bio, url, joined_date, last_active, follower_count, recent_posts
+  - 字段：platform, username, display_name, avatar_url, avatar_phash, bio, url, joined_date, last_active, follower_count, recent_posts
   - 验收：至少 3 类平台可正确序列化
 
 ---

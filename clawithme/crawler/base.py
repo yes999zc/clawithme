@@ -21,7 +21,7 @@ class Profile:
     display_name: str | None = None
     bio: str | None = None
     avatar_url: str | None = None
-    avatar_hash: str | None = None  # sha256 of avatar image (Phase 4: computed by signals/)
+    avatar_phash: str | None = None  # perceptual hash for cross-platform avatar matching (Phase 4)
     location: str | None = None
     joined_date: str | None = None
     post_count: int | None = None
@@ -34,7 +34,7 @@ class Profile:
         """True if no meaningful data beyond site id/name/url/username."""
         return not any([
             self.display_name, self.bio, self.avatar_url,
-            self.avatar_hash, self.location, self.joined_date,
+            self.avatar_phash, self.location, self.joined_date,
             self.post_count, self.follower_count is not None,
             self.following_count is not None, self.extra,
         ])

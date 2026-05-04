@@ -41,9 +41,9 @@ class TestProfile:
                      username="u", following_count=5)
         assert p.empty is False
 
-    def test_only_avatar_hash_not_empty(self):
+    def test_only_avatar_phash_not_empty(self):
         p = Profile(site_id="t", site_name="T", url="http://x",
-                     username="u", avatar_hash="abc123")
+                     username="u", avatar_phash="abc123")
         assert p.empty is False
 
 
