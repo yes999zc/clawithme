@@ -90,7 +90,7 @@ def search(username: str):
                     "followers": profile.follower_count,
                     "empty": False,
                 })
-                log.info("profile_extracted", site=site_id,
+                log.debug("profile_extracted", site=site_id,
                          display_name=profile.display_name)
         except (OSError, ValueError, TimeoutError) as e:
             log.warning("extract_failed", site=site_id, error=str(e))

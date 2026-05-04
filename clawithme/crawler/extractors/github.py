@@ -76,5 +76,5 @@ class GithubExtractor(ProfileExtractor):
         if following_text:
             profile.following_count = parse_count(following_text)
 
-        logger.info("github_extracted", username=username, display_name=profile.display_name)
+        logger.debug("github_extracted", username=username, display_name=profile.display_name)
         return profile

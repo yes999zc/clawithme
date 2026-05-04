@@ -77,6 +77,7 @@ class TestCrawlerClient:
         assert client._min_delay_ms == 200
         assert client._max_retries == 2
         assert client._backoff_base_ms == 1000
+        assert client._proxy is None
 
     def test_dynamic_available_or_graceful(self):
         client = CrawlerClient(min_delay_ms=0)
@@ -85,3 +86,22 @@ class TestCrawlerClient:
             return
         assert resp.status == 200
         assert resp.html_content or resp.body
+
+    @patch("clawithme.crawler.client.HttpClient")
+    def test_fetch_static_retries_429(self, mock_http_cls):
+        mock_http = MagicMock()
+        mock_fetcher = MagicMock()
+        mock_429 = MagicMock()
+        mock_429.status = 429
+        mock_429.headers = {"Retry-After": "0.01"}
+        mock_ok = MagicMock()
+        mock_ok.status = 200
+
+        mock_fetcher.get.side_effect = [mock_429, mock_ok]
+        mock_http.static = mock_fetcher
+        mock_http_cls.return_value = mock_http
+
+        client = CrawlerClient(max_retries=2, min_delay_ms=0, backoff_base_ms=1)
+        resp = client.fetch_static("http://example.com")
+        assert resp.status == 200
+        assert mock_fetcher.get.call_count == 2

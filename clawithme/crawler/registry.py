@@ -33,6 +33,12 @@ def discover_extractors() -> dict[str, type[ProfileExtractor]]:
             if not cls.site_id:
                 logger.warning("extractor_no_site_id", entry_point=ep.name)
                 continue
+            if cls.site_id in extractors:
+                existing = extractors[cls.site_id].__name__
+                logger.warning(
+                    "duplicate_site_id", site_id=cls.site_id,
+                    existing=existing, new=cls.__name__,
+                )
             extractors[cls.site_id] = cls
             logger.debug("extractor_discovered", site_id=cls.site_id, name=ep.name)
         except (ImportError, TypeError, ValueError) as e:

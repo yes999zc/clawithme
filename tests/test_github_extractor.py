@@ -102,3 +102,15 @@ class TestGithubExtractor:
 
         assert profile.site_id == "github"
         assert profile.empty is True
+
+    @patch("clawithme.crawler.extractors.github.CrawlerClient.fetch_static")
+    def test_extract_network_failure_returns_empty_profile(self, mock_fetch):
+        mock_fetch.return_value = None
+
+        ex = GithubExtractor()
+        profile = ex.extract(
+            {"id": "github", "name": "GitHub"}, "testuser"
+        )
+
+        assert profile.site_id == "github"
+        assert profile.empty is True

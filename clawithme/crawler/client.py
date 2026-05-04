@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import random
 import time
+from urllib.parse import urlparse
 
 from scrapling.engines.toolbelt.custom import Response
 
@@ -19,9 +20,11 @@ logger = get_logger()
 _DYNAMIC_AVAILABLE: bool | None = None
 
 # Remove navigator.webdriver flag (standard headless detection vector)
-# NOTE: DynamicFetcher init_script expects a file path, not inline code.
-# For stealth, extractors can pass page_setup callable via **kwargs.
-_STEALTH_INIT_SCRIPT = None  # placeholder — needs file-based approach for Scrapling
+def _stealth_page_setup(page):
+    """Inject anti-detection scripts into Playwright page before navigation."""
+    page.add_init_script("""
+        Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+    """)
 
 # Common User-Agent strings for rotation
 _USER_AGENTS = [
@@ -51,6 +54,21 @@ def random_user_agent() -> str:
     return random.choice(_USER_AGENTS)
 
 
+_RETRYABLE_STATUSES = frozenset({429, 503})
+
+
+def _parse_retry_after(response) -> float | None:
+    """Parse Retry-After header (seconds or HTTP-date) → seconds or None."""
+    value = response.headers.get("Retry-After", "")
+    if not value:
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        # HTTP-date format — approximate
+        return None
+
+
 # Module-level — shared across all CrawlerClient instances
 _last_request_at: float = 0.0
 
@@ -71,11 +89,13 @@ class CrawlerClient:
         min_delay_ms: int = 200,
         max_retries: int = 2,
         backoff_base_ms: int = 1000,
+        proxy: str | None = None,
     ):
         self._timeout_ms = timeout_ms
         self._min_delay_ms = min_delay_ms
         self._max_retries = max_retries
         self._backoff_base_ms = backoff_base_ms
+        self._proxy = proxy
         self._http: HttpClient | None = None
         self._dynamic = None  # DynamicFetcher, lazy
 
@@ -94,7 +114,7 @@ class CrawlerClient:
     @property
     def http(self) -> HttpClient:
         if self._http is None:
-            self._http = HttpClient(timeout_ms=self._timeout_ms)
+            self._http = HttpClient(timeout_ms=self._timeout_ms, proxy=self._proxy)
         return self._http
 
     @property
@@ -106,11 +126,84 @@ class CrawlerClient:
             self._dynamic = DynamicFetcher()
         return self._dynamic
 
+    # ── Robots.txt compliance (optional, opt-in per extractor) ─
+
+    _robots_cache: dict[str, set[str]] = {}  # domain → disallowed path prefixes
+
+    def _parse_robots(self, text: str) -> set[str]:
+        """Extract Disallow rules from User-agent: * section."""
+        disallowed: set[str] = set()
+        in_wildcard = False
+        for line in text.splitlines():
+            stripped = line.strip().lower()
+            if stripped.startswith("user-agent:") and "*" in stripped:
+                in_wildcard = True
+            elif stripped.startswith("user-agent:"):
+                in_wildcard = False
+            elif in_wildcard and stripped.startswith("disallow:"):
+                path = stripped.split(":", 1)[1].strip()
+                if path:
+                    disallowed.add(path)
+        return disallowed
+
+    def is_allowed(self, url: str) -> bool:
+        """Check robots.txt compliance for a URL.
+
+        Returns False if the URL path is disallowed by robots.txt.
+        Returns True if robots.txt is unavailable or the path is allowed.
+        Cache is per-domain for the lifetime of the CrawlerClient.
+        """
+        parsed = urlparse(url)
+        domain = parsed.netloc
+        path = parsed.path or "/"
+
+        # Check cache
+        if domain in self._robots_cache:
+            disallowed = self._robots_cache[domain]
+        else:
+            robots_url = f"{parsed.scheme}://{domain}/robots.txt"
+            try:
+                resp = self.fetch_static(robots_url)
+                if resp is None or resp.status != 200:
+                    # Can't fetch robots.txt → assume allowed
+                    self._robots_cache[domain] = set()
+                    return True
+                disallowed = self._parse_robots(resp.text)
+                self._robots_cache[domain] = disallowed
+            except (OSError, TimeoutError, ValueError):
+                self._robots_cache[domain] = set()
+                return True
+
+        # Check if path matches any disallowed prefix
+        for rule in disallowed:
+            if path.startswith(rule):
+                logger.info("robots_disallowed", url=url, rule=rule)
+                return False
+        return True
+
+    # ── Cleanup ───────────────────────────────────────────────
+
+    def close(self):
+        """Release HTTP resources and any cached connections."""
+        if self._dynamic is not None:
+            # DynamicFetcher sessions are per-request; no persistent browser.
+            self._dynamic = None
+        if self._http is not None:
+            self._http = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        return False
+
     # ── Fetch methods ────────────────────────────────────────
 
     def fetch_static(self, url: str) -> Response | None:
         """Fetch a page using static Fetcher, with rate limiting + backoff.
 
+        Retries on network errors and HTTP 429/503.
         Returns None if all retries are exhausted.
         """
         self._wait_if_needed()
@@ -119,7 +212,7 @@ class CrawlerClient:
 
         for attempt in range(self._max_retries + 1):
             try:
-                return self.http.static.get(url, headers=headers)
+                resp = self.http.static.get(url, headers=headers)
             except (OSError, TimeoutError):
                 if attempt < self._max_retries:
                     backoff = self._backoff_base_ms * (2 ** attempt) / 1000
@@ -128,6 +221,19 @@ class CrawlerClient:
                         backoff_s=backoff,
                     )
                     time.sleep(backoff)
+                continue
+
+            # HTTP-level retry for rate-limiting / server overload
+            if resp.status not in _RETRYABLE_STATUSES or attempt >= self._max_retries:
+                return resp
+
+            retry_after = _parse_retry_after(resp)
+            backoff = retry_after or self._backoff_base_ms * (2 ** attempt) / 1000
+            logger.debug(
+                "fetch_retry_http", url=url, status=resp.status,
+                attempt=attempt + 1, backoff_s=backoff,
+            )
+            time.sleep(backoff)
 
         logger.error("fetch_static_exhausted", url=url, retries=self._max_retries)
         return None
@@ -159,14 +265,15 @@ class CrawlerClient:
                     timeout=self._timeout_ms,
                     useragent=random_user_agent(),
                     headless=headless,
+                    page_setup=_stealth_page_setup,
                     disable_resources=disable_resources,
                     block_ads=block_ads,
                     wait_selector=wait_selector,
                     **kwargs,
                 )
-                if _STEALTH_INIT_SCRIPT is not None:
-                    fetch_kwargs["init_script"] = _STEALTH_INIT_SCRIPT
-                return df.fetch(url, **fetch_kwargs)
+                if self._proxy:
+                    fetch_kwargs["proxy"] = self._proxy
+                resp = df.fetch(url, **fetch_kwargs)
             except (OSError, TimeoutError):
                 if attempt < self._max_retries:
                     backoff = self._backoff_base_ms * (2 ** attempt) / 1000
@@ -175,6 +282,19 @@ class CrawlerClient:
                         attempt=attempt + 1, backoff_s=backoff,
                     )
                     time.sleep(backoff)
+                continue
+
+            # HTTP-level retry for rate-limiting / server overload
+            if resp.status not in _RETRYABLE_STATUSES or attempt >= self._max_retries:
+                return resp
+
+            retry_after = _parse_retry_after(resp)
+            backoff = retry_after or self._backoff_base_ms * (2 ** attempt) / 1000
+            logger.debug(
+                "fetch_dynamic_retry_http", url=url, status=resp.status,
+                attempt=attempt + 1, backoff_s=backoff,
+            )
+            time.sleep(backoff)
 
         logger.error("fetch_dynamic_exhausted", url=url, retries=self._max_retries)
         return None
