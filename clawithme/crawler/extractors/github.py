@@ -7,6 +7,7 @@ from clawithme.crawler.client import CrawlerClient
 from clawithme.crawler.utils import first_text, parse_count
 from clawithme.logging import get_logger
 from clawithme.signals.avatar import compute_phash
+from clawithme.signals.extraction import extract_emails
 
 logger = get_logger()
 
@@ -43,6 +44,10 @@ class GithubExtractor(ProfileExtractor):
         bio = first_text(response, ["div.p-note", ".user-profile-bio"])
         if bio:
             profile.bio = bio
+            # Extract email from bio text
+            emails = extract_emails(bio)
+            if emails:
+                profile.email = emails[0]  # first email found
 
         # Avatar URL
         for sel in ["img.avatar-user", "a[itemprop=\"image\"] img"]:
