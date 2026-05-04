@@ -1,0 +1,36 @@
+{
+  "id": "weibo",
+  "name": "微博",
+  "primary": "social",
+  "canonical_url": "https://weibo.com/u/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "public_social",
+    "geo_region": "cn",
+    "user_scale": 300000000,
+    "tags": [
+      "microblog",
+      "news"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 30
+  },
+  "check": {
+    "probe_url": "https://weibo.com/u/{username}",
+    "expected": 200,
+    "regex": "^[0-9]+$",
+    "known_accounts": [
+      "1642591402"
+    ],
+    "error_flags": {
+      "uid_only": "微博 requires numeric UID, not username",
+      "needs_dynamic_fetcher": "JS-rendered page"
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "jianshu",
+  "name": "简书",
+  "primary": "blog",
+  "canonical_url": "https://www.jianshu.com/u/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 30000000,
+    "tags": [
+      "writing"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 1200
+  },
+  "check": {
+    "probe_url": "https://www.jianshu.com/u/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "yZq3ZV"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist99999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

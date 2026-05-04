@@ -1,0 +1,25 @@
+{
+  "id": "tieba",
+  "name": "贴吧",
+  "primary": "forum",
+  "canonical_url": "https://tieba.baidu.com/home/main?un={username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "cn",
+    "user_scale": 100000000,
+    "tags": [
+      "forum"
+    ]
+  },
+  "check": {
+    "probe_url": "https://tieba.baidu.com/home/main?un={username}",
+    "error_flags": {
+      "anti_bot": "Cloudflare/403 protection blocks unauthenticated probes"
+    }
+  },
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

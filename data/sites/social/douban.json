@@ -1,0 +1,34 @@
+{
+  "id": "douban",
+  "name": "豆瓣",
+  "primary": "social",
+  "canonical_url": "https://www.douban.com/people/{username}/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 80000000,
+    "tags": [
+      "books",
+      "movies"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 350
+  },
+  "check": {
+    "probe_url": "https://www.douban.com/people/{username}/",
+    "expected": 200,
+    "known_accounts": [
+      "ahbei"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist99999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

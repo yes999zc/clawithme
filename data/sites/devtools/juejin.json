@@ -1,0 +1,26 @@
+{
+  "id": "juejin",
+  "name": "掘金",
+  "primary": "devtools",
+  "canonical_url": "https://juejin.cn/user/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "cn",
+    "user_scale": 20000000,
+    "tags": [
+      "tech",
+      "blog"
+    ]
+  },
+  "check": {
+    "probe_url": "https://juejin.cn/user/{username}",
+    "error_flags": {
+      "needs_dynamic_fetcher": "JS-rendered SPA, all requests return 404 without JS"
+    }
+  },
+  "deprecated": true,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

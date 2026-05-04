@@ -1,0 +1,35 @@
+{
+  "id": "bilibili",
+  "name": "B站",
+  "primary": "media",
+  "canonical_url": "https://space.bilibili.com/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 200000000,
+    "tags": [
+      "video",
+      "anime"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 50
+  },
+  "check": {
+    "probe_url": "https://space.bilibili.com/{username}",
+    "expected": 200,
+    "regex": "^[0-9]+$",
+    "known_accounts": [
+      "8047632"
+    ],
+    "error_flags": {
+      "needs_dynamic_fetcher": "Page is JS-rendered, requires DynamicFetcher for body analysis. Status code 200 works for both existing and non-existing."
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}

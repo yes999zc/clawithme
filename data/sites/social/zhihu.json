@@ -1,0 +1,35 @@
+{
+  "id": "zhihu",
+  "name": "知乎",
+  "primary": "social",
+  "canonical_url": "https://www.zhihu.com/people/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "cn",
+    "user_scale": 100000000,
+    "tags": [
+      "qa",
+      "knowledge"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 120
+  },
+  "check": {
+    "probe_url": "https://www.zhihu.com/api/v4/members/{username}",
+    "expected": 200,
+    "regex": "^[a-zA-Z0-9_-]{2,30}$",
+    "known_accounts": [
+      "zhangjiawei"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist99999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-04T00:00:00Z"
+}
