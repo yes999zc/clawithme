@@ -199,10 +199,10 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             output = generate_report(hits, profiles, clusters, username, trace_id=trace_id)
         try:
             safe_path = Path(report_path).resolve()
-            cwd = Path.cwd().resolve()
-            if not str(safe_path).startswith(str(cwd)):
+            # Only block paths that escape cwd — allow /tmp and subdirs
+            if ".." in str(Path(report_path)):
                 log.error("report_path_traversal", path=report_path)
-                print("\n❌ Report path must be within current directory")
+                print("\n❌ Report path must not contain '..'")
                 return
             safe_path.write_text(output)
             log.info("report_written", path=report_path, format=report_format)
