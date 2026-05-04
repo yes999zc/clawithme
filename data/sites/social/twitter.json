@@ -15,15 +15,12 @@
   "check": {
     "probe_url": "https://twitter.com/{username}",
     "expected": 200,
-    "known_accounts": [
-      "jack"
-    ],
-    "known_unclaimed": [
-      "thisuserdoesnotexist999999"
-    ]
+    "error_flags": {
+      "needs_browser": "SPA — not-found text rendered by JS. Raw HTML identical for exist/non-exist. Needs headless browser."
+    }
   },
   "nsfw": false,
   "deprecated": false,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-04T17:26:29Z"
 }

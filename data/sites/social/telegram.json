@@ -3,7 +3,7 @@
   "name": "Telegram",
   "primary": "social",
   "canonical_url": "https://t.me/{username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "social",
     "identity_type": "virtual_social",
@@ -14,12 +14,8 @@
   "rankings": {},
   "check": {
     "probe_url": "https://t.me/{username}",
-    "expected": 200,
-    "known_accounts": [
-      "telegram"
-    ],
-    "known_unclaimed": [
-      "thisuserdoesnotexist999999"
+    "absence_strs": [
+      "Contact @"
     ]
   },
   "nsfw": false,

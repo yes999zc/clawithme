@@ -3,7 +3,7 @@
   "name": "Hacker News",
   "primary": "forum",
   "canonical_url": "https://news.ycombinator.com/user?id={username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "forum",
     "identity_type": "professional",
@@ -14,12 +14,8 @@
   "rankings": {},
   "check": {
     "probe_url": "https://news.ycombinator.com/user?id={username}",
-    "expected": 200,
-    "known_accounts": [
-      "pg"
-    ],
-    "known_unclaimed": [
-      "thisuserdoesnotexist999999"
+    "absence_strs": [
+      "No such user."
     ]
   },
   "nsfw": false,

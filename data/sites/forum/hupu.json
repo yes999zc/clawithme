@@ -16,9 +16,10 @@
   },
   "check": {
     "probe_url": "https://my.hupu.com/{username}",
-    "error_flags": {
-      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
-    }
+    "presence_strs": [
+      "他的动态"
+    ],
+    "timeout_ms": 8000
   },
   "nsfw": false,
   "deprecated": false,

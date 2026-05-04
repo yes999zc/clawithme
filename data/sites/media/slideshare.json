@@ -20,10 +20,13 @@
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"
-    ]
+    ],
+    "error_flags": {
+      "needs_browser": "Cloudflare JS challenge blocks HTTP-only access. Requires headless browser."
+    }
   },
   "nsfw": false,
   "deprecated": false,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-04T17:18:01Z"
 }

@@ -3,7 +3,7 @@
   "name": "Steam",
   "primary": "gaming",
   "canonical_url": "https://steamcommunity.com/id/{username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "gaming",
     "identity_type": "virtual_social",
@@ -14,12 +14,8 @@
   "rankings": {},
   "check": {
     "probe_url": "https://steamcommunity.com/id/{username}",
-    "expected": 200,
-    "known_accounts": [
-      "gabelnewell"
-    ],
-    "known_unclaimed": [
-      "thisuserdoesnotexist999999"
+    "absence_strs": [
+      "Steam Community :: Error"
     ]
   },
   "nsfw": false,

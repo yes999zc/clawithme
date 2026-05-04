@@ -16,9 +16,10 @@
   },
   "check": {
     "probe_url": "https://bbs.nga.cn/nuke.php?func=ucp&username={username}",
-    "error_flags": {
-      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
-    }
+    "absence_strs": [
+      "找不到用户"
+    ],
+    "timeout_ms": 8000
   },
   "nsfw": false,
   "deprecated": false,

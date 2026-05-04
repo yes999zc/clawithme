@@ -15,9 +15,10 @@
   },
   "check": {
     "probe_url": "https://zhidao.baidu.com/usercenter?uid={username}",
-    "error_flags": {
-      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
-    }
+    "absence_strs": [
+      "没有找到该用户哦～"
+    ],
+    "timeout_ms": 8000
   },
   "nsfw": false,
   "deprecated": false,

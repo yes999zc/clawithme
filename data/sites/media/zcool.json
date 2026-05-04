@@ -16,9 +16,10 @@
   },
   "check": {
     "probe_url": "https://www.zcool.com.cn/u/{username}",
-    "error_flags": {
-      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
-    }
+    "absence_strs": [
+      "用户不存在"
+    ],
+    "timeout_ms": 8000
   },
   "nsfw": false,
   "deprecated": false,

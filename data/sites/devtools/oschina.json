@@ -17,10 +17,11 @@
     "probe_url": "https://my.oschina.net/{username}",
     "error_flags": {
       "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
-    }
+    },
+    "note": "Returns identical page for existing and non-existing users. Cannot distinguish via HTTP."
   },
   "nsfw": false,
-  "deprecated": false,
+  "deprecated": true,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-04T17:18:01Z"
 }

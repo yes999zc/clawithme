@@ -3,7 +3,7 @@
   "name": "少数派",
   "primary": "blog",
   "canonical_url": "https://sspai.com/u/{username}/",
-  "engine_ref": "base_http_message",
+  "engine_ref": "base_http_status",
   "classification": {
     "primary": "blog",
     "identity_type": "virtual_social",
@@ -16,12 +16,13 @@
   },
   "check": {
     "probe_url": "https://sspai.com/u/{username}/",
+    "expected": 200,
     "error_flags": {
-      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
+      "needs_browser": "SPA — redirects to /whoops via JS routing. Raw HTML identical (2.8KB shell). Needs headless browser."
     }
   },
   "nsfw": false,
   "deprecated": false,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-04T17:26:29Z"
 }

@@ -3,7 +3,7 @@
   "name": "Instagram",
   "primary": "social",
   "canonical_url": "https://www.instagram.com/{username}/",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "social",
     "identity_type": "public_social",
@@ -14,13 +14,10 @@
   "rankings": {},
   "check": {
     "probe_url": "https://www.instagram.com/{username}/",
-    "expected": 200,
-    "known_accounts": [
-      "instagram"
+    "absence_strs": [
+      "\"show_lox_redesigned_404_page\":true"
     ],
-    "known_unclaimed": [
-      "thisuserdoesnotexist999999"
-    ]
+    "timeout_ms": 8000
   },
   "nsfw": false,
   "deprecated": false,

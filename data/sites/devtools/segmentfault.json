@@ -16,9 +16,10 @@
   },
   "check": {
     "probe_url": "https://segmentfault.com/u/{username}",
-    "error_flags": {
-      "needs_dynamic_fetcher": "Returns 200 for both existing/non-existing. Needs body analysis."
-    }
+    "absence_strs": [
+      "登录 - SegmentFault 思否"
+    ],
+    "timeout_ms": 8000
   },
   "nsfw": false,
   "deprecated": false,

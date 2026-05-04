@@ -102,13 +102,26 @@ class HttpClient:
 
     @staticmethod
     def _to_response(page) -> HttpResponse:
-        """Convert Scrapling page to unified HttpResponse."""
+        """Convert Scrapling page to unified HttpResponse.
+
+        Scrapling's Fetcher.text is a lazy TextHandler — str() on it may
+        return empty string while body has the actual content. Fallback
+        to decoding body with detected encoding.
+        """
+        body = page.body if page.body else b""
+        text = str(page.text) if page.text else ""
+        if not text and body:
+            encoding = page.encoding if hasattr(page, "encoding") and page.encoding else "utf-8"
+            try:
+                text = body.decode(encoding, errors="replace")
+            except (LookupError, UnicodeDecodeError):
+                text = body.decode("utf-8", errors="replace")
         return HttpResponse(
             status_code=page.status,
             url=str(page.url),
-            text=str(page.text) if page.text else "",
+            text=text,
             headers=dict(page.headers) if page.headers else {},
-            body=page.body if page.body else b"",
+            body=body,
         )
 
     def close(self) -> None:
