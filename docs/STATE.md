@@ -163,7 +163,19 @@ Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
 - Total: 65 (main) + 7 (plugin) = 72
 - Git commit: 2f35ec6 (main)
 
-### 4.3 Multi-Signal Correlation Engine (next)
+### 4.3 Multi-Signal Correlation Engine ✅
+
+- `CorrelationEngine.correlate(profiles) → list[Cluster]`
+- Cluster: `{profiles, confidence, signals}` dataclass
+- Union-Find algorithm with transitive closure across signals
+- Signal weights: email=1.0, phone=0.95, avatar_phash=0.8
+- Phone normalization: strips +86, spaces, dashes
+- Profile extended with `email`/`phone` fields (None default)
+- E2E: same avatar→cluster, transitive(phash+email)→1 cluster, different→separate
+- Tests: 7 correlation + 65 existing = 72 (main) + 7 (plugin) = 79
+- Git commit: 5b9ffe1 (main)
+
+### 4.4 Email/Phone Signal Extraction (next)
 
 ## v2 Scope (deferred)
 
