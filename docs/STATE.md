@@ -1,6 +1,6 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-05
+> Handoff document for fresh session. Last updated: 2026-05-04 (post-jury-audit fixes)
 
 ## What is clawithme
 
@@ -9,13 +9,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
 ## Current Code State (architecture isolation ✅)
 
-```
-~2600 lines Python, 28 .py files, 49 tests (all passing)
-48 site JSONs (37 active, 11 deprecated), all validate green
-6 engines, 3 classifiers (status_code/message/headers)
-2 extractors: GithubExtractor (working), ZhihuExtractor (working — 张一)
-Rate limiting: 200ms min delay, exponential backoff, 6-UA rotation
-```
+```\n~2650 lines Python, 28 .py files, 52 tests (all passing)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (working), ZhihuExtractor (working — auth wall)\nRate limiting: 200ms min delay, exponential backoff, 6-UA rotation (NOW WIRED)\nDynamicFetcher: base stealth (custom UA + headless control, init_script pending)\nRuff: 0 errors\n```
 
 ### Key files to know
 
@@ -124,7 +118,24 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 5. ✅ **3.2.1** Rate limiting + backoff (CrawlerClient: min_delay 200ms, exponential retry with 2 attempts)
 6. ✅ **3.2.2** User-Agent rotation (6 Chrome/Firefox/Safari UAs, random_user_agent())
 
-**Phase 3 — ALL 6/6 TASKS DONE ✅**
+**Phase 3 — ALL 6/6 TASKS DONE ✅ (jury-audited + fixed)**
+
+### Jury Audit (2026-05-04)
+
+3 independent auditors found 21 issues (7 CRITICAL, 8 HIGH, 6 MEDIUM/LOW).
+All 7 CRITICAL fixed in commit 86149bb:
+
+| Fix | Issue | Resolution |
+|-----|-------|------------|
+| UA rotation dead code | `random_user_agent()` never passed to requests | Wired into `fetch_static`/`fetch_dynamic` |
+| `Profile.empty` bugs | Missing `following_count`, `avatar_hash`; falsy `follower_count==0` | All 3 fixed + 3 new tests |
+| `can_handle()` dead code | Abstract method never called in pipeline | Made concrete on ABC with default id-based dispatch |
+| `avatar_hash` never computed | Field declared but unused | Annotated as Phase 4 computed field |
+| No global rate limit | Per-instance timers → burst detection risk | Module-level `_last_request_at` |
+| `fetch_static`/`fetch_dynamic` asymmetry | One raises, one returns None | Both now return `Response \\| None` |
+| DynamicFetcher zero stealth | Headless Chromium with webdriver flag | UA rotation + `headless` param exposed |
+
+Remaining (lower priority): 429/503 retry, Playwright error handling, proxy support, integration tests, Zhihu extractor tests.
 
 ### Key architectural decisions for Phase 3
 
