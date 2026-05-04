@@ -49,6 +49,9 @@ class ProfileExtractor(ABC):
     # Must be set by subclass
     site_id: str = ""
 
+    # Set to True if DynamicFetcher (Playwright) is REQUIRED
+    requires_dynamic: bool = False
+
     @abstractmethod
     def can_handle(self, site: dict) -> bool:
         """Return True if this extractor can handle the given site dict."""
