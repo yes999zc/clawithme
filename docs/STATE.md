@@ -1,6 +1,6 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-04 (post-jury-audit fixes)
+> Handoff document for fresh session. Last updated: 2026-05-04 (post-round-2-audit)
 
 ## What is clawithme
 
@@ -9,7 +9,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
 ## Current Code State (architecture isolation ✅)
 
-```\n~2650 lines Python, 28 .py files, 52 tests (all passing)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (working), ZhihuExtractor (working — auth wall)\nRate limiting: 200ms min delay, exponential backoff, 6-UA rotation (NOW WIRED)\nDynamicFetcher: base stealth (custom UA + headless control, init_script pending)\nRuff: 0 errors\n```
+```\n~2750 lines Python, 30 .py files, 57 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (7 tests), ZhihuExtractor (7 tests)\nRate limiting: 200ms global min delay, exponential backoff, 429/503 retry\nUA rotation: 6-browser pool, wired into static + dynamic fetchers\nDynamicFetcher: headless control, page_setup anti-webdriver, proxy passthrough\nCrawlerClient: proxy support, robots.txt compliance, context manager\nRuff: 0 errors\n```
 
 ### Key files to know
 
@@ -123,19 +123,15 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 ### Jury Audit (2026-05-04)
 
 3 independent auditors found 21 issues (7 CRITICAL, 8 HIGH, 6 MEDIUM/LOW).
-All 7 CRITICAL fixed in commit 86149bb:
+All 7 CRITICAL fixed in commit 86149bb.
 
-| Fix | Issue | Resolution |
-|-----|-------|------------|
-| UA rotation dead code | `random_user_agent()` never passed to requests | Wired into `fetch_static`/`fetch_dynamic` |
-| `Profile.empty` bugs | Missing `following_count`, `avatar_hash`; falsy `follower_count==0` | All 3 fixed + 3 new tests |
-| `can_handle()` dead code | Abstract method never called in pipeline | Made concrete on ABC with default id-based dispatch |
-| `avatar_hash` never computed | Field declared but unused | Annotated as Phase 4 computed field |
-| No global rate limit | Per-instance timers → burst detection risk | Module-level `_last_request_at` |
-| `fetch_static`/`fetch_dynamic` asymmetry | One raises, one returns None | Both now return `Response \\| None` |
-| DynamicFetcher zero stealth | Headless Chromium with webdriver flag | UA rotation + `headless` param exposed |
+**Round 2 fix** (commit 415fe03): All 11 remaining issues from Rounds 1+2 resolved:
+- PII logging, 429/503 retry, proxy support, robots.txt, browser cleanup
+- Registry collision detection, API exports, integration test, Zhihu tests
+- DynamicFetcher stealth (page_setup callback removes navigator.webdriver)
+- CrawlerClient context manager + close()
 
-Remaining (lower priority): 429/503 retry, Playwright error handling, proxy support, integration tests, Zhihu extractor tests.
+Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
 
 ### Key architectural decisions for Phase 3
 
