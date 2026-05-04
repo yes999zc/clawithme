@@ -1,26 +1,32 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-04 (Phase 1-5 COMPLETE)
+> Handoff document for fresh session. Last updated: 2026-05-04 (P4+P5 jury audit complete)
 
 ## What is clawithme
 
 OSINT tool. Input: username → Output: identity panorama across social platforms.
 Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
-## Current Code State (architecture isolation ✅)
+## Current Code State
 
-```\n~4200 lines Python, 40 .py files, 92 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs, 6 engines, 2 extractors\nPhase 1-5 COMPLETE: probe → extract → leak → correlate → report\n99 total tests, Ruff 0\n```
+```
+~4500 lines Python, 42 .py files, 116 tests (main) + 7 (plugin) = 123 total
+48 site JSONs, 6 engines, 2 extractors
+Phase 1-5 COMPLETE + jury audit fixed
+Ruff 0
+```
 
 ### Key files to know
 
 | File | Purpose |
 |------|---------|
-| `clawithme/cli.py` | CLI entry: `clawithme search <username>` |
+| `clawithme/cli.py` | CLI entry: `clawithme search <username> [--report <path>] [--format json]` |
 | `clawithme/engine/http_client.py` | Scrapling Fetcher wrapper |
 | `clawithme/engine/engines.py` | Engine runner + template sandbox |
 | `clawithme/engine/loader.py` | Load engines.json, match sites to engines |
 | `clawithme/leak_sources/__init__.py` | BreachRecord (Pydantic) + LeakSource ABC + CavalierSource |
 | `clawithme/logging.py` | structlog + trace_id |
+| `clawithme/crawler/base.py` | Profile dataclass (17 fields) + ProfileExtractor ABC |
 | `data/schema.json` | JSON Schema for site definitions |
 | `data/taxonomy.json` | Valid classification values |
 | `data/engines.json` | 6 engine definitions |
@@ -28,14 +34,13 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 | `scripts/validate.py` | Schema validation (48 OK) |
 | `scripts/verify_site.py` | Test a site's detection rule |
 | `scripts/stats.py` | Site DB statistics |
-|| `tests/test_http_client.py` | 5 tests (mock-based) |
-|| `tests/test_engines.py` | 8 tests (mock-based) |
-|| **Signals (Phase 4)** | |
-|| `clawithme/signals/avatar.py` | pHash compute + Hamming distance + compare_avatars |
-|| `clawithme/signals/correlation.py` | Union-Find clustering engine + Cluster dataclass |
-|| `clawithme/signals/extraction.py` | Email/phone regex extraction from text |
-|| **Report (Phase 5)** | |
-|| `clawithme/report/generator.py` | Geist-style self-contained HTML report |
+| **Signals (Phase 4)** | |
+| `clawithme/signals/avatar.py` | pHash compute + Hamming distance + AvatarMatch NamedTuple |
+| `clawithme/signals/correlation.py` | Union-Find clustering engine + Cluster dataclass (with evidence) |
+| `clawithme/signals/extraction.py` | Email/phone regex extraction + normalize_phone() + disposable filter |
+| `clawithme/signals/username.py` | Levenshtein distance + compare_usernames() (affix/digit patterns) |
+| **Report (Phase 5)** | |
+| `clawithme/report/generator.py` | Geist HTML report + JSON export + 3-tier confidence + evidence traceability |
 
 ### How to run
 
@@ -44,190 +49,93 @@ cd ~/AI_Workspace/01_Code/tools/clawithme
 pip install -e ".[dev]"
 python -m clawithme.cli search yes999zc
 python -m clawithme.cli search yes999zc --report report.html
+python -m clawithme.cli search yes999zc --report report.json --format json
 python -m pytest tests/ -v
 python scripts/validate.py
 python scripts/stats.py
 python scripts/verify_site.py zhihu
 ```
 
-### Classification system
+### Signal correlation model
 
-- `identity_type`: real_social / public_social / virtual_social / anonymous / professional
-- `geo_region`: cn / asia / europe / americas / global
-- `primary`: social / devtools / forum / media / ecommerce / gaming / music / blog / academic
+| Signal | Weight | Logic | Threshold |
+|--------|:------:|-------|:---------:|
+| email | 1.0 | Exact, case-insensitive | — |
+| phone | 0.95 | Digits-only, normalized | — |
+| avatar_phash | 0.8 | Hamming distance | ≤10 |
+| username | 0.7 | Levenshtein + affix/digit patterns | ≥0.7 |
 
-### Site database (48 total)
+### Cluster confidence badge tiers
 
-- 28 truly active (status_code discrimination works)
-- 9 need DynamicFetcher for body analysis (probe_url filled, deprecated=false, Phase 3)
-- 11 deprecated (403/timeout/captcha)
+| Confidence | Badge | Color |
+|:----------:|-------|-------|
+| ≥90% | badge-high | Green |
+| 70–89% | badge-mid | Orange |
+| <70% | badge-low | Red |
 
 ## Phase Completion
 
-### Phase 1 ✅ — Basic Verification
-Deliverable: CLI tool that probes 10 Chinese sites + queries Cavalier.
-- Project skeleton + pyproject.toml + config
-- Scrapling HTTP client wrapper
-- JSON Schema + taxonomy
-- 10 Chinese sites validated (7 active, 3 deprecated)
-- Engine system (3 engines + sandbox + loader)
-- LeakSource: BreachRecord Pydantic + ABC + CavalierSource
-- CLI: `clawithme search <username>`
-- Git commit chain: 41b4da6 → b254d24
+### Phase 1 ✅ — Basic Verification (15 tasks, 7 commits)
+### Phase 2 ✅ — Site Database Expansion (48 sites, 6 engines, CI)
+### Audit Cleanup ✅ — Post-Jury Fixes (Round 1 + Round 2)
+### Architecture Isolation ✅ — Plugin System (clawithme-cn)
+### Phase 3 ✅ — Deep Crawler (jury-audited)
 
-### Phase 2 ✅ — Site Database Expansion
-Deliverable: 48 sites + 6 engines + CI + docs.
-- Expanded to 48 sites (37 active, 11 deprecated)
-- maigret migration script
-- 6 engines (status_code/message/headers/xenforo/discourse/wordpress)
-- CI: PR checks + daily site verification
-- CONTRIBUTING.md + stats + validate + healthcheck
-- Legacy data.json cleaned up
-- Git commit chain: 4039abd → 637f0d1
+### Phase 4: Multi-Signal Association ✅
 
-### Audit Cleanup ✅ — Post-Jury Fixes
-- Removed 4500 lines of vendored maigret dead code (81% reduction)
-- Fixed 7 shell sites with empty probe_url
-- Fixed migration script .values() → .items() bug
-- Unified HTTP layer (CavalierSource → HttpClient)
-- Added 13 core tests (0 → 13)
-- Fixed Claude-introduced bugs (missing BaseModel import, async bugs)
-- Git commits: 2a95db1 → 3aaf4e5
-
-### Audit Round 2 ✅ — Dependency & Stub Cleanup
-- Removed unused httpx/aiohttp from dependencies (never imported)
-- Deleted 7 unknown.json migration artifacts in data/sites/migrated/
-- Marked 4 empty __init__.py stubs with TODO: Phase N markers
-- Added smoke tests: test_loader.py (4) + test_cli.py (3) → 13→20 total
-- All 20 tests pass, 48 sites validate green
-- Git commit: 7fc4f57
-
-### Architecture Isolation ✅ — Plugin System
-- Created `clawithme-cn` plugin repo: github.com/yes999zc/clawithme-cn
-- Main repo: `Profile` dataclass + `ProfileExtractor` ABC + `discover_extractors()` registry
-- Plugin discovery via `importlib.metadata` entry_points group `clawithme.extractors`
-- First extractor: `ZhihuExtractor` (skeleton, returns Profile)
-- End-to-end verified: install `clawithme-cn` → `discover_extractors()` returns 1 extractor
-- 10 new tests (crawler_base 8 + crawler_registry 2), 30 total all green
-- Git commits: 2ea951d (main), 8105952 (clawithme-cn)
-
-## Next: Phase 3 — Deep Crawler
-
-**Goal**: Crawl public info from discovered profiles (avatar hash, bio, posts).
-**Dependency**: Phase 2 ✅, Audit ✅, Architecture Isolation ✅
-
-### Tasks (from docs/todo.md)
-
-1. ✅ **3.1.1** Generic crawler framework (`crawler/base.py` + `client.py` + `registry.py`)
-2. ✅ **3.1.2** Site-specific extractors — GithubExtractor (working), ZhihuExtractor (auth wall)
-3. ✅ **3.1.3** Scrapling DynamicFetcher integration (via CrawlerClient, lazy init)
-4. ✅ **3.3.1** Unified Profile dataclass
-5. ✅ **3.2.1** Rate limiting + backoff (CrawlerClient: min_delay 200ms, exponential retry with 2 attempts)
-6. ✅ **3.2.2** User-Agent rotation (6 Chrome/Firefox/Safari UAs, random_user_agent())
-
-**Phase 3 — ALL 6/6 TASKS DONE ✅ (jury-audited + fixed)**
-
-### Jury Audit (2026-05-04)
-
-3 independent auditors found 21 issues (7 CRITICAL, 8 HIGH, 6 MEDIUM/LOW).
-All 7 CRITICAL fixed in commit 86149bb.
-
-**Round 2 fix** (commit 415fe03): All 11 remaining issues from Rounds 1+2 resolved:
-- PII logging, 429/503 retry, proxy support, robots.txt, browser cleanup
-- Registry collision detection, API exports, integration test, Zhihu tests
-- DynamicFetcher stealth (page_setup callback removes navigator.webdriver)
-- CrawlerClient context manager + close()
-
-Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
-
-### Key architectural decisions for Phase 3
-
-- ~~**CRITICAL**: Before writing first extractor, create `clawithme-cn` plugin repo for China site code isolation~~ ✅ DONE
-- Plugin system active: `discover_extractors()` finds 2 extractors (GithubExtractor + ZhihuExtractor)
-- DynamicFetcher needed for: B站, 微博, 虎扑, NGA, 少数派, 百度知道, 开源中国, 思否, 站酷
-- Phase 2 established pattern: one extractor per site, same file-per-site approach as JSONs
-- Static Fetcher suitable for: GitHub, GitLab, StackOverflow, etc. (server-rendered HTML)
-
-## Phase 4: Multi-Signal Association (in progress)
-
-### 4.1 Avatar Perceptual Hashing ✅
-
-- Renamed `avatar_hash` → `avatar_phash` (pHash, not SHA-256)
-- `signals/avatar.py`: `compute_phash(image_bytes) → str | None`
-- Both extractors download avatar → compute pHash
-- E2E verified: Linus Torvalds → `c60c9933d19bcccd`; Karpathy → `8c857bd4b24bc999`
-- Dependencies: imagehash>=4.3, Pillow>=10.0
-- Tests: 3 (same/diff/invalid) + existing 60 = 63 total
-- Git commit: 0e6ca02 (main), 62984e4 (clawithme-cn)
-
-### 4.2 Avatar Cross-Platform Matching ✅
-
-- `hamming_distance(phash1, phash2) → int` via XOR + `int.bit_count()`
-- `compare_avatars(phash1, phash2, threshold=10) → {distance, is_match}`
-- None-safe: either pHash is None → distance=-1, is_match=False
-- Verified: Linus vs Karpathy distance=28 (>>threshold 10), same hash distance=0
-- Tests: 8 avatar tests (3 compute + 2 hamming + 3 compare)
-- Total: 65 (main) + 7 (plugin) = 72
-- Git commit: 2f35ec6 (main)
-
-### 4.3 Multi-Signal Correlation Engine ✅
-
-- `CorrelationEngine.correlate(profiles) → list[Cluster]`
-- Cluster: `{profiles, confidence, signals}` dataclass
-- Union-Find algorithm with transitive closure across signals
-- Signal weights: email=1.0, phone=0.95, avatar_phash=0.8
-- Phone normalization: strips +86, spaces, dashes
-- Profile extended with `email`/`phone` fields (None default)
-- E2E: same avatar→cluster, transitive(phash+email)→1 cluster, different→separate
-- Tests: 7 correlation + 65 existing = 72 (main) + 7 (plugin) = 79
-- Git commit: 5b9ffe1 (main)
-
-### 4.4 Email/Phone Signal Extraction ✅
-
-- `signals/extraction.py`: `extract_emails(text)` / `extract_phones(text)` — pure regex
-- Email: RFC 5322 simplified, deduplicated, lowercased
-- Phone: Chinese mobile 1[3-9]XXXXXXXXX, strips +86/spaces/dashes
-- GithubExtractor: extracts first email from profile bio
-- Tests: 12 extraction + 72 existing = 84 (main) + 7 (plugin) = 91
-- Git commit: d6e0523 (main)
-
-### 4.5 CLI Integration Pipeline ✅
-
-- `clawithme search` runs full 4-phase pipeline: probe → extract → leaks → correlate
-- Profile objects flow end-to-end (no data loss from dict conversion)
-- Leak records converted to Profile with email/phone → participate in correlation
-- Output: multi-profile clusters with confidence + signal types
-- Simulated E2E: github+zhihu(phash)+adobe(email)+linkedin(phone) → 1 cluster, 0.92
-- Tests: 2 pipeline + 84 existing = 86 (main) + 7 (plugin) = 93
-- Git commit: d7a879e (main)
-
-### Phase 4 Complete 🎉
+**4.1–4.5 ALL COMPLETE** + post-jury hardening:
 
 ```
-Phase 4.1 ✅ avatar phash        — compute_phash()
-Phase 4.2 ✅ avatar matching     — hamming_distance(), compare_avatars()
-Phase 4.3 ✅ correlation engine  — Union-Find, 3-signal clustering
-Phase 4.4 ✅ extraction          — extract_emails(), extract_phones()
-Phase 4.5 ✅ CLI pipeline        — full integration in 'clawithme search'
+4.1 ✅ avatar phash        — compute_phash()
+4.2 ✅ avatar matching     — hamming_distance(), AvatarMatch NamedTuple
+4.3 ✅ correlation engine  — Union-Find, 4-signal clustering (email/phone/avatar/username)
+4.4 ✅ extraction          — extract_emails(), extract_phones(), disposable filter
+4.5 ✅ CLI pipeline        — full integration in 'clawithme search'
+4.x ✅ username signal     — Levenshtein + affix/digit pattern detection
 ```
 
 ### Phase 5: Panorama Report ✅
 
-- `report/generator.py`: `generate_report()` — single-function, self-contained HTML
-- Geist/Vercel grayscale: white bg, system-ui font, card grid, 720px max-width
-- Sections: Discovered Sites → Profiles → Identity Clusters
-- Cluster confidence badges (green ≥90%, orange <90%) + signal tags
-- CLI: `clawithme search <user> --report <path>`
-- Tests: 6 report + 86 existing = 92 (main) + 7 (plugin) = 99
-- Git commit: 0b667c9 (main)
+- **HTML**: Geist/Vercel grayscale, responsive (mobile @480px), system-ui font
+- **JSON**: `export_json()` + CLI `--format json`
+- **Evidence**: Reports WHY profiles were clustered (e.g., "alice@gmail.com", "distance=3")
+- **Confidence**: 3-tier badges (green/orange/red)
+- **Error handling**: OSError guarded on report write
 
-### Phase 1-5 ALL COMPLETE 🎉
+## P4+P5 Jury Audit (2026-05-04)
 
-## v2 Scope (deferred)
+3 independent auditors (Brutal Pragmatist / OSINT Expert / Architect) found 22 issues.
+Fixed in 3 rounds (commits ad1c122 + prior):
 
-- Self-hosted breach database (PostgreSQL on NAS)
-- 2000+ global site migration
-- China site code isolation (clawithme-cn)
+### Round 1 — Critical bugs (3 fixes)
+- Profile.empty now includes email/phone fields
+- _detected_signals reports actual signal contributions, not field presence
+- Deduplicated phone normalization: shared normalize_phone() in extraction.py
+
+### Round 2 — Type safety + new signals (6 fixes)
+- compare_avatars returns AvatarMatch NamedTuple (was bare dict)
+- JSON report export (export_json + CLI --format json)
+- Username similarity signal (Levenshtein + affix patterns, weight 0.7)
+- hamming_distance raises ValueError on unequal-length hex
+- _render_sites uses .get() instead of bare dict access
+
+### Round 3 — Report UX + traceability (5 fixes)
+- Mobile CSS @media (max-width: 480px)
+- Report write OSError handling
+- Confidence badge 3-tier: green(≥90%) / orange(≥70%) / red(<70%)
+- Cluster evidence traceability: shows WHY profiles were linked
+- Disposable email domain filter (21 domains)
+
+### Remaining (deferred — needs discussion)
+
+| Severity | Finding | Rationale |
+|:--------:|---------|-----------|
+| CRITICAL | Default avatar pHash false clusters | Needs known-default-avatar hash DB |
+| CRITICAL | No ethical consent/opt-out mechanism | Design decision for public release |
+| CRITICAL | Breach DB integration ethics | Gate behind --include-breaches flag |
+| HIGH | OR logic chain-fusion guard | Requires AND/weighted threshold redesign |
+| HIGH | CLI God function refactor | Large refactor, v2 |
+| HIGH | Confidence model (arithmetic mean flaw) | v2 — Bayesian fusion |
 
 ## Key Design Decisions
 
@@ -235,24 +143,28 @@ Phase 4.5 ✅ CLI pipeline        — full integration in 'clawithme search'
 |----------|------|
 | Site storage | One JSON per site |
 | Engine storage | Separate engines.json |
-| Detection type | Engine.classifier only, sites never declare type |
-| Classification | 5 identity_types (incl. public_social) |
-| HTTP layer | Scrapling Fetcher, not raw httpx |
+| Detection type | Engine.classifier only |
+| HTTP layer | Scrapling Fetcher |
 | Leak data | Pydantic BreachRecord, password_sha256 only |
-| Template engine | Manual str.replace (no Jinja2), variable whitelist |
-| Logging | structlog + trace_id propagation |
-| Testing | Mock-based unit tests for Engine + HttpClient |
+| Template engine | Manual str.replace (no Jinja2) |
+| Logging | structlog + trace_id |
+| Testing | Mock-based unit tests |
+| Phone scope | China mobile only (1[3-9]XXXXXXXXX) |
 
-## Quality Gates (learned from audit)
+## Quality Gates
 
-1. **Phase cleanup commit mandatory** — every phase must end with a cleanup/refactor commit
-2. **Content spot-check** — "X items" claims must verify ≥3 random samples
-3. **CI must run** — validate.py, tests must pass before phase completion
+1. **Phase cleanup commit mandatory**
+2. **Content spot-check** — verify ≥3 random samples
+3. **CI must run** — validate.py + tests before phase completion
 
-## Unresolved Items
+## v2 Scope (deferred)
 
-- ~~Architecture isolation (China site plugin)~~ ✅ — clawithme-cn repo created, plugin system active
-- WeChat weak signal experiment — not started
-- Chat slang fingerprint library — v2
-- Monitoring liveness probe — Phase 2.3.3 listed but not deployed
-- Phase 3/4/5 packages: crawler/, signals/, report/ — stubs marked, implementation pending
+- Default avatar hash DB
+- Ethical use gates (--include-breaches, --acknowledge-ethical-use)
+- Weighted-edge graph clustering (Louvain)
+- 2000+ global site migration
+- PDF/Markdown report export
+- Location proximity signal
+- Temporal correlation (joined_date)
+- Self-hosted breach database (PostgreSQL on NAS)
+- WeChat weak signal experiment
