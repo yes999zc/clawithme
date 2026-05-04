@@ -13,7 +13,9 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from clawithme.engine.http_client import HttpClient
+from clawithme.engine.engines import Engine
+from clawithme.engine.http_client import HttpClient, HttpResponse
+from clawithme.engine.loader import get_engine_for_site, load_engines
 from clawithme.logging import get_logger, setup_logging
 
 
@@ -26,39 +28,78 @@ def load_site(site_id: str) -> dict:
     raise FileNotFoundError(f"Site '{site_id}' not found in data/sites/")
 
 
-def verify_site(site: dict) -> dict:
+def _classify_response(
+    resp: HttpResponse, check: dict, engine: Engine
+) -> bool:
+    """Check if response matches the site's classification rule.
+
+    Uses Engine._classify() logic for status_code, message, and headers classifiers.
+    """
+    classifier = engine.classifier
+
+    if classifier == "status_code":
+        expected = check.get("expected", 200)
+        return resp.status_code == expected
+
+    if classifier == "message":
+        presence_strs = check.get("presence_strs", [])
+        absence_strs = check.get("absence_strs", [])
+        body = resp.text
+        has_presence = not presence_strs or all(s in body for s in presence_strs)
+        has_absence = not absence_strs or all(s not in body for s in absence_strs)
+        return has_presence and has_absence
+
+    if classifier == "headers":
+        expected_headers = check.get("expected_headers", {})
+        return all(
+            resp.headers.get(k) == v
+            for k, v in expected_headers.items()
+        )
+
+    # Unknown classifier — fall back to status_code
+    return resp.status_code == check.get("expected", 200)
+
+
+def verify_site(site: dict, engines: dict[str, Engine] | None = None) -> dict:
     """Probe a site's known accounts and report results."""
     logger = get_logger(site_id=site["id"])
     client = HttpClient(timeout_ms=8000)
     check = site["check"]
-    probe_url = check["probe_url"]
     engine_ref = site["engine_ref"]
+
+    # Load engine for classification
+    if engines is None:
+        engines = load_engines()
+    engine = get_engine_for_site(site, engines)
 
     result = {
         "site_id": site["id"],
         "site_name": site["name"],
         "engine": engine_ref,
+        "classifier": engine.classifier if engine else "unknown",
         "deprecated": site.get("deprecated", False),
         "checks": [],
     }
 
     # Probe known accounts (positive cases)
     for account in check.get("known_accounts", []):
-        url = probe_url.replace("{username}", account)
+        url = Engine._substitute(check["probe_url"], check, account)
         try:
             resp = client.get(url)
-            ok = resp.status_code == check.get("expected", 200)
+            ok = _classify_response(resp, check, engine) if engine else (
+                resp.status_code == check.get("expected", 200)
+            )
             result["checks"].append({
                 "account": account,
                 "type": "known_existing",
                 "url": url,
                 "status": resp.status_code,
-                "expected": check.get("expected", 200),
+                "classifier": engine.classifier if engine else "status_code",
                 "pass": ok,
                 "body_len": len(resp.text) if resp.text else 0,
             })
-            logger.debug("probe_known", account=account, status=resp.status_code, pass_=ok)
-        except Exception as e:
+            logger.debug("probe_known", account=account, status=resp.status_code)
+        except (OSError, ValueError, TimeoutError) as e:
             result["checks"].append({
                 "account": account, "type": "known_existing",
                 "url": url, "error": str(e), "pass": False,
@@ -66,21 +107,23 @@ def verify_site(site: dict) -> dict:
 
     # Probe unclaimed accounts (negative cases)
     for account in check.get("known_unclaimed", []):
-        url = probe_url.replace("{username}", account)
+        url = Engine._substitute(check["probe_url"], check, account)
         try:
             resp = client.get(url)
-            ok = resp.status_code != check.get("expected", 200)
+            ok = not _classify_response(resp, check, engine) if engine else (
+                resp.status_code != check.get("expected", 200)
+            )
             result["checks"].append({
                 "account": account,
                 "type": "known_unclaimed",
                 "url": url,
                 "status": resp.status_code,
-                "not_expected": check.get("expected", 200),
+                "classifier": engine.classifier if engine else "status_code",
                 "pass": ok,
                 "body_len": len(resp.text) if resp.text else 0,
             })
-            logger.debug("probe_unclaimed", account=account, status=resp.status_code, pass_=ok)
-        except Exception as e:
+            logger.debug("probe_unclaimed", account=account, status=resp.status_code)
+        except (OSError, ValueError, TimeoutError) as e:
             result["checks"].append({
                 "account": account, "type": "known_unclaimed",
                 "url": url, "error": str(e), "pass": False,
@@ -107,13 +150,17 @@ def format_result(result: dict) -> str:
         status = "⚠️ DEPRECATED (skip)"
 
     lines = [
-        f"{status}  {result['site_name']} ({result['site_id']})  engine={result['engine']}",
+        f"{status}  {result['site_name']} ({result['site_id']})  "
+        f"engine={result['engine']}  classifier={result['classifier']}",
         f"         {s['passed']}/{s['total']} checks passed",
     ]
 
     for check in result["checks"]:
         icon = "✅" if check["pass"] else "❌"
-        lines.append(f"  {icon} {check['type']}: {check['account']} → {check.get('status', 'ERR')}")
+        lines.append(
+            f"  {icon} {check['type']}: {check['account']} "
+            f"→ {check.get('status', 'ERR')}"
+        )
 
     return "\n".join(lines)
 
@@ -125,13 +172,16 @@ def main():
     args = parser.parse_args()
 
     setup_logging()
+    engines = load_engines()
 
     if args.all:
         data_dir = Path(__file__).resolve().parent.parent / "data" / "sites"
         all_results = []
         for json_file in sorted(data_dir.rglob("*.json")):
+            if "migrated" in json_file.parts:
+                continue
             site = json.loads(json_file.read_text())
-            result = verify_site(site)
+            result = verify_site(site, engines)
             print(format_result(result))
             print()
             all_results.append(result)
@@ -139,12 +189,15 @@ def main():
         # Summary
         healthy = sum(1 for r in all_results if r["summary"]["healthy"])
         deprecated = sum(1 for r in all_results if r["deprecated"])
-        print(f"---\nTotal: {len(all_results)} sites | {healthy} healthy | {deprecated} deprecated")
+        print(
+            f"---\nTotal: {len(all_results)} sites | "
+            f"{healthy} healthy | {deprecated} deprecated"
+        )
     else:
         if not args.site_id:
             parser.error("Must specify site_id or --all")
         site = load_site(args.site_id)
-        result = verify_site(site)
+        result = verify_site(site, engines)
         print(format_result(result))
 
 
