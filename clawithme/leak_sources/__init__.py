@@ -12,6 +12,7 @@ import asyncio
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from pydantic import BaseModel
 from clawithme.engine.http_client import HttpClient, HttpResponse
 from clawithme.logging import get_logger
 
@@ -160,9 +161,10 @@ class CavalierSource(LeakSource):
     async def is_available(self) -> bool:
         """Check if Cavalier API is reachable."""
         try:
-            client = await self._get_client()
-            resp = await client.get(f"{self._base}/osint-tools/search-by-username",
-                                    params={"username": "test"})
+            resp = await self._async_get(
+                f"{self._base}/osint-tools/search-by-username",
+                params={"username": "test"},
+            )
             return resp.status_code == 200
         except Exception:
             return False
@@ -173,6 +175,5 @@ class CavalierSource(LeakSource):
 
     async def close(self):
         """Clean up HTTP client."""
-        if self._client:
-            await self._client.aclose()
-            self._client = None
+        if self._http:
+            self._http = None
