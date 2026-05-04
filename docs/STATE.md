@@ -9,7 +9,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
 ## Current Code State (architecture isolation ✅)
 
-```\n~3500 lines Python, 37 .py files, 86 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (email+phash), ZhihuExtractor (phash)\nPhase 4 FULL: phash → matching → correlation engine → extraction → CLI pipeline\n93 total tests, Ruff 0\n```
+```\n~4200 lines Python, 40 .py files, 92 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs, 6 engines, 2 extractors\nPhase 1-5 COMPLETE: probe → extract → leak → correlate → report\n99 total tests, Ruff 0\n```
 
 ### Key files to know
 
@@ -204,7 +204,17 @@ Phase 4.4 ✅ extraction          — extract_emails(), extract_phones()
 Phase 4.5 ✅ CLI pipeline        — full integration in 'clawithme search'
 ```
 
-### Phase 5: Panorama Report (next)
+### Phase 5: Panorama Report ✅
+
+- `report/generator.py`: `generate_report()` — single-function, self-contained HTML
+- Geist/Vercel grayscale: white bg, system-ui font, card grid, 720px max-width
+- Sections: Discovered Sites → Profiles → Identity Clusters
+- Cluster confidence badges (green ≥90%, orange <90%) + signal tags
+- CLI: `clawithme search <user> --report <path>`
+- Tests: 6 report + 86 existing = 92 (main) + 7 (plugin) = 99
+- Git commit: 0b667c9 (main)
+
+### Phase 1-5 ALL COMPLETE 🎉
 
 ## v2 Scope (deferred)
 
