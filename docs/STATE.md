@@ -175,7 +175,16 @@ Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
 - Tests: 7 correlation + 65 existing = 72 (main) + 7 (plugin) = 79
 - Git commit: 5b9ffe1 (main)
 
-### 4.4 Email/Phone Signal Extraction (next)
+### 4.4 Email/Phone Signal Extraction ✅
+
+- `signals/extraction.py`: `extract_emails(text)` / `extract_phones(text)` — pure regex
+- Email: RFC 5322 simplified, deduplicated, lowercased
+- Phone: Chinese mobile 1[3-9]XXXXXXXXX, strips +86/spaces/dashes
+- GithubExtractor: extracts first email from profile bio
+- Tests: 12 extraction + 72 existing = 84 (main) + 7 (plugin) = 91
+- Git commit: d6e0523 (main)
+
+### 4.5 CLI Integration — Pipeline All Signals (next)
 
 ## v2 Scope (deferred)
 
