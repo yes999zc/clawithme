@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Clawithme taxonomy — valid values for site classification fields.",
+  "identity_type": {
+    "description": "Identity nature of the platform",
+    "values": {
+      "real_social": "Real-identity social network (WeChat, QQ Zone, LinkedIn)",
+      "public_social": "Public/semi-real social network, searchable (Weibo, Xiaohongshu)",
+      "virtual_social": "Virtual-identity social network (Bilibili, Zhihu, Douban)",
+      "anonymous": "Anonymous/pseudonymous (Tieba, forums)",
+      "professional": "Professional identity (GitHub, Juejin, LinkedIn)"
+    }
+  },
+  "geo_region": {
+    "description": "Primary geographic region",
+    "values": {
+      "cn": "China mainland",
+      "asia": "Asia (excl. China)",
+      "europe": "Europe",
+      "americas": "Americas",
+      "global": "Global / no dominant region"
+    }
+  },
+  "primary": {
+    "description": "Functional category",
+    "values": {
+      "social": "Social networking",
+      "devtools": "Developer tools & platforms",
+      "forum": "Forums & communities",
+      "media": "Media & content platforms",
+      "ecommerce": "E-commerce",
+      "gaming": "Gaming",
+      "music": "Music & audio",
+      "blog": "Blogging & publishing",
+      "academic": "Academic & research"
+    }
+  },
+  "nsfw": {
+    "description": "Is the site adult/NSFW content?",
+    "values": {
+      "true": "Contains NSFW content",
+      "false": "Safe for work"
+    }
+  }
+}

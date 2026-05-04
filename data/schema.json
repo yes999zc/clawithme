@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/yes999zc/clawithme/data/schema.json",
+  "title": "Clawithme Site Definition",
+  "description": "Schema for a single clawithme site definition JSON file.",
+  "type": "object",
+  "required": ["id", "name", "canonical_url", "engine_ref", "classification", "check"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique site identifier (slug)",
+      "pattern": "^[a-z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable site name",
+      "minLength": 1
+    },
+    "canonical_url": {
+      "type": "string",
+      "description": "URL template with {username} placeholder",
+      "format": "uri-template"
+    },
+    "engine_ref": {
+      "type": "string",
+      "description": "Reference to engine in engines.json"
+    },
+    "classification": {
+      "type": "object",
+      "required": ["primary", "identity_type", "geo_region"],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "description": "Functional category",
+          "enum": ["social", "devtools", "forum", "media", "ecommerce", "gaming", "music", "blog", "academic"]
+        },
+        "identity_type": {
+          "type": "string",
+          "description": "Identity nature of the platform",
+          "enum": ["real_social", "public_social", "virtual_social", "anonymous", "professional"]
+        },
+        "geo_region": {
+          "type": "string",
+          "description": "Primary geographic region",
+          "enum": ["cn", "asia", "europe", "americas", "global"]
+        },
+        "user_scale": {
+          "type": "integer",
+          "description": "Approximate user count (for priority sorting)",
+          "minimum": 0
+        },
+        "tags": {
+          "type": "array",
+          "description": "Flexible tags for filtering",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        }
+      }
+    },
+    "rankings": {
+      "type": "object",
+      "description": "Optional ranking data",
+      "properties": {
+        "similarweb_global": {"type": "integer", "minimum": 1},
+        "alexa": {"type": "integer", "minimum": 1}
+      }
+    },
+    "check": {
+      "type": "object",
+      "required": ["probe_url"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "HTTP method for probing",
+          "enum": ["GET", "HEAD", "POST"],
+          "default": "GET"
+        },
+        "probe_url": {
+          "type": "string",
+          "description": "URL to probe, with {username} placeholder"
+        },
+        "expected": {
+          "description": "Expected HTTP status code or value (depends on engine.classifier)"
+        },
+        "regex": {
+          "type": "string",
+          "description": "Regex for username validation"
+        },
+        "presence_strs": {
+          "type": "array",
+          "description": "Strings that indicate account EXISTS",
+          "items": {"type": "string"}
+        },
+        "absence_strs": {
+          "type": "array",
+          "description": "Strings that indicate account DOES NOT EXIST",
+          "items": {"type": "string"}
+        },
+        "error_flags": {
+          "type": "object",
+          "description": "Site-specific error signals (e.g. region-lock, login-wall)",
+          "additionalProperties": {"type": "string"}
+        },
+        "known_accounts": {
+          "type": "array",
+          "description": "Known existing accounts for validation",
+          "items": {"type": "string"}
+        },
+        "known_unclaimed": {
+          "type": "array",
+          "description": "Known non-existing usernames for false-positive detection",
+          "items": {"type": "string"}
+        },
+        "headers": {
+          "type": "object",
+          "description": "Custom headers for this site",
+          "additionalProperties": {"type": "string"}
+        }
+      }
+    },
+    "nsfw": {
+      "type": "boolean",
+      "default": false
+    },
+    "deprecated": {
+      "type": "boolean",
+      "description": "Mark as deprecated instead of deleting",
+      "default": false
+    },
+    "source": {
+      "type": "string",
+      "description": "Origin of this site definition",
+      "default": "manual"
+    },
+    "last_updated": {
+      "type": "string",
+      "description": "ISO 8601 timestamp",
+      "format": "date-time"
+    }
+  }
+}
