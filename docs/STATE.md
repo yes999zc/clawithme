@@ -10,10 +10,11 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 ## Current Code State (architecture isolation ✅)
 
 ```
-~2200 lines Python, 26 .py files, 45 tests (all passing)
+~2600 lines Python, 28 .py files, 49 tests (all passing)
 48 site JSONs (37 active, 11 deprecated), all validate green
 6 engines, 3 classifiers (status_code/message/headers)
-2 extractors: GithubExtractor (working), ZhihuExtractor (auth wall)
+2 extractors: GithubExtractor (working), ZhihuExtractor (working — 张一)
+Rate limiting: 200ms min delay, exponential backoff, 6-UA rotation
 ```
 
 ### Key files to know
@@ -120,8 +121,10 @@ Deliverable: 48 sites + 6 engines + CI + docs.
 2. ✅ **3.1.2** Site-specific extractors — GithubExtractor (working), ZhihuExtractor (auth wall)
 3. ✅ **3.1.3** Scrapling DynamicFetcher integration (via CrawlerClient, lazy init)
 4. ✅ **3.3.1** Unified Profile dataclass
-5. **3.2.1** Rate limiting + backoff
-6. **3.2.2** User-Agent rotation
+5. ✅ **3.2.1** Rate limiting + backoff (CrawlerClient: min_delay 200ms, exponential retry with 2 attempts)
+6. ✅ **3.2.2** User-Agent rotation (6 Chrome/Firefox/Safari UAs, random_user_agent())
+
+**Phase 3 — ALL 6/6 TASKS DONE ✅**
 
 ### Key architectural decisions for Phase 3
 
