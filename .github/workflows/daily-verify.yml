@@ -1,0 +1,24 @@
+name: Daily Site Verification
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 08:00 UTC
+  workflow_dispatch:      # Manual trigger
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]" jsonschema
+      - name: Verify all sites
+        run: python scripts/verify_site.py --all
+      - name: Report failures
+        if: failure()
+        run: |
+          echo "⚠️ Some site detection rules have degraded."
+          echo "Check the logs above for specific failures."
