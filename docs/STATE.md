@@ -9,7 +9,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 
 ## Current Code State (architecture isolation ✅)
 
-```\n~2750 lines Python, 30 .py files, 57 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (7 tests), ZhihuExtractor (7 tests)\nRate limiting: 200ms global min delay, exponential backoff, 429/503 retry\nUA rotation: 6-browser pool, wired into static + dynamic fetchers\nDynamicFetcher: headless control, page_setup anti-webdriver, proxy passthrough\nCrawlerClient: proxy support, robots.txt compliance, context manager\nRuff: 0 errors\n```
+```\n~2800 lines Python, 32 .py files, 60 tests (all passing) + 7 zhihu tests (clawithme-cn)\n48 site JSONs (37 active, 11 deprecated), all validate green\n6 engines, 3 classifiers (status_code/message/headers)\n2 extractors: GithubExtractor (7 tests), ZhihuExtractor (7 tests), both output avatar_phash\nPhase 4.1: perceptual hashing (imagehash + Pillow), E2E verified\nRate limiting: 200ms global min delay, exponential backoff, 429/503 retry\nUA rotation: 6-browser pool, wired into static + dynamic fetchers\nDynamicFetcher: headless control, page_setup anti-webdriver, proxy passthrough\nCrawlerClient: proxy support, robots.txt compliance, context manager\nRuff: 0 errors\n```
 
 ### Key files to know
 
@@ -141,7 +141,19 @@ Tests: 57 (main) + 7 (plugin) = 64 total. Ruff: 0 errors.
 - Phase 2 established pattern: one extractor per site, same file-per-site approach as JSONs
 - Static Fetcher suitable for: GitHub, GitLab, StackOverflow, etc. (server-rendered HTML)
 
-## Phase 4-5 (future)
+## Phase 4: Multi-Signal Association (in progress)
+
+### 4.1 Avatar Perceptual Hashing ✅
+
+- Renamed `avatar_hash` → `avatar_phash` (pHash, not SHA-256)
+- `signals/avatar.py`: `compute_phash(image_bytes) → str | None`
+- Both extractors download avatar → compute pHash
+- E2E verified: Linus Torvalds → `c60c9933d19bcccd`; Karpathy → `8c857bd4b24bc999`
+- Dependencies: imagehash>=4.3, Pillow>=10.0
+- Tests: 3 (same/diff/invalid) + existing 60 = 63 total
+- Git commit: 0e6ca02 (main), 62984e4 (clawithme-cn)
+
+### 4.2 Avatar Cross-Platform Matching (next)
 
 - Phase 4: Multi-signal association (email/phone/avatar hash linking)
 - Phase 5: Panorama report (Geist web UI + export)
