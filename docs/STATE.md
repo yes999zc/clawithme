@@ -1,6 +1,6 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-04 (post-round-2-audit)
+> Handoff document for fresh session. Last updated: 2026-05-04 (Phase 1-5 COMPLETE)
 
 ## What is clawithme
 
@@ -28,8 +28,14 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 | `scripts/validate.py` | Schema validation (48 OK) |
 | `scripts/verify_site.py` | Test a site's detection rule |
 | `scripts/stats.py` | Site DB statistics |
-| `tests/test_http_client.py` | 5 tests (mock-based) |
-| `tests/test_engines.py` | 8 tests (mock-based) |
+|| `tests/test_http_client.py` | 5 tests (mock-based) |
+|| `tests/test_engines.py` | 8 tests (mock-based) |
+|| **Signals (Phase 4)** | |
+|| `clawithme/signals/avatar.py` | pHash compute + Hamming distance + compare_avatars |
+|| `clawithme/signals/correlation.py` | Union-Find clustering engine + Cluster dataclass |
+|| `clawithme/signals/extraction.py` | Email/phone regex extraction from text |
+|| **Report (Phase 5)** | |
+|| `clawithme/report/generator.py` | Geist-style self-contained HTML report |
 
 ### How to run
 
@@ -37,6 +43,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 cd ~/AI_Workspace/01_Code/tools/clawithme
 pip install -e ".[dev]"
 python -m clawithme.cli search yes999zc
+python -m clawithme.cli search yes999zc --report report.html
 python -m pytest tests/ -v
 python scripts/validate.py
 python scripts/stats.py
