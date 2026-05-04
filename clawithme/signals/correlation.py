@@ -36,7 +36,7 @@ class CorrelationEngine:
     """
 
     PHASH_THRESHOLD = 10
-    USERNAME_THRESHOLD = 0.7
+    USERNAME_THRESHOLD = 0.85
     SIGNAL_WEIGHTS = {
         "email": 1.0,
         "phone": 0.95,
@@ -47,7 +47,9 @@ class CorrelationEngine:
     def correlate(self, profiles: list[Profile]) -> list[Cluster]:  # noqa: PLR0912
         """Return clusters. Each profile belongs to exactly one cluster."""
         n = len(profiles)
-        if n <= 1:
+        if n == 0:
+            return []
+        if n == 1:
             return [Cluster(profiles=profiles, confidence=1.0, signals=[])]
 
         parent = list(range(n))

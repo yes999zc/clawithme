@@ -18,6 +18,7 @@ _DISPOSABLE_DOMAINS = frozenset({
     "maildrop.cc", "getnada.com", "inboxalias.com",
     "dispostable.com", "mailnesia.com", "spamgourmet.com",
     "anonaddy.com", "simplelogin.com", "33mail.com",
+    "temporary.email", "disposablemail.com",
     "example.com", "test.com", "localhost",
 })
 
