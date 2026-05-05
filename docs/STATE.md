@@ -136,9 +136,10 @@ Commit `57be4e2`: Batch-migrated 3120 sites from maigret_china (MIT) to `data/si
 verify_site --all (curated): 29 healthy | 0 no-checks | 7 degraded | 12 deprecated
 ```
 
-GitHub Actions workflows deployed and running:
-- `.github/workflows/ci.yml` — PR: schema validate + stats on push to main
-- `.github/workflows/daily-verify.yml` — Daily 08:00 UTC: verify all sites, manual trigger available
+GitHub Actions workflows deployed and verified (2026-05-05):
+- `.github/workflows/ci.yml` — PR: schema validate + stats on push to main (✅ always green)
+- `.github/workflows/daily-verify.yml` — Daily 08:00 UTC: verify all sites (⚠️ expected non-zero on degraded sites — monitoring signal, not failure)
+- Dependency fix (`a7c2fe2`): lazy-imported Scrapling Fetcher, added curl_cffi+playwright+chromium to CI env
 
 ### SPA Limitation
 
