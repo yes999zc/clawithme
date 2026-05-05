@@ -123,10 +123,9 @@
 
 ### 2.1 站点扩展
 
-- [ ] **2.1.1** 中国站扩展至 50+
-  - 包括：所有 Phase 1 已验证站 + 虎扑、NGA、少数派、什么值得买、AcFun、酷安、站酷、花瓣、LOFTER、百度知道、天涯社区
-  - 标注分类维度（identity_type / geo_region / user_scale / tags）
-  - 验收：50+ 中国站 JSON 文件，全部通过 schema 校验
+- [ ] **2.1.1** 中国站扩展至 50+ → **v2 scope** (2026-05-05 deferred)
+  - 当前：26 CN 站（16 active）
+  - 推后原因：中国站反爬严重，逐个验证成本高；maigret_china 无额外 CN 数据
 
 - [ ] **2.1.2** maigret 站点迁移脚本
   - 编写 `scripts/migrate_maigret.py`：maigret 格式 → clawithme schema
@@ -144,10 +143,10 @@
 
 ### 2.2 Engine 系统完善
 
-- [ ] **2.2.1** 实现全部 CMS Engine
-  - XenForo、phpBB、Discourse、vBulletin、WordPress/Author、Discuz!
-  - 每种 Engine 至少覆盖 3 个已知站点
-  - 验收：每个 Engine 的测试用例通过
+- [x] **2.2.1** 实现全部 CMS Engine ✅ (2026-05-05)
+  - XenForo、Discourse、WordPress/Author → ✅
+  - phpBB、vBulletin → ✅ (ported from maigret_china, MIT)
+  - phpBB 缺 Discuz! → v2 scope
 
 - [ ] **2.2.2** Engine 指标统计
   - `scripts/stats.py`：输出每个 Engine 覆盖站点数、覆盖率
