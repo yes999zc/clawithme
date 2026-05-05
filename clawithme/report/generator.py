@@ -213,7 +213,12 @@ def _render_summary(
 
     fp_note = ""
     if fp_count > 0:
-        fp_note = f' +{fp_count} SPA hidden'
+        fp_note = (
+            f'<span class="fp-note" title="Single-Page Application sites — '
+            f'return HTTP 200 for all usernames. These hits may be false positives '
+            f'and require manual verification.">'
+            f' +{fp_count} unverified</span>'
+        )
 
     items = []
     if true_hits:
@@ -228,6 +233,10 @@ def _render_summary(
 
     return (
         f'<div class="summary-hero">'
+        f'<div class="brand-header">'
+        f'<span class="brand-wordmark">clawithme</span>'
+        f'<span class="brand-slogan">OSINT Identity Panorama</span>'
+        f'</div>'
         f'<h1>{_esc(display_title)}</h1>'
         f'{identity_line}'
         f'<p class="hero-summary">{auto_summary}</p>'
@@ -264,6 +273,18 @@ body {{
 }}
 .container {{ max-width: 780px; margin: 0 auto; padding: 48px 24px 56px; }}
 
+/* ── Brand header ───────────────────────────── */
+.brand-header {{
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px;
+}}
+.brand-wordmark {{
+  font: 600 15px/1 'Geist', sans-serif; color: var(--accent);
+  letter-spacing: -0.3px;
+}}
+.brand-slogan {{
+  font: 400 13px/1 'Geist Mono', ui-monospace, monospace; color: #b0b0b0;
+}}
+
 h1 {{ font-size: 36px; font-weight: 700; letter-spacing: -0.8px; margin: 0 0 4px; }}
 h2 {{ font-size: 20px; font-weight: 600; color: #171717; letter-spacing: -0.3px; margin: 0; }}
 h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em; margin: 0; }}
@@ -285,6 +306,9 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
   background: var(--accent); color: white; flex-shrink: 0;
 }}
 .section-header h2 {{ font: 600 15px/1.3 'Geist', sans-serif; color: #171717; }}
+.section-explain {{
+  font-size: 13px; color: #808080; line-height: 1.6; margin: 20px 0 0; max-width: 600px;
+}}
 .section-container {{
   padding: 28px; border-radius: 8px;
   box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
@@ -322,6 +346,11 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 }}
 .hero-stat-label {{
   font-size: 12px; color: #808080; text-transform: uppercase; letter-spacing: 0.5px;
+}}
+.fp-note {{
+  font-size: 12px; color: #b0b0b0; cursor: help;
+  border-bottom: 1px dotted #b0b0b0;
+  text-transform: none; letter-spacing: normal;
 }}
 
 /* ── Sites table ────────────────────────────── */
@@ -376,6 +405,12 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 600; color: #171717;
 }}
+.completeness-label {{
+  font-size: 9px; color: #b0b0b0; cursor: help;
+  font-family: 'Geist Mono', monospace; text-align: center;
+  border-bottom: 1px dotted transparent;
+}}
+.completeness-label:hover {{ border-bottom-color: #b0b0b0; }}
 
 /* ── Clusters ────────────────────────────────── */
 .cluster {{
@@ -461,6 +496,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 
 <div class="section"><div class="section-container">
 <div class="section-header"><span class="badge">03</span><h2>Identity Clusters</h2></div>
+<p class="section-explain">Groups of profiles that likely belong to the same person, linked by matching signals like username similarity, shared email, phone number, or avatar hash. Higher confidence means stronger evidence of a single identity.</p>
 {cluster_section}
 </div></div>
 
@@ -472,7 +508,14 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 </div></div>
 
 <div class="footer">
-  clawithme &middot; trace: {trace_id}
+  <p><strong>clawithme</strong> &mdash; OSINT Identity Panorama</p>
+  <p>Report generated {timestamp} &middot; trace: {trace_id}</p>
+  <p style="margin-top:12px;font-size:11px">
+    <span class="fp-note" style="font-size:11px">Hover dotted terms for explanations.</span>
+    &middot; SPA = Single-Page Application, requires browser rendering.
+    &middot; Profile completeness = % of key identity fields populated.
+    &middot; Identity clusters = profiles grouped by shared signals.
+  </p>
 </div>
 
 </div>
@@ -530,10 +573,12 @@ def _render_sites(true_hits: list[dict], fp_hits: list[dict]) -> str:
         parts.append(
             f'<details style="margin-top:16px;font-size:12px;color:#b0b0b0">'
             f'<summary style="cursor:pointer">'
-            f'+ {len(fp_hits)} SPA/redirect hits hidden</summary>'
-            f'<p style="margin-top:4px">{fp_names} &mdash; '
-            f'These sites return HTTP 200 for all usernames (SPA shell / login redirect). '
-            f'Manual verification needed.</p>'
+            f'+ {len(fp_hits)} unverified hits — what does this mean?</summary>'
+            f'<p style="margin-top:4px;line-height:1.6">'
+            f'{fp_names} &mdash; '
+            f'These are Single-Page Application (SPA) sites that return HTTP 200 '
+            f'for all usernames, making automated detection unreliable. '
+            f'They are hidden by default. Click the links to manually verify.</p>'
             f'</details>'
         )
 
@@ -625,6 +670,13 @@ def _render_profiles(profiles: list[dict]) -> str:
         donut_html = (
             f'<div class="cc-donut" style="--pct:{pct};--donut-color:{donut_color}" data-pct="{pct}%"></div>'
         )
+        completeness_label = (
+            f'<span class="completeness-label" title="Profile completeness — '
+            f'percentage of key fields (name, bio, location, avatar, followers) '
+            f'populated on this profile">'
+
+            f'{pct}% complete</span>'
+        )
 
         cards.append(
             f'<div class="card">'
@@ -632,7 +684,9 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'{avatar_html}'
             f'<div style="flex:1"><div class="card-name">{_esc(name)}</div>'
             f'<div class="card-site">{_esc(site_id)}</div></div>'
-            f'{donut_html}'
+            f'<div style="display:flex;flex-direction:column;align-items:center;gap:2px">'
+            f'{donut_html}{completeness_label}'
+            f'</div>'
             f'</div>'
             f'{bio_html}{extra_html}{meta_html}'
             f'</div>'
