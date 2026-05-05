@@ -211,7 +211,7 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 |:-----:|:------:|---------|
 | 1-5 | ✅ | v1 baseline |
 | 6 + V2 P1 | ✅ | 5 commits (e657aa1: B1-B4 + jury audit 🔴🟡 fixes) |
-| 7 | 🟡 | ~82h in progress (Batch 1 ✅, Batch 2 ✅) |
+| 7 | 🟡 | ~82h in progress (Batches 1-3 ✅) |
 
 **Phase 6 + V2 Phase 1 deliverables** (HEAD e657aa1):
 - 7-signal rules engine with weighted Union-Find (avatar_phash=0.8, username=0.7, email=1.0, phone=0.95)
