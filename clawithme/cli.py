@@ -14,6 +14,7 @@ import re
 import sys
 from pathlib import Path
 
+from clawithme.config import load_config
 from clawithme.crawler.base import Profile
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import get_engine_for_site, load_engines
@@ -74,9 +75,22 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
     trace_id = new_trace_id()
     log = get_logger(trace_id=trace_id, username=username)
 
+    # ── Load config ──
+    cfg = load_config()
+
     # ── Phase 1: Site probing (engine) ──
-    sites = load_all_sites()
-    engines = load_engines()
+    try:
+        sites = load_all_sites()
+    except (OSError, json.JSONDecodeError) as e:
+        log.error("site_load_failed", error=str(e))
+        print(f"❌ Failed to load site definitions: {e}")
+        return
+    try:
+        engines = load_engines()
+    except (OSError, json.JSONDecodeError) as e:
+        log.error("engine_load_failed", error=str(e))
+        print(f"❌ Failed to load engine definitions: {e}")
+        return
     extractors = discover_extractors()
 
     log.info("search_start", sites=len(sites), engines=len(engines),
@@ -259,6 +273,9 @@ def main():
             idx = sys.argv.index("--format")
             if idx + 1 < len(sys.argv):
                 report_format = sys.argv[idx + 1]
+        if report_format not in ("html", "json"):
+            print(f"❌ Unknown format: {report_format!r}. Use 'html' or 'json'.")
+            sys.exit(1)
         search(username, report_path=report_path, report_format=report_format)
 
     elif command == "verify":
