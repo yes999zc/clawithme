@@ -146,7 +146,7 @@
 - [x] **2.2.1** 实现全部 CMS Engine ✅ (2026-05-05)
   - XenForo、Discourse、WordPress/Author → ✅
   - phpBB、vBulletin → ✅ (ported from maigret_china, MIT)
-  - phpBB 缺 Discuz! → v2 scope
+  - **Discuz!** → ✅ (Chinese forum CMS, home.php?mod=space&username=)
 
 - [ ] **2.2.2** Engine 指标统计
   - `scripts/stats.py`：输出每个 Engine 覆盖站点数、覆盖率

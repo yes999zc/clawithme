@@ -128,5 +128,32 @@
         "This user has not registered and therefore does not have a profile to view."
       ]
     }
+  },
+  "discuz": {
+    "name": "Discuz! Forum",
+    "version": "1.0",
+    "classifier": "message",
+    "description": "Discuz! X forum engine (X2/X2.5/X3/X3.2/X3.4). Most common Chinese forum CMS. Profile via home.php?mod=space&username=. Detection: <title> tag presence.",
+    "params": {
+      "presence_strings": [
+        "{e_string}"
+      ],
+      "absence_strings": [
+        "{m_string}"
+      ],
+      "timeout_ms": 8000
+    },
+    "anti_bot": "scrapling_fetcher",
+    "_site_defaults": {
+      "probe_url": "{urlMain}{urlSubpath}/home.php?mod=space&username={username}",
+      "presence_strs": [
+        "<title>"
+      ],
+      "absence_strs": [
+        "您访问的用户空间不存在",
+        "space not found",
+        "空间不存在"
+      ]
+    }
   }
 }
