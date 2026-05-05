@@ -16,6 +16,8 @@
   },
   "check": {
     "probe_url": "https://sspai.com/u/{username}/",
+    "known_accounts": ["michael", "whoops"],
+    "known_unclaimed": ["thisuserdoesnotexist_abc123xyz"],
     "expected": 200,
     "error_flags": {
       "needs_browser": "SPA — redirects to /whoops via JS routing. Raw HTML identical (2.8KB shell). Needs headless browser."

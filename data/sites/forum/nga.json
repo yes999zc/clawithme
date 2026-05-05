@@ -19,10 +19,20 @@
     "absence_strs": [
       "找不到用户"
     ],
-    "timeout_ms": 8000
+    "timeout_ms": 8000,
+    "known_accounts": [
+      "ngacn"
+    ],
+    "known_unclaimed": [
+      "test_nonexistent_abcdef"
+    ]
   },
   "nsfw": false,
   "deprecated": false,
+  "known_accounts": [
+    "ngacn"
+  ],
+  "known_unclaimed": "test_nonexistent_abcdef",
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

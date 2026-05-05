@@ -53,7 +53,7 @@ async def _query_source(
 
     try:
         return await asyncio.wait_for(_do_query(), timeout=timeout)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         logger.warning("leak_source_timeout", source=source_name,
                        username=username, email=email)
         return []

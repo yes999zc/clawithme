@@ -7,6 +7,7 @@ Falls back gracefully if no API key configured.
 from __future__ import annotations
 
 import asyncio
+import json
 
 from clawithme.engine.http_client import HttpClient
 from clawithme.leak_sources import BreachRecord, LeakSource
@@ -49,7 +50,7 @@ class HIBPSource(LeakSource):
 
     # ── Core search methods ────────────────────────────────
 
-    async def search_by_email(self, email: str) -> list[BreachRecord]:
+    async def search_by_email(self, email: str) -> list[BreachRecord]:  # noqa: PLR0911
         """Query HIBP for breaches associated with an email address.
 
         Requires a verified API key. Returns empty list if no key or no breaches.
@@ -81,7 +82,6 @@ class HIBPSource(LeakSource):
             return []
 
         try:
-            import json
             breaches = json.loads(body)
         except json.JSONDecodeError as e:
             logger.warning("hibp_parse_error", email=email, error=str(e))

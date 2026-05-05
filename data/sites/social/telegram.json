@@ -16,8 +16,20 @@
     "probe_url": "https://t.me/{username}",
     "absence_strs": [
       "Contact @"
+    ],
+    "known_accounts": [
+      "telegram",
+      "durov"
+    ],
+    "known_unclaimed": [
+      "nonexistent_user_xyz_7766"
     ]
   },
+  "known_accounts": [
+    "telegram",
+    "durov"
+  ],
+  "known_unclaimed": "nonexistent_user_xyz_7766",
   "nsfw": false,
   "deprecated": false,
   "source": "manual",

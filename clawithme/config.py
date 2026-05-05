@@ -6,14 +6,11 @@ Falls back gracefully if config file is missing.
 
 from __future__ import annotations
 
-import sys
+import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
 
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib  # pragma: no cover
+import structlog
 
 
 @dataclass
@@ -76,7 +73,6 @@ def load_config(path: str | Path | None = None) -> Config:
         raw = tomllib.loads(toml_path.read_text())
     except (OSError, ValueError) as e:
         # Corrupted config — warn but don't crash
-        import structlog
         logger = structlog.get_logger()
         logger.warning("config_parse_failed", path=str(toml_path), error=str(e))
         return config

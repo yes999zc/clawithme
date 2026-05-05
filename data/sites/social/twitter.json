@@ -17,8 +17,20 @@
     "expected": 200,
     "error_flags": {
       "needs_browser": "SPA — not-found text rendered by JS. Raw HTML identical for exist/non-exist. Needs headless browser."
-    }
+    },
+    "known_accounts": [
+      "jack",
+      "elonmusk"
+    ],
+    "known_unclaimed": [
+      "random_nonexistent_xyz_192837"
+    ]
   },
+  "known_accounts": [
+    "jack",
+    "elonmusk"
+  ],
+  "known_unclaimed": "random_nonexistent_xyz_192837",
   "nsfw": false,
   "deprecated": false,
   "source": "manual",

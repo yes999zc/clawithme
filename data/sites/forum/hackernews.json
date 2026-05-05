@@ -16,10 +16,22 @@
     "probe_url": "https://news.ycombinator.com/user?id={username}",
     "absence_strs": [
       "No such user."
+    ],
+    "known_accounts": [
+      "pg",
+      "tptacek"
+    ],
+    "known_unclaimed": [
+      "xzzyqwerty987654"
     ]
   },
   "nsfw": false,
   "deprecated": false,
+  "known_accounts": [
+    "pg",
+    "tptacek"
+  ],
+  "known_unclaimed": "xzzyqwerty987654",
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

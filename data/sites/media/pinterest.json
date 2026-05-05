@@ -16,10 +16,22 @@
     "probe_url": "https://www.pinterest.com/{username}/",
     "absence_strs": [
       "User not found."
+    ],
+    "known_accounts": [
+      "pinterest",
+      "nasa"
+    ],
+    "known_unclaimed": [
+      "nonexistent_user_98765"
     ]
   },
   "nsfw": false,
   "deprecated": false,
+  "known_accounts": [
+    "pinterest",
+    "nasa"
+  ],
+  "known_unclaimed": "nonexistent_user_98765",
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

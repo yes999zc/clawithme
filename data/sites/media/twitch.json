@@ -17,10 +17,22 @@
     "expected": 200,
     "error_flags": {
       "needs_browser": "SPA — channel data rendered by JS. Raw HTML nearly identical. Needs headless browser."
-    }
+    },
+    "known_accounts": [
+      "ninja",
+      "shroud"
+    ],
+    "known_unclaimed": [
+      "nonexistent_user_12345678"
+    ]
   },
   "nsfw": false,
   "deprecated": false,
+  "known_accounts": [
+    "ninja",
+    "shroud"
+  ],
+  "known_unclaimed": "nonexistent_user_12345678",
   "source": "manual",
   "last_updated": "2026-05-04T17:26:29Z"
 }

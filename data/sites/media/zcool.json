@@ -19,8 +19,20 @@
     "absence_strs": [
       "用户不存在"
     ],
-    "timeout_ms": 8000
+    "timeout_ms": 8000,
+    "known_accounts": [
+      "14960228",
+      "16565548"
+    ],
+    "known_unclaimed": [
+      "99999999999"
+    ]
   },
+  "known_accounts": [
+    "14960228",
+    "16565548"
+  ],
+  "known_unclaimed": "99999999999",
   "nsfw": false,
   "deprecated": false,
   "source": "manual",

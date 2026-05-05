@@ -15,6 +15,8 @@
   },
   "check": {
     "probe_url": "https://zhidao.baidu.com/usercenter?uid={username}",
+    "known_accounts": ["914444444", "101010101"],
+    "known_unclaimed": ["000000000_notexist_xyz"],
     "absence_strs": [
       "没有找到该用户哦～"
     ],

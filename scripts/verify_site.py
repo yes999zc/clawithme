@@ -137,6 +137,7 @@ def verify_site(site: dict, engines: dict[str, Engine] | None = None) -> dict:
         "passed": passed,
         "failed": len(all_checks) - passed,
         "healthy": passed == len(all_checks) and len(all_checks) > 0,
+        "no_checks": len(all_checks) == 0,
     }
 
     return result
@@ -145,9 +146,14 @@ def verify_site(site: dict, engines: dict[str, Engine] | None = None) -> dict:
 def format_result(result: dict) -> str:
     """Pretty-print a verification result."""
     s = result["summary"]
-    status = "✅ HEALTHY" if s["healthy"] else "❌ DEGRADED"
     if result["deprecated"]:
         status = "⚠️ DEPRECATED (skip)"
+    elif s["no_checks"]:
+        status = "⚪ NO CHECKS"
+    elif s["healthy"]:
+        status = "✅ HEALTHY"
+    else:
+        status = "❌ DEGRADED"
 
     lines = [
         f"{status}  {result['site_name']} ({result['site_id']})  "
@@ -186,12 +192,16 @@ def main():
             print()
             all_results.append(result)
 
-        # Summary
-        healthy = sum(1 for r in all_results if r["summary"]["healthy"])
-        deprecated = sum(1 for r in all_results if r["deprecated"])
+        # Summary (deprecated sites counted separately)
+        deprecated_results = [r for r in all_results if r["deprecated"]]
+        active_results = [r for r in all_results if not r["deprecated"]]
+        healthy = sum(1 for r in active_results if r["summary"]["healthy"])
+        no_checks = sum(1 for r in active_results if r["summary"]["no_checks"])
+        degraded = len(active_results) - healthy - no_checks
         print(
             f"---\nTotal: {len(all_results)} sites | "
-            f"{healthy} healthy | {deprecated} deprecated"
+            f"{healthy} healthy | {no_checks} no-checks | "
+            f"{degraded} degraded | {len(deprecated_results)} deprecated"
         )
     else:
         if not args.site_id:

@@ -16,6 +16,8 @@
   },
   "check": {
     "probe_url": "https://segmentfault.com/u/{username}",
+    "known_accounts": ["phodal", "joyqi"],
+    "known_unclaimed": ["thisuserdoesnotexist_abc123xyz"],
     "absence_strs": [
       "登录 - SegmentFault 思否"
     ],

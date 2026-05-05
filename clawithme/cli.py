@@ -14,7 +14,7 @@ import re
 import sys
 from pathlib import Path
 
-from clawithme.config import Config, load_config
+from clawithme.config import load_config
 from clawithme.crawler.base import Profile
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import get_engine_for_site, load_engines

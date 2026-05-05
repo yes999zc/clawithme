@@ -16,6 +16,8 @@
   },
   "check": {
     "probe_url": "https://my.hupu.com/{username}",
+    "known_accounts": ["ye_wa", "jordunmiaw"],
+    "known_unclaimed": ["thisuserdoesnotexist_abc123xyz"],
     "presence_strs": [
       "他的动态"
     ],

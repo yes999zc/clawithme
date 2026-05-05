@@ -16,10 +16,22 @@
     "probe_url": "https://steamcommunity.com/id/{username}",
     "absence_strs": [
       "Steam Community :: Error"
+    ],
+    "known_accounts": [
+      "gabelnewell",
+      "robinwalker"
+    ],
+    "known_unclaimed": [
+      "nonexistent_user_876543"
     ]
   },
   "nsfw": false,
   "deprecated": false,
+  "known_accounts": [
+    "gabelnewell",
+    "robinwalker"
+  ],
+  "known_unclaimed": "nonexistent_user_876543",
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

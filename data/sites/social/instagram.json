@@ -17,8 +17,20 @@
     "absence_strs": [
       "\"show_lox_redesigned_404_page\":true"
     ],
-    "timeout_ms": 8000
+    "timeout_ms": 8000,
+    "known_accounts": [
+      "instagram",
+      "natgeo"
+    ],
+    "known_unclaimed": [
+      "nonexistent_xyz_99887"
+    ]
   },
+  "known_accounts": [
+    "instagram",
+    "natgeo"
+  ],
+  "known_unclaimed": "nonexistent_xyz_99887",
   "nsfw": false,
   "deprecated": false,
   "source": "manual",
