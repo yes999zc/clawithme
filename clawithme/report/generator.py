@@ -24,9 +24,11 @@ def generate_report(
 ) -> str:
     """Return a complete HTML document as a string."""
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
+    # Escape { } in user-supplied strings to prevent str.format() crashes
+    safe_username = _fmt_esc(username)
     return _HTML.format(
-        title=f"clawithme: {username}",
-        username=username,
+        title=f"clawithme: {safe_username}",
+        username=safe_username,
         timestamp=now,
         hit_count=f"{len(hits)} sites found",
         profile_count=f"{len(profiles)} profiles",
@@ -34,7 +36,7 @@ def generate_report(
         sites_table=_render_sites(hits),
         profile_cards=_render_profiles(profiles),
         cluster_section=_render_clusters(clusters),
-        trace_id=trace_id,
+        trace_id=_fmt_esc(trace_id),
     )
 
 
@@ -305,3 +307,8 @@ def _render_clusters(clusters: list) -> str:
 def _esc(s: str) -> str:
     """Minimal HTML escape."""
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _fmt_esc(s: str) -> str:
+    """Escape curly braces for str.format() safety."""
+    return s.replace("{", "{{").replace("}", "}}")

@@ -103,6 +103,10 @@ class Engine:
             text = resp.text or ""
             presence = check.get("presence_strs", [])
             absence = check.get("absence_strs", [])
+            if not presence and not absence:
+                self._log.warning("message_classifier_no_rules",
+                                 site_id=check.get("probe_url", "?"))
+                return False  # conservative: no rules = no detection
             has_presence = any(s in text for s in presence) if presence else True
             has_absence = any(s in text for s in absence)
             return has_presence and not has_absence
