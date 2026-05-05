@@ -73,9 +73,9 @@
 
 ---
 
-## Phase 3：深度爬虫 ✅ **100%**
+## Phase 3：深度爬虫 ✅ **100%**（7 extractors）
 
-> **交付物**：GitHub + 知乎 两个 extractor，CrawlerClient 完整。
+> **交付物**：GitHub + 知乎 + Bilibili + V2EX + GitLab + dev.to + StackOverflow 七个 extractor，CrawlerClient 完整。
 
 ### 3.1 爬虫核心
 
@@ -85,6 +85,11 @@
 - [x] **3.1.4** `crawler/utils.py` — first_text() / parse_count() 共享工具
 - [x] **3.1.5** GitHubExtractor — CSS selector 提取 name/bio/location/followers/avatar_phash
 - [x] **3.1.6** ZhihuExtractor（clawithme-cn 插件）— Playwright DynamicFetcher
+- [x] **3.1.7** BilibiliExtractor — API web-interface/card，username→UID 解析
+- [x] **3.1.8** V2exExtractor — API v1 members, 含跨站链接提取
+- [x] **3.1.9** GitlabExtractor — API v4 users, 含 twitter/linkedin 跨站链接
+- [x] **3.1.10** DevtoExtractor — API by_username, 含 github/twitter 跨站链接
+- [x] **3.1.11** StackoverflowExtractor — StackExchange 2.3 API, 含 reputation/badges
 
 ### 3.2 DynamicFetcher
 
@@ -184,9 +189,8 @@
 | 8 | 位置邻近信号 | 地理位置相关性 |
 | 9 | 时间关联 | joined_date 聚类 |
 | 10 | GitHub Actions CI/CD | deploy + release automation |
-| 11 | LinkedIn Profile 提取 | 全球版，反爬极严需代理+轮换 |
+| 11 | Profile 提取 P1 梯队 | 11 站（博客园/简书/Keybase/SegmentFault/酷安等） |
 | 12 | 天眼查 API 集成 | 法人/股东/高管/失信查询，公开工商数据 |
-| 13 | 邮箱/手机号 CLI 入口 | ✅ **已实现** (commit `92726bd`)，自动检测输入类型 |
 
 ---
 
@@ -194,19 +198,19 @@
 
 36 站点可行性矩阵（技术可行性 × 数据丰富度）：
 
-**P0 — 立即实施（5 站）：**
-| # | 站点 | 技术 | 丰富度 | 预计工时 |
+**P0 — 已完成（5/5 站）：**
+| # | 站点 | 技术 | 丰富度 | 状态 |
 |:--:|------|:--:|:--:|:--:|
-| 1 | **StackOverflow** | HIGH | 4 | 1 天 |
-| 2 | **Bilibili** | HIGH (API) | 4 | 2 小时 |
-| 3 | **GitLab** | HIGH | 5 | 半天 |
-| 4 | **dev.to** | HIGH | 4 | 1 天 |
-| 5 | **V2EX** | HIGH | 3 | 半天 |
+| 1 | **StackOverflow** | HIGH | 4 | ✅ API（SE 2.3 public） |
+| 2 | **Bilibili** | HIGH (API) | 4 | ✅ web-interface/card |
+| 3 | **GitLab** | HIGH | 5 | ✅ API v4 users |
+| 4 | **dev.to** | HIGH | 4 | ✅ API by_username |
+| 5 | **V2EX** | HIGH | 3 | ✅ API v1 members |
 
 **P1 — 第二梯队（11 站）：**
 博客园、简书、Keybase、SegmentFault、酷安、Behance、Dribbble、Flickr、花瓣、Patreon、CSDN
 
-**API 金矿发现：**
+**API 金矿发现（P0 已全部实现）：**
 - B站：`api.bilibili.com/x/space/acc/info?mid=` 公开 JSON，无需签名
 - V2EX：`v2ex.com/api/v2/members/` 公开 API
 - 天眼查：`open.tianyancha.com` 完整 API 平台（人名查企业/失信/被执行）
