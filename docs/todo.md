@@ -1,13 +1,13 @@
 # clawithme — Work Scope & TODO
 
-> 2026-05-05 全代码审计后重写。Phase 1-5 代码 100% 完成，CI 部署待做，v2 延期。
-> 160 tests all passing, Ruff 0 (by policy, 2 intentional exceptions), 9 engines, 2487 migrated sites.
+> 2026-05-05 V2 路线重写。四方评审 + 9 哥方向确认。
+> Phase 1-5 代码 100% 完成。160 tests all passing, Ruff 0, 9 engines, 19 extractors, 3119 migrated sites.
 
 ---
 
-## Phase 1：基础验证 ✅ **100% 代码完成**（CI 待部署）
+## Phase 1：基础验证 ✅ 100%
 
-> **交付物**：能探测站点 + 查询泄露库的 CLI 工具。schema + CI 脚本就位。
+> **交付物**：能探测站点 + 查询泄露库的 CLI 工具。
 
 ### 1.1 环境搭建 & Schema
 
@@ -21,139 +21,265 @@
 ### 1.2 站点验证
 
 - [x] **1.2.1** 48 个站点定义（36 active, 12 deprecated），通过 schema 校验
-- [ ] **1.2.2** 微信弱信号实验 → **v2 scope**（搜一搜/公众号间接探测）
-- [x] **1.2.3** `scripts/verify_site.py` — known_accounts 逐站验证
+- [x] **1.2.2** `scripts/verify_site.py` — known_accounts 逐站验证
 
 ### 1.3 Engine 系统 MVP
 
 - [x] **1.3.1** `base_http_status` Engine
 - [x] **1.3.2** `base_http_message` Engine
 - [x] **1.3.3** `base_http_headers` Engine
-- [x] **1.3.4** `engines.json` 结构 + 模板沙箱（`str.replace`，白名单制）
+- [x] **1.3.4** `engines.json` 结构 + 模板沙箱
 - [x] **1.3.5** 引擎加载器（`engine/loader.py`）
 
 ### 1.4 LeakSource
 
-- [x] **1.4.1** BreachRecord Pydantic Model（7 字段，field validators）
-- [x] **1.4.2** LeakSource 抽象基类（3 个 search 方法 + is_available + rate_limit）
+- [x] **1.4.1** BreachRecord Pydantic Model
+- [x] **1.4.2** LeakSource 抽象基类
 - [x] **1.4.3** CavalierSource 实现
 
-### 1.5 CLI + CI ✅
+### 1.5 CLI + CI
 
-- [x] **1.5.1** `clawithme search <username>` CLI 入口（含 SearXNG fallback）
-- [x] **1.5.2** GitHub Actions CI — **已部署**：`.github/workflows/ci.yml`（PR validate + stats）、`.github/workflows/daily-verify.yml`（每日 08:00 UTC 全量验证）
+- [x] **1.5.1** `clawithme search <username>` CLI 入口
+- [x] **1.5.2** GitHub Actions CI（ci.yml + daily-verify.yml）
 
 ---
 
-## Phase 2：站点数据库扩展 ✅ **100% 代码完成**（CI 待部署）
+## Phase 2：站点数据库扩展 ✅ 100%
 
 > **交付物**：48 站点 + 9 Engines + 3119 迁移站点 + CI 脚本。
 
 ### 2.1 站点扩展
 
-- [ ] **2.1.1** 中国站扩展至 50+ → **v2 scope**（当前 28 CN 站定义，16 active）
-- [x] **2.1.2** maigret 站点迁移（`scripts/migrate_maigret.py`）
-  - 3120 站点迁移完成，2487 active，100% engine_ref 覆盖
-  - 自动分配：xenforo 222 / phpbb 157 / vbulletin 120 / discourse 92 / flarum 15 / wordpress 9
-- [x] **2.1.3** known_accounts 填充（36 个 curated 站点全部完成）
-- [x] **2.1.4** legacy `data.json` 清理（1.2MB 文件已废弃）
+- [x] **2.1.1** maigret 站点迁移（`scripts/migrate_maigret.py`）— 3120 站点，2487 active，100% engine_ref 覆盖
+- [x] **2.1.2** known_accounts 填充（36 个 curated 站点全部完成）
+- [x] **2.1.3** legacy `data.json` 清理
 
 ### 2.2 Engine 系统完善
 
-- [x] **2.2.1** 全部 CMS Engine 实现（xenforo / discourse / wordpress_author / phpbb / vbulletin / discuz）
-  - phpBB + vBulletin ported from maigret_china (MIT)
-  - **Discuz!** — 原创（maigret/maigret_china 均无）
+- [x] **2.2.1** 全部 CMS Engine（xenforo/discourse/wordpress_author/phpbb/vbulletin/discuz）
 - [x] **2.2.2** `scripts/stats.py` — Engine 覆盖统计
 
-### 2.3 基础设施 ✅
+### 2.3 基础设施
 
-- [x] **2.3.1** GitHub Actions CI — **已部署**（ci.yml + daily-verify.yml）
+- [x] **2.3.1** GitHub Actions CI 已部署
 - [x] **2.3.2** `CONTRIBUTING.md` + known_accounts 维护指南
 - [x] **2.3.3** `scripts/healthcheck.py` — 组件存活探针
 
 ---
 
-## Phase 3：深度爬虫 ✅ **100%**（7 extractors）
+## Phase 3：深度爬虫 ✅ 100%
 
-> **交付物**：GitHub + 知乎 + Bilibili + V2EX + GitLab + dev.to + StackOverflow 七个 extractor，CrawlerClient 完整。
+> **交付物**：19 extractors（7 P0 + 11 P1 + 天眼查 stub），CrawlerClient 完整。
 
 ### 3.1 爬虫核心
 
 - [x] **3.1.1** `crawler/base.py` — Profile dataclass（16 字段）+ ProfileExtractor ABC
 - [x] **3.1.2** `crawler/client.py` — CrawlerClient：频率控制、UA 轮换、static+dynamic fetch
 - [x] **3.1.3** `crawler/registry.py` — entry_points 插件发现
-- [x] **3.1.4** `crawler/utils.py` — first_text() / parse_count() 共享工具
-- [x] **3.1.5** GitHubExtractor — CSS selector 提取 name/bio/location/followers/avatar_phash
-- [x] **3.1.6** ZhihuExtractor（clawithme-cn 插件）— Playwright DynamicFetcher
-- [x] **3.1.7** BilibiliExtractor — API web-interface/card，username→UID 解析
-- [x] **3.1.8** V2exExtractor — API v1 members, 含跨站链接提取
-- [x] **3.1.9** GitlabExtractor — API v4 users, 含 twitter/linkedin 跨站链接
-- [x] **3.1.10** DevtoExtractor — API by_username, 含 github/twitter 跨站链接
-- [x] **3.1.11** StackoverflowExtractor — StackExchange 2.3 API, 含 reputation/badges
+- [x] **3.1.4** `crawler/utils.py` — 共享工具
 
-### 3.2 DynamicFetcher
+### 3.2 P0 Extractors（7 站）
 
-- [x] **3.2.1** DynamicFetcher 集成（`_stealth_page_setup` 去 webdriver 标记）
-- [x] **3.2.2** 已知局限：SPA shells 对 exist/nonexist 返回相同 HTML（Twitter/Twitch/少数派等 5 站）
+- [x] **3.2.1** GitHubExtractor — CSS selector
+- [x] **3.2.2** ZhihuExtractor（clawithme-cn 插件）— Playwright
+- [x] **3.2.3** BilibiliExtractor — API web-interface/card
+- [x] **3.2.4** V2exExtractor — API v1 members
+- [x] **3.2.5** GitlabExtractor — API v4 users
+- [x] **3.2.6** DevtoExtractor — API by_username
+- [x] **3.2.7** StackoverflowExtractor — SE 2.3 API
+
+### 3.3 P1 Extractors（11 站）
+
+- [x] **3.3.1** Keybase / SegmentFault / CSDN / Coolapk / Cnblogs / Jianshu / Huaban / Behance / Dribbble / Flickr / Patreon
+
+### 3.4 天眼查 stub
+
+- [x] **3.4.1** TianyanchaExtractor（token gate，stub 完成）
+
+### 3.5 DynamicFetcher
+
+- [x] **3.5.1** Playwright DynamicFetcher 集成
+- [x] **3.5.2** 已知局限：5 个 SPA 站不可探测
 
 ---
 
-## Phase 4：多信号关联 ✅ **100%**
+## Phase 4：多信号关联 ✅ 100%
 
 > **交付物**：4 信号 Union-Find 关联引擎 + Cavalier/HIBP 双泄露源。
 
 ### 4.1 信号模块
 
-- [x] **4.1.1** `signals/avatar.py` — pHash 计算 + Hamming distance ≤ 10 + AvatarMatch
-- [x] **4.1.2** `signals/extraction.py` — 国际手机号 regex（E.164 7-15 位）+ 邮件提取 + 一次性邮箱过滤
-- [x] **4.1.3** `signals/username.py` — Levenshtein + 词缀/数字后缀模式识别
-- [x] **4.1.4** `signals/correlation.py` — Union-Find 传递闭包，4 信号加权匹配
+- [x] **4.1.1** `signals/avatar.py` — pHash + Hamming distance ≤ 10
+- [x] **4.1.2** `signals/extraction.py` — 国际手机号 regex + 邮件提取 + 一次性邮箱过滤
+- [x] **4.1.3** `signals/username.py` — Levenshtein + 词缀/数字后缀
+- [x] **4.1.4** `signals/correlation.py` — Union-Find，4 信号加权匹配
 
 ### 4.2 泄露源
 
-- [x] **4.2.1** `leak_sources/hibp.py` — HIBP v3 API，k-anonymity，无密钥优雅降级
-- [x] **4.2.2** `leak_sources/manager.py` — 并行查询 + 15s 超时 + 去重 + 单源故障隔离
+- [x] **4.2.1** `leak_sources/hibp.py` — HIBP v3
+- [x] **4.2.2** `leak_sources/manager.py` — 并行 + 15s timeout + 去重
 - [x] **4.2.3** 泄露域名→平台反向映射
-- [x] **4.2.4** SearXNG `site:domain "username"` 回退搜索
-
-### 4.3 关联引擎
-
-- [x] **4.3.1** 信号权重：email(1.0) > phone(0.95) > phash(0.8) > username(0.7)
-- [x] **4.3.2** Cluster 置信度评分（≥90% high / 70-89% mid / <70% low）
-- [x] **4.3.3** 证据脱敏（email `a***@gmail.com` / phone `***1234`）
+- [x] **4.2.4** SearXNG 回退搜索
 
 ---
 
-## Phase 5：全景报告 ✅ **100%**
+## Phase 5：全景报告 ✅ 100%
 
-> **交付物**：Geist 灰白自包含 HTML + JSON 导出 + CSS 图表。
+> **交付物**：Geist 灰白 HTML + JSON 导出 + CSS 图表。
 
 ### 5.1 报告引擎
 
-- [x] **5.1.1** 数据聚合：站点探测 + 爬虫提取 + 泄露记录 + 关联信号
-- [x] **5.1.2** Profile 完整度进度条（5 字段 → %）
-- [x] **5.1.3** 泄露时间线（CSS 横轴 timeline）
-- [x] **5.1.4** 平台分布 + 关联信号柱状图（纯 CSS，无 JS）
+- [x] **5.1.1** 数据聚合
+- [x] **5.1.2** Profile 完整度进度条
+- [x] **5.1.3** 泄露时间线（CSS timeline）
+- [x] **5.1.4** 平台分布 + 关联信号柱状图（纯 CSS）
 
 ### 5.2 可视化
 
-- [x] **5.2.1** 站点表格（按 classification.primary 分组，含分类摘要条）
-- [x] **5.2.2** Profile 卡片（display_name / bio / location / followers / completeness bar）
-- [x] **5.2.3** Cluster 展示（站点列表 + 信号标签 + 置信度 badge + 脱敏证据）
+- [x] **5.2.1** 站点表格（按 classification 分组）
+- [x] **5.2.2** Profile 卡片
+- [x] **5.2.3** Cluster 展示 + 脱敏证据
 
 ### 5.3 安全和导出
 
 - [x] **5.3.1** PII 脱敏（`_redact_evidence()`）
-- [x] **5.3.2** HTML 转义（`_esc()` 防 XSS）
-- [x] **5.3.3** `str.format()` 花括号转义（`_fmt_esc()` 防 crash）
-- [x] **5.3.4** 路径遍历防护（`.resolve()` + `..` 检测）
-- [x] **5.3.5** 自包含 HTML 报告（CSS 内联，零外部依赖）
-- [x] **5.3.6** JSON 结构化导出
-- [x] **5.3.7** 伦理使用门禁（`--acknowledge-ethical-use`）
+- [x] **5.3.2** HTML 转义（XSS 防护）
+- [x] **5.3.3** 路径遍历防护
+- [x] **5.3.4** 自包含 HTML 报告
+- [x] **5.3.5** JSON 结构化导出
+- [x] **5.3.6** 伦理使用门禁（`--acknowledge-ethical-use`）
 
-### 5.4 Web UI
+---
 
-- [ ] **5.4.1** 搜索交互 Web UI → **v2 scope**（需要 Web server）
+## Phase 6：关联引擎加固 + 基础建设 🟡 进行中
+
+> **核心命题**：修正确性 + 加信号 + 治腐烂 + LLM POC。
+> **工时**：~33h | **交付物**：6 信号引擎 + 反合并 + 噪声过滤 + LLM 仲裁 + 4 CN 站复活 + 自动发布
+
+### 6.1 正确性修复
+
+- [ ] **6.1.1** 拆分误合并 cluster (#13) — `_match_signals()` 加反合并逻辑。username 匹配但 display_name Levenshtein<0.3 且 location 不同 → username 信号权重降为 0.3。**2h**
+- [ ] **6.1.2** 默认头像哈希库 (#7) — 采集 GitHub identicon/Discourse/phpBB/XenForo 默认头像 pHash → `data/default_avatars.json`。`compare_avatars()` 先查白名单再计算距离。**3h**
+
+### 6.2 新信号（低 effort）
+
+- [ ] **6.2.1** 时间关联信号 (#9) — `signals/time.py`：解析 `joined_date` → 月精度距离。同月注册 weight=0.4，±3 月 weight=0.2。**2h**
+- [ ] **6.2.2** 位置邻近信号 (#8) — `signals/location.py`：城市名归一化（"北京"↔"Beijing"↔"北京市"）。精确匹配 weight=0.35，同省 weight=0.2。**3h**
+
+### 6.3 治腐烂
+
+- [ ] **6.3.1** Extractor 健康监控 — 每周对 known_accounts 跑全量 extractor smoke test。检测返回值退化（empty 率上升、字段减少）。`scripts/extractor_health.py` + cron。告警输出。**5h**
+- [ ] **6.3.2** 修复误判 deprecated CN 站 — Gitee（API 含 email/weibo/QQ）、掘金（`__NEXT_DATA__` JSON）、网易云音乐（JSONP）、AcFun（API）。改 probe_url + 复活 site JSON。**3h**
+
+### 6.4 LLM 身份推理 POC
+
+- [ ] **6.4.1** `signals/llm_verifier.py` — DeepSeek Flash API 接入。provider-agnostic 接口设计。**4h**
+- [ ] **6.4.2** 高冲突 cluster 二分类 — username 匹配但 display_name/location 矛盾时，LLM 判断是否同一人。**2h**
+- [ ] **6.4.3** LLM identity summary — 替代 `generator.py:_compose_summary()`。输入全量 profile 数据，输出自然语言身份摘要。**2h**
+
+### 6.5 基础设施
+
+- [ ] **6.5.1** CI/CD 自动发布 (#10) — `.github/workflows/release.yml`：wheel 构建 → PyPI publish → GitHub Release。版本号自动 bump。**4h**
+- [ ] **6.5.2** 结果缓存层 — SQLite cache at `~/.cache/clawithme/cache.db`。key=(username, site_id)，TTL 可配（默认 24h）。`--no-cache` 跳过。**3h**
+
+### 6.6 测试补齐
+
+- [ ] **6.6.1** correlation.py 边界测试 — 空输入、单 profile、全空 profile、单信号合并、反合并逻辑。**2h**
+- [ ] **6.6.2** generator.py 安全测试 — 空数据渲染、Unicode/HTML 注入残余。**1h**
+- [ ] **6.6.3** engines.py 模板全量测试 — 7 个 `_ALLOWED_VARS` 每种模板替换。**1h**
+
+---
+
+## Phase 7：引擎升级 + 站点扩展 🟡 待开始
+
+> **核心命题**：async pipeline + LLM 正式化 + 铺国际精华站。
+> **工时**：~88h | **交付物**：async 流水线（180s→18s）+ 16-24 新站 + LLM 推理正式版
+
+### 7.1 架构升级
+
+- [ ] **7.1.1** CLI async 重构 — `cli.py:search()` god function → `orchestrator.py:Orchestrator.run()`。Phase 1 引擎探测改为 `asyncio.gather` + `asyncio.Semaphore(10)`。**15h**
+- [ ] **7.1.2** 配置层增强 — DeepSeek API key、concurrency 配置生效、cache TTL、Web UI 端口。**3h**
+
+### 7.2 LLM 推理正式化
+
+- [ ] **7.2.1** Prompt 模板化 — 设计二分类 prompt、identity summary prompt、bio 语义理解 prompt。**3h**
+- [ ] **7.2.2** 批量推理 + 缓存 — 一次调用处理多对 profile 对比，减少 API 调用次数。LLM 结果缓存（同 pair 同结果 TTL 7 天）。**4h**
+- [ ] **7.2.3** Fallback 到规则引擎 — LLM API 不可用时自动降级到纯规则引擎。**2h**
+- [ ] **7.2.4** 成本控制 — 单次搜索 LLM 调用上限（默认 10 次），超出仅用规则引擎。**3h**
+
+### 7.3 国际站扩展（优先，面向国际客户）
+
+- [ ] **7.3.1** LinkedIn — 实名桥梁。profile HTML extractor。需 Playwright DynamicFetcher。**4h**
+- [ ] **7.3.2** Instagram — profile meta JSON extractor。API-first 或 Playwright。**2h**
+- [ ] **7.3.3** Reddit — JSON API。user/about endpoint。**2h**
+- [ ] **7.3.4** Medium — RSS/HTML extractor。**2h**
+- [ ] **7.3.5** YouTube — Channel page HTML extractor。**2h**
+- [ ] **7.3.6** Pinterest — 公开 profile HTML。**2h**
+- [ ] **7.3.7** Twitch — API endpoint extractor。**2h**
+- [ ] **7.3.8** TikTok — Web profile HTML（需 DynamicFetcher）。**2h**
+- [ ] **7.3.9** Spotify — 公开 profile API。**1h**
+- [ ] **7.3.10** Telegram — 公开 profile HTML（已有 engine，需 extractor）。**1h**
+
+### 7.4 CN 站扩展 Tier 1（6 站，精华增量）
+
+- [ ] **7.4.1** 虎扑 — HTML extractor。**2h**
+- [ ] **7.4.2** NGA — HTML extractor。**2h**
+- [ ] **7.4.3** 站酷 Zcool — API extractor。**2h**
+- [ ] **7.4.4** LOFTER — HTML extractor。**2h**
+- [ ] **7.4.5** 什么值得买 — API/HTML。**2h**
+- [ ] **7.4.6** 百度贴吧 — 移动版 HTML extractor。**2h**
+
+### 7.5 CN 站扩展 Tier 2（8 站）
+
+- [ ] **7.5.1** 微博 mobile API — 需 cookie 注入方案。**3h**
+- [ ] **7.5.2** CSDN 增强 — 迁移为 `__NEXT_DATA__` JSON 提取，去掉 CSS parsing。**2h**
+- [ ] **7.5.3** 简书增强 — HTML extractor 优化。**1h**
+- [ ] **7.5.4** 酷安增强 — API discover。**2h**
+- [ ] **7.5.5** 豆瓣小组 — HTML extractor。**2h**
+- [ ] **7.5.6** Bilibili 增强 — 补 `space/acc/info` API 端点。**2h**
+- [ ] **7.5.7** 小红书 POC — 可行性探测（大概率不可行）。**2h**
+- [ ] **7.5.8** 抖音 POC — 可行性探测（大概率不可行）。**2h**
+
+### 7.6 报告 LLM 增强
+
+- [ ] **7.6.1** 自然语言 identity summary — LLM 替代 `_compose_summary()`。**3h**
+- [ ] **7.6.2** Bio 语义聚类 — LLM 分析 bio 字段，提取角色/行业/技能。**2h**
+
+---
+
+## Phase 8：表面层扩展 🟡 待开始
+
+> **核心命题**：Web UI + 多格式报告 + 天眼查。上线准备。
+> **工时**：~60h | **交付物**：可上线的最小 Web 应用
+
+### 8.1 Web UI
+
+- [ ] **8.1.1** FastAPI 骨架 — `clawithme/web/` 可选包。GET /, POST /api/search, GET /api/search/{id}, GET /api/search/{id}/sse。**8h**
+- [ ] **8.1.2** SSE 进度流 — 搜索进度实时推送（Phase 1 探测 N/36, Phase 2 提取 N/19...）。**4h**
+- [ ] **8.1.3** 前端单页面 — 搜索框 → 进度条 → 结果卡片 + cluster 可视化 → 报告下载。Vanilla JS，Geist 灰白风。**16h**
+- [ ] **8.1.4** 安全加固 — CSRF token、API rate limiting per IP、报告路径访问控制。**6h**
+- [ ] **8.1.5** 部署配置 — uvicorn 启动、`clawithme web` 命令、Docker Compose。**6h**
+
+### 8.2 多格式报告
+
+- [ ] **8.2.1** Markdown 报告 — 字符串拼接，复用 generator.py 数据层。Geist 风格纯文本报告。**4h**
+- [ ] **8.2.2** PDF 报告 — WeasyPrint 包装 HTML generator。CSS 兼容性处理（CSS-only charts 需降级为简单表格）。**8h**
+
+### 8.3 天眼查 API
+
+- [ ] **8.3.1** Stub 补齐 — `tianyancha.py` 完整实现，token gate，¥6/次按需调用。条件触发（需已知真实姓名）。**8h**
+
+---
+
+## KILLED / DEFERRED
+
+| # | 项 | 状态 | 原因 |
+|:--:|------|:----:|------|
+| 1 | 自建泄露库 | **KILLED** | 刑法 285 条风险 + 无合法数据源 |
+| 6 | 微信弱信号实验 | **KILLED** | 失败率 90%+，无公开 API |
+| 11 | Profile 提取 P1 | **✅ DONE** | 已从 v2 移除 |
+| 3 | Louvain 图聚类 | **v3** | 等 face recognition 方向确定 |
+| 12 | 天眼查 API | **Phase 8 条件触发** | 需先通过 LinkedIn 拿真实姓名 |
 
 ---
 
@@ -161,71 +287,25 @@
 
 | 轮次 | 方式 | 发现 | 状态 |
 |:---:|------|------|:---:|
-| 1 | 陪审团（3 视角） | maigret 死代码 4500 行、7 空壳站点、迁移脚本 bug | ✅ 已修复 |
-| 2 | 陪审团 | 4 空 `__init__.py` stubs、迁移 artifacts、HTTP 层不统一 | ✅ 已修复 |
-| 3 | code-review-excellence（Python+安全双视角） | 29 findings: CrawlerClient leak, 路径遍历, username 校验, UA secrets | ✅ 8 项已修复 |
-| 4 | 功能 QA 自审 | 7 虚标完成 + 3 逻辑 bug（空输入集群、相似度阈值、一次性邮箱）| ✅ 已修复 |
-| 5 | Claude Code Opus 架构审计 | 5 代码问题 + 10 边界情况 → 4 步开发计划 | ✅ 全部执行 |
-
----
-
-## 待办
-
-> **零待办。** Phase 1-5 代码 100% 完成，CI 已部署。所有剩余项在 v2 scope。
-
----
-
-## v2 Scope（远期、按优先级排列）
-
-| # | 特性 | 说明 |
-|:--:|------|------|
-| 1 | 自建泄露库 | NAS PostgreSQL，法律风险需独立评估 |
-| 2 | 中国站扩展至 50+ | 当前 28 站定义（16 active），扩展需逐站验证 |
-| 3 | Louvain 图聚类 | 加权边图聚类替代 Union-Find |
-| 4 | PDF/Markdown 报告 | 多格式导出 |
-| 5 | Web UI 搜索交互 | Geist 灰白风搜索页 |
-| 6 | 微信弱信号实验 | 搜一搜/公众号间接探测 |
-| 7 | 默认头像哈希库 | 过滤 GitHub 默认 identicon |
-| 8 | 位置邻近信号 | 地理位置相关性 |
-| 9 | 时间关联 | joined_date 聚类 |
-| 10 | GitHub Actions CI/CD | deploy + release automation |
-| 11 | Profile 提取 P1 梯队 | 11 站（博客园/简书/Keybase/SegmentFault/酷安等） |
-| 12 | 天眼查 API 集成 | 法人/股东/高管/失信查询，公开工商数据 |
-| 13 | 关联引擎：拆分误合并 cluster | 同一 username 但 location/display_name 不一致 → 降权重，避免把不同人合并 |
-
----
-
-## Profile 提取扩展计划（陪审团审计 2026-05-05）
-
-36 站点可行性矩阵（技术可行性 × 数据丰富度）：
-
-**P0 — 已完成（5/5 站）：**
-| # | 站点 | 技术 | 丰富度 | 状态 |
-|:--:|------|:--:|:--:|:--:|
-| 1 | **StackOverflow** | HIGH | 4 | ✅ API（SE 2.3 public） |
-| 2 | **Bilibili** | HIGH (API) | 4 | ✅ web-interface/card |
-| 3 | **GitLab** | HIGH | 5 | ✅ API v4 users |
-| 4 | **dev.to** | HIGH | 4 | ✅ API by_username |
-| 5 | **V2EX** | HIGH | 3 | ✅ API v1 members |
-
-**P1 — 第二梯队（11 站）：**
-博客园、简书、Keybase、SegmentFault、酷安、Behance、Dribbble、Flickr、花瓣、Patreon、CSDN
-
-**API 金矿发现（P0 已全部实现）：**
-- B站：`api.bilibili.com/x/space/acc/info?mid=` 公开 JSON，无需签名
-- V2EX：`v2ex.com/api/v2/members/` 公开 API
-- 天眼查：`open.tianyancha.com` 完整 API 平台（人名查企业/失信/被执行）
+| 1 | 陪审团（3 视角） | maigret 死代码 4500 行、7 空壳站点 | ✅ 已修复 |
+| 2 | 陪审团 | 4 空 stubs、迁移 artifacts | ✅ 已修复 |
+| 3 | code-review-excellence | 29 findings | ✅ 8 项已修复 |
+| 4 | 功能 QA 自审 | 7 虚标 + 3 bug | ✅ 已修复 |
+| 5 | Claude Code 架构审计 | 5 代码 + 10 边界 | ✅ 全部执行 |
+| **6** | **四方 V2 路线评审** | **重新排名 V2、KILL #1/#6、新增 LLM POC** | 🟡 **Phase 6 待启动** |
 
 ---
 
 ## 总结
 
-| 维度的 | 状态 |
+| 维度 | 状态 |
 |------|:---:|
 | Phase 1-5 代码 | **100%** ✅ |
 | 测试 (160 tests) | **all passing** ✅ |
-| Lint (Ruff) | **0 (by policy)** ✅ |
+| Lint (Ruff) | **0** ✅ |
 | CI 部署 | **已部署** ✅ |
-| v2 scope | **13 项延期** 🟡 |
-
-> **零待办。** 全部代码完成 + 5 轮独立审计 + CI 就位。
+| Phase 6 | **🟡 33h 待启动** |
+| Phase 7 | **🟡 88h 待启动** |
+| Phase 8 | **🟡 60h 待启动** |
+| **V2 总计** | **~181h** |
+| v3 scope | Louvain, 人脸识别, 天眼查对接, SaaS 上线 |

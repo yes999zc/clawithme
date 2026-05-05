@@ -244,24 +244,38 @@ python scripts/verify_site.py --all # Full verification
 | Item | Status |
 |------|:------:|
 | Local ↔ GitHub | ✅ aligned, no pending commits |
-| v2 scope (13 items, see docs/todo.md) | 🟡 Deferred |
+| Phase 6 (33h) | 🟡 Ready to start |
+| Phase 7 (88h) | 🟡 Pending |
+| Phase 8 (60h) | 🟡 Pending |
+| V2 total | ~181h across 3 phases
 
-## v2 Scope (deferred)
+## V2 Direction (2026-05-05 四方评审 + 9哥决策)
 
-| # | Item |
-|:--:|------|
-| 1 | 自建泄露库 (NAS PostgreSQL) |
-| 2 | 中国站扩展至 50+ |
-| 3 | Louvain 图聚类 |
-| 4 | PDF/Markdown 报告 |
-| 5 | Web UI 搜索交互 |
-| 6 | 微信弱信号实验 |
-| 7 | 默认头像哈希库 |
-| 8 | 位置邻近信号 |
-| 9 | 时间关联 |
-| 10 | GitHub Actions CI/CD |
-| 11 | Profile 提取 P1 梯队 (11 站 — ✅ P0+P1 done) |
-| 12 | 天眼查 API 集成 (stub done, 需 token) |
-| 13 | 关联引擎：拆分误合并 cluster |
+**产品方向**：国际客户为主，中国站探测作为竞争优势。最终上线 SaaS。
+**核心差异化**：LLM 身份推理引擎（规则 + DeepSeek Flash API 混合）。
+**终局**：人脸识别 → 跨实名平台关联 → nuwa.world 式大图。
 
-> Phase 1-5 全部完成。19 extractors (7 P0 + 11 P1 + 天眼查 stub)。160 tests。CI 已部署。Local ↔ GitHub 对齐。
+| # | Item | Status |
+|:--:|------|:------:|
+| 1 | 关联引擎：拆分误合并 cluster | 🟡 Phase 6 |
+| 2 | 默认头像哈希库 | 🟡 Phase 6 |
+| 3 | 时间关联信号 | 🟡 Phase 6 |
+| 4 | Extractor 健康监控 | 🟡 Phase 6 |
+| 5 | 修复误判 deprecated CN站 (Gitee/掘金/网易云/AcFun) | 🟡 Phase 6 |
+| 6 | CI/CD 自动发布 | 🟡 Phase 6 |
+| 7 | LLM 身份推理 POC (DeepSeek Flash) | 🟡 Phase 6 |
+| 8 | 结果缓存层 | 🟡 Phase 6 |
+| 9 | 位置邻近信号 | 🟡 Phase 6 |
+| 10 | CLI async 重构 | 🟡 Phase 7 |
+| 11 | LLM 推理正式化 | 🟡 Phase 7 |
+| 12 | 国际站扩展 (LinkedIn/Reddit/Medium 等 10+ 站) | 🟡 Phase 7 |
+| 13 | CN 站扩展至 30 (国际精华 + 中国金矿) | 🟡 Phase 7 |
+| 14 | Web UI | 🟡 Phase 8 |
+| 15 | PDF/Markdown 报告 | 🟡 Phase 8 |
+| 16 | 天眼查 API (条件触发，需先拿实名) | 🟡 Phase 8 |
+| — | 自建泄露库 | ❌ KILLED |
+| — | 微信弱信号实验 | ❌ KILLED |
+| — | Profile 提取 P1 | ✅ DONE (v1) |
+| — | Louvain 图聚类 | ⏸️ v3 |
+
+> Phase 1-5 全部完成。Phase 6-8 V2 路线已规划（181h）。19 extractors。160 tests。CI 已部署。LLM 身份推理为 v2 核心差异化。
