@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 import json
 import re
+import sqlite3
 import sys
 from pathlib import Path
 
@@ -171,9 +172,12 @@ def _search_leaks(search_term: str, search_type: str,
                                      trace_id=trace_id, breach_dates=breach_dates)
         try:
             safe_path = Path(report_path).resolve()
-            if ".." in str(Path(report_path)):
+            cwd = Path.cwd().resolve()
+            try:
+                safe_path.relative_to(cwd)
+            except ValueError:
                 log.error("report_path_traversal", path=report_path)
-                print("\n❌ Report path must not contain '..'")
+                print("\n❌ Report path must be within current directory")
                 return
             safe_path.write_text(output)
             log.info("report_written", path=report_path, format=report_format)
@@ -230,13 +234,14 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
     if not no_cache:
         try:
             cache = ResultCache()
-        except OSError as e:
+        except (OSError, sqlite3.OperationalError) as e:
             log.warning("cache_init_failed", error=str(e))
 
     # ── Init LLM verifier (if API key available) ──
     llm_verifier: LLMVerifier | None = None
-    if LLMVerifier.is_configured():
-        llm_verifier = LLMVerifier()
+    llm = LLMVerifier()
+    if llm.is_configured():
+        llm_verifier = llm
 
     # Email/phone search: leak DB only, no site probing
     if search_type != "username":
@@ -486,10 +491,12 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
                                      trace_id=trace_id, breach_dates=breach_dates)
         try:
             safe_path = Path(report_path).resolve()
-            # Check resolved path for traversal
-            if ".." in str(safe_path):
+            cwd = Path.cwd().resolve()
+            try:
+                safe_path.relative_to(cwd)
+            except ValueError:
                 log.error("report_path_traversal", path=report_path)
-                print("\n❌ Report path must not contain '..'")
+                print("\n❌ Report path must be within current directory")
                 return
             safe_path.write_text(output)
             log.info("report_written", path=report_path, format=report_format)

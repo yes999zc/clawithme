@@ -51,7 +51,6 @@ class CorrelationEngine:
         "phone": 0.95,
         "avatar_phash": 0.8,
         "username": 0.7,
-        "username_weak": 0.3,
         "joined_date": 0.15,
         "location": 0.15,
     }

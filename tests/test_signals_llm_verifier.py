@@ -19,11 +19,13 @@ def _profile(site_id: str, **kw) -> Profile:
 class TestLLMVerifier:
     def test_is_configured_false_when_no_key(self, monkeypatch):
         monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
-        assert LLMVerifier.is_configured() is False
+        v = LLMVerifier(api_key="")
+        assert v.is_configured() is False
 
     def test_is_configured_true_with_key(self, monkeypatch):
         monkeypatch.setenv("DEEPSEEK_API_KEY", "sk-test-123")
-        assert LLMVerifier.is_configured() is True
+        v = LLMVerifier()
+        assert v.is_configured() is True
 
     def test_verify_same_person_no_api_key(self):
         """Should fall back gracefully when no API key."""

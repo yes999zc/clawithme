@@ -69,9 +69,9 @@ class LLMVerifier:
         self.base_url = base_url
         self.model = model
 
-    @staticmethod
-    def is_configured() -> bool:
-        return bool(_get_api_key())
+    def is_configured(self) -> bool:
+        """Check if this verifier has a usable API key."""
+        return bool(self.api_key)
 
     def verify_same_person(
         self, profile_a: Profile, profile_b: Profile

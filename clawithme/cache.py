@@ -24,6 +24,7 @@ class ResultCache:
             cache_dir = Path.home() / ".cache" / "clawithme"
         self._db_path = Path(cache_dir) / "cache.db"
         self._db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._db_path.parent.chmod(0o700)
         self._conn: sqlite3.Connection | None = None
         self._init_db()
 
@@ -51,6 +52,9 @@ class ResultCache:
         if self._conn is not None:
             self._conn.close()
             self._conn = None
+
+    def __del__(self) -> None:
+        self.close()
 
     def get(self, key: str) -> dict | None:
         """Return cached dict or None if expired or missing."""
