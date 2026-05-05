@@ -199,19 +199,16 @@ python scripts/verify_site.py zhihu # Single site verification
 python scripts/verify_site.py --all # Full verification
 ```
 
-## Git Status (2026-05-05)
+## Git Status (2026-05-06)
 
-6 local commits ahead of origin/main (pending `gh auth login`):
+Local ↔ GitHub aligned. Phase 6 complete. 209 tests.
 
-| Commit | Description |
-|--------|-------------|
-| `c307233` | fix: 5 audit blocking bugs |
-| `c085ea6` | docs: README rewrite |
-| `92726bd` | feat: email/phone CLI search |
-| `b30e54d` | docs: LinkedIn/Tianyancha v2 scope |
-| `40dc714` | feat: Bilibili + V2EX extractors |
-| `326a8df` | feat: GitLab + dev.to + StackOverflow extractors |
-| *(pending)* | feat: P1 (11 extractors) + 天眼查 stub + bilibili bugfix |
+| Phase | Status | Commits |
+|:-----:|:------:|---------|
+| 1-5 | ✅ | v1 baseline |
+| 6 | ✅ | 5 commits (B1-B4 + jury fix) |
+| 7 | 🟡 | ~88h pending |
+| 8 | 🟡 | ~60h pending |
 
 ## Key Design Decisions
 
