@@ -12,7 +12,9 @@ from dataclasses import dataclass, field
 from clawithme.crawler.base import Profile
 from clawithme.signals.avatar import compare_avatars
 from clawithme.signals.extraction import normalize_phone
-from clawithme.signals.username import compare_usernames
+from clawithme.signals.location import compare_locations
+from clawithme.signals.time import compare_joined_dates
+from clawithme.signals.username import compare_usernames, levenshtein_distance
 
 
 @dataclass
@@ -42,6 +44,9 @@ class CorrelationEngine:
         "phone": 0.95,
         "avatar_phash": 0.8,
         "username": 0.7,
+        "username_weak": 0.3,
+        "joined_date": 0.15,
+        "location": 0.15,
     }
 
     def correlate(self, profiles: list[Profile]) -> list[Cluster]:  # noqa: PLR0912
@@ -88,6 +93,18 @@ class CorrelationEngine:
                     if "username" in sigs:
                         sim = compare_usernames(pi.username, pj.username)
                         evidence_map["username"] = f"{pi.username} ↔ {pj.username} (sim={sim:.2f})"
+                    if "joined_date" in sigs:
+                        score = compare_joined_dates(pi.joined_date, pj.joined_date)
+                        evidence_map["joined_date"] = (
+                            f"{pi.joined_date} ↔ {pj.joined_date} "
+                            f"(score={score:.2f})"
+                        )
+                    if "location" in sigs:
+                        score = compare_locations(pi.location, pj.location)
+                        evidence_map["location"] = (
+                            f"{pi.location} ↔ {pj.location} "
+                            f"(score={score:.2f})"
+                        )
                     edge_evidence[(i, j)] = evidence_map
 
         # ── Extract clusters ───────────────────────────────────
@@ -136,9 +153,29 @@ class CorrelationEngine:
                 normalize_phone(a.phone) == normalize_phone(b.phone)):
             matched.add("phone")
         sim = compare_usernames(a.username, b.username)
-        if sim >= self.USERNAME_THRESHOLD:
+        if sim >= self.USERNAME_THRESHOLD and not self._is_username_contradicted(a, b):
             matched.add("username")
+        if compare_joined_dates(a.joined_date, b.joined_date) > 0:
+            matched.add("joined_date")
+        if compare_locations(a.location, b.location) > 0:
+            matched.add("location")
         return matched
+
+    def _is_username_contradicted(self, a: Profile, b: Profile) -> bool:
+        """Username match is contradicted when display_name and location differ sharply."""
+        if not a.display_name or not b.display_name:
+            return False
+        if not a.location or not b.location:
+            return False
+        if a.location.strip().lower() == b.location.strip().lower():
+            return False
+        da = a.display_name.strip().lower()
+        db = b.display_name.strip().lower()
+        max_len = max(len(da), len(db))
+        if max_len == 0:
+            return False
+        dn_sim = 1.0 - (levenshtein_distance(da, db) / max_len)
+        return dn_sim < 0.3
 
     def _cluster_confidence(self, profiles: list[Profile]) -> float:
         """Average of strongest matching signal weights."""

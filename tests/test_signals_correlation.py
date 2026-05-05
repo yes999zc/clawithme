@@ -94,3 +94,23 @@ class TestCorrelationEngine:
         clusters = engine.correlate([a, b])
         assert len(clusters) == 1
         assert "username" in clusters[0].signals
+
+    def test_anti_merge_username_contradiction(self):
+        """Same username, very different display_name + location → NOT merged."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="john",
+                     display_name="John Smith", location="New York")
+        b = _profile("zhihu", username="john",
+                     display_name="张伟", location="Beijing")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 2
+
+    def test_anti_merge_same_location_still_merges(self):
+        """Username match + same location → still merges despite different display_name."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="john",
+                     display_name="John Smith", location="New York")
+        b = _profile("zhihu", username="john",
+                     display_name="张伟", location="New York")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 1
