@@ -116,6 +116,22 @@ pytest tests/ -v
 
 The CLI enforces an `--acknowledge-ethical-use` gate.
 
+## Creating a Release
+
+1. Ensure all changes are committed and pushed to `main`.
+2. Tag the release and push:
+
+   ```bash
+   git tag v0.2.0          # bump version in pyproject.toml first
+   git push --tags
+   ```
+
+3. The [Release workflow](.github/workflows/release.yml) automatically:
+   - Builds the wheel
+   - Runs a smoke test (import check)
+   - Publishes to PyPI (requires `PYPI_TOKEN` secret configured in repo)
+   - Creates a GitHub Release with auto-generated release notes
+
 ## License
 
 MIT

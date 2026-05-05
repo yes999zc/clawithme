@@ -20,3 +20,15 @@ jobs:
         run: python scripts/validate.py
       - name: Stats
         run: python scripts/stats.py
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install build deps
+        run: pip install build
+      - name: Build wheel
+        run: python -m build
