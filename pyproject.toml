@@ -41,6 +41,8 @@ clawithme = "clawithme.cli:main"
 
 [project.entry-points."clawithme.extractors"]
 github = "clawithme.crawler.extractors.github:GithubExtractor"
+v2ex = "clawithme.crawler.extractors.v2ex:V2exExtractor"
+bilibili = "clawithme.crawler.extractors.bilibili:BilibiliExtractor"
 
 [tool.setuptools.packages.find]
 include = ["clawithme*"]
