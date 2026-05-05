@@ -25,10 +25,10 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 
 ```
 ~6600 lines Python, 43 .py files + tests + scripts
-209 tests, all passing, Ruff 0 (by policy)
+235 tests, all passing, Ruff 0 (by policy)
 48 site JSONs (40 active, 8 deprecated), 3119 migrated sites (2487 active)
-9 engines, 18 extractors (7 P0 + 10 P1 + 天眼查 stub)
-Phase 1-6 code COMPLETE. V2 Phase 1 DONE. LLM Verifier POC live.
+9 engines, 34 extractors
+Phase 1-7 code COMPLETE. V2 Phase 1-7 DONE. Async + LLM live.
 ```
 
 ### Key source files
@@ -48,6 +48,7 @@ Phase 1-6 code COMPLETE. V2 Phase 1 DONE. LLM Verifier POC live.
 | `clawithme/crawler/client.py` | 300 | CrawlerClient: rate limiting, UA rotation, static+dynamic fetch |
 | `clawithme/crawler/registry.py` | — | Plugin discovery via `importlib.metadata` entry_points |
 | `clawithme/crawler/utils.py` | — | Shared: `first_text()`, `parse_count()` |
+| `clawithme/pipeline.py` | 380 | Async pipeline orchestrator (Phase 7): semaphore-bounded parallel probes + extraction |
 | `clawithme/crawler/extractors/` | 19 files | See extractor table below |
 | `clawithme/signals/avatar.py` | — | pHash + Hamming distance + AvatarMatch |
 | `clawithme/signals/correlation.py` | 169 | Union-Find, 4-signal weighted matching |
@@ -59,7 +60,7 @@ Phase 1-6 code COMPLETE. V2 Phase 1 DONE. LLM Verifier POC live.
 | `data/default_avatars.json` | 5 | Default avatar pHash library (GitHub identicon, forum defaults) |
 | `scripts/extractor_health.py` | 132 | Weekly extractor smoke tests, breakage detection |
 
-### Extractors (19 total)
+### Extractors (34 total)
 
 **P0 (7 extractors) — public API-first:**
 
@@ -211,11 +212,16 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 |:-----:|:------:|---------|
 | 1-5 | ✅ | v1 baseline |
 | 6 + V2 P1 | ✅ | 5 commits (e657aa1: B1-B4 + jury audit 🔴🟡 fixes) |
-| 7 | 🟡 | ~82h in progress (Batches 1-4 ✅) |
+| 7 | ✅ | 7 commits, 30h (Batches 1-5 all done) |
+| 8 | 🟡 | ~60h pending (Web UI + PDF + Tianyancha) |
 
-**Phase 7 Batch 4a deliverables** (Claude Code, HEAD 286a9e8):
-- 5 new international extractors: Reddit, HackerNews, LinkedIn, Medium, YouTube
-- 24 extractors total (was 19). 49 site JSONs (41 active, 8 deprecated).
+**Phase 7 deliverables** (HEAD f50a13a):
+- Anti-merge logic for username-only weak links
+- Async pipeline (semaphore=10, 180s→~14s)
+- Multi-provider LLM verifier (DeepSeek/Kimi/DashScope) with structured confidence scoring
+- 9 international extractors: Reddit, HN, LinkedIn, Medium, YouTube, Telegram, Steam, Quora, ProductHunt
+- 6 CN extractors: Douban, Juejin, Baidu Zhidao, NGA, Zcool, Netease Music
+- 34 extractors total (was 19). 235 tests. Ruff 0.
 
 **Phase 6 + V2 Phase 1 deliverables** (HEAD e657aa1):
 - 7-signal rules engine with weighted Union-Find (avatar_phash=0.8, username=0.7, email=1.0, phone=0.95)
@@ -293,4 +299,4 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 | — | Profile 提取 P1 | ✅ DONE (v1) |
 | — | Louvain 图聚类 | ⏸️ v3 |
 
-> Phase 1-5 全部完成。Phase 6 + V2 P1 全部完成。Phase 7-8 V2 路线已规划（~88h + ~60h）。18 extractors。209 tests。CI 已部署 + auto release。LLM 身份推理 POC 完成。
+> Phase 1-7 全部完成。V2 Phase 1-7 DONE。34 extractors。235 tests。Async + LLM 正式化。CI + auto release。
