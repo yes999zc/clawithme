@@ -14,11 +14,13 @@ import re
 import sys
 from pathlib import Path
 
-from clawithme.config import load_config
+from clawithme.config import Config, load_config
 from clawithme.crawler.base import Profile
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import get_engine_for_site, load_engines
 from clawithme.leak_sources import CavalierSource
+from clawithme.leak_sources.hibp import HIBPSource
+from clawithme.leak_sources.manager import query_breaches
 from clawithme.logging import get_logger, new_trace_id, setup_logging
 from clawithme.signals.correlation import CorrelationEngine
 
@@ -149,9 +151,12 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
     # ── Phase 3: Leak database ──
     async def query_leaks():
-        src = CavalierSource()
-        records = await src.search_by_username(username)
-        await src.close()
+        sources: list = [CavalierSource()]
+        if cfg.apis.hibp_api_key:
+            sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
+        records = await query_breaches(sources, username=username)
+        for src in sources:
+            await src.close()
         return records
 
     try:
@@ -200,12 +205,15 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             print(" ".join(parts))
 
     print()
+    sources_used = ["Cavalier"]
+    if cfg.apis.hibp_api_key:
+        sources_used.append("HIBP")
     if leak_records:
-        print(f"🔓 Leak records: {len(leak_records)}")
+        print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
         for r in leak_records:
             print(f"   ⚠️  {r}")
     else:
-        print("🔓 Leak records: 0 (no known breaches)")
+        print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
 
     if len(clusters) > 0:
         print()
