@@ -25,10 +25,10 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 
 ```
 ~6600 lines Python, 43 .py files + tests + scripts
-160 tests (119 main + 41 leak sources), all passing, Ruff 0 (by policy)
-48 site JSONs (36 active, 12 deprecated), 3119 migrated sites (2487 active)
-9 engines, 19 extractors (7 P0 + 11 P1 + 天眼查 stub)
-Phase 1-5 code COMPLETE. P0/P1 profile extraction DONE. 天眼查 stub DONE.
+209 tests, all passing, Ruff 0 (by policy)
+48 site JSONs (40 active, 8 deprecated), 3119 migrated sites (2487 active)
+9 engines, 18 extractors (7 P0 + 10 P1 + 天眼查 stub)
+Phase 1-6 code COMPLETE. V2 Phase 1 DONE. LLM Verifier POC live.
 ```
 
 ### Key source files
@@ -53,7 +53,11 @@ Phase 1-5 code COMPLETE. P0/P1 profile extraction DONE. 天眼查 stub DONE.
 | `clawithme/signals/correlation.py` | 169 | Union-Find, 4-signal weighted matching |
 | `clawithme/signals/extraction.py` | — | Phone regex (E.164) + email extraction + disposable filter |
 | `clawithme/signals/username.py` | — | Levenshtein + compare_usernames (affix/digit patterns) |
+| `clawithme/signals/llm_verifier.py` | 186 | LLM-based cluster verification (provider-agnostic, OpenAI-compatible API) |
+| `clawithme/cache.py` | 92 | SQLite ResultCache with TTL, async-safe |
 | `clawithme/report/generator.py` | 492 | Geist HTML + JSON export, CSS-only charts, PII redaction |
+| `data/default_avatars.json` | 5 | Default avatar pHash library (GitHub identicon, forum defaults) |
+| `scripts/extractor_health.py` | 132 | Weekly extractor smoke tests, breakage detection |
 
 ### Extractors (19 total)
 
@@ -201,14 +205,24 @@ python scripts/verify_site.py --all # Full verification
 
 ## Git Status (2026-05-06)
 
-Local ↔ GitHub aligned. Phase 6 complete. 209 tests.
+Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 
 | Phase | Status | Commits |
 |:-----:|:------:|---------|
 | 1-5 | ✅ | v1 baseline |
-| 6 | ✅ | 5 commits (B1-B4 + jury fix) |
+| 6 + V2 P1 | ✅ | 5 commits (e657aa1: B1-B4 + jury audit 🔴🟡 fixes) |
 | 7 | 🟡 | ~88h pending |
-| 8 | 🟡 | ~60h pending |
+
+**Phase 6 + V2 Phase 1 deliverables** (HEAD e657aa1):
+- 7-signal rules engine with weighted Union-Find (avatar_phash=0.8, username=0.7, email=1.0, phone=0.95)
+- LLM Verifier (DeepSeek Flash, provider-agnostic openai-compatible client)
+- SQLite ResultCache with TTL (prerequisite for Web UI)
+- Default avatar hash library (GitHub identicon + forum defaults)
+- 4 deprecated CN sites revived: Gitee (API, email/weibo/QQ fields!), 掘金, AcFun, 网易云音乐
+- Extractor health monitoring (weekly smoke tests, breakage detection)
+- CI/CD auto release (GitHub Release → PyPI on tag push)
+- 2 rounds jury audit, 🔴🟡 all fixed
+- 209 tests (160 → 209), Ruff 0 (by policy)
 
 ## Key Design Decisions
 
@@ -234,14 +248,14 @@ Local ↔ GitHub aligned. Phase 6 complete. 209 tests.
 1. **Ruff 0 (by policy)** — 2 intentional exceptions: `PLC0415` for lazy Fetcher import, `UP037` quoted type annotation
 2. **Schema validation** — `python scripts/validate.py` before merge
 3. **Site verification** — `python scripts/verify_site.py --all` daily
-4. **160 tests passing** — `python -m pytest tests/ -v`
+4. **209 tests passing** — `python -m pytest tests/ -v`
 
 ## Pending Work
 
 | Item | Status |
 |------|:------:|
 | Local ↔ GitHub | ✅ aligned, no pending commits |
-| Phase 6 (33h) | 🟡 Ready to start |
+| Phase 6 (33h) | ✅ DONE (2026-05-06) |
 | Phase 7 (88h) | 🟡 Pending |
 | Phase 8 (60h) | 🟡 Pending |
 | V2 total | ~181h across 3 phases
@@ -254,15 +268,15 @@ Local ↔ GitHub aligned. Phase 6 complete. 209 tests.
 
 | # | Item | Status |
 |:--:|------|:------:|
-| 1 | 关联引擎：拆分误合并 cluster | 🟡 Phase 6 |
-| 2 | 默认头像哈希库 | 🟡 Phase 6 |
-| 3 | 时间关联信号 | 🟡 Phase 6 |
-| 4 | Extractor 健康监控 | 🟡 Phase 6 |
-| 5 | 修复误判 deprecated CN站 (Gitee/掘金/网易云/AcFun) | 🟡 Phase 6 |
-| 6 | CI/CD 自动发布 | 🟡 Phase 6 |
-| 7 | LLM 身份推理 POC (DeepSeek Flash) | 🟡 Phase 6 |
-| 8 | 结果缓存层 | 🟡 Phase 6 |
-| 9 | 位置邻近信号 | 🟡 Phase 6 |
+| 1 | 关联引擎：拆分误合并 cluster | 🟡 Phase 7 |
+| 2 | 默认头像哈希库 | ✅ Phase 6 |
+| 3 | 时间关联信号 | 🟡 Phase 7 |
+| 4 | Extractor 健康监控 | ✅ Phase 6 |
+| 5 | 修复误判 deprecated CN站 (Gitee/掘金/网易云/AcFun) | ✅ Phase 6 |
+| 6 | CI/CD 自动发布 | ✅ Phase 6 |
+| 7 | LLM 身份推理 POC (DeepSeek Flash) | ✅ Phase 6 |
+| 8 | 结果缓存层 | ✅ Phase 6 |
+| 9 | 位置邻近信号 | 🟡 Phase 7 |
 | 10 | CLI async 重构 | 🟡 Phase 7 |
 | 11 | LLM 推理正式化 | 🟡 Phase 7 |
 | 12 | 国际站扩展 (LinkedIn/Reddit/Medium 等 10+ 站) | 🟡 Phase 7 |
@@ -275,4 +289,4 @@ Local ↔ GitHub aligned. Phase 6 complete. 209 tests.
 | — | Profile 提取 P1 | ✅ DONE (v1) |
 | — | Louvain 图聚类 | ⏸️ v3 |
 
-> Phase 1-5 全部完成。Phase 6-8 V2 路线已规划（181h）。19 extractors。160 tests。CI 已部署。LLM 身份推理为 v2 核心差异化。
+> Phase 1-5 全部完成。Phase 6 + V2 P1 全部完成。Phase 7-8 V2 路线已规划（~88h + ~60h）。18 extractors。209 tests。CI 已部署 + auto release。LLM 身份推理 POC 完成。

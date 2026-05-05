@@ -176,7 +176,45 @@ class CorrelationEngine:
             matched.add("joined_date")
         if compare_locations(a.location, b.location) > 0:
             matched.add("location")
+
+        # Anti-merge: username-only match requires stronger evidence
+        if matched == {"username"} and not self._is_strong_username_match(a, b):
+            matched.discard("username")
+
         return matched
+
+    def _is_strong_username_match(self, a: Profile, b: Profile) -> bool:
+        """Check if a username-only link has enough evidence to merge.
+
+        Username-only matches are the weakest signal — common short
+        names like 'alex' or 'john' can belong to different people.
+        Gating logic:
+          1. Long usernames (>=8 chars) are unique enough → always merge
+          2. Affix/pattern variants (0.85-0.94, e.g. 'alice' vs 'alice_cn')
+             indicate conscious identity demarcation → merge
+          3. Exact match (>=0.95) on short name → need display-name consensus
+        """
+        if len(a.username) >= 8:
+            return True
+        sim = compare_usernames(a.username, b.username)
+        # Affix/pattern variants — conscious identity demarcation
+        if 0.85 <= sim < 0.95:
+            return True
+        # Exact match on short name — need human confirmation
+        if sim >= 0.95:
+            if a.display_name and b.display_name:
+                dn_sim = compare_usernames(
+                    a.display_name.strip().lower(),
+                    b.display_name.strip().lower(),
+                )
+                if dn_sim >= 0.5:
+                    return True
+            # Same location supports same-person hypothesis
+            return bool(
+                a.location and b.location and
+                a.location.strip().lower() == b.location.strip().lower()
+            )
+        return False
 
     def _is_username_contradicted(self, a: Profile, b: Profile) -> bool:
         """Username match is contradicted when display_name and location differ sharply."""

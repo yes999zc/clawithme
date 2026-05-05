@@ -114,3 +114,48 @@ class TestCorrelationEngine:
                      display_name="张伟", location="New York")
         clusters = engine.correlate([a, b])
         assert len(clusters) == 1
+
+    # ── Anti-merge: username-only weak links ──────────────────
+
+    def test_anti_merge_username_only_short_exact(self):
+        """Short exact username match with no other signals → NOT merged."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="alex")
+        b = _profile("gitlab", username="alex")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 2
+
+    def test_anti_merge_username_only_short_no_display_name(self):
+        """Short username match, no display_name → NOT merged."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="max")
+        b = _profile("devto", username="max")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 2
+
+    def test_username_only_long_still_merges(self):
+        """Long unique username (>=8) exact match → merges."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="sindresorhus")
+        b = _profile("gitlab", username="sindresorhus")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 1
+
+    def test_username_only_display_consensus_merges(self):
+        """Short username match + same display_name → merges."""
+        engine = CorrelationEngine()
+        a = _profile("github", username="alex",
+                     display_name="Alex Johnson")
+        b = _profile("gitlab", username="alex",
+                     display_name="Alex Johnson")
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 1
+
+    def test_username_only_weak_with_other_signal_still_merges(self):
+        """Short username + avatar_phash → merges (username is not alone)."""
+        engine = CorrelationEngine()
+        phash = "a3f8c2d1e4b5a3f8"
+        a = _profile("github", username="alex", avatar_phash=phash)
+        b = _profile("gitlab", username="alex", avatar_phash=phash)
+        clusters = engine.correlate([a, b])
+        assert len(clusters) == 1
