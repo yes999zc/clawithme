@@ -64,17 +64,28 @@ def load_all_sites(validate: bool = False, include_migrated: bool = False) -> li
 
 
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
-           include_migrated: bool = False):
+           include_migrated: bool = False, acknowledged: bool = False):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.
     If include_migrated, also search maigret-migrated sites (~2500).
+    Requires --acknowledge-ethical-use flag to confirm responsible use.
     """
     # Validate username against common pattern
     if not _USERNAME_RE.match(username):
         log = get_logger()
         log.error("invalid_username", username=username)
         print(f"❌ Invalid username: {username!r} (allowed: letters, digits, . _ -)")
+        return
+
+    if not acknowledged:
+        print("🛡️  ETHICAL USE REQUIRED")
+        print()
+        print("   This tool queries public profiles and breach databases.")
+        print("   Use only on accounts you own or have explicit authorization.")
+        print("   Unauthorized use violates platform ToS, privacy laws, and ethical norms.")
+        print()
+        print("   Re-run with: clawithme search <username> --acknowledge-ethical-use")
         return
 
     trace_id = new_trace_id()
@@ -312,7 +323,8 @@ def main():
     setup_logging()
 
     if len(sys.argv) < 2:
-        print("Usage: clawithme search <username> [--report <path>] [--include-migrated]")
+        print("Usage: clawithme search <username> [--report <path>] "
+              "[--include-migrated] [--acknowledge-ethical-use]")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)
@@ -321,12 +333,14 @@ def main():
 
     if command == "search":
         if len(sys.argv) < 3:
-            print("Usage: clawithme search <username> [--report <path>] [--include-migrated]")
+            print("Usage: clawithme search <username> [--report <path>] "
+                  "[--include-migrated] [--acknowledge-ethical-use]")
             sys.exit(1)
         username = sys.argv[2]
         report_path = None
         report_format = "html"
         include_migrated = "--include-migrated" in sys.argv
+        acknowledged = "--acknowledge-ethical-use" in sys.argv
         if "--report" in sys.argv:
             idx = sys.argv.index("--report")
             if idx + 1 < len(sys.argv):
@@ -339,7 +353,7 @@ def main():
             print(f"❌ Unknown format: {report_format!r}. Use 'html' or 'json'.")
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
-               include_migrated=include_migrated)
+               include_migrated=include_migrated, acknowledged=acknowledged)
 
     elif command == "verify":
         # Delegate to verify_site.py

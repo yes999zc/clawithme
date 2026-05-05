@@ -1,6 +1,6 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-05 (Step 3 complete — known_accounts population)
+> Handoff document for fresh session. Last updated: 2026-05-05 (P2 hardening complete — leak tests + ethical gate)
 
 ## What is clawithme
 
@@ -10,9 +10,9 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 ## Current Code State
 
 ```
-~4700 lines Python, 42 .py files, 116 tests (main) + 7 (plugin) = 123 total
+~4700 lines Python, 43 .py files, 160 tests (119 main + 41 leak sources)
 48 site JSONs (36 active, 12 deprecated), 6 engines, 2 extractors
-Phase 1-5 COMPLETE + jury audit fixed + Step 1-3 hardening COMPLETE
+Phase 1-5 COMPLETE + jury audit P0/P1 fixed + P2 leak tests + ethical gate
 Ruff 0
 ```
 
@@ -50,9 +50,9 @@ Ruff 0
 ```bash
 cd ~/AI_Workspace/01_Code/tools/clawithme
 pip install -e ".[dev]"
-python -m clawithme.cli search yes999zc
-python -m clawithme.cli search yes999zc --report report.html
-python -m clawithme.cli search yes999zc --report report.json --format json
+python -m clawithme.cli search yes999zc --acknowledge-ethical-use
+python -m clawithme.cli search yes999zc --report report.html --acknowledge-ethical-use
+python -m clawithme.cli search yes999zc --report report.json --format json --acknowledge-ethical-use
 python -m pytest tests/ -v
 python scripts/validate.py
 python scripts/stats.py
@@ -76,7 +76,7 @@ All 36 active sites have `known_accounts` + `known_unclaimed` populated.
 | email | 1.0 | Exact, case-insensitive | — |
 | phone | 0.95 | Digits-only, normalized | — |
 | avatar_phash | 0.8 | Hamming distance | ≤10 |
-| username | 0.7 | Levenshtein + affix/digit patterns | ≥0.7 |
+| username | 0.7 | Levenshtein + affix/digit patterns | ≥0.80 |
 
 ### Cluster confidence badge tiers
 
@@ -134,7 +134,7 @@ All 36 active sites have `known_accounts` + `known_unclaimed` populated.
 | Template engine | Manual str.replace (no Jinja2) |
 | Logging | structlog + trace_id |
 | Testing | Mock-based unit tests |
-| Phone scope | China mobile only (1[3-9]XXXXXXXXX) |
+| Phone scope | International (7-15 digits, E.164 range) |
 | Config | TOML (`~/.config/clawithme/config.toml`), zero external deps |
 
 ## Quality Gates
@@ -147,7 +147,6 @@ All 36 active sites have `known_accounts` + `known_unclaimed` populated.
 ## v2 Scope (deferred)
 
 - Default avatar hash DB
-- Ethical use gates (--include-breaches, --acknowledge-ethical-use)
 - Weighted-edge graph clustering (Louvain)
 - 2000+ global site migration
 - PDF/Markdown report export

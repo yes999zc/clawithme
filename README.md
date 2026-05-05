@@ -1,23 +1,32 @@
 # clawithme 🕵️‍♂️
 
-**Claw the open web，with me.**
+**Claw the open web, with me.**
 
-输入一个用户名，发现 ta 在 3000+ 平台的踪迹 — 从社交网络到技术社区，从中国本地平台到全球站点。构建完整的公开身份全景图。
+Input a username, discover their presence across 3000+ platforms — from social networks to dev communities, from Chinese local platforms to global sites. Build a complete public identity panorama.
 
-## 路线图
+## ⚠️ Ethical Use
 
-- [x] 继承 maigret 核心引擎（3000+ 站点检测）
-- [ ] 扩充中国社交网络（Bilibili、小红书、抖音等）
-- [ ] 加强 LinkedIn / 真实身份网络
-- [ ] 深度公开信息爬取
-- [ ] 全景报告（Geist 风格可视化）
+**This tool queries public profiles and breach databases. Use only on accounts you own or have explicit authorization to investigate.** Unauthorized use may violate platform Terms of Service, privacy laws (GDPR, PIPL), and ethical norms.
 
-## 快速开始
+The CLI enforces an `--acknowledge-ethical-use` gate — you must explicitly accept these terms before any search runs.
+
+## Quick Start
 
 ```bash
-pip install -r requirements.txt
-python -m clawithme <username>
+pip install -e ".[dev]"
+clawithme search <username> --acknowledge-ethical-use
+clawithme search <username> --report report.html --acknowledge-ethical-use
 ```
+
+## Pipeline
+
+| Phase | Description |
+|-------|-------------|
+| 1 | Site probing (37 curated + ~2500 migrated, 9 CMS engines) |
+| 2 | Profile extraction (GitHub, Zhihu extractors) |
+| 3 | Leak database query (Cavalier + HIBP) |
+| 4 | Multi-signal correlation (email, phone, avatar pHash, username → Union-Find clusters) |
+| 5 | Geist HTML report |
 
 ## License
 
