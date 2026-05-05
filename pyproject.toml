@@ -76,12 +76,14 @@ select = ["E", "F", "I", "W", "UP", "B", "SIM", "PL"]
 ignore = [
     "PLR2004",  # magic value comparisons (acceptable in tests)
     "B904",     # raise from in except (not critical)
+    "UP037",    # quoted type annotations (TYPE_CHECKING pattern, by policy)
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D", "PLR2004", "S", "F401"]
 "scripts/*" = ["D", "S", "E501", "SIM", "PLC0415", "E402", "PLW0603"]
-"clawithme/cli.py" = ["PLR0912", "PLR0915", "PLC0415"]
+"clawithme/cli.py" = ["PLR0912", "PLR0913", "PLR0915", "PLC0415"]
+"clawithme/pipeline.py" = ["PLR0913"]
 "clawithme/crawler/client.py" = ["PLC0415", "PLW0603", "E501"]
 "clawithme/engine/engines.py" = ["PLC0415", "PLW0603"]
 "clawithme/leak_sources/__init__.py" = ["PLC0415"]

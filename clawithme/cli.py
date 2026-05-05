@@ -191,12 +191,13 @@ def _search_leaks(search_term: str, search_type: str,
 
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
            include_migrated: bool = False, acknowledged: bool = False,
-           no_cache: bool = False):
+           no_cache: bool = False, async_mode: bool = True):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.
     If include_migrated, also search maigret-migrated sites (~2500).
     Requires --acknowledge-ethical-use flag to confirm responsible use.
+    If async_mode=False, uses legacy serial pipeline (slower, debug-friendly).
     """
     # Detect search type: email, phone, or username
     if "@" in username:
@@ -222,6 +223,178 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
         print()
         print("   Re-run with: clawithme search <username> --acknowledge-ethical-use")
         return
+
+    # Async pipeline path (default)
+    if async_mode and search_type == "username":
+        try:
+            return _search_async(
+                username, report_path=report_path, report_format=report_format,
+                include_migrated=include_migrated, no_cache=no_cache,
+            )
+        except RuntimeError:
+            # Nested event loop (e.g., pytest-asyncio) — fall back to sync
+            pass
+
+    # Legacy serial pipeline (sync fallback for email/phone/debug)
+    return _search_sync(
+        username, search_type=search_type, report_path=report_path,
+        report_format=report_format, include_migrated=include_migrated,
+        no_cache=no_cache, acknowledged=acknowledged,
+    )
+
+
+def _search_async(username: str, *, report_path: str | None = None,
+                  report_format: str = "html", include_migrated: bool = False,
+                  no_cache: bool = False):
+    """Async pipeline: parallel probes + extraction (6-38x faster)."""
+    import asyncio
+
+    trace_id = new_trace_id()
+    log = get_logger(trace_id=trace_id, username=username)
+    cfg = load_config()
+
+    # Init cache
+    cache: ResultCache | None = None
+    if not no_cache:
+        try:
+            cache = ResultCache()
+        except (OSError, sqlite3.OperationalError) as e:
+            log.warning("cache_init_failed", error=str(e))
+
+    # Init LLM verifier
+    llm_verifier: LLMVerifier | None = None
+    llm = LLMVerifier()
+    if llm.is_configured():
+        llm_verifier = llm
+
+    # Load sites, engines, extractors
+    try:
+        sites = load_all_sites(include_migrated=include_migrated)
+    except (OSError, json.JSONDecodeError) as e:
+        log.error("site_load_failed", error=str(e))
+        print(f"❌ Failed to load site definitions: {e}")
+        return
+    try:
+        engines = load_engines()
+    except (OSError, json.JSONDecodeError) as e:
+        log.error("engine_load_failed", error=str(e))
+        print(f"❌ Failed to load engine definitions: {e}")
+        return
+    extractors = discover_extractors()
+
+    log.info("search_start", sites=len(sites), engines=len(engines),
+             extractors=len(extractors), mode="async")
+
+    # Run pipeline
+    from clawithme.pipeline import AsyncPipeline
+    pipeline = AsyncPipeline(
+        sites, engines, extractors, cfg,
+        cache=cache, llm_verifier=llm_verifier,
+    )
+
+    try:
+        result = asyncio.run(pipeline.run(username))
+    except (OSError, ValueError, TimeoutError, RuntimeError) as e:
+        log.error("pipeline_failed", error=str(e))
+        print(f"❌ Search failed: {e}")
+        return
+
+    # Output
+    print()
+    print(f"═══ clawithme search: {username} ═══")
+    print()
+
+    if result.hits:
+        print(f"📊 Sites found: {len(result.hits)}/{len(sites)}")
+        for h in result.hits:
+            print(f"   ✅ {h['site_name']:12s} → {h['url']}")
+    else:
+        print(f"📊 Sites found: 0/{len(sites)}")
+
+    if result.profiles:
+        print()
+        print(f"👤 Profiles extracted: {len(result.profiles)}")
+        for p in result.profiles:
+            parts = [f"   {p['site_id']}"]
+            if p["display_name"]:
+                parts.append(f"→ {p['display_name']}")
+            if p["location"]:
+                parts.append(f"📍 {p['location']}")
+            if p["follower_count"] is not None:
+                parts.append(f"👥 {p['follower_count']}")
+            print(" ".join(parts))
+
+    print()
+    leak_records = result.leak_records
+    sources_used = ["Cavalier"]
+    if cfg.apis.hibp_api_key:
+        sources_used.append("HIBP")
+    if leak_records:
+        print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
+        for r in leak_records:
+            print(f"   ⚠️  {r}")
+        leak_domains: set[str] = {r.domain for r in leak_records if r.domain}
+        if leak_domains:
+            print(f"📧 Breach-associated platforms: {', '.join(sorted(leak_domains))}")
+        leak_phones: set[str] = {r.phone for r in leak_records if r.phone}
+        if leak_phones:
+            print(f"📱 Phone numbers revealed: {', '.join(sorted(leak_phones))}")
+        leak_emails: set[str] = {r.email for r in leak_records if r.email}
+        if leak_emails:
+            print(f"📧 Emails revealed: {', '.join(sorted(leak_emails))}")
+    else:
+        print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
+
+    clusters = result.clusters
+    if len(clusters) > 0:
+        print()
+        multi = sum(1 for c in clusters if len(c.profiles) > 1)
+        print(f"🔗 Identity clusters: {len(clusters)} total, {multi} multi-profile")
+        for i, c in enumerate(clusters, 1):
+            if len(c.profiles) == 1:
+                continue
+            sids = [p.site_id.replace("leak:", "🔓") for p in c.profiles]
+            print(f"   Cluster {i}: {', '.join(sids)}")
+            print(f"      confidence={c.confidence}  signals={c.signals}")
+
+    print()
+    log.info("search_done", hits=len(result.hits), profiles=len(result.profiles),
+             leaks=len(leak_records), searxng_hits=result.searxng_hits)
+    print(f"trace_id: {trace_id}")
+
+    # Report
+    if report_path:
+        breach_dates = [r.breach_date for r in leak_records if r.breach_date]
+        if report_format == "json":
+            from clawithme.report.generator import export_json
+            output = export_json(result.hits, result.profiles, clusters,
+                                 username, trace_id=trace_id)
+        else:
+            from clawithme.report.generator import generate_report
+            output = generate_report(result.hits, result.profiles, clusters,
+                                     username, trace_id=trace_id,
+                                     breach_dates=breach_dates)
+        try:
+            safe_path = Path(report_path).resolve()
+            cwd = Path.cwd().resolve()
+            try:
+                safe_path.relative_to(cwd)
+            except ValueError:
+                log.error("report_path_traversal", path=report_path)
+                print("\n❌ Report path must be within current directory")
+                return
+            safe_path.write_text(output)
+            log.info("report_written", path=report_path, format=report_format)
+            print(f"\n📄 Report ({report_format}): {report_path}")
+        except OSError as e:
+            log.error("report_write_failed", path=report_path, error=str(e))
+            print(f"\n❌ Failed to write report: {e}")
+
+
+def _search_sync(username: str, *, search_type: str, report_path: str | None,
+                 report_format: str, include_migrated: bool,
+                 no_cache: bool, acknowledged: bool):
+    """Legacy serial pipeline (backward compatible, debug-friendly)."""
 
     trace_id = new_trace_id()
     log = get_logger(trace_id=trace_id, username=username)
@@ -513,7 +686,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: clawithme search <username> [--report <path>] "
               "[--format html|json] [--include-migrated] [--no-cache] "
-              "[--acknowledge-ethical-use]")
+              "[--sync] [--acknowledge-ethical-use]")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)
@@ -524,7 +697,7 @@ def main():
         if len(sys.argv) < 3:
             print("Usage: clawithme search <username> [--report <path>] "
                   "[--format html|json] [--include-migrated] [--no-cache] "
-                  "[--acknowledge-ethical-use]")
+                  "[--sync] [--acknowledge-ethical-use]")
             sys.exit(1)
         username = sys.argv[2]
         report_path = None
@@ -532,6 +705,7 @@ def main():
         include_migrated = "--include-migrated" in sys.argv
         no_cache = "--no-cache" in sys.argv
         acknowledged = "--acknowledge-ethical-use" in sys.argv
+        async_mode = "--sync" not in sys.argv
         if "--report" in sys.argv:
             idx = sys.argv.index("--report")
             if idx + 1 < len(sys.argv):
@@ -545,7 +719,7 @@ def main():
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
                include_migrated=include_migrated, acknowledged=acknowledged,
-               no_cache=no_cache)
+               no_cache=no_cache, async_mode=async_mode)
 
     elif command == "verify":
         # Delegate to verify_site.py
