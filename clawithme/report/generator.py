@@ -59,12 +59,15 @@ def generate_report(  # noqa: PLR0913
     # Auto-summary paragraph
     auto_summary = _compose_summary(profiles)
 
+    # Pick best display name for title
+    display_title = _pick_display_name(profiles, safe_username)
+
     return _HTML.format(
         title=f"clawithme: {safe_username}",
         username=safe_username,
         timestamp=now,
         summary_hero=_render_summary(
-            safe_username, true_hit_count, fp_count,
+            display_title, safe_username, true_hit_count, fp_count,
             profile_count, cluster_count, leak_count,
             consensus_name, auto_summary,
         ),
@@ -173,13 +176,32 @@ def _truncate_sentence(text: str, max_chars: int) -> str:
     return cut + "…"
 
 
+def _pick_display_name(profiles: list[dict], username: str) -> str:
+    """Pick the best display name for the report title.
+
+    Priority: most common display_name (≥50% of profiles), else username.title().
+    """
+    names = [p.get("display_name") for p in profiles if p.get("display_name")]
+    if not names:
+        return username.title()
+    # Count occurrences
+    from collections import Counter
+    counts = Counter(names)
+    most_common, freq = counts.most_common(1)[0]
+    if freq >= len(profiles) * 0.5:  # at least 50% of profiles
+        return most_common
+    return username.title()
+
+
 # ── Summary hero ─────────────────────────────────────────────
 
 def _render_summary(
-    username: str, true_hits: int, fp_count: int,
+    display_title: str, username: str,
+    true_hits: int, fp_count: int,
     profiles: int, clusters: int, leaks: int,
     consensus_name: str | None, auto_summary: str,
 ) -> str:
+    # Pick best display name: unanimous consensus, or most common, or title-case username
     identity_line = ""
     if consensus_name:
         identity_line = (
@@ -206,7 +228,7 @@ def _render_summary(
 
     return (
         f'<div class="summary-hero">'
-        f'<h1>{_esc(username)}</h1>'
+        f'<h1>{_esc(display_title)}</h1>'
         f'{identity_line}'
         f'<p class="hero-summary">{auto_summary}</p>'
         f'{stats_html}'
@@ -227,10 +249,18 @@ _HTML = """\
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/font.min.css" rel="stylesheet">
 <style>
+/* ── Design Tokens ─────────────────────────── */
+:root {{
+  --accent: #1e293b;
+  --accent-subtle: #475569;
+  --accent-bg: rgba(30, 41, 59, 0.04);
+  --bg-warm: #fafaf8;
+}}
+
 *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
 body {{
   font-family: 'Geist', 'Geist Fallback', system-ui, -apple-system, sans-serif;
-  color: #171717; background: #fafafa; line-height: 1.6;
+  color: #171717; background: var(--bg-warm); line-height: 1.6;
 }}
 .container {{ max-width: 780px; margin: 0 auto; padding: 48px 24px 56px; }}
 
@@ -252,7 +282,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 .section-header .badge {{
   font: 500 11px/1 'Geist Mono', ui-monospace, monospace;
   padding: 2px 8px; border-radius: 999px;
-  background: #171717; color: white; flex-shrink: 0;
+  background: var(--accent); color: white; flex-shrink: 0;
 }}
 .section-header h2 {{ font: 600 15px/1.3 'Geist', sans-serif; color: #171717; }}
 .section-container {{
@@ -263,10 +293,11 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 
 /* ── Summary hero ───────────────────────────── */
 .summary-hero {{
-  background: #fff; border-radius: 10px;
+  background: #fff; border-radius: 10px; border-left: 4px solid var(--accent);
   padding: 36px 36px 28px;
   box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
 }}
+.summary-hero h1 {{ color: var(--accent); }}
 .hero-summary {{
   font-size: 15px; color: #4d4d4d; line-height: 1.7; margin-top: 12px; max-width: 640px;
 }}
@@ -298,7 +329,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 .site-table th {{ text-align: left; padding: 10px 12px; border-bottom: 2px solid #e5e5e5; color: #4d4d4d; font-weight: 500; }}
 .site-table td {{ padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }}
 .site-table .url {{ color: #808080; font-size: 13px; word-break: break-all; }}
-.status-ok {{ color: #171717; font-weight: 500; font-family: 'Geist Mono', monospace; font-size: 13px; }}
+.status-ok {{ color: var(--accent-subtle); font-weight: 500; font-family: 'Geist Mono', monospace; font-size: 13px; }}
 .status-fp {{ color: #b0b0b0; font-style: italic; }}
 .cat-label {{
   font-size: 13px; font-weight: 500; color: #808080;
@@ -333,7 +364,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 .cc-donut {{
   width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
   background: conic-gradient(
-    #171717 0deg calc(var(--pct) * 3.6deg),
+    var(--donut-color, #171717) 0deg calc(var(--pct) * 3.6deg),
     #f0f0f0 calc(var(--pct) * 3.6deg) 360deg
   );
   position: relative;
@@ -395,7 +426,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 .chart-bar-row {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }}
 .chart-bar-label {{ font-size: 12px; color: #4d4d4d; min-width: 80px; text-align: right; flex-shrink: 0; }}
 .chart-bar-track {{ flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }}
-.chart-bar-fill {{ height: 100%; border-radius: 4px; background: #171717; opacity: var(--bar-opacity, 1); }}
+.chart-bar-fill {{ height: 100%; border-radius: 4px; background: var(--accent); opacity: var(--bar-opacity, 1); }}
 .chart-bar-count {{
   font-family: 'Geist Mono', monospace; font-size: 11px; color: #808080; min-width: 24px;
 }}
@@ -587,11 +618,12 @@ def _render_profiles(profiles: list[dict]) -> str:
                     extra_tags.append(f'<span class="card-extra-tag">{label}: {_esc(str(val)[:50])}</span>')
         extra_html = f'<div class="card-extras">{"".join(extra_tags)}</div>' if extra_tags else ""
 
-        # Donut ring completeness
+        # Donut ring completeness — accent for high, grayscale for low
         filled = sum(1 for f in _PROFILE_FIELDS if p.get(f))
         pct = int(filled / len(_PROFILE_FIELDS) * 100)
+        donut_color = "var(--accent)" if pct >= 60 else "#171717"
         donut_html = (
-            f'<div class="cc-donut" style="--pct:{pct}" data-pct="{pct}%"></div>'
+            f'<div class="cc-donut" style="--pct:{pct};--donut-color:{donut_color}" data-pct="{pct}%"></div>'
         )
 
         cards.append(
