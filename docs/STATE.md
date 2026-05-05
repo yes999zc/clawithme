@@ -1,7 +1,7 @@
 # clawithme — Project State
 
-> 手写于 2026-05-05（全代码审计后重写，替代旧 STATE.md）
-> 源：真实代码库验证（47 .py files, 160 tests all passing, 9 engines, 3119 migrated sites）
+> 2026-05-05 更新（P0 Profile 提取 5/5 + P1 Profile 提取 11/11 + 天眼查 stub）
+> 源：真实代码库验证（43 .py files, 160 tests all passing, 9 engines, 19 extractors, 3119 migrated sites）
 
 ## What is clawithme
 
@@ -15,59 +15,85 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 | Detection | Single `checking.py` (~1200 lines, hardcoded) | 9 pluggable Engines in `engines.json` |
 | HTTP layer | aiohttp + requests | Scrapling (anti-bot fingerprinting) |
 | Quality gate | None | CI: daily verify + Schema validation + Ruff 0 |
-| Deep extraction | None | GitHub + Zhihu extractors (CSS selector, Playwright) |
+| Deep extraction | None | **19 extractors** (7 P0 + 11 P1 + 天眼查 stub) |
 | Leak DB | None | Cavalier + HIBP with parallel manager |
 | Correlation | None | Union-Find: email/phone/avatar_phash/username |
 | Site scale | 3000+ (unverified) | 36 curated (verified) + 2487 migrated (engine-assigned) |
+| CLI search | username only | username + email + phone (auto-detect) |
 
 ## Current Code State
 
 ```
-~4650 lines Python, 47 .py files
-160 tests (119 main + 41 leak sources), all passing, Ruff 0
+~6600 lines Python, 43 .py files + tests + scripts
+160 tests (119 main + 41 leak sources), all passing, Ruff 0 (by policy)
 48 site JSONs (36 active, 12 deprecated), 3119 migrated sites (2487 active)
-9 engines, 2 extractors (GitHub + Zhihu in CN plugin)
-Phase 1-5 code COMPLETE. CI deployment + v2 scope deferred.
+9 engines, 19 extractors (7 P0 + 11 P1 + 天眼查 stub)
+Phase 1-5 code COMPLETE. P0/P1 profile extraction DONE. 天眼查 stub DONE.
 ```
 
 ### Key source files
 
 | File | Lines | Purpose |
 |------|:-----:|---------|
-| `clawithme/cli.py` | 383 | CLI: `search`, `verify`, `validate`. Includes SearXNG fallback. |
+| `clawithme/cli.py` | 520 | CLI: `search`, `verify`, `validate`. Email/phone auto-detect. SearXNG fallback. |
 | `clawithme/config.py` | 109 | TOML config loader (project-root `config.toml`, not `~/.config`) |
-| `clawithme/engine/http_client.py` | — | Scrapling Fetcher wrapper |
+| `clawithme/engine/http_client.py` | — | Scrapling Fetcher wrapper (lazy-imported) |
 | `clawithme/engine/engines.py` | — | Engine runner + template sandbox (`str.replace`, no Jinja2) |
 | `clawithme/engine/loader.py` | — | Load engines.json, match sites to engines |
-| `clawithme/leak_sources/__init__.py` | 235 | BreachRecord (Pydantic, 7 fields, field validators) + LeakSource ABC + CavalierSource |
+| `clawithme/leak_sources/__init__.py` | 235 | BreachRecord (Pydantic, 7 fields) + LeakSource ABC + CavalierSource |
 | `clawithme/leak_sources/hibp.py` | 128 | HIBP v3 API (k-anonymity, no-key graceful degradation) |
 | `clawithme/leak_sources/manager.py` | 91 | LeakSourceManager: parallel Cavalier+HIBP, 15s timeout, dedup |
 | `clawithme/logging.py` | — | structlog + trace_id propagation |
 | `clawithme/crawler/base.py` | 72 | Profile dataclass (16 fields) + ProfileExtractor ABC |
 | `clawithme/crawler/client.py` | 300 | CrawlerClient: rate limiting, UA rotation, static+dynamic fetch |
 | `clawithme/crawler/registry.py` | — | Plugin discovery via `importlib.metadata` entry_points |
-| `clawithme/crawler/utils.py` | — | Shared extractor utilities: `first_text()`, `parse_count()` |
-| `clawithme/crawler/extractors/github.py` | 96 | GitHubExtractor: static CSS-selected profile extraction + avatar phash |
-| `clawithme/signals/avatar.py` | — | pHash compute + Hamming distance + AvatarMatch NamedTuple |
-| `clawithme/signals/correlation.py` | 169 | Union-Find correlation engine, 4-signal weighted matching |
-| `clawithme/signals/extraction.py` | — | International phone regex (7-15 digits, E.164), email extraction, disposable filter |
-| `clawithme/signals/username.py` | — | Levenshtein distance + compare_usernames (affix/digit patterns) |
-| `clawithme/report/generator.py` | 492 | Geist HTML report + JSON export, CSS-only charts, PII redaction |
-| `clawithme/sites/__init__.py` | — | CN platform extension marker |
-| `data/engines.json` | 159 | 9 engine definitions |
-| `data/schema.json` | — | JSON Schema for site validation |
-| `data/taxonomy.json` | — | Valid classification values |
-| `data/sites/*/<id>.json` | — | 48 curated site JSONs (categories: social/devtools/forum/media/blog/gaming/music/ecommerce) |
-| `data/sites/migrated/` | — | 3119 migrated sites (2487 active, engine auto-assigned) |
-| `scripts/validate.py` | — | Schema validation (48 OK) |
-| `scripts/verify_site.py` | — | Per-site detection rule verification (known_accounts + known_unclaimed) |
-| `scripts/stats.py` | — | Site DB statistics |
-| `scripts/healthcheck.py` | — | Core component liveness probe |
-| `scripts/migrate_maigret.py` | — | maigret format → clawithme schema batch migration |
+| `clawithme/crawler/utils.py` | — | Shared: `first_text()`, `parse_count()` |
+| `clawithme/crawler/extractors/` | 19 files | See extractor table below |
+| `clawithme/signals/avatar.py` | — | pHash + Hamming distance + AvatarMatch |
+| `clawithme/signals/correlation.py` | 169 | Union-Find, 4-signal weighted matching |
+| `clawithme/signals/extraction.py` | — | Phone regex (E.164) + email extraction + disposable filter |
+| `clawithme/signals/username.py` | — | Levenshtein + compare_usernames (affix/digit patterns) |
+| `clawithme/report/generator.py` | 492 | Geist HTML + JSON export, CSS-only charts, PII redaction |
+
+### Extractors (19 total)
+
+**P0 (7 extractors) — public API-first:**
+
+| Extractor | Method | Site | Key fields |
+|-----------|--------|------|------------|
+| BilibiliExtractor | API web-interface/card | bilibili.com | name, fans, gender, verified |
+| V2exExtractor | API v1 members | v2ex.com | name, bio, cross-site links |
+| GitlabExtractor | API v4 users | gitlab.com | name, location, twitter/linkedin |
+| DevtoExtractor | API by_username | dev.to | name, bio, github/twitter |
+| StackoverflowExtractor | SE 2.3 API | stackoverflow.com | name, reputation, badges |
+| GithubExtractor | CSS selector | github.com | name, bio, followers, avatar_phash |
+| ZhihuExtractor | Playwright | zhihu.com | (clawithme-cn plugin) |
+
+**P1 (11 extractors) — CSS selector / API hybrid:**
+
+| Extractor | Method | Site |
+|-----------|--------|------|
+| KeybaseExtractor | API | keybase.io |
+| SegmentfaultExtractor | CSS | segmentfault.com |
+| CsdnExtractor | CSS | blog.csdn.net |
+| CoolapkExtractor | CSS | coolapk.com |
+| CnblogsExtractor | CSS | cnblogs.com |
+| JianshuExtractor | CSS | jianshu.com |
+| HuabanExtractor | CSS | huaban.com |
+| BehanceExtractor | CSS | behance.net |
+| DribbbleExtractor | CSS | dribbble.com |
+| FlickrExtractor | CSS | flickr.com |
+| PatreonExtractor | CSS | patreon.com |
+
+**天眼查 stub:**
+
+| Extractor | Method | Site | Status |
+|-----------|--------|------|:------:|
+| TianyanchaExtractor | API (open.tianyancha.com) | 天眼查 | stub (需 token, ¥6/次) |
 
 ### Plugin: clawithme-cn
 
-Separate repo at `~/AI_Workspace/01_Code/tools/clawithme-cn/`. Contains ZhihuExtractor with DynamicFetcher (Playwright) support. Discovered via `entry_points` group `clawithme.extractors`.
+Separate repo at `~/AI_Workspace/01_Code/tools/clawithme-cn/`. Contains ZhihuExtractor with DynamicFetcher (Playwright). Discovered via `entry_points` group `clawithme.extractors`.
 
 ### Engines (9 total)
 
@@ -102,18 +128,9 @@ Separate repo at `~/AI_Workspace/01_Code/tools/clawithme-cn/`. Contains ZhihuExt
 |:-----:|------|:------:|
 | 1 | Basic Verification | ✅ Code complete |
 | 2 | Site DB Expansion | ✅ Code complete |
-| 3 | Deep Crawler | ✅ Jury-audited |
+| 3 | Deep Crawler | ✅ **19 extractors (P0+P1 done)** |
 | 4 | Multi-Signal Correlation | ✅ Jury-audited |
 | 5 | Panorama Report | ✅ v2 features done |
-
-### Hardening (4-step plan, all done)
-
-| Step | Description | Commit |
-|:----:|-------------|--------|
-| 1 | Config system + error hardening | `82caa3a` |
-| 2 | HIBP + LeakSource manager | `cfdc16a` |
-| 3 | Site DB audit + CONTRIBUTING.md | `af0a927` |
-| 4 | DynamicFetcher engine integration | `0a4bba9` |
 
 ### Audit rounds (5 completed)
 
@@ -139,11 +156,21 @@ verify_site --all (curated): 29 healthy | 0 no-checks | 7 degraded | 12 deprecat
 GitHub Actions workflows deployed and verified (2026-05-05):
 - `.github/workflows/ci.yml` — PR: schema validate + stats on push to main (✅ always green)
 - `.github/workflows/daily-verify.yml` — Daily 08:00 UTC: verify all sites (⚠️ expected non-zero on degraded sites — monitoring signal, not failure)
-- Dependency fix (`a7c2fe2`): lazy-imported Scrapling Fetcher, added curl_cffi+playwright+chromium to CI env
 
 ### SPA Limitation
 
 5 sites fundamentally undetectable via HTTP: Twitter/X, Twitch, 少数派, SlideShare, 微博. Marked `dynamic_fetch: true` with known architecture limitation — no engine type can solve SPA shells returning identical HTML for exist/nonexist users.
+
+## Test Results (2026-05-05)
+
+### Unit
+- **160 tests** all passing, Ruff 0, 2.06s
+
+### End-to-end (liberborn)
+- 13/36 hits, 3 profiles (dev.to/github/gitlab), 1 cluster (confidence 0.7)
+
+### End-to-end (yes999zc)
+- 10/36 hits, 3 profiles (github/zhihu/coolapk), 1 cluster (confidence 0.7)
 
 ## How to run
 
@@ -151,15 +178,18 @@ GitHub Actions workflows deployed and verified (2026-05-05):
 cd ~/AI_Workspace/01_Code/tools/clawithme
 pip install -e ".[dev]"
 
-# Search (curated 36 sites)
-python -m clawithme.cli search yes999zc --acknowledge-ethical-use
+# Search username (curated 36 sites)
+clawithme search yes999zc --acknowledge-ethical-use
 
-# Search (all 2487 sites)
-python -m clawithme.cli search yes999zc --include-migrated --acknowledge-ethical-use
+# Search email (auto-detected)
+clawithme search yes999zc@163.com --acknowledge-ethical-use
+
+# Search (all 2487 sites — SLOW)
+clawithme search yes999zc --include-migrated --acknowledge-ethical-use
 
 # Generate report
-python -m clawithme.cli search yes999zc --report report.html --acknowledge-ethical-use
-python -m clawithme.cli search yes999zc --report report.json --format json --acknowledge-ethical-use
+clawithme search yes999zc --report report.html --acknowledge-ethical-use
+clawithme search yes999zc --report report.json --format json --acknowledge-ethical-use
 
 # Tests & validation
 python -m pytest tests/ -v          # 160 tests
@@ -168,6 +198,20 @@ python scripts/stats.py             # Database statistics
 python scripts/verify_site.py zhihu # Single site verification
 python scripts/verify_site.py --all # Full verification
 ```
+
+## Git Status (2026-05-05)
+
+6 local commits ahead of origin/main (pending `gh auth login`):
+
+| Commit | Description |
+|--------|-------------|
+| `c307233` | fix: 5 audit blocking bugs |
+| `c085ea6` | docs: README rewrite |
+| `92726bd` | feat: email/phone CLI search |
+| `b30e54d` | docs: LinkedIn/Tianyancha v2 scope |
+| `40dc714` | feat: Bilibili + V2EX extractors |
+| `326a8df` | feat: GitLab + dev.to + StackOverflow extractors |
+| *(pending)* | feat: P1 (11 extractors) + 天眼查 stub + bilibili bugfix |
 
 ## Key Design Decisions
 
@@ -185,10 +229,12 @@ python scripts/verify_site.py --all # Full verification
 | Phone scope | International (7-15 digits, E.164 range) |
 | Config | TOML, project-root `config.toml` (zero external deps) |
 | CN code | Separate plugin repo (`clawithme-cn`), entry_points discovery |
+| Extractor dispatch | `entry_points` group `clawithme.extractors`, `can_handle()` |
+| Profile empty | `Profile.empty` is a property (bool), NOT a factory — return `Profile(site_id=..., ...)` for empty profiles |
 
 ## Quality Gates
 
-1. **Ruff 0 (by policy)** — 2 intentional exceptions: `PLC0415` for lazy Fetcher import (`http_client.py:51`, by design) and `UP037` quoted type annotation (`http_client.py:62`, style)
+1. **Ruff 0 (by policy)** — 2 intentional exceptions: `PLC0415` for lazy Fetcher import, `UP037` quoted type annotation
 2. **Schema validation** — `python scripts/validate.py` before merge
 3. **Site verification** — `python scripts/verify_site.py --all` daily
 4. **160 tests passing** — `python -m pytest tests/ -v`
@@ -197,19 +243,24 @@ python scripts/verify_site.py --all # Full verification
 
 | Item | Status |
 |------|:------:|
-| v2 scope (10 items, see docs/todo.md) | 🟡 Deferred |
-
-> Phase 1-5 全部完成。CI 已部署（ci.yml + daily-verify.yml）。零待办。
+| Push 7 commits to GitHub | ⚠️ pending `gh auth login` |
+| v2 scope (12 items, see docs/todo.md) | 🟡 Deferred |
 
 ## v2 Scope (deferred)
 
-- 微信弱信号实验
-- GitHub Actions CI/CD deployment
-- Web UI (search interaction)
-- 中国站扩展至 50+
-- Default avatar hash DB
-- Weighted-edge graph clustering (Louvain)
-- PDF/Markdown report export
-- Location proximity signal
-- Temporal correlation (joined_date)
-- Self-hosted breach database (PostgreSQL on NAS)
+| # | Item |
+|:--:|------|
+| 1 | 自建泄露库 (NAS PostgreSQL) |
+| 2 | 中国站扩展至 50+ |
+| 3 | Louvain 图聚类 |
+| 4 | PDF/Markdown 报告 |
+| 5 | Web UI 搜索交互 |
+| 6 | 微信弱信号实验 |
+| 7 | 默认头像哈希库 |
+| 8 | 位置邻近信号 |
+| 9 | 时间关联 |
+| 10 | GitHub Actions CI/CD |
+| 11 | Profile 提取 P1 梯队 (11 站 — ✅ P0+P1 done) |
+| 12 | 天眼查 API 集成 (stub done, 需 token) |
+
+> Phase 1-5 全部完成。P0/P1 Profile 提取 DONE。CI 已部署。6 commits 待推。
