@@ -21,6 +21,7 @@
     ],
     "timeout_ms": 8000,
     "known_accounts": [
+      "zhangwang",
       "14960228",
       "16565548"
     ],

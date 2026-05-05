@@ -21,7 +21,8 @@
     "probe_url": "https://www.douban.com/people/{username}/",
     "expected": 200,
     "known_accounts": [
-      "ahbei"
+      "ahbei",
+      "1274049"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist99999999"
