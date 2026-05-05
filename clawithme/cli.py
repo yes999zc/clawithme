@@ -297,12 +297,14 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
     # ── Report (optional) ──
     if report_path:
+        breach_dates = [r.breach_date for r in leak_records if r.breach_date]
         if report_format == "json":
             from clawithme.report.generator import export_json
             output = export_json(hits, profiles, clusters, username, trace_id=trace_id)
         else:
             from clawithme.report.generator import generate_report
-            output = generate_report(hits, profiles, clusters, username, trace_id=trace_id)
+            output = generate_report(hits, profiles, clusters, username,
+                                     trace_id=trace_id, breach_dates=breach_dates)
         try:
             safe_path = Path(report_path).resolve()
             # Only block paths that escape cwd — allow /tmp and subdirs

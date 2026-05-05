@@ -14,13 +14,14 @@ from datetime import UTC, datetime
 from clawithme.signals.correlation import Cluster
 
 
-def generate_report(
+def generate_report(  # noqa: PLR0913
     hits: list[dict],
     profiles: list[dict],
     clusters: list,
     username: str,
     *,
     trace_id: str = "",
+    breach_dates: list[str] | None = None,
 ) -> str:
     """Return a complete HTML document as a string."""
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
@@ -36,6 +37,8 @@ def generate_report(
         sites_table=_render_sites(hits),
         profile_cards=_render_profiles(profiles),
         cluster_section=_render_clusters(clusters),
+        timeline_section=_render_timeline(breach_dates or []),
+        chart_section=_render_charts(hits, clusters),
         trace_id=_fmt_esc(trace_id),
     )
 
@@ -118,6 +121,10 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 .card-name {{ font-size: 15px; font-weight: 600; }}
 .card-bio {{ font-size: 13px; color: #555; margin-top: 8px; line-height: 1.5; }}
 .card-meta {{ display: flex; gap: 16px; margin-top: 12px; font-size: 12px; color: #888; }}
+.card-completeness {{ display: flex; align-items: center; gap: 8px; margin-top: 10px; }}
+.cc-pct {{ font-family: monospace; font-size: 11px; min-width: 28px; }}
+.cc-bar {{ display: inline-block; width: 60px; height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }}
+.cc-fill {{ display: block; height: 100%; border-radius: 2px; background: #d0d0d0; }}
 .card-phash {{ font-family: monospace; font-size: 11px; color: #aaa; margin-top: 8px; word-break: break-all; }}
 
 /* ── Clusters ────────────────────────────────── */
@@ -135,6 +142,31 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 
 /* ── Footer ──────────────────────────────────── */
 .footer {{ margin-top: 48px; padding-top: 16px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #aaa; }}
+
+/* ── Timeline ───────────────────────────────── */
+.timeline {{ overflow-x: auto; padding: 16px 0; }}
+.timeline-track {{ display: flex; align-items: flex-end; gap: 0; min-height: 80px; position: relative; }}
+.timeline-track::before {{
+  content: ''; position: absolute; bottom: 28px; left: 0; right: 0;
+  height: 2px; background: #e5e5e5;
+}}
+.timeline-dot {{ text-align: center; min-width: 100px; flex-shrink: 0; position: relative; }}
+.timeline-dot::before {{
+  content: ''; display: block; width: 8px; height: 8px;
+  background: #171717; border-radius: 50%;
+  margin: 0 auto 8px; position: relative; z-index: 1;
+}}
+.timeline-date {{ font-family: monospace; font-size: 11px; color: #555; display: block; }}
+
+/* ── Charts ──────────────────────────────────── */
+.chart-row {{ display: flex; gap: 24px; flex-wrap: wrap; }}
+.chart-col {{ flex: 1; min-width: 280px; }}
+.chart-title {{ font-size: 13px; font-weight: 500; color: #555; margin-bottom: 12px; }}
+.chart-bar-row {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }}
+.chart-bar-label {{ font-size: 12px; color: #666; min-width: 80px; text-align: right; flex-shrink: 0; }}
+.chart-bar-track {{ flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }}
+.chart-bar-fill {{ height: 100%; border-radius: 4px; }}
+.chart-bar-count {{ font-family: monospace; font-size: 11px; color: #999; min-width: 24px; }}
 
 /* ── Mobile ─────────────────────────────────── */
 @media (max-width: 480px) {{
@@ -171,6 +203,12 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 <hr class="divider">
 {cluster_section}
 </div>
+
+<!-- TIMELINE -->
+{timeline_section}
+
+<!-- CHARTS -->
+{chart_section}
 
 <div class="footer">
   clawithme &middot; trace: {trace_id}
@@ -238,6 +276,8 @@ def _render_sites(hits: list[dict]) -> str:
 def _render_profiles(profiles: list[dict]) -> str:
     if not profiles:
         return '<p style="color:#888">No profiles extracted.</p>'
+
+    _PROFILE_FIELDS = ["display_name", "bio", "location", "avatar_url", "followers"]
     cards = []
     for p in profiles:
         bio = p.get("bio", "") or ""
@@ -249,6 +289,16 @@ def _render_profiles(profiles: list[dict]) -> str:
             meta_parts.append(f"📍 {_esc(location)}")
         if followers is not None:
             meta_parts.append(f"👥 {followers}")
+        # Completeness score
+        filled = sum(1 for f in _PROFILE_FIELDS if p.get(f))
+        pct = int(filled / len(_PROFILE_FIELDS) * 100)
+        pct_color = "#171717" if pct >= 60 else ("#808080" if pct >= 30 else "#b0b0b0")
+        completeness_html = (
+            f'<div class="card-completeness">'
+            f'<span class="cc-pct" style="color:{pct_color}">{pct}%</span>'
+            f'<span class="cc-bar"><span class="cc-fill" style="width:{pct}%"></span></span>'
+            f'</div>'
+        )
         meta_html = f'<div class="card-meta">{" · ".join(meta_parts)}</div>' if meta_parts else ""
         name = p.get("display_name") or p["site_id"]
         cards.append(
@@ -258,7 +308,7 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'<div><div class="card-name">{_esc(name)}</div>'
             f'<div class="card-site">{_esc(p["site_id"])}</div></div>'
             f'</div>'
-            f'{bio_html}{meta_html}'
+            f'{bio_html}{completeness_html}{meta_html}'
             f'</div>'
         )
     return '<div class="card-grid">' + "".join(cards) + "</div>"
@@ -329,3 +379,114 @@ def _redact_evidence(signal: str, detail: str) -> str:
     if signal == "phone":
         return f"***{detail[-4:]}" if len(detail) >= 4 else "***"
     return detail
+
+
+def _render_timeline(dates: list[str]) -> str:
+    """Render horizontal timeline from breach dates. Empty if no dates."""
+    if not dates:
+        return ""
+    unique_dates = sorted(set(dates), reverse=True)[:20]  # max 20
+    dots = []
+    for d in unique_dates:
+        label = d if len(d) <= 10 else d[:10]  # YYYY-MM-DD
+        dots.append(
+            f'<div class="timeline-dot">'
+            f'<span class="timeline-date">{_esc(label)}</span>'
+            f'</div>'
+        )
+    return (
+        '<div class="section">'
+        '<h3>Breach Timeline</h3>'
+        '<hr class="divider">'
+        f'<div class="timeline"><div class="timeline-track">{"".join(dots)}</div></div>'
+        '</div>'
+    )
+
+
+_CHART_COLORS = ["#171717", "#4d4d4d", "#808080", "#b0b0b0", "#d0d0d0"]
+
+
+def _render_charts(hits: list[dict], clusters: list) -> str:
+    """Render platform distribution + correlation signal charts."""
+    if not hits and not clusters:
+        return ""
+
+    sections: list[str] = []
+
+    # Platform distribution by classification
+    if hits:
+        cat_counts: dict[str, int] = {}
+        for h in hits:
+            site_def = h.get("site_def", {})
+            cat = site_def.get("classification", {}).get("primary", "other")
+            cat_counts[cat] = cat_counts.get(cat, 0) + 1
+
+        cat_names = {
+            "social": "Social", "devtools": "Dev Tools", "forum": "Forums",
+            "media": "Media", "blog": "Blogs", "gaming": "Gaming",
+            "music": "Music", "ecommerce": "E-Commerce",
+        }
+        sorted_cats = sorted(cat_counts.items(), key=lambda x: -x[1])
+        max_count = max(c for _, c in sorted_cats) if sorted_cats else 1
+
+        bars = []
+        for i, (cat, count) in enumerate(sorted_cats):
+            pct = int(count / max_count * 100)
+            color = _CHART_COLORS[i % len(_CHART_COLORS)]
+            name = cat_names.get(cat, cat.title())
+            bars.append(
+                f'<div class="chart-bar-row">'
+                f'<span class="chart-bar-label">{_esc(name)}</span>'
+                f'<span class="chart-bar-track">'
+                f'<span class="chart-bar-fill" style="width:{pct}%;background:{color}"></span>'
+                f'</span>'
+                f'<span class="chart-bar-count">{count}</span>'
+                f'</div>'
+            )
+
+        sections.append(
+            '<div class="chart-col">'
+            '<div class="chart-title">Platform Distribution</div>'
+            + "".join(bars) +
+            '</div>'
+        )
+
+    # Correlation signal distribution
+    if clusters:
+        sig_counts: dict[str, int] = {}
+        for c in clusters:
+            for sig in c.signals:
+                sig_counts[sig] = sig_counts.get(sig, 0) + 1
+        if sig_counts:
+            sorted_sigs = sorted(sig_counts.items(), key=lambda x: -x[1])
+            max_sig = max(c for _, c in sorted_sigs)
+            bars = []
+            for i, (sig, count) in enumerate(sorted_sigs):
+                pct = int(count / max_sig * 100)
+                color = _CHART_COLORS[i % len(_CHART_COLORS)]
+                bars.append(
+                    f'<div class="chart-bar-row">'
+                    f'<span class="chart-bar-label">{_esc(sig)}</span>'
+                    f'<span class="chart-bar-track">'
+                    f'<span class="chart-bar-fill" style="width:{pct}%;background:{color}"></span>'
+                    f'</span>'
+                    f'<span class="chart-bar-count">{count}</span>'
+                    f'</div>'
+                )
+            sections.append(
+                '<div class="chart-col">'
+                '<div class="chart-title">Correlation Signals</div>'
+                + "".join(bars) +
+                '</div>'
+            )
+
+    if not sections:
+        return ""
+
+    return (
+        '<div class="section">'
+        '<h3>Analytics</h3>'
+        '<hr class="divider">'
+        f'<div class="chart-row">{"".join(sections)}</div>'
+        '</div>'
+    )
