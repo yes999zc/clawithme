@@ -45,7 +45,7 @@ class TestEngineTemplateSubstitution:
 
 
 class TestEngineProbe:
-    @patch("clawithme.engine.http_client.Fetcher")
+    @patch("scrapling.Fetcher")
     def test_status_code_probe_existing(self, mock_fetcher_class):
         mock_fetcher = MagicMock()
         mock_page = MagicMock()
@@ -64,7 +64,7 @@ class TestEngineProbe:
         assert result.status_code == 200
         assert result.classifier == "status_code"
 
-    @patch("clawithme.engine.http_client.Fetcher")
+    @patch("scrapling.Fetcher")
     def test_status_code_probe_missing(self, mock_fetcher_class):
         mock_fetcher = MagicMock()
         mock_page = MagicMock()
@@ -82,7 +82,7 @@ class TestEngineProbe:
         assert result.exists is False
         assert result.status_code == 404
 
-    @patch("clawithme.engine.http_client.Fetcher")
+    @patch("scrapling.Fetcher")
     def test_message_probe_presence(self, mock_fetcher_class):
         mock_fetcher = MagicMock()
         mock_page = MagicMock()
@@ -107,7 +107,7 @@ class TestEngineProbe:
         result = engine.probe(site, "alice")
         assert result.exists is True
 
-    @patch("clawithme.engine.http_client.Fetcher")
+    @patch("scrapling.Fetcher")
     def test_message_probe_absence(self, mock_fetcher_class):
         mock_fetcher = MagicMock()
         mock_page = MagicMock()

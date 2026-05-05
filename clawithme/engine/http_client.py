@@ -6,9 +6,10 @@ Replaces maigret's native requests/httpx with anti-bot fingerprinting.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from scrapling import Fetcher
+if TYPE_CHECKING:
+    from scrapling import Fetcher
 
 from clawithme.logging import get_logger
 
@@ -47,16 +48,18 @@ class HttpClient:
         timeout_ms: int = 5000,
         trace_id: str | None = None,
     ):
+        from scrapling import Fetcher
+
         self._log = get_logger(trace_id=trace_id) if trace_id else logger
         # Scrapling Fetcher auto-handles TLS fingerprints
         fetcher_kwargs: dict[str, Any] = {}
         if proxy:
             fetcher_kwargs["proxy"] = proxy
-        self._fetcher = Fetcher(**fetcher_kwargs)
+        self._fetcher: Fetcher = Fetcher(**fetcher_kwargs)
         self._timeout_ms = timeout_ms
 
     @property
-    def static(self) -> Fetcher:
+    def static(self) -> "Fetcher":
         """Underlying Scrapling Fetcher instance (for raw Response access)."""
         return self._fetcher
 

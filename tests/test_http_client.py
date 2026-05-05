@@ -25,7 +25,7 @@ class TestHttpResponse:
 
 
 class TestHttpClient:
-    @patch("clawithme.engine.http_client.Fetcher")
+    @patch("scrapling.Fetcher")
     def test_get_returns_response(self, mock_fetcher_class):
         mock_fetcher = MagicMock()
         mock_page = MagicMock()
@@ -44,7 +44,7 @@ class TestHttpClient:
         assert resp.text == "hello"
         assert resp.ok is True
 
-    @patch("clawithme.engine.http_client.Fetcher")
+    @patch("scrapling.Fetcher")
     def test_get_404(self, mock_fetcher_class):
         mock_fetcher = MagicMock()
         mock_page = MagicMock()
