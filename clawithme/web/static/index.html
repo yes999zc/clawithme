@@ -222,12 +222,21 @@ async function search() {
   });
 
   sse.addEventListener('error', e => {
-    const msg = e.data ? JSON.parse(e.data) : 'Connection lost';
-    document.getElementById('error').textContent = 'Error: ' + msg;
+    const msg = e.data ? JSON.parse(e.data) : null;
+    const errText = msg || (sse.readyState === EventSource.CLOSED ? 'Connection lost. Retrying...' : 'Connection error');
+    document.getElementById('error').textContent = 'Error: ' + errText;
     document.getElementById('error').style.display = 'block';
     document.getElementById('spinner').style.display = 'none';
     btn.disabled = false;
-    sse.close();
+    if (sse.readyState === EventSource.CLOSED) {
+      sse.close();
+      // Auto-retry once with a short delay
+      setTimeout(() => {
+        if (document.getElementById('error').style.display !== 'none') {
+          search();
+        }
+      }, 3000);
+    }
   });
 }
 

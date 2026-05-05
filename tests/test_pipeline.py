@@ -10,7 +10,6 @@ from clawithme.crawler.base import Profile
 from clawithme.engine.engines import EngineResult
 from clawithme.pipeline import AsyncPipeline, SearchResult
 
-
 # ── Helpers ────────────────────────────────────────────────────
 
 class FakeConfig:

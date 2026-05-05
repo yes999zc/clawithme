@@ -2,6 +2,8 @@
 
 import json
 
+import pytest
+
 from clawithme.crawler.base import Profile
 from clawithme.report.generator import export_json, generate_report
 from clawithme.signals.correlation import CorrelationEngine
@@ -104,3 +106,82 @@ class TestExportJson:
         assert len(data["clusters"]) == 1
         assert data["clusters"][0]["confidence"] == 0.8
         assert "avatar_phash" in data["clusters"][0]["signals"]
+
+
+# ── PDF export ─────────────────────────────────────────────────
+
+
+def _sample_hits_full():
+    return [
+        {"site_name": "GitHub", "url": "https://github.com/alice", "status": 200,
+         "site_def": {"id": "github", "classification": {"primary": "devtools"}}},
+    ]
+
+
+def _sample_profiles_full():
+    return [
+        {
+            "site_id": "github",
+            "display_name": "Alice",
+            "bio": "Full-stack developer.",
+            "location": "Shanghai",
+            "avatar_url": None,
+            "follower_count": 42,
+        },
+    ]
+
+
+class TestExportPdf:
+    @classmethod
+    def setup_class(cls):
+        """Skip all PDF tests if WeasyPrint system deps are unavailable."""
+        try:
+            from weasyprint import HTML  # noqa: F401
+        except OSError:
+            pytest.skip("WeasyPrint system dependencies (Pango, GObject) not available")
+
+    def test_returns_bytes(self):
+        """export_pdf returns raw PDF bytes."""
+        from clawithme.report.generator import export_pdf
+        pdf = export_pdf([], [], [], "alice")
+        assert isinstance(pdf, bytes)
+        assert len(pdf) > 0
+
+    def test_has_pdf_signature(self):
+        """PDF bytes start with %PDF- signature."""
+        from clawithme.report.generator import export_pdf
+        pdf = export_pdf([], [], [], "alice")
+        assert pdf.startswith(b"%PDF-")
+
+    def test_with_hits_and_profiles(self):
+        """Real data produces valid PDF."""
+        from clawithme.report.generator import export_pdf
+        pdf = export_pdf(
+            _sample_hits_full(), _sample_profiles_full(),
+            _sample_clusters(), "alice",
+        )
+        assert len(pdf) > 1000  # non-trivial size
+        assert pdf.startswith(b"%PDF-")
+
+    def test_html_escaped_in_pdf(self):
+        """XSS payload does not reach PDF as raw HTML."""
+        from clawithme.report.generator import export_pdf
+        profiles = [{
+            "site_id": "test",
+            "display_name": "<script>alert(1)</script>",
+            "bio": "a & b",
+            "location": "",
+            "avatar_url": None,
+            "follower_count": None,
+        }]
+        pdf = export_pdf([], profiles, [], "alice")
+        text = pdf.decode("latin-1", errors="ignore")
+        assert "<script>" not in text
+        assert "&lt;script&gt;" in text
+
+    def test_empty_data_still_valid_pdf(self):
+        """Empty hits/profiles/clusters still produce valid PDF."""
+        from clawithme.report.generator import export_pdf
+        pdf = export_pdf([], [], [], "alice")
+        assert pdf.startswith(b"%PDF-")
+        assert len(pdf) > 500  # header + boilerplate

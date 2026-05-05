@@ -18,14 +18,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
 
 from clawithme.cache import ResultCache
+from clawithme.cli import load_all_sites
 from clawithme.config import load_config
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import load_engines
 from clawithme.logging import get_logger, new_trace_id
 from clawithme.pipeline import AsyncPipeline
 from clawithme.signals.llm_verifier import LLMVerifier
-
-from .cli_web import load_all_sites
 
 logger = get_logger()
 
@@ -87,53 +86,57 @@ async def _search_stream(username: str):
     )
 
     try:
-        result = await pipeline.run(username)
-    except (OSError, ValueError, TimeoutError, RuntimeError) as e:
-        log.error("pipeline_failed", error=str(e))
-        yield _sse("error", str(e))
-        return
+        try:
+            result = await pipeline.run(username)
+        except (OSError, ValueError, TimeoutError, RuntimeError) as e:
+            log.error("pipeline_failed", error=str(e))
+            yield _sse("error", str(e))
+            return
 
-    elapsed = round(time.monotonic() - t0, 1)
+        elapsed = round(time.monotonic() - t0, 1)
 
-    # Stream hits
-    for h in result.hits:
-        yield _sse("hit", json.dumps({
-            "site_id": h["site_id"],
-            "site_name": h["site_name"],
-            "url": h["url"],
-        }))
-
-    # Stream profiles
-    for p in result.profiles:
-        yield _sse("profile", json.dumps({
-            "site_id": p["site_id"],
-            "display_name": p.get("display_name"),
-            "location": p.get("location"),
-            "bio": p.get("bio", "")[:200] if p.get("bio") else None,
-            "avatar_url": p.get("avatar_url"),
-            "follower_count": p.get("follower_count"),
-        }))
-
-    # Stream clusters
-    multi_clusters = [c for c in result.clusters if len(c.profiles) > 1]
-    if multi_clusters:
-        for c in multi_clusters:
-            yield _sse("cluster", json.dumps({
-                "sites": [p.site_id for p in c.profiles],
-                "confidence": c.confidence,
-                "signals": c.signals,
+        # Stream hits
+        for h in result.hits:
+            yield _sse("hit", json.dumps({
+                "site_id": h["site_id"],
+                "site_name": h["site_name"],
+                "url": h["url"],
             }))
 
-    # Done
-    yield _sse("done", json.dumps({
-        "trace_id": trace_id,
-        "hits": len(result.hits),
-        "profiles": len(result.profiles),
-        "leaks": len(result.leak_records),
-        "clusters": len(result.clusters),
-        "searxng_hits": result.searxng_hits,
-        "elapsed_s": elapsed,
-    }))
+        # Stream profiles
+        for p in result.profiles:
+            yield _sse("profile", json.dumps({
+                "site_id": p["site_id"],
+                "display_name": p.get("display_name"),
+                "location": p.get("location"),
+                "bio": p.get("bio", "")[:200] if p.get("bio") else None,
+                "avatar_url": p.get("avatar_url"),
+                "follower_count": p.get("follower_count"),
+            }))
+
+        # Stream clusters
+        multi_clusters = [c for c in result.clusters if len(c.profiles) > 1]
+        if multi_clusters:
+            for c in multi_clusters:
+                yield _sse("cluster", json.dumps({
+                    "sites": [p.site_id for p in c.profiles],
+                    "confidence": c.confidence,
+                    "signals": c.signals,
+                }))
+
+        # Done
+        yield _sse("done", json.dumps({
+            "trace_id": trace_id,
+            "hits": len(result.hits),
+            "profiles": len(result.profiles),
+            "leaks": len(result.leak_records),
+            "clusters": len(result.clusters),
+            "searxng_hits": result.searxng_hits,
+            "elapsed_s": elapsed,
+        }))
+    except Exception as e:
+        log.error("search_stream_failed", error=str(e), type=type(e).__name__)
+        yield _sse("error", f"Internal error: {type(e).__name__}")
 
 
 @app.get("/api/search/{username}")
@@ -146,18 +149,6 @@ async def search_stream(username: str, request: Request):
             "Cache-Control": "no-cache",
             "X-Accel-Buffering": "no",
         },
-    )
-
-
-# ── Report ─────────────────────────────────────────────────────
-
-
-@app.get("/api/report/{trace_id}")
-async def report(trace_id: str):
-    """Return an HTML report for a completed search (from cache)."""
-    # For now: placeholder. Full impl reads from file cache.
-    return HTMLResponse(
-        f"<p>Report for {trace_id}: not yet implemented.</p>"
     )
 
 

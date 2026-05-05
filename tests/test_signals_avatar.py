@@ -4,7 +4,13 @@ import io
 
 from PIL import Image, ImageDraw
 
-from clawithme.signals.avatar import AvatarMatch, compare_avatars, compute_phash, hamming_distance, is_default_avatar
+from clawithme.signals.avatar import (
+    AvatarMatch,
+    compare_avatars,
+    compute_phash,
+    hamming_distance,
+    is_default_avatar,
+)
 
 
 def _make_red_block() -> bytes:

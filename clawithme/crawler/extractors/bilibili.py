@@ -17,7 +17,6 @@ import json
 import logging
 import re
 import urllib.request
-from datetime import UTC, datetime
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 

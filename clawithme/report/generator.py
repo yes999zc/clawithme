@@ -22,7 +22,6 @@ from datetime import UTC, datetime
 
 from clawithme.signals.correlation import Cluster
 
-
 # ── Known false-positive sites ──
 _SPA_SITES = frozenset({"sspai", "twitch", "twitter", "weibo", "instagram", "slideshare"})
 
@@ -116,6 +115,9 @@ def export_pdf(
 
     Renders the same Geist HTML as generate_report() and converts to PDF.
     Returns raw PDF bytes — caller writes to file.
+
+    Raises ImportError if weasyprint is not installed.
+    Raises OSError if WeasyPrint system libraries (Pango, GObject) are missing.
     """
     from weasyprint import HTML
 

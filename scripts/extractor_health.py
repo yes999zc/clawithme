@@ -22,7 +22,6 @@ from clawithme.cli import load_all_sites
 from clawithme.crawler.registry import discover_extractors
 from clawithme.logging import setup_logging
 
-
 NON_EMPTY_FIELDS = [
     "display_name",
     "bio",

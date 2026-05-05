@@ -100,7 +100,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["D", "PLR2004", "S", "F401"]
+"tests/*" = ["D", "PLR2004", "S", "F401", "PLC0415"]
 "scripts/*" = ["D", "S", "E501", "SIM", "PLC0415", "E402", "PLW0603"]
 "clawithme/cli.py" = ["PLR0912", "PLR0913", "PLR0915", "PLC0415"]
 "clawithme/pipeline.py" = ["PLR0913"]
@@ -108,4 +108,4 @@ ignore = [
 "clawithme/engine/engines.py" = ["PLC0415", "PLW0603"]
 "clawithme/leak_sources/__init__.py" = ["PLC0415"]
 "clawithme/logging.py" = ["PLC0415"]
-"clawithme/report/generator.py" = ["E501", "PLR0913", "PLC0415"]  # CSS templates + optional weasyprint import
+"clawithme/report/generator.py" = ["E501", "PLR0912", "PLR0913", "PLR0915", "SIM108", "PLC0415"]  # CSS templates + optional weasyprint import
