@@ -184,6 +184,32 @@
 | 8 | 位置邻近信号 | 地理位置相关性 |
 | 9 | 时间关联 | joined_date 聚类 |
 | 10 | GitHub Actions CI/CD | deploy + release automation |
+| 11 | LinkedIn Profile 提取 | 全球版，反爬极严需代理+轮换 |
+| 12 | 天眼查 API 集成 | 法人/股东/高管/失信查询，公开工商数据 |
+| 13 | 邮箱/手机号 CLI 入口 | ✅ **已实现** (commit `92726bd`)，自动检测输入类型 |
+
+---
+
+## Profile 提取扩展计划（陪审团审计 2026-05-05）
+
+36 站点可行性矩阵（技术可行性 × 数据丰富度）：
+
+**P0 — 立即实施（5 站）：**
+| # | 站点 | 技术 | 丰富度 | 预计工时 |
+|:--:|------|:--:|:--:|:--:|
+| 1 | **StackOverflow** | HIGH | 4 | 1 天 |
+| 2 | **Bilibili** | HIGH (API) | 4 | 2 小时 |
+| 3 | **GitLab** | HIGH | 5 | 半天 |
+| 4 | **dev.to** | HIGH | 4 | 1 天 |
+| 5 | **V2EX** | HIGH | 3 | 半天 |
+
+**P1 — 第二梯队（11 站）：**
+博客园、简书、Keybase、SegmentFault、酷安、Behance、Dribbble、Flickr、花瓣、Patreon、CSDN
+
+**API 金矿发现：**
+- B站：`api.bilibili.com/x/space/acc/info?mid=` 公开 JSON，无需签名
+- V2EX：`v2ex.com/api/v2/members/` 公开 API
+- 天眼查：`open.tianyancha.com` 完整 API 平台（人名查企业/失信/被执行）
 
 ---
 
