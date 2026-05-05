@@ -62,6 +62,126 @@ def load_all_sites(validate: bool = False, include_migrated: bool = False) -> li
         sites.append(site)
     return sites
 
+def _search_leaks(search_term: str, search_type: str,
+                  report_path: str | None, report_format: str,
+                  acknowledged: bool):
+    """Email or phone search: leak database only (no site probing).
+
+    search_type: "email" or "phone"
+    """
+    trace_id = new_trace_id()
+    log = get_logger(trace_id=trace_id, search_term=search_term, search_type=search_type)
+    cfg = load_config()
+
+    log.info("search_start", search_type=search_type)
+
+    # Phase 3: Leak database
+    async def query_leaks():
+        sources: list = [CavalierSource()]
+        if cfg.apis.hibp_api_key:
+            sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
+        kwargs = {search_type: search_term}
+        records = await query_breaches(sources, **kwargs)
+        # Follow-up: cross-search with the other identifier
+        if search_type == "email":
+            phones = [r.phone for r in records if r.phone]
+            if phones:
+                phone_records = await query_breaches(sources, phone=phones[0])
+                records.extend(phone_records)
+        else:  # phone
+            emails = [r.email for r in records if r.email]
+            if emails:
+                email_records = await query_breaches(sources, email=emails[0])
+                records.extend(email_records)
+        for src in sources:
+            await src.close()
+        return records
+
+    try:
+        leak_records = asyncio.run(query_leaks())
+    except (OSError, ValueError, TimeoutError, RuntimeError) as e:
+        log.warning("leak_query_failed", error=str(e))
+        leak_records = []
+
+    # Phase 4: Correlation
+    profile_objects: list[Profile] = []
+    for r in leak_records:
+        profile_objects.append(Profile(
+            site_id=f"leak:{r.source or 'unknown'}",
+            site_name=r.source or "Leak DB",
+            url="",
+            username=r.username or search_term,
+            email=r.email,
+            phone=r.phone,
+        ))
+    engine = CorrelationEngine()
+    clusters = engine.correlate(profile_objects)
+
+    # Output
+    print()
+    label = {"email": "email", "phone": "phone"}[search_type]
+    print(f"═══ clawithme search ({label}): {search_term} ═══")
+    print()
+
+    sources_used = ["Cavalier"]
+    if cfg.apis.hibp_api_key:
+        sources_used.append("HIBP")
+    if leak_records:
+        print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
+        for r in leak_records:
+            print(f"   ⚠️  {r}")
+        leak_domains: set[str] = {r.domain for r in leak_records if r.domain}
+        if leak_domains:
+            print(f"📧 Breach-associated platforms: {', '.join(sorted(leak_domains))}")
+        leak_phones: set[str] = {r.phone for r in leak_records if r.phone}
+        if leak_phones:
+            print(f"📱 Phone numbers revealed: {', '.join(sorted(leak_phones))}")
+        leak_emails: set[str] = {r.email for r in leak_records if r.email}
+        if leak_emails:
+            print(f"📧 Emails revealed: {', '.join(sorted(leak_emails))}")
+    else:
+        print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
+
+    if len(clusters) > 0:
+        print()
+        multi = sum(1 for c in clusters if len(c.profiles) > 1)
+        print(f"🔗 Identity clusters: {len(clusters)} total, {multi} multi-profile")
+        for i, c in enumerate(clusters, 1):
+            if len(c.profiles) == 1:
+                continue
+            sites = [p.site_id for p in c.profiles]
+            print(f"   Cluster {i}: {', '.join(sites)}")
+            print(f"      confidence={c.confidence}  signals={c.signals}")
+
+    print()
+    log.info("search_done", leaks=len(leak_records))
+    print(f"trace_id: {trace_id}")
+
+    # Report
+    if report_path:
+        breach_dates = [r.breach_date for r in leak_records if r.breach_date]
+        if report_format == "json":
+            from clawithme.report.generator import export_json
+            output = export_json([], [], clusters, search_term, trace_id=trace_id)
+        else:
+            from clawithme.report.generator import generate_report
+            output = generate_report([], [], clusters, search_term,
+                                     trace_id=trace_id, breach_dates=breach_dates)
+        try:
+            safe_path = Path(report_path).resolve()
+            if ".." in str(Path(report_path)):
+                log.error("report_path_traversal", path=report_path)
+                print("\n❌ Report path must not contain '..'")
+                return
+            safe_path.write_text(output)
+            log.info("report_written", path=report_path, format=report_format)
+            print(f"\n📄 Report ({report_format}): {report_path}")
+        except OSError as e:
+            log.error("report_write_failed", path=report_path, error=str(e))
+            print(f"\n❌ Failed to write report: {e}")
+
+
+
 
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
            include_migrated: bool = False, acknowledged: bool = False):
@@ -71,8 +191,16 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
     If include_migrated, also search maigret-migrated sites (~2500).
     Requires --acknowledge-ethical-use flag to confirm responsible use.
     """
-    # Validate username against common pattern
-    if not _USERNAME_RE.match(username):
+    # Detect search type: email, phone, or username
+    if "@" in username:
+        search_type = "email"
+    elif re.match(r"^\d{7,15}$", username):
+        search_type = "phone"
+    else:
+        search_type = "username"
+
+    # Validate input format
+    if search_type == "username" and not _USERNAME_RE.match(username):
         log = get_logger()
         log.error("invalid_username", username=username)
         print(f"❌ Invalid username: {username!r} (allowed: letters, digits, . _ -)")
@@ -93,6 +221,10 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
     # ── Load config ──
     cfg = load_config()
+
+    # Email/phone search: leak DB only, no site probing
+    if search_type != "username":
+        return _search_leaks(username, search_type, report_path, report_format, acknowledged)
 
     # ── Phase 1: Site probing (engine) ──
     try:
@@ -206,6 +338,11 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
         if cfg.apis.hibp_api_key:
             sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
         records = await query_breaches(sources, username=username)
+        # Follow-up: query by email if username search returned emails
+        emails_found = [r.email for r in records if r.email]
+        if emails_found:
+            email_records = await query_breaches(sources, email=emails_found[0])
+            records.extend(email_records)
         # Follow-up: query by phone if username search returned phone numbers
         phones_found = [r.phone for r in records if r.phone]
         if phones_found:
