@@ -211,7 +211,11 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 |:-----:|:------:|---------|
 | 1-5 | ✅ | v1 baseline |
 | 6 + V2 P1 | ✅ | 5 commits (e657aa1: B1-B4 + jury audit 🔴🟡 fixes) |
-| 7 | 🟡 | ~82h in progress (Batches 1-3 ✅) |
+| 7 | 🟡 | ~82h in progress (Batches 1-4 ✅) |
+
+**Phase 7 Batch 4a deliverables** (Claude Code, HEAD 286a9e8):
+- 5 new international extractors: Reddit, HackerNews, LinkedIn, Medium, YouTube
+- 24 extractors total (was 19). 49 site JSONs (41 active, 8 deprecated).
 
 **Phase 6 + V2 Phase 1 deliverables** (HEAD e657aa1):
 - 7-signal rules engine with weighted Union-Find (avatar_phash=0.8, username=0.7, email=1.0, phone=0.95)
