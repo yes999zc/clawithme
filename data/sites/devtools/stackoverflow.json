@@ -13,7 +13,7 @@
   },
   "rankings": {},
   "check": {
-    "probe_url": "https://stackoverflow.com/users/{username}",
+    "probe_url": "https://stackoverflow.com/users/22656/{username}",
     "expected": 200,
     "known_accounts": [
       "22656"

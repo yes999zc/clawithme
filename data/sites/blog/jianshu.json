@@ -20,7 +20,7 @@
     "probe_url": "https://www.jianshu.com/u/{username}",
     "expected": 200,
     "known_accounts": [
-      "yZq3ZV"
+      "jianshu"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist99999999"

@@ -19,7 +19,7 @@
     "probe_url": "https://huaban.com/{username}/",
     "expected": 200,
     "known_accounts": [
-      "huaban"
+      "design"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"

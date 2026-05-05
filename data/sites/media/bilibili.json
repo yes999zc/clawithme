@@ -22,7 +22,7 @@
     "expected": 200,
     "regex": "^[0-9]+$",
     "known_accounts": [
-      "8047632"
+      "546195"
     ],
     "error_flags": {
       "needs_dynamic_fetcher": "Page is JS-rendered, requires DynamicFetcher for body analysis. Status code 200 works for both existing and non-existing."

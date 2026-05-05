@@ -16,7 +16,7 @@
     "probe_url": "https://www.behance.net/{username}",
     "expected": 200,
     "known_accounts": [
-      "behance"
+      "adobe"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"

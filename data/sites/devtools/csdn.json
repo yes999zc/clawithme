@@ -21,7 +21,7 @@
     "probe_url": "https://blog.csdn.net/{username}",
     "expected": 200,
     "known_accounts": [
-      "yanzi1225627"
+      "qq_12345678"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist99999999"

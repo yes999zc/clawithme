@@ -21,7 +21,7 @@
     "probe_url": "https://www.coolapk.com/u/{username}",
     "expected": 200,
     "known_accounts": [
-      "小编"
+      "yes999zc"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"
