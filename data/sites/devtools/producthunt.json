@@ -16,14 +16,20 @@
     "probe_url": "https://www.producthunt.com/@{username}",
     "expected": 200,
     "known_accounts": [
-      "rrhoover"
+      "rrhoover",
+      "mikejudge"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"
     ]
   },
   "nsfw": false,
-  "deprecated": true,
+  "deprecated": false,
+  "known_accounts": [
+    "rrhoover",
+    "mikejudge"
+  ],
+  "known_unclaimed": "thisuserdoesnotexist999999",
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

@@ -62,7 +62,11 @@ hackernews = "clawithme.crawler.extractors.hackernews:HackernewsExtractor"
 huaban = "clawithme.crawler.extractors.huaban:HuabanExtractor"
 linkedin = "clawithme.crawler.extractors.linkedin:LinkedinExtractor"
 medium = "clawithme.crawler.extractors.medium:MediumExtractor"
+producthunt = "clawithme.crawler.extractors.producthunt:ProducthuntExtractor"
+quora = "clawithme.crawler.extractors.quora:QuoraExtractor"
 reddit = "clawithme.crawler.extractors.reddit:RedditExtractor"
+steam = "clawithme.crawler.extractors.steam:SteamExtractor"
+telegram = "clawithme.crawler.extractors.telegram:TelegramExtractor"
 youtube = "clawithme.crawler.extractors.youtube:YoutubeExtractor"
 
 [tool.setuptools.packages.find]

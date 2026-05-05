@@ -3,7 +3,7 @@
   "name": "Quora",
   "primary": "social",
   "canonical_url": "https://www.quora.com/profile/{username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "social",
     "identity_type": "virtual_social",
@@ -14,16 +14,25 @@
   "rankings": {},
   "check": {
     "probe_url": "https://www.quora.com/profile/{username}",
-    "expected": 200,
+    "absence_strs": [
+      "Page not found",
+      "404"
+    ],
     "known_accounts": [
-      "Adam-DAngelo"
+      "Adam-DAngelo",
+      "Jimmy-Wales"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"
     ]
   },
   "nsfw": false,
-  "deprecated": true,
+  "deprecated": false,
+  "known_accounts": [
+    "Adam-DAngelo",
+    "Jimmy-Wales"
+  ],
+  "known_unclaimed": "thisuserdoesnotexist999999",
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }
