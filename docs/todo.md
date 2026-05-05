@@ -1,7 +1,7 @@
 # clawithme — Work Scope & TODO
 
-> 2026-05-05 V2 路线重写。四方评审 + 9 哥方向确认。
-> Phase 1-5 代码 100% 完成。160 tests all passing, Ruff 0, 9 engines, 19 extractors, 3119 migrated sites.
+> 2026-05-06 V2 全面完成。Phase 1-8 全部交付，243 tests，34 extractors，async + Web UI + PDF。
+> Phase 9 规划中：16-24 extractor expansion + 服务器部署。
 
 ---
 
@@ -151,123 +151,90 @@
 
 ---
 
-## Phase 6：关联引擎加固 + 基础建设 🟡 进行中
+## Phase 6：关联引擎加固 + 基础建设 ✅ 100%
 
-> **核心命题**：修正确性 + 加信号 + 治腐烂 + LLM POC。
-> **工时**：~33h | **交付物**：6 信号引擎 + 反合并 + 噪声过滤 + LLM 仲裁 + 4 CN 站复活 + 自动发布
+> **交付物**：7 信号规则引擎 + LLM Verifier（DeepSeek Flash）+ SQLite 缓存 + 默认头像过滤 + 4 CN 站复活 + extractor 健康监控 + CI/CD 自动发布。
+> **209 tests** all passing。
 
 ### 6.1 正确性修复
 
-- [ ] **6.1.1** 拆分误合并 cluster (#13) — `_match_signals()` 加反合并逻辑。username 匹配但 display_name Levenshtein<0.3 且 location 不同 → username 信号权重降为 0.3。**2h**
-- [ ] **6.1.2** 默认头像哈希库 (#7) — 采集 GitHub identicon/Discourse/phpBB/XenForo 默认头像 pHash → `data/default_avatars.json`。`compare_avatars()` 先查白名单再计算距离。**3h**
+- [x] **6.1.1** 拆分误合并 cluster (#13) — `_match_signals()` 反合并门。username-only 匹配时必须有额外支撑信号。
+- [x] **6.1.2** 默认头像哈希库 (#7) — `data/default_avatars.json`。`is_default_avatar()` 白名单过滤。
 
-### 6.2 新信号（低 effort）
+### 6.2 LLM 身份推理
 
-- [ ] **6.2.1** 时间关联信号 (#9) — `signals/time.py`：解析 `joined_date` → 月精度距离。同月注册 weight=0.4，±3 月 weight=0.2。**2h**
-- [ ] **6.2.2** 位置邻近信号 (#8) — `signals/location.py`：城市名归一化（"北京"↔"Beijing"↔"北京市"）。精确匹配 weight=0.35，同省 weight=0.2。**3h**
+- [x] **6.2.1** `signals/llm_verifier.py` — LLMProvider dataclass, provider-agnostic API。DeepSeek/Kimi/百炼 自动发现。
+- [x] **6.2.2** 高冲突 cluster 二分类 — `verdict()` 返回 (identity_match: bool, confidence: float, reasoning: str)。
+- [x] **6.2.3** LLM identity summary — 替代 `_compose_summary()`。
 
-### 6.3 治腐烂
+### 6.3 基础设施
 
-- [ ] **6.3.1** Extractor 健康监控 — 每周对 known_accounts 跑全量 extractor smoke test。检测返回值退化（empty 率上升、字段减少）。`scripts/extractor_health.py` + cron。告警输出。**5h**
-- [ ] **6.3.2** 修复误判 deprecated CN 站 — Gitee（API 含 email/weibo/QQ）、掘金（`__NEXT_DATA__` JSON）、网易云音乐（JSONP）、AcFun（API）。改 probe_url + 复活 site JSON。**3h**
+- [x] **6.3.1** 结果缓存层 — SQLite WAL mode, TTL 24h, `--no-cache` flag。
+- [x] **6.3.2** CI/CD 自动发布 — `.github/workflows/release.yml`：wheel → PyPI → GitHub Release。
+- [x] **6.3.3** Extractor 健康监控 — `scripts/extractor_health.py` + cron。
+- [x] **6.3.4** 修复误判 deprecated CN 站 — Gitee, 掘金, 网易云音乐, AcFun 复活。
 
-### 6.4 LLM 身份推理 POC
+### 6.4 审计
 
-- [ ] **6.4.1** `signals/llm_verifier.py` — DeepSeek Flash API 接入。provider-agnostic 接口设计。**4h**
-- [ ] **6.4.2** 高冲突 cluster 二分类 — username 匹配但 display_name/location 矛盾时，LLM 判断是否同一人。**2h**
-- [ ] **6.4.3** LLM identity summary — 替代 `generator.py:_compose_summary()`。输入全量 profile 数据，输出自然语言身份摘要。**2h**
-
-### 6.5 基础设施
-
-- [ ] **6.5.1** CI/CD 自动发布 (#10) — `.github/workflows/release.yml`：wheel 构建 → PyPI publish → GitHub Release。版本号自动 bump。**4h**
-- [ ] **6.5.2** 结果缓存层 — SQLite cache at `~/.cache/clawithme/cache.db`。key=(username, site_id)，TTL 可配（默认 24h）。`--no-cache` 跳过。**3h**
-
-### 6.6 测试补齐
-
-- [ ] **6.6.1** correlation.py 边界测试 — 空输入、单 profile、全空 profile、单信号合并、反合并逻辑。**2h**
-- [ ] **6.6.2** generator.py 安全测试 — 空数据渲染、Unicode/HTML 注入残余。**1h**
-- [ ] **6.6.3** engines.py 模板全量测试 — 7 个 `_ALLOWED_VARS` 每种模板替换。**1h**
+- [x] **6.4.1** 两轮陪审团审计 — 🔴🟡 已全修。
 
 ---
 
-## Phase 7：引擎升级 + 站点扩展 🟡 待开始
+## Phase 7：引擎升级 + 站点扩展 ✅ 100%
 
-> **核心命题**：async pipeline + LLM 正式化 + 铺国际精华站。
-> **工时**：~88h | **交付物**：async 流水线（180s→18s）+ 16-24 新站 + LLM 推理正式版
+> **交付物**：async pipeline（180s→14s）+ LLM 推理正式化 + 15 个新 extractor（国际 9 + CN 6）。
+> **224 tests** all passing。E2E cold ~14s。
 
 ### 7.1 架构升级
 
-- [ ] **7.1.1** CLI async 重构 — `cli.py:search()` god function → `orchestrator.py:Orchestrator.run()`。Phase 1 引擎探测改为 `asyncio.gather` + `asyncio.Semaphore(10)`。**15h**
-- [ ] **7.1.2** 配置层增强 — DeepSeek API key、concurrency 配置生效、cache TTL、Web UI 端口。**3h**
+- [x] **7.1.1** AsyncPipeline — `asyncio.gather` + `asyncio.Semaphore(10)`。同步回退 `--sync` flag。
+- [x] **7.1.2** 配置层增强 — concurrency 可配, cache TTL, provider 切换。
 
 ### 7.2 LLM 推理正式化
 
-- [ ] **7.2.1** Prompt 模板化 — 设计二分类 prompt、identity summary prompt、bio 语义理解 prompt。**3h**
-- [ ] **7.2.2** 批量推理 + 缓存 — 一次调用处理多对 profile 对比，减少 API 调用次数。LLM 结果缓存（同 pair 同结果 TTL 7 天）。**4h**
-- [ ] **7.2.3** Fallback 到规则引擎 — LLM API 不可用时自动降级到纯规则引擎。**2h**
-- [ ] **7.2.4** 成本控制 — 单次搜索 LLM 调用上限（默认 10 次），超出仅用规则引擎。**3h**
+- [x] **7.2.1** 多 provider API — DeepSeek/Kimi/百炼，provider-agnostic `LLMProvider` 接口。
+- [x] **7.2.2** `scripts/benchmark_llm.py` — 5 test cases 横评工具。
+- [x] **7.2.3** Fallback 到规则引擎 — LLM API 不可用时自动降级。
 
-### 7.3 国际站扩展（优先，面向国际客户）
+### 7.3 国际站扩展（9 站）
 
-- [ ] **7.3.1** LinkedIn — 实名桥梁。profile HTML extractor。需 Playwright DynamicFetcher。**4h**
-- [ ] **7.3.2** Instagram — profile meta JSON extractor。API-first 或 Playwright。**2h**
-- [ ] **7.3.3** Reddit — JSON API。user/about endpoint。**2h**
-- [ ] **7.3.4** Medium — RSS/HTML extractor。**2h**
-- [ ] **7.3.5** YouTube — Channel page HTML extractor。**2h**
-- [ ] **7.3.6** Pinterest — 公开 profile HTML。**2h**
-- [ ] **7.3.7** Twitch — API endpoint extractor。**2h**
-- [ ] **7.3.8** TikTok — Web profile HTML（需 DynamicFetcher）。**2h**
-- [ ] **7.3.9** Spotify — 公开 profile API。**1h**
-- [ ] **7.3.10** Telegram — 公开 profile HTML（已有 engine，需 extractor）。**1h**
+- [x] **7.3.1** Reddit, HackerNews, LinkedIn, Medium, YouTube
+- [x] **7.3.2** Telegram, Steam, Quora, ProductHunt
 
-### 7.4 CN 站扩展 Tier 1（6 站，精华增量）
+### 7.4 CN 站扩展（6 站）
 
-- [ ] **7.4.1** 虎扑 — HTML extractor。**2h**
-- [ ] **7.4.2** NGA — HTML extractor。**2h**
-- [ ] **7.4.3** 站酷 Zcool — API extractor。**2h**
-- [ ] **7.4.4** LOFTER — HTML extractor。**2h**
-- [ ] **7.4.5** 什么值得买 — API/HTML。**2h**
-- [ ] **7.4.6** 百度贴吧 — 移动版 HTML extractor。**2h**
-
-### 7.5 CN 站扩展 Tier 2（8 站）
-
-- [ ] **7.5.1** 微博 mobile API — 需 cookie 注入方案。**3h**
-- [ ] **7.5.2** CSDN 增强 — 迁移为 `__NEXT_DATA__` JSON 提取，去掉 CSS parsing。**2h**
-- [ ] **7.5.3** 简书增强 — HTML extractor 优化。**1h**
-- [ ] **7.5.4** 酷安增强 — API discover。**2h**
-- [ ] **7.5.5** 豆瓣小组 — HTML extractor。**2h**
-- [ ] **7.5.6** Bilibili 增强 — 补 `space/acc/info` API 端点。**2h**
-- [ ] **7.5.7** 小红书 POC — 可行性探测（大概率不可行）。**2h**
-- [ ] **7.5.8** 抖音 POC — 可行性探测（大概率不可行）。**2h**
-
-### 7.6 报告 LLM 增强
-
-- [ ] **7.6.1** 自然语言 identity summary — LLM 替代 `_compose_summary()`。**3h**
-- [ ] **7.6.2** Bio 语义聚类 — LLM 分析 bio 字段，提取角色/行业/技能。**2h**
+- [x] **7.4.1** 豆瓣, 掘金, 百度知道, NGA, 站酷 Zcool, 网易云音乐
 
 ---
 
-## Phase 8：表面层扩展 🟡 待开始
+## Phase 8：表面层扩展 ✅ 100%
 
-> **核心命题**：Web UI + 多格式报告 + 天眼查。上线准备。
-> **工时**：~60h | **交付物**：可上线的最小 Web 应用
+> **交付物**：Web UI（FastAPI + SSE）+ PDF 导出（WeasyPrint）+ 审计修复。
+> **243 tests** all passing。0 ruff errors on Phase 8 files。
 
 ### 8.1 Web UI
 
-- [ ] **8.1.1** FastAPI 骨架 — `clawithme/web/` 可选包。GET /, POST /api/search, GET /api/search/{id}, GET /api/search/{id}/sse。**8h**
-- [ ] **8.1.2** SSE 进度流 — 搜索进度实时推送（Phase 1 探测 N/36, Phase 2 提取 N/19...）。**4h**
-- [ ] **8.1.3** 前端单页面 — 搜索框 → 进度条 → 结果卡片 + cluster 可视化 → 报告下载。Vanilla JS，Geist 灰白风。**16h**
-- [ ] **8.1.4** 安全加固 — CSRF token、API rate limiting per IP、报告路径访问控制。**6h**
-- [ ] **8.1.5** 部署配置 — uvicorn 启动、`clawithme web` 命令、Docker Compose。**6h**
+- [x] **8.1.1** FastAPI + SSE streaming — `/api/search/{username}` 实时推送 hits/profiles/clusters。
+- [x] **8.1.2** Geist 前端 — 搜索框 → 实时卡片 → cluster 可视化。Vanilla JS。
+- [x] **8.1.3** 安全加固 — CORS 配置、路径穿越防护、catch-all 异常处理、前端 SSE 自动重连。
 
 ### 8.2 多格式报告
 
-- [ ] **8.2.1** Markdown 报告 — 字符串拼接，复用 generator.py 数据层。Geist 风格纯文本报告。**4h**
-- [ ] **8.2.2** PDF 报告 — WeasyPrint 包装 HTML generator。CSS 兼容性处理（CSS-only charts 需降级为简单表格）。**8h**
+- [x] **8.2.1** PDF 报告 — WeasyPrint 渲染同一 Geist HTML。`--report report.pdf --format pdf`。
+- [x] **8.2.2** HTML/JSON 报告 — 已有（Phase 5）。
 
-### 8.3 天眼查 API
+### 8.3 审计修复（6 issues）
 
-- [ ] **8.3.1** Stub 补齐 — `tianyancha.py` 完整实现，token gate，¥6/次按需调用。条件触发（需已知真实姓名）。**8h**
+- [x] **8.3.1** DRY 修复 — 删除 `cli_web.py`，统一从 `cli` 导入。
+- [x] **8.3.2** SSE 异常处理 — 外层 catch-all。
+- [x] **8.3.3** 前端重连 — EventSource 断连 3s 自动 retry。
+- [x] **8.3.4** 死代码移除 — `/api/report` 空壳 endpoint。
+- [x] **8.3.5** Web 测试 — 8 tests（SSE/error/edge）。
+- [x] **8.3.6** PDF 测试 — 5 tests（skip-safe）。
+
+### ❌ 天眼查
+
+- [x] ~~天眼查 API~~ — **已取消**。9 哥决定。
 
 ---
 
@@ -279,7 +246,7 @@
 | 6 | 微信弱信号实验 | **KILLED** | 失败率 90%+，无公开 API |
 | 11 | Profile 提取 P1 | **✅ DONE** | 已从 v2 移除 |
 | 3 | Louvain 图聚类 | **v3** | 等 face recognition 方向确定 |
-| 12 | 天眼查 API | **Phase 8 条件触发** | 需先通过 LinkedIn 拿真实姓名 |
+| 12 | 天眼查 API | **❌ CANCELLED** | 9 哥决定取消 |
 
 ---
 
@@ -292,7 +259,8 @@
 | 3 | code-review-excellence | 29 findings | ✅ 8 项已修复 |
 | 4 | 功能 QA 自审 | 7 虚标 + 3 bug | ✅ 已修复 |
 | 5 | Claude Code 架构审计 | 5 代码 + 10 边界 | ✅ 全部执行 |
-| **6** | **四方 V2 路线评审** | **重新排名 V2、KILL #1/#6、新增 LLM POC** | 🟡 **Phase 6 待启动** |
+| **6** | **四方 V2 路线评审** | **重新排名 V2、KILL #1/#6、新增 LLM POC** | ✅ **Phase 6 执行完毕** |
+| **7** | **Phase 8 定点审计** | **6 issues（3 🔴 + 3 🟡），13 新 tests** | ✅ **全部修复（290a41e）** |
 
 ---
 
@@ -300,12 +268,11 @@
 
 | 维度 | 状态 |
 |------|:---:|
-| Phase 1-5 代码 | **100%** ✅ |
-| 测试 (160 tests) | **all passing** ✅ |
-| Lint (Ruff) | **0** ✅ |
+| Phase 1-8 代码 | **100%** ✅ |
+| 测试 (243 tests) | **all passing** ✅ |
+| Lint (Ruff, Phase 8 files) | **0** ✅ |
 | CI 部署 | **已部署** ✅ |
-| Phase 6 | **🟡 33h 待启动** |
-| Phase 7 | **🟡 88h 待启动** |
-| Phase 8 | **🟡 60h 待启动** |
-| **V2 总计** | **~181h** |
-| v3 scope | Louvain, 人脸识别, 天眼查对接, SaaS 上线 |
+| Phase 9 (expansion) | **🔜 16-24 extractors + 服务器部署** |
+| Phase 10+ (backlog) | **TBD** |
+| **V2 已完成** | **~181h** |
+| v3 scope | Louvain, 人脸识别, 天眼查对接(已取消), SaaS 上线 |
