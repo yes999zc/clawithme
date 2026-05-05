@@ -259,7 +259,7 @@ def _render_sites(hits: list[dict]) -> str:
             rows.append(
                 f'<tr>'
                 f'<td>{_esc(h.get("site_name", ""))}</td>'
-                f'<td class="url">{url}</td>'
+                f'<td class="url">{_esc(url)}</td>'
                 f'<td class="status-ok">{h.get("status", "")}</td>'
                 f'</tr>'
             )
@@ -300,13 +300,14 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'</div>'
         )
         meta_html = f'<div class="card-meta">{" · ".join(meta_parts)}</div>' if meta_parts else ""
-        name = p.get("display_name") or p["site_id"]
+        site_id = p.get("site_id", "?")
+        name = p.get("display_name") or site_id
         cards.append(
             f'<div class="card">'
             f'<div class="card-header">'
             f'<div class="card-avatar"></div>'
             f'<div><div class="card-name">{_esc(name)}</div>'
-            f'<div class="card-site">{_esc(p["site_id"])}</div></div>'
+            f'<div class="card-site">{_esc(site_id)}</div></div>'
             f'</div>'
             f'{bio_html}{completeness_html}{meta_html}'
             f'</div>'

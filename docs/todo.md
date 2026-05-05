@@ -1,7 +1,7 @@
 # clawithme — Work Scope & TODO
 
 > 2026-05-05 全代码审计后重写。Phase 1-5 代码 100% 完成，CI 部署待做，v2 延期。
-> 160 tests all passing, Ruff 0, 9 engines, 2523 migrated sites.
+> 160 tests all passing, Ruff 0 (by policy, 2 intentional exceptions), 9 engines, 2487 migrated sites.
 
 ---
 
@@ -53,7 +53,7 @@
 
 - [ ] **2.1.1** 中国站扩展至 50+ → **v2 scope**（当前 28 CN 站定义，16 active）
 - [x] **2.1.2** maigret 站点迁移（`scripts/migrate_maigret.py`）
-  - 3120 站点迁移完成，2523 active，100% engine_ref 覆盖
+  - 3120 站点迁移完成，2487 active，100% engine_ref 覆盖
   - 自动分配：xenforo 222 / phpbb 157 / vbulletin 120 / discourse 92 / flarum 15 / wordpress 9
 - [x] **2.1.3** known_accounts 填充（36 个 curated 站点全部完成）
 - [x] **2.1.4** legacy `data.json` 清理（1.2MB 文件已废弃）
@@ -193,7 +193,7 @@
 |------|:---:|
 | Phase 1-5 代码 | **100%** ✅ |
 | 测试 (160 tests) | **all passing** ✅ |
-| Lint (Ruff) | **0 errors** ✅ |
+| Lint (Ruff) | **0 (by policy)** ✅ |
 | CI 部署 | **已部署** ✅ |
 | v2 scope | **10 项延期** 🟡 |
 

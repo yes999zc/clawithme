@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import re
+import urllib.parse
 from abc import ABC, abstractmethod
 
 from pydantic import BaseModel, field_validator
@@ -138,7 +139,7 @@ class CavalierSource(LeakSource):
         client = self._get_client()
         full_url = url
         if params:
-            query = "&".join(f"{k}={v}" for k, v in params.items())
+            query = urllib.parse.urlencode(params)
             full_url = f"{url}?{query}"
         return await asyncio.to_thread(client.get, full_url)
 

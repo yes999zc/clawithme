@@ -18,14 +18,14 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 | Deep extraction | None | GitHub + Zhihu extractors (CSS selector, Playwright) |
 | Leak DB | None | Cavalier + HIBP with parallel manager |
 | Correlation | None | Union-Find: email/phone/avatar_phash/username |
-| Site scale | 3000+ (unverified) | 36 curated (verified) + 2523 migrated (engine-assigned) |
+| Site scale | 3000+ (unverified) | 36 curated (verified) + 2487 migrated (engine-assigned) |
 
 ## Current Code State
 
 ```
 ~4650 lines Python, 47 .py files
 160 tests (119 main + 41 leak sources), all passing, Ruff 0
-48 site JSONs (36 active, 12 deprecated), 3119 migrated sites (2523 active)
+48 site JSONs (36 active, 12 deprecated), 3119 migrated sites (2487 active)
 9 engines, 2 extractors (GitHub + Zhihu in CN plugin)
 Phase 1-5 code COMPLETE. CI deployment + v2 scope deferred.
 ```
@@ -58,7 +58,7 @@ Phase 1-5 code COMPLETE. CI deployment + v2 scope deferred.
 | `data/schema.json` | — | JSON Schema for site validation |
 | `data/taxonomy.json` | — | Valid classification values |
 | `data/sites/*/<id>.json` | — | 48 curated site JSONs (categories: social/devtools/forum/media/blog/gaming/music/ecommerce) |
-| `data/sites/migrated/` | — | 3119 migrated sites (2523 active, engine auto-assigned) |
+| `data/sites/migrated/` | — | 3119 migrated sites (2487 active, engine auto-assigned) |
 | `scripts/validate.py` | — | Schema validation (48 OK) |
 | `scripts/verify_site.py` | — | Per-site detection rule verification (known_accounts + known_unclaimed) |
 | `scripts/stats.py` | — | Site DB statistics |
@@ -126,7 +126,7 @@ Separate repo at `~/AI_Workspace/01_Code/tools/clawithme-cn/`. Contains ZhihuExt
 ### Migration: maigret → clawithme
 
 Commit `57be4e2`: Batch-migrated 3120 sites from maigret_china (MIT) to `data/sites/migrated/`.
-- 2523 active, 632 disabled, 37 skipped
+- 2487 active, 632 disabled, 37 skipped
 - 100% engine_ref coverage (auto-assigned: xenforo 222, phpbb 157, vbulletin 120, discourse 92, flarum 15, wordpress 9)
 - Accessed via CLI: `clawithme search <user> --include-migrated`
 
@@ -154,7 +154,7 @@ pip install -e ".[dev]"
 # Search (curated 36 sites)
 python -m clawithme.cli search yes999zc --acknowledge-ethical-use
 
-# Search (all 2523 sites)
+# Search (all 2487 sites)
 python -m clawithme.cli search yes999zc --include-migrated --acknowledge-ethical-use
 
 # Generate report
@@ -188,7 +188,7 @@ python scripts/verify_site.py --all # Full verification
 
 ## Quality Gates
 
-1. **Ruff 0** — enforced at every commit
+1. **Ruff 0 (by policy)** — 2 intentional exceptions: `PLC0415` for lazy Fetcher import (`http_client.py:51`, by design) and `UP037` quoted type annotation (`http_client.py:62`, style)
 2. **Schema validation** — `python scripts/validate.py` before merge
 3. **Site verification** — `python scripts/verify_site.py --all` daily
 4. **160 tests passing** — `python -m pytest tests/ -v`

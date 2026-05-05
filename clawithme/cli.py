@@ -169,7 +169,7 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
                         searxng_total += 1
             except (OSError, ValueError, TimeoutError):
                 continue
-    except Exception:
+    except (OSError, ValueError, TimeoutError, json.JSONDecodeError):
         pass  # SearXNG unavailable — skip gracefully
 
     # ── Phase 2: Profile extraction (crawler) ──

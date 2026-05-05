@@ -226,12 +226,10 @@ class Engine:
             "{username}": username,
             "{e_code}": str(check.get("expected", 200)),
             "{e_string}": (
-                str(check.get("presence_strs", [""])[0])
-                if check.get("presence_strs") else ""
+                str(presence[0]) if (presence := check.get("presence_strs")) else ""
             ),
             "{m_string}": (
-                str(check.get("absence_strs", [""])[0])
-                if check.get("absence_strs") else ""
+                str(absence[0]) if (absence := check.get("absence_strs")) else ""
             ),
             "{probe_url}": check.get("probe_url", template),
             "{url_subpath}": check.get("subpath", ""),
