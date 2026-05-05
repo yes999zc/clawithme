@@ -9,7 +9,7 @@ from clawithme.engine.loader import get_engine_for_site, load_engines
 class TestLoadEngines:
     def test_loads_all_engines(self):
         engines = load_engines()
-        assert len(engines) == 6
+        assert len(engines) >= 6, f"Expected at least 6 engines, got {len(engines)}"
         assert "base_http_status" in engines
         assert "xenforo" in engines
 

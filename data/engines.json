@@ -17,8 +17,12 @@
     "classifier": "message",
     "description": "Probe a URL and check response body for presence/absence strings.",
     "params": {
-      "presence_strings": ["{e_string}"],
-      "absence_strings": ["{m_string}"],
+      "presence_strings": [
+        "{e_string}"
+      ],
+      "absence_strings": [
+        "{m_string}"
+      ],
       "timeout_ms": 8000
     },
     "anti_bot": "scrapling_fetcher"
@@ -40,8 +44,12 @@
     "classifier": "message",
     "description": "Generic XenForo forum engine. Covers hundreds of XenForo-based forums.",
     "params": {
-      "presence_strings": ["{e_string}"],
-      "absence_strings": ["{m_string}"],
+      "presence_strings": [
+        "{e_string}"
+      ],
+      "absence_strings": [
+        "{m_string}"
+      ],
       "timeout_ms": 8000
     },
     "anti_bot": "scrapling_fetcher"
@@ -52,8 +60,12 @@
     "classifier": "message",
     "description": "Discourse forum engine. Presence: user profile elements. Absence: 'not found' messages.",
     "params": {
-      "presence_strings": ["{e_string}"],
-      "absence_strings": ["{m_string}"],
+      "presence_strings": [
+        "{e_string}"
+      ],
+      "absence_strings": [
+        "{m_string}"
+      ],
       "timeout_ms": 8000
     },
     "anti_bot": "scrapling_fetcher"
@@ -69,5 +81,52 @@
       "follow_redirects": true
     },
     "anti_bot": "scrapling_fetcher"
+  },
+  "phpbb": {
+    "name": "phpBB Forum",
+    "version": "1.0",
+    "classifier": "message",
+    "description": "Generic phpBB forum engine. Profile search via memberlist.php. Presence: user found. Absence: 'No members found'.",
+    "params": {
+      "presence_strings": [
+        "{e_string}"
+      ],
+      "absence_strings": [
+        "{m_string}"
+      ],
+      "timeout_ms": 8000
+    },
+    "anti_bot": "scrapling_fetcher",
+    "_site_defaults": {
+      "probe_url": "{urlMain}{urlSubpath}/memberlist.php?username={username}",
+      "presence_strs": [
+        "memberlist.php?mode=viewprofile"
+      ],
+      "absence_strs": [
+        "No members found for this search criterion."
+      ]
+    }
+  },
+  "vbulletin": {
+    "name": "vBulletin Forum",
+    "version": "1.0",
+    "classifier": "message",
+    "description": "Generic vBulletin forum engine. Profile via member.php. Absence: 'does not have a profile' in multiple languages.",
+    "params": {
+      "presence_strings": [
+        "{e_string}"
+      ],
+      "absence_strings": [
+        "{m_string}"
+      ],
+      "timeout_ms": 8000
+    },
+    "anti_bot": "scrapling_fetcher",
+    "_site_defaults": {
+      "probe_url": "{urlMain}{urlSubpath}/member.php?username={username}",
+      "absence_strs": [
+        "This user has not registered and therefore does not have a profile to view."
+      ]
+    }
   }
 }
