@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=flat-square)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![CI](https://github.com/yes999zc/clawithme/actions/workflows/ci.yml/badge.svg)](https://github.com/yes999zc/clawithme/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-160%20passed-brightgreen?style=flat-square)](https://github.com/yes999zc/clawithme/actions)
+[![tests](https://img.shields.io/badge/tests-243%20passed-brightgreen?style=flat-square)](https://github.com/yes999zc/clawithme/actions)
 
 **Username to identity panorama — for the Chinese internet and beyond.**
 
@@ -13,7 +13,7 @@
 
 ---
 
-Input a username. Discover their presence across 3000+ platforms — from social networks to dev communities, from Chinese local forums to global sites. Link identities through email, phone, avatar hashes, and leaked credentials. Export a self-contained Geist-style HTML report.
+Input a username. Discover their presence across 3000+ platforms — from social networks to dev communities, from Chinese local forums to global sites. Link identities through email, phone, avatar hashes, and leaked credentials. Export a self-contained Geist-style HTML or PDF report. All powered by an async pipeline with LLM identity verification.
 
 ## Quick Start
 
@@ -21,6 +21,14 @@ Input a username. Discover their presence across 3000+ platforms — from social
 pip install -e ".[dev]"
 clawithme search <username> --acknowledge-ethical-use
 clawithme search <username> --report report.html --acknowledge-ethical-use
+clawithme search <username> --report report.pdf --format pdf --acknowledge-ethical-use
+```
+
+### Web UI
+
+```bash
+pip install -e ".[web]"
+python -m clawithme.web.app  # → http://localhost:8000
 ```
 
 ## Pipeline
@@ -28,13 +36,13 @@ clawithme search <username> --report report.html --acknowledge-ethical-use
 ```
 username
   |
-  +-- Phase 1: Site probing (36 curated + 2487 migrated, 9 CMS engines)
+  +-- Phase 1: Site probing (44 curated + 2487 migrated, 9 CMS engines)
   |     |
   |     +-- HTTP status code / body message / header matching
   |     +-- Scrapling anti-bot fingerprinting
   |     +-- SearXNG fallback for un-hit sites
   |
-  +-- Phase 2: Profile extraction (GitHub, Zhihu extractors)
+  +-- Phase 2: Profile extraction (34 extractors: GitHub, Zhihu, Reddit, LinkedIn, ...)
   |     +-- CSS/XPath selectors, Playwright for JS-rendered pages
   |     +-- Avatar perceptual hash (pHash)
   |
@@ -42,26 +50,34 @@ username
   |
   +-- Phase 4: Multi-signal correlation
   |     +-- email (1.0) · phone (0.95) · avatar pHash (0.8) · username (0.7)
-  |     +-- Union-Find transitive closure
+  |     +-- Union-Find transitive closure + anti-merge gate
   |
-  +-- Phase 5: Geist HTML report
-        +-- Platform distribution charts
-        +-- Breach timeline
-        +-- Identity clusters with confidence badges
-        +-- PII redaction
+  +-- Phase 5: Geist HTML / PDF report
+  |     +-- Platform distribution charts · Breach timeline
+  |     +-- Identity clusters with confidence badges · PII redaction
+  |
+  +-- Phase 6: LLM Verifier (DeepSeek/Kimi/百炼, provider-agnostic)
+  |     +-- SQLite result caching
+  |
+  +-- Phase 7: Async pipeline (asyncio.gather, 10 concurrent, 180s→14s)
+  |
+  +-- Phase 8: Web UI (FastAPI + SSE streaming) + PDF export (WeasyPrint)
 ```
 
 ## Features
 
 - **9 detection engines** — status code, body message, headers, plus XenForo/Discourse/phpBB/vBulletin/WordPress/Discuz! CMS
-- **3000+ sites** — 36 hand-curated + 2487 migrated from maigret_china, all engine-assigned
-- **Deep extraction** — GitHub and Zhihu profile scraping with CSS selectors
+- **3000+ sites** — 44 hand-curated + 2487 migrated from maigret_china, all engine-assigned
+- **34 profile extractors** — GitHub, Zhihu, Reddit, LinkedIn, HackerNews, Douban, Juejin, NGA, and more
+- **Async pipeline** — 10-concurrent asyncio.gather, cold search 180s→14s
 - **Leak database** — Cavalier infostealer records + HIBP breach database, parallel query with graceful degradation
-- **Identity correlation** — Union-Find clustering across email, phone, avatar hash, and username similarity
-- **Geist report** — self-contained HTML, grayscale design, CSS-only charts, PII redacted
+- **LLM verifier** — DeepSeek/Kimi/百炼 multi-provider, auto-discovery, structured confidence scoring
+- **Identity correlation** — Union-Find clustering across email, phone, avatar hash, and username similarity, with anti-merge gate
+- **Geist report** — self-contained HTML + PDF via WeasyPrint, grayscale design, CSS-only charts, PII redacted
+- **Web UI** — FastAPI + SSE streaming search, Geist frontend, zero-config deploy
 - **Plugin architecture** — CN site extractors via `entry_points`, main repo stays jurisdiction-clean
 - **Schema-first** — JSON Schema validation on every site definition, CI-enforced
-- **CI/CD** — PR schema validation + daily site verification
+- **CI/CD** — PR schema validation + daily site verification + auto-release to PyPI
 
 ## vs maigret
 
