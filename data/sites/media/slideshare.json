@@ -23,7 +23,8 @@
     ],
     "error_flags": {
       "needs_browser": "Cloudflare JS challenge blocks HTTP-only access. Requires headless browser."
-    }
+    },
+    "dynamic_fetch": true
   },
   "nsfw": false,
   "deprecated": false,

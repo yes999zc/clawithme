@@ -3,7 +3,7 @@
   "name": "Medium",
   "primary": "blog",
   "canonical_url": "https://medium.com/@{username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "blog",
     "identity_type": "professional",
@@ -14,12 +14,12 @@
   "rankings": {},
   "check": {
     "probe_url": "https://medium.com/@{username}",
-    "expected": 200,
+    "absence_strs": ["PAGE NOT FOUND"],
     "known_accounts": [
       "ev"
     ],
     "known_unclaimed": [
-      "thisuserdoesnotexist999999"
+      "xkcdxkcdxkcdxkcd_nope"
     ]
   },
   "nsfw": false,

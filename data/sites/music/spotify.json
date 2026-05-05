@@ -20,7 +20,8 @@
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"
-    ]
+    ],
+    "dynamic_fetch": true
   },
   "nsfw": false,
   "deprecated": false,

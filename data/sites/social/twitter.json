@@ -24,7 +24,8 @@
     ],
     "known_unclaimed": [
       "random_nonexistent_xyz_192837"
-    ]
+    ],
+    "dynamic_fetch": true
   },
   "known_accounts": [
     "jack",

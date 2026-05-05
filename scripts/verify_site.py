@@ -18,6 +18,44 @@ from clawithme.engine.http_client import HttpClient, HttpResponse
 from clawithme.engine.loader import get_engine_for_site, load_engines
 from clawithme.logging import get_logger, setup_logging
 
+# DynamicFetcher availability (lazy)
+_DYNAMIC_AVAILABLE: bool | None = None
+
+
+def _check_dynamic() -> bool:
+    global _DYNAMIC_AVAILABLE
+    if _DYNAMIC_AVAILABLE is None:
+        try:
+            from scrapling import DynamicFetcher  # noqa: F401
+            _DYNAMIC_AVAILABLE = True
+        except ImportError:
+            _DYNAMIC_AVAILABLE = False
+    return _DYNAMIC_AVAILABLE
+
+
+def _fetch_dynamic_page(url: str) -> HttpResponse | None:
+    """Fetch a page using Playwright-based DynamicFetcher. Returns HttpResponse or None."""
+    if not _check_dynamic():
+        return None
+    try:
+        from scrapling import DynamicFetcher
+        df = DynamicFetcher()
+        page = df.fetch(url, timeout=15000, headless=True,
+                        disable_resources=True, block_ads=True)
+        body = page.body if page.body else b""
+        text = str(page.html_content) if page.html_content else ""
+        if not text and body:
+            text = body.decode("utf-8", errors="replace")
+        return HttpResponse(
+            status_code=page.status,
+            url=str(page.url),
+            text=text,
+            headers=dict(page.headers) if page.headers else {},
+            body=body,
+        )
+    except (OSError, TimeoutError):
+        return None
+
 
 def load_site(site_id: str) -> dict:
     """Find and load a site JSON by id."""
@@ -78,6 +116,7 @@ def verify_site(site: dict, engines: dict[str, Engine] | None = None) -> dict:
         "engine": engine_ref,
         "classifier": engine.classifier if engine else "unknown",
         "deprecated": site.get("deprecated", False),
+        "auth_gated": site.get("error_flags", {}).get("auth_gated", False),
         "checks": [],
     }
 
@@ -85,7 +124,16 @@ def verify_site(site: dict, engines: dict[str, Engine] | None = None) -> dict:
     for account in check.get("known_accounts", []):
         url = Engine._substitute(check["probe_url"], check, account)
         try:
-            resp = client.get(url)
+            if check.get("dynamic_fetch"):
+                resp = _fetch_dynamic_page(url)
+                if resp is None:
+                    result["checks"].append({
+                        "account": account, "type": "known_existing",
+                        "url": url, "error": "dynamic_fetch_failed", "pass": False,
+                    })
+                    continue
+            else:
+                resp = client.get(url)
             ok = _classify_response(resp, check, engine) if engine else (
                 resp.status_code == check.get("expected", 200)
             )
@@ -109,7 +157,16 @@ def verify_site(site: dict, engines: dict[str, Engine] | None = None) -> dict:
     for account in check.get("known_unclaimed", []):
         url = Engine._substitute(check["probe_url"], check, account)
         try:
-            resp = client.get(url)
+            if check.get("dynamic_fetch"):
+                resp = _fetch_dynamic_page(url)
+                if resp is None:
+                    result["checks"].append({
+                        "account": account, "type": "known_unclaimed",
+                        "url": url, "error": "dynamic_fetch_failed", "pass": False,
+                    })
+                    continue
+            else:
+                resp = client.get(url)
             ok = not _classify_response(resp, check, engine) if engine else (
                 resp.status_code != check.get("expected", 200)
             )
@@ -148,6 +205,8 @@ def format_result(result: dict) -> str:
     s = result["summary"]
     if result["deprecated"]:
         status = "⚠️ DEPRECATED (skip)"
+    elif result.get("auth_gated"):
+        status = "🔒 AUTH-GATED"
     elif s["no_checks"]:
         status = "⚪ NO CHECKS"
     elif s["healthy"]:
@@ -192,17 +251,22 @@ def main():
             print()
             all_results.append(result)
 
-        # Summary (deprecated sites counted separately)
+        # Summary (deprecated/auth-gated sites counted separately)
         deprecated_results = [r for r in all_results if r["deprecated"]]
-        active_results = [r for r in all_results if not r["deprecated"]]
+        auth_gated_results = [r for r in all_results if r.get("auth_gated") and not r["deprecated"]]
+        active_results = [r for r in all_results if not r["deprecated"] and not r.get("auth_gated")]
         healthy = sum(1 for r in active_results if r["summary"]["healthy"])
         no_checks = sum(1 for r in active_results if r["summary"]["no_checks"])
         degraded = len(active_results) - healthy - no_checks
-        print(
-            f"---\nTotal: {len(all_results)} sites | "
-            f"{healthy} healthy | {no_checks} no-checks | "
-            f"{degraded} degraded | {len(deprecated_results)} deprecated"
-        )
+        parts = [
+            f"{healthy} healthy",
+            f"{no_checks} no-checks",
+            f"{degraded} degraded",
+        ]
+        if auth_gated_results:
+            parts.append(f"{len(auth_gated_results)} auth-gated")
+        parts.append(f"{len(deprecated_results)} deprecated")
+        print(f"---\nTotal: {len(all_results)} sites | {' | '.join(parts)}")
     else:
         if not args.site_id:
             parser.error("Must specify site_id or --all")

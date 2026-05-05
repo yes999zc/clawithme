@@ -18,6 +18,20 @@ from clawithme.logging import get_logger
 
 logger = get_logger()
 
+# DynamicFetcher availability (lazy, cached)
+_DYNAMIC_AVAILABLE: bool | None = None
+
+
+def _check_dynamic() -> bool:
+    global _DYNAMIC_AVAILABLE
+    if _DYNAMIC_AVAILABLE is None:
+        try:
+            from scrapling import DynamicFetcher  # noqa: F401
+            _DYNAMIC_AVAILABLE = True
+        except ImportError:
+            _DYNAMIC_AVAILABLE = False
+    return _DYNAMIC_AVAILABLE
+
 # Allowed template variables (whitelist) — enforced in _substitute()
 _ALLOWED_VARS = {
     "{username}", "{e_code}", "{e_string}", "{m_string}",
@@ -46,6 +60,7 @@ class Engine:
     def __init__(self, engine_def: dict, http_client: HttpClient | None = None):
         self._def = engine_def
         self._http = http_client or HttpClient()
+        self._dynamic = None  # DynamicFetcher, lazy
         self._log = get_logger(engine=engine_def.get("name", "?"))
 
     @property
@@ -61,14 +76,81 @@ class Engine:
     def params(self) -> dict:
         return self._def.get("params", {})
 
+    @property
+    def dynamic(self):
+        """Lazy-init DynamicFetcher for JS-rendered pages."""
+        if not _check_dynamic():
+            return None
+        if self._dynamic is None:
+            from scrapling import DynamicFetcher
+            self._dynamic = DynamicFetcher()
+        return self._dynamic
+
+    def _fetch_dynamic(self, url: str) -> HttpResponse | None:
+        """Fetch a page using Playwright-based DynamicFetcher.
+
+        Returns HttpResponse (same interface as HttpClient.get()) so
+        _classify() works unchanged. Returns None on failure.
+        """
+        df = self.dynamic
+        if df is None:
+            self._log.warning("dynamic_fetcher_unavailable", url=url)
+            return None
+
+        try:
+            page = df.fetch(
+                url,
+                timeout=15000,
+                headless=True,
+                disable_resources=True,
+                block_ads=True,
+            )
+        except (OSError, TimeoutError) as e:
+            self._log.warning("dynamic_fetch_failed", url=url, error=str(e))
+            return None
+
+        # DynamicFetcher Response → HttpResponse
+        body = page.body if page.body else b""
+        text = str(page.html_content) if page.html_content else ""
+        if not text and body:
+            text = body.decode("utf-8", errors="replace")
+
+        return HttpResponse(
+            status_code=page.status,
+            url=str(page.url),
+            text=text,
+            headers=dict(page.headers) if page.headers else {},
+            body=body,
+        )
+
     def probe(self, site: dict, username: str) -> EngineResult:
-        """Probe a site for a given username."""
+        """Probe a site for a given username.
+
+        Uses DynamicFetcher (Playwright) for sites with dynamic_fetch: true.
+        Falls back to static HttpClient otherwise.
+        """
         check = site.get("check", {})
         probe_template = check.get("probe_url", site.get("canonical_url", ""))
         url = self._substitute(probe_template, check, username)
+        use_dynamic = check.get("dynamic_fetch", False)
 
         try:
-            resp = self._http.get(url, headers=check.get("headers"))
+            if use_dynamic:
+                resp = self._fetch_dynamic(url)
+                if resp is None:
+                    return EngineResult(
+                        site_id=site["id"],
+                        site_name=site["name"],
+                        url_probed=url,
+                        status_code=0,
+                        exists=False,
+                        engine=self.name,
+                        classifier=self.classifier,
+                        error="dynamic_fetch_failed",
+                    )
+            else:
+                resp = self._http.get(url, headers=check.get("headers"))
+
             exists = self._classify(resp, check)
             return EngineResult(
                 site_id=site["id"],
@@ -78,7 +160,8 @@ class Engine:
                 exists=exists,
                 engine=self.name,
                 classifier=self.classifier,
-                details={"body_len": len(resp.text) if resp.text else 0},
+                details={"body_len": len(resp.text) if resp.text else 0,
+                         "dynamic": use_dynamic},
             )
         except (OSError, ValueError, TimeoutError) as e:
             self._log.error("probe_failed", site_id=site["id"], error=str(e))

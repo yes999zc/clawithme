@@ -16,12 +16,16 @@
   },
   "check": {
     "probe_url": "https://my.hupu.com/{username}",
-    "known_accounts": ["ye_wa", "jordunmiaw"],
+    "known_accounts": [],
     "known_unclaimed": ["thisuserdoesnotexist_abc123xyz"],
     "presence_strs": [
-      "他的动态"
+      "他发布的主题",
+      "他的回帖"
     ],
     "timeout_ms": 8000
+  },
+  "error_flags": {
+    "auth_gated": true
   },
   "nsfw": false,
   "deprecated": false,

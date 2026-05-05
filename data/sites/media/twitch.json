@@ -24,7 +24,8 @@
     ],
     "known_unclaimed": [
       "nonexistent_user_12345678"
-    ]
+    ],
+    "dynamic_fetch": true
   },
   "nsfw": false,
   "deprecated": false,
