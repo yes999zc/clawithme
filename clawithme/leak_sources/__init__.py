@@ -183,9 +183,37 @@ class CavalierSource(LeakSource):
         return []
 
     async def search_by_phone(self, phone: str) -> list[BreachRecord]:
-        """Cavalier does not support phone search."""
-        logger.debug("cavalier_no_phone_search", phone=phone)
-        return []
+        """Query Cavalier for infostealer records by phone number."""
+        url = f"{self._base}/osint-tools/search-by-phone"
+        try:
+            resp = await self._async_get(url, params={"phone": phone})
+            if not resp.ok:
+                logger.warning("cavalier_phone_http_error", status=resp.status_code, phone=phone)
+                return []
+
+            import json
+            data = json.loads(resp.text)
+
+            records: list[BreachRecord] = []
+            for stealer in data.get("stealers", []):
+                records.append(BreachRecord(
+                    phone=phone,
+                    email=stealer.get("email"),
+                    domain=stealer.get("domain"),
+                    source=f"cavalier:{stealer.get('stealer_family', 'unknown')}",
+                    breach_date=stealer.get("infection_date"),
+                ))
+
+            logger.info(
+                "cavalier_phone_search",
+                phone=phone,
+                records=len(records),
+            )
+            return records
+
+        except (OSError, ValueError, TimeoutError) as e:
+            logger.warning("cavalier_phone_error", phone=phone, error=str(e))
+            return []
 
     async def is_available(self) -> bool:
         """Check if Cavalier API is reachable."""

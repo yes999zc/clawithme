@@ -220,7 +220,7 @@ def _render_sites(hits: list[dict]) -> str:
             url = h.get("url", "")
             rows.append(
                 f'<tr>'
-                f'<td>{h.get("site_name", "")}</td>'
+                f'<td>{_esc(h.get("site_name", ""))}</td>'
                 f'<td class="url">{url}</td>'
                 f'<td class="status-ok">{h.get("status", "")}</td>'
                 f'</tr>'
@@ -256,7 +256,7 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'<div class="card-header">'
             f'<div class="card-avatar"></div>'
             f'<div><div class="card-name">{_esc(name)}</div>'
-            f'<div class="card-site">{p["site_id"]}</div></div>'
+            f'<div class="card-site">{_esc(p["site_id"])}</div></div>'
             f'</div>'
             f'{bio_html}{meta_html}'
             f'</div>'
@@ -269,7 +269,7 @@ def _render_clusters(clusters: list) -> str:
         return '<p style="color:#888">No identity clusters.</p>'
     blocks = []
     for i, c in enumerate(clusters, 1):
-        sites = ", ".join(p.site_id for p in c.profiles)
+        sites = ", ".join(_esc(p.site_id) for p in c.profiles)
         conf = c.confidence
         if conf >= 0.9:
             badge_cls = "badge-high"
@@ -286,7 +286,7 @@ def _render_clusters(clusters: list) -> str:
                 for d in details[:3]:  # max 3 per signal
                     evidence_lines.append(
                         f'<div class="cluster-evidence">'
-                        f'<span class="signal-tag">{sig}</span> {_esc(d)}'
+                        f'<span class="signal-tag">{sig}</span> {_esc(_redact_evidence(sig, d))}'
                         f'</div>'
                     )
         evidence_html = "".join(evidence_lines) if evidence_lines else ""
@@ -312,3 +312,20 @@ def _esc(s: str) -> str:
 def _fmt_esc(s: str) -> str:
     """Escape curly braces for str.format() safety."""
     return s.replace("{", "{{").replace("}", "}}")
+
+
+def _redact_evidence(signal: str, detail: str) -> str:
+    """Redact PII in cluster evidence details.
+
+    Email: 'alice@gmail.com' → 'a***@gmail.com'
+    Phone: '13800001234' → '***1234'
+    Other signals pass through unchanged.
+    """
+    if signal == "email":
+        if "@" in detail:
+            local, domain = detail.split("@", 1)
+            return f"{local[0]}***@{domain}" if local else "***@…"
+        return "***"
+    if signal == "phone":
+        return f"***{detail[-4:]}" if len(detail) >= 4 else "***"
+    return detail

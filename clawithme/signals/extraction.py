@@ -64,25 +64,27 @@ def normalize_phone(s: str) -> str:
     return digits
 
 
-# Matches Chinese mobile numbers: 1[3-9]XXXXXXXXX (11 digits).
-# Also matches with common separators and country codes.
+# Matches phone-like strings with common formats:
+# 13800001234, +1-555-000-1234, +86 13800001234, (020) 7946 0958, etc.
+# Post-filtered by digit count (7-15) in extract_phones().
 _PHONE_RE = re.compile(
-    r"(?:(?:\+?86)[\s-]*)?1[3-9]\d[\s-]?\d{4}[\s-]?\d{4}"
+    r"\+?(?:\(?\d{1,4}\)?[\s.\-]?)?\d{1,4}(?:[\s.\-]?\d{1,4}){1,5}"
 )
 
 
 def extract_phones(text: str) -> list[str]:
     """Return unique phone numbers (digits only) found in text.
 
-    Normalizes: strips +86 prefix, spaces, dashes.
+    Normalizes: strips country code prefixes, spaces, dashes.
+    Accepts 7-15 digit numbers (ITU-T E.164 range).
     """
     matches = _PHONE_RE.findall(text)
     seen: set[str] = set()
     results: list[str] = []
     for raw in matches:
         digits = normalize_phone(raw)
-        if len(digits) != 11:
-            continue  # skip non-standard lengths
+        if len(digits) < 7 or len(digits) > 15:
+            continue
         if digits in seen:
             continue
         seen.add(digits)

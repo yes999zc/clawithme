@@ -36,7 +36,7 @@ class CorrelationEngine:
     """
 
     PHASH_THRESHOLD = 10
-    USERNAME_THRESHOLD = 0.85
+    USERNAME_THRESHOLD = 0.80
     SIGNAL_WEIGHTS = {
         "email": 1.0,
         "phone": 0.95,

@@ -45,13 +45,24 @@ class TestExtractPhones:
         assert extract_phones("+8613800001234") == ["13800001234"]
 
     def test_deduplicate(self):
-        assert extract_phones("13800001234 13800001234") == ["13800001234"]
+        # Same number appearing in different parts of a bio
+        assert extract_phones("Call 13800001234 or text 13800001234") == ["13800001234"]
 
     def test_no_phone(self):
         assert extract_phones("call me maybe") == []
 
     def test_non_standard_length_skipped(self):
         assert extract_phones("12345") == []
+        assert extract_phones("1234567890123456") == []  # >15 digits
+
+    def test_international_us(self):
+        assert extract_phones("+1-555-000-1234") == ["15550001234"]
+
+    def test_international_uk(self):
+        assert extract_phones("+44 20 7946 0958") == ["442079460958"]
+
+    def test_area_code_parens(self):
+        assert extract_phones("(020) 7946 0958") == ["02079460958"]
 
 
 class TestNormalizePhone:

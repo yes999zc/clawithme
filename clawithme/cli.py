@@ -124,6 +124,43 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             })
             log.info("hit", site=result.site_name, status=result.status_code)
 
+    # ── Phase 1.5: SearXNG fallback for un-hit sites ──
+    searxng_total = 0
+    try:
+        import urllib.parse
+        import urllib.request
+        hit_ids = {h["site_id"] for h in hits}
+        searxng_base = "http://localhost:8888/search"
+        for site in sites[:50]:  # cap: only top 50 un-hit sites
+            sid = site["id"]
+            if sid in hit_ids:
+                continue
+            domain = site.get("domain") or site.get("urlMain", "")
+            if not domain:
+                continue
+            # Extract bare domain from urlMain if needed
+            if "://" in domain:
+                domain = domain.split("://")[-1].split("/")[0]
+            query = f'site:{domain} "{username}"'
+            url = f"{searxng_base}?q={urllib.parse.quote(query)}&format=json"
+            try:
+                with urllib.request.urlopen(url, timeout=5) as resp:
+                    data = json.loads(resp.read())
+                    results = data.get("results", [])
+                    if results:
+                        hits.append({
+                            "site_id": sid,
+                            "site_name": site.get("name", sid),
+                            "url": results[0].get("url", ""),
+                            "status": 0,  # SearXNG result, not HTTP probe
+                            "site_def": site,
+                        })
+                        searxng_total += 1
+            except (OSError, ValueError, TimeoutError):
+                continue
+    except Exception:
+        pass  # SearXNG unavailable — skip gracefully
+
     # ── Phase 2: Profile extraction (crawler) ──
     profiles: list[dict] = []
     profile_objects: list[Profile] = []  # kept for Phase 4 correlation
@@ -158,6 +195,11 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
         if cfg.apis.hibp_api_key:
             sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
         records = await query_breaches(sources, username=username)
+        # Follow-up: query by phone if username search returned phone numbers
+        phones_found = [r.phone for r in records if r.phone]
+        if phones_found:
+            phone_records = await query_breaches(sources, phone=phones_found[0])
+            records.extend(phone_records)
         for src in sources:
             await src.close()
         return records
@@ -215,6 +257,14 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
         print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
         for r in leak_records:
             print(f"   ⚠️  {r}")
+        # Extract associated platforms from breach domains
+        leak_domains: set[str] = {r.domain for r in leak_records if r.domain}
+        if leak_domains:
+            print(f"📧 Breach-associated platforms: {', '.join(sorted(leak_domains))}")
+        # Extract phone numbers found in breaches
+        leak_phones: set[str] = {r.phone for r in leak_records if r.phone}
+        if leak_phones:
+            print(f"📱 Phone numbers revealed: {', '.join(sorted(leak_phones))}")
     else:
         print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
 
@@ -231,7 +281,7 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
     print()
     log.info("search_done", hits=len(hits), profiles=len(profiles),
-             leaks=len(leak_records))
+             leaks=len(leak_records), searxng_hits=searxng_total)
     print(f"trace_id: {trace_id}")
 
     # ── Report (optional) ──
