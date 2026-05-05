@@ -1,8 +1,14 @@
 """Phase 5 — Panorama report generator.
 
 Produces a self-contained HTML report from search results.
-Single function: generate_report(hits, profiles, clusters, username) -> str.
 Geist-style grayscale design, no external dependencies.
+
+v2 improvements (2026-05-05):
+- Avatar images from actual URLs
+- Profile card extras (reputation, badges, cross-site links, verified)
+- Cluster display_name consistency highlight
+- Summary hero box at top
+- Site hit quality: flag SPA/redirect false positives
 """
 
 from __future__ import annotations
@@ -12,6 +18,15 @@ from dataclasses import asdict
 from datetime import UTC, datetime
 
 from clawithme.signals.correlation import Cluster
+
+
+# ── Known false-positive sites (SPA shells, login redirects) ──
+_SPA_SITES = frozenset({"sspai", "twitch", "twitter", "weibo", "instagram", "slideshare"})
+
+
+def _is_false_positive(site_id: str) -> bool:
+    """Return True if this site hit is a known SPA/redirect false positive."""
+    return site_id in _SPA_SITES
 
 
 def generate_report(  # noqa: PLR0913
@@ -25,22 +40,45 @@ def generate_report(  # noqa: PLR0913
 ) -> str:
     """Return a complete HTML document as a string."""
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
-    # Escape { } in user-supplied strings to prevent str.format() crashes
     safe_username = _fmt_esc(username)
+
+    # Separate true hits from false positives
+    true_hits = [h for h in hits if not _is_false_positive(_hit_site_id(h))]
+    fp_hits = [h for h in hits if _is_false_positive(_hit_site_id(h))]
+
+    # Compute summary stats
+    true_hit_count = len(true_hits)
+    fp_count = len(fp_hits)
+    profile_count = len(profiles)
+    cluster_count = len(clusters)
+    leak_count = len(breach_dates or [])
+
+    # Display name consistency across profiles
+    disp_names = {p.get("display_name") for p in profiles if p.get("display_name")}
+    name_consensus = len(disp_names) == 1 and profile_count >= 2
+    consensus_name = next(iter(disp_names)) if name_consensus else None
+
     return _HTML.format(
         title=f"clawithme: {safe_username}",
         username=safe_username,
         timestamp=now,
-        hit_count=f"{len(hits)} sites found",
-        profile_count=f"{len(profiles)} profiles",
-        cluster_count=f"{len(clusters)} clusters",
-        sites_table=_render_sites(hits),
+        summary_hero=_render_summary(
+            safe_username, true_hit_count, fp_count,
+            profile_count, cluster_count, leak_count,
+            consensus_name,
+        ),
+        sites_table=_render_sites(true_hits, fp_hits),
         profile_cards=_render_profiles(profiles),
-        cluster_section=_render_clusters(clusters),
+        cluster_section=_render_clusters(clusters, consensus_name),
         timeline_section=_render_timeline(breach_dates or []),
-        chart_section=_render_charts(hits, clusters),
+        chart_section=_render_charts(true_hits, clusters),
         trace_id=_fmt_esc(trace_id),
     )
+
+
+def _hit_site_id(hit: dict) -> str:
+    """Extract site id from a hit dict."""
+    return hit.get("site_def", {}).get("id", "")
 
 
 def export_json(
@@ -77,6 +115,53 @@ def export_json(
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
+# ── Summary hero ─────────────────────────────────────────────
+
+def _render_summary(
+    username: str, true_hits: int, fp_count: int,
+    profiles: int, clusters: int, leaks: int,
+    consensus_name: str | None,
+) -> str:
+    """Render the top hero summary box."""
+    identity_line = ""
+    if consensus_name:
+        identity_line = (
+            f'<div style="margin-top:16px;font-size:16px;font-weight:500;color:#111">'
+            f'Identity: {_esc(consensus_name)}  '
+            f'<span style="font-size:12px;color:#2e7d32;background:#e8f5e9;padding:2px 8px;border-radius:4px">'
+            f'✓ Confirmed across {profiles} platforms'
+            f'</span></div>'
+        )
+
+    fp_note = ""
+    if fp_count > 0:
+        fp_note = (
+            f'<span style="color:#b0b0b0;font-size:12px">'
+            f' + {fp_count} SPA/redirect false positives hidden'
+            f'</span>'
+        )
+
+    stats = []
+    if true_hits:
+        stats.append(f"{true_hits} sites")
+    if profiles:
+        stats.append(f"{profiles} profiles")
+    if clusters:
+        stats.append(f"{clusters} clusters")
+    if leaks:
+        stats.append(f"{leaks} leaks")
+
+    return (
+        f'<div class="summary-hero">'
+        f'<h1>{_esc(username)}</h1>'
+        f'{identity_line}'
+        f'<div class="meta" style="margin-top:12px">'
+        f'{" · ".join(stats)} &middot; {fp_note}'
+        f'</div>'
+        f'</div>'
+    )
+
+
 # ── HTML template ──────────────────────────────────────────────
 
 _HTML = """\
@@ -92,14 +177,20 @@ body {{
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: #111; background: #fafafa; line-height: 1.6;
 }}
-.container {{ max-width: 720px; margin: 0 auto; padding: 48px 24px; }}
+.container {{ max-width: 780px; margin: 0 auto; padding: 48px 24px; }}
 
-h1 {{ font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }}
+h1 {{ font-size: 32px; font-weight: 700; letter-spacing: -0.6px; }}
 h2 {{ font-size: 18px; font-weight: 600; color: #333; }}
 h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 .meta {{ color: #888; font-size: 13px; margin-top: 4px; }}
 .section {{ margin-top: 40px; }}
 .divider {{ border: 0; border-top: 1px solid #e5e5e5; margin: 24px 0; }}
+
+/* ── Summary hero ───────────────────────────── */
+.summary-hero {{
+  background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;
+  padding: 32px;
+}}
 
 /* ── Sites table ────────────────────────────── */
 .site-table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
@@ -107,25 +198,33 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 .site-table td {{ padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }}
 .site-table .url {{ color: #555; font-size: 13px; word-break: break-all; }}
 .status-ok {{ color: #0a0; font-weight: 500; }}
+.status-fp {{ color: #b0b0b0; font-style: italic; }}
 
 /* ── Profile cards ──────────────────────────── */
-.card-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }}
+.card-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }}
 .card {{
   background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;
   padding: 20px; transition: box-shadow 0.15s;
 }}
 .card:hover {{ box-shadow: 0 2px 12px rgba(0,0,0,0.06); }}
 .card-header {{ display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }}
-.card-avatar {{ width: 40px; height: 40px; border-radius: 50%; background: #eee; flex-shrink: 0; }}
+.card-avatar {{
+  width: 44px; height: 44px; border-radius: 50%; background: #eee;
+  flex-shrink: 0; object-fit: cover;
+}}
 .card-site {{ font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }}
 .card-name {{ font-size: 15px; font-weight: 600; }}
 .card-bio {{ font-size: 13px; color: #555; margin-top: 8px; line-height: 1.5; }}
-.card-meta {{ display: flex; gap: 16px; margin-top: 12px; font-size: 12px; color: #888; }}
-.card-completeness {{ display: flex; align-items: center; gap: 8px; margin-top: 10px; }}
+.card-meta {{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; font-size: 12px; color: #888; }}
+.card-extras {{ display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }}
+.card-extra-tag {{
+  font-size: 11px; padding: 2px 8px; background: #f5f5f5;
+  border-radius: 4px; color: #555; font-family: monospace;
+}}
+.card-completeness {{ display: flex; align-items: center; gap: 8px; margin-top: 12px; }}
 .cc-pct {{ font-family: monospace; font-size: 11px; min-width: 28px; }}
 .cc-bar {{ display: inline-block; width: 60px; height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }}
 .cc-fill {{ display: block; height: 100%; border-radius: 2px; background: #d0d0d0; }}
-.card-phash {{ font-family: monospace; font-size: 11px; color: #aaa; margin-top: 8px; word-break: break-all; }}
 
 /* ── Clusters ────────────────────────────────── */
 .cluster {{ background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; margin-bottom: 16px; }}
@@ -134,11 +233,12 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 .badge-high {{ background: #e8f5e9; color: #2e7d32; }}
 .badge-mid {{ background: #fff3e0; color: #e65100; }}
 .badge-low {{ background: #fce4ec; color: #c62828; }}
-.cluster-signals {{ display: flex; gap: 6px; margin-top: 12px; }}
+.cluster-signals {{ display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }}
 .signal-tag {{ font-size: 11px; padding: 2px 8px; background: #f5f5f5; border-radius: 4px; color: #666; font-family: monospace; }}
 .cluster-list {{ font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px; }}
 .cluster-site {{ font-size: 12px; padding: 2px 8px; background: #f5f5f5; border-radius: 4px; }}
 .cluster-evidence {{ font-size: 12px; color: #666; margin-top: 4px; padding: 2px 0; }}
+.cluster-identity {{ margin-top: 12px; padding: 8px 12px; background: #e8f5e9; border-radius: 4px; font-size: 13px; color: #2e7d32; }}
 
 /* ── Footer ──────────────────────────────────── */
 .footer {{ margin-top: 48px; padding-top: 16px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #aaa; }}
@@ -172,16 +272,14 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 @media (max-width: 480px) {{
   .container {{ padding: 24px 16px; }}
   .card-grid {{ grid-template-columns: 1fr; }}
-  h1 {{ font-size: 22px; }}
+  h1 {{ font-size: 24px; }}
 }}
 </style>
 </head>
 <body>
 <div class="container">
 
-<h1>clawithme Report</h1>
-<h2>{username}</h2>
-<div class="meta">{hit_count} &middot; {profile_count} &middot; {cluster_count} &middot; {timestamp}</div>
+{summary_hero}
 
 <!-- SITES -->
 <div class="section">
@@ -192,7 +290,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 
 <!-- PROFILES -->
 <div class="section">
-<h3>Profiles</h3>
+<h3>Extracted Profiles</h3>
 <hr class="divider">
 {profile_cards}
 </div>
@@ -221,56 +319,85 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 
 # ── Render helpers ──────────────────────────────────────────────
 
-def _render_sites(hits: list[dict]) -> str:
-    if not hits:
+def _render_sites(true_hits: list[dict], fp_hits: list[dict]) -> str:
+    """Render grouped site tables. FP hits shown collapsed with explanation."""
+    if not true_hits and not fp_hits:
         return '<p style="color:#888">No sites found.</p>'
 
-    # Group by classification.primary
-    groups: dict[str, list[dict]] = {}
-    for h in hits:
-        site_def = h.get("site_def", {})
-        classification = site_def.get("classification", {})
-        primary = classification.get("primary", "other")
-        groups.setdefault(primary, []).append(h)
+    parts = []
 
-    # Category display names
-    cat_names = {
-        "social": "Social", "devtools": "Dev Tools", "forum": "Forums",
-        "media": "Media", "blog": "Blogs", "gaming": "Gaming",
-        "music": "Music", "ecommerce": "E-Commerce",
-    }
+    # ── True hits table ──
+    if true_hits:
+        groups: dict[str, list[dict]] = {}
+        for h in true_hits:
+            cat = _hit_category(h)
+            groups.setdefault(cat, []).append(h)
 
-    # Summary bar
-    summary_parts = []
-    for cat in sorted(groups.keys()):
-        name = cat_names.get(cat, cat.title())
-        count = len(groups[cat])
-        summary_parts.append(f'<span class="signal-tag">{name} {count}</span>')
-    summary_html = '<div class="cluster-signals" style="margin-bottom:16px">' + "".join(summary_parts) + '</div>'
-
-    # Grouped tables
-    sections = []
-    for cat in sorted(groups.keys()):
-        cat_hits = groups[cat]
-        name = cat_names.get(cat, cat.title())
-        rows = []
-        for h in cat_hits:
-            url = h.get("url", "")
-            rows.append(
-                f'<tr>'
-                f'<td>{_esc(h.get("site_name", ""))}</td>'
-                f'<td class="url">{_esc(url)}</td>'
-                f'<td class="status-ok">{h.get("status", "")}</td>'
-                f'</tr>'
-            )
-        sections.append(
-            f'<h4 style="margin-top:16px;font-size:13px;color:#666;font-weight:500">{name}</h4>'
-            f'<table class="site-table">'
-            f'<thead><tr><th>Site</th><th>URL</th><th>Status</th></tr></thead>'
-            f'<tbody>' + "".join(rows) + "</tbody></table>"
+        cat_names = _CAT_NAMES
+        summary_parts = []
+        for cat in sorted(groups.keys()):
+            name = cat_names.get(cat, cat.title())
+            count = len(groups[cat])
+            summary_parts.append(f'<span class="signal-tag">{name} {count}</span>')
+        parts.append(
+            '<div class="cluster-signals" style="margin-bottom:16px">'
+            + "".join(summary_parts) + '</div>'
         )
 
-    return summary_html + "".join(sections)
+        for cat in sorted(groups.keys()):
+            cat_hits = groups[cat]
+            name = cat_names.get(cat, cat.title())
+            rows = []
+            for h in cat_hits:
+                url = h.get("url", "")
+                rows.append(
+                    f'<tr>'
+                    f'<td>{_esc(h.get("site_name", ""))}</td>'
+                    f'<td class="url">{_esc(url)}</td>'
+                    f'<td class="status-ok">{h.get("status", "")}</td>'
+                    f'</tr>'
+                )
+            parts.append(
+                f'<h4 style="margin-top:16px;font-size:13px;color:#666;font-weight:500">'
+                f'{name}</h4>'
+                f'<table class="site-table">'
+                f'<thead><tr><th>Site</th><th>URL</th><th>Status</th></tr></thead>'
+                f'<tbody>' + "".join(rows) + "</tbody></table>"
+            )
+
+    # ── False-positive note ──
+    if fp_hits:
+        fp_names = ", ".join(_esc(h.get("site_name", "?")) for h in fp_hits)
+        parts.append(
+            f'<details style="margin-top:16px;font-size:12px;color:#999">'
+            f'<summary style="cursor:pointer">'
+            f'+ {len(fp_hits)} SPA/redirect hits hidden</summary>'
+            f'<p style="margin-top:4px">{fp_names} — '
+            f'These sites return HTTP 200 for all usernames (SPA shell / login redirect). '
+            f'Manual verification needed.</p>'
+            f'</details>'
+        )
+
+    return "".join(parts)
+
+
+_CAT_NAMES = {
+    "social": "Social", "devtools": "Dev Tools", "forum": "Forums",
+    "media": "Media", "blog": "Blogs", "gaming": "Gaming",
+    "music": "Music", "ecommerce": "E-Commerce",
+}
+
+
+def _hit_category(hit: dict) -> str:
+    return hit.get("site_def", {}).get("classification", {}).get("primary", "other")
+
+
+# ── Extra field labels for profile cards ──
+_EXTRA_LABELS: dict[str, str] = {
+    "reputation": "Rep", "badges": "Badges",
+    "twitter": "Twitter", "github": "GitHub", "linkedin": "LinkedIn",
+    "website": "Website", "gender": "Gender", "verified": "Verified",
+}
 
 
 def _render_profiles(profiles: list[dict]) -> str:
@@ -280,16 +407,62 @@ def _render_profiles(profiles: list[dict]) -> str:
     _PROFILE_FIELDS = ["display_name", "bio", "location", "avatar_url", "followers"]
     cards = []
     for p in profiles:
+        site_id = p.get("site_id", "?")
+        name = p.get("display_name") or site_id
         bio = p.get("bio", "") or ""
-        bio_html = f'<div class="card-bio">{_esc(bio[:200])}</div>' if bio.strip() else ""
         location = p.get("location", "") or ""
-        followers = p.get("followers")
+
+        # Bio
+        bio_html = f'<div class="card-bio">{_esc(bio[:200])}</div>' if bio.strip() else ""
+
+        # Avatar
+        avatar_url = p.get("avatar_url", "")
+        if avatar_url:
+            avatar_html = (
+                f'<img class="card-avatar" src="{_esc(avatar_url)}"'
+                f' alt="" loading="lazy">'
+            )
+        else:
+            avatar_html = '<div class="card-avatar"></div>'
+
+        # Meta (location, followers, following, joined)
         meta_parts = []
         if location:
             meta_parts.append(f"📍 {_esc(location)}")
+        followers = p.get("follower_count")
         if followers is not None:
-            meta_parts.append(f"👥 {followers}")
-        # Completeness score
+            meta_parts.append(f"👥 {followers:,}" if isinstance(followers, int) else f"👥 {followers}")
+        following = p.get("following_count")
+        if following is not None:
+            meta_parts.append(f"↗ {following:,}" if isinstance(following, int) else f"↗ {following}")
+        joined = p.get("joined_date")
+        if joined:
+            meta_parts.append(f"📅 {joined}")
+        meta_html = f'<div class="card-meta">{" · ".join(meta_parts)}</div>' if meta_parts else ""
+
+        # Extra fields (reputation, badges, links, gender, verified)
+        extra = p.get("extra", {})
+        extra_tags = []
+        if extra:
+            for key, label in _EXTRA_LABELS.items():
+                val = extra.get(key)
+                if val is None or val == "":
+                    continue
+                if isinstance(val, dict):
+                    # badges: {bronze: 9355, silver: 9316, gold: 895}
+                    parts = []
+                    for bk, bv in val.items():
+                        parts.append(f"{bk}:{bv:,}" if isinstance(bv, int) else f"{bk}:{bv}")
+                    display = " ".join(parts)
+                    extra_tags.append(f'<span class="card-extra-tag">{_esc(display)}</span>')
+                elif isinstance(val, bool):
+                    if val:
+                        extra_tags.append(f'<span class="card-extra-tag">✓ {label}</span>')
+                else:
+                    extra_tags.append(f'<span class="card-extra-tag">{label}: {_esc(str(val)[:50])}</span>')
+        extra_html = f'<div class="card-extras">{"".join(extra_tags)}</div>' if extra_tags else ""
+
+        # Completeness
         filled = sum(1 for f in _PROFILE_FIELDS if p.get(f))
         pct = int(filled / len(_PROFILE_FIELDS) * 100)
         pct_color = "#171717" if pct >= 60 else ("#808080" if pct >= 30 else "#b0b0b0")
@@ -299,28 +472,28 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'<span class="cc-bar"><span class="cc-fill" style="width:{pct}%"></span></span>'
             f'</div>'
         )
-        meta_html = f'<div class="card-meta">{" · ".join(meta_parts)}</div>' if meta_parts else ""
-        site_id = p.get("site_id", "?")
-        name = p.get("display_name") or site_id
+
         cards.append(
             f'<div class="card">'
             f'<div class="card-header">'
-            f'<div class="card-avatar"></div>'
+            f'{avatar_html}'
             f'<div><div class="card-name">{_esc(name)}</div>'
             f'<div class="card-site">{_esc(site_id)}</div></div>'
             f'</div>'
-            f'{bio_html}{completeness_html}{meta_html}'
+            f'{bio_html}{extra_html}{completeness_html}{meta_html}'
             f'</div>'
         )
     return '<div class="card-grid">' + "".join(cards) + "</div>"
 
 
-def _render_clusters(clusters: list) -> str:
+def _render_clusters(clusters: list, consensus_name: str | None = None) -> str:
     if not clusters:
-        return '<p style="color:#888">No identity clusters.</p>'
+        return '<p style="color:#888">No identity clusters found.</p>'
     blocks = []
     for i, c in enumerate(clusters, 1):
         sites = ", ".join(_esc(p.site_id) for p in c.profiles)
+
+        # Confidence badge
         conf = c.confidence
         if conf >= 0.9:
             badge_cls = "badge-high"
@@ -328,18 +501,31 @@ def _render_clusters(clusters: list) -> str:
             badge_cls = "badge-mid"
         else:
             badge_cls = "badge-low"
+
         sig_tags = "".join(
-            f'<span class="signal-tag">{s}</span>' for s in c.signals
+            f'<span class="signal-tag">{_esc(s)}</span>' for s in c.signals
         )
+
+        # Identity consensus highlight
+        identity_html = ""
+        if consensus_name and len(c.profiles) >= 2:
+            identity_html = (
+                f'<div class="cluster-identity">'
+                f'✓ Identity confirmed: all profiles share name "{_esc(consensus_name)}"'
+                f'</div>'
+            )
+
         evidence_lines = []
         if c.evidence:
             for sig, details in c.evidence.items():
-                for d in details[:3]:  # max 3 per signal
+                for d in details[:3]:
                     evidence_lines.append(
                         f'<div class="cluster-evidence">'
-                        f'<span class="signal-tag">{sig}</span> {_esc(_redact_evidence(sig, d))}'
+                        f'<span class="signal-tag">{_esc(sig)}</span> '
+                        f'{_esc(_redact_evidence(sig, d))}'
                         f'</div>'
                     )
+
         evidence_html = "".join(evidence_lines) if evidence_lines else ""
         blocks.append(
             f'<div class="cluster">'
@@ -350,6 +536,7 @@ def _render_clusters(clusters: list) -> str:
             f'<div class="cluster-list">{sites}</div>'
             f'<div class="cluster-signals">{sig_tags}</div>'
             f'{evidence_html}'
+            f'{identity_html}'
             f'</div>'
         )
     return "".join(blocks)
@@ -366,12 +553,7 @@ def _fmt_esc(s: str) -> str:
 
 
 def _redact_evidence(signal: str, detail: str) -> str:
-    """Redact PII in cluster evidence details.
-
-    Email: 'alice@gmail.com' → 'a***@gmail.com'
-    Phone: '13800001234' → '***1234'
-    Other signals pass through unchanged.
-    """
+    """Redact PII in cluster evidence details."""
     if signal == "email":
         if "@" in detail:
             local, domain = detail.split("@", 1)
@@ -383,13 +565,12 @@ def _redact_evidence(signal: str, detail: str) -> str:
 
 
 def _render_timeline(dates: list[str]) -> str:
-    """Render horizontal timeline from breach dates. Empty if no dates."""
     if not dates:
         return ""
-    unique_dates = sorted(set(dates), reverse=True)[:20]  # max 20
+    unique_dates = sorted(set(dates), reverse=True)[:20]
     dots = []
     for d in unique_dates:
-        label = d if len(d) <= 10 else d[:10]  # YYYY-MM-DD
+        label = d if len(d) <= 10 else d[:10]
         dots.append(
             f'<div class="timeline-dot">'
             f'<span class="timeline-date">{_esc(label)}</span>'
@@ -407,26 +588,19 @@ def _render_timeline(dates: list[str]) -> str:
 _CHART_COLORS = ["#171717", "#4d4d4d", "#808080", "#b0b0b0", "#d0d0d0"]
 
 
-def _render_charts(hits: list[dict], clusters: list) -> str:
-    """Render platform distribution + correlation signal charts."""
-    if not hits and not clusters:
+def _render_charts(true_hits: list[dict], clusters: list) -> str:
+    if not true_hits and not clusters:
         return ""
 
     sections: list[str] = []
 
-    # Platform distribution by classification
-    if hits:
+    # Platform distribution
+    if true_hits:
         cat_counts: dict[str, int] = {}
-        for h in hits:
-            site_def = h.get("site_def", {})
-            cat = site_def.get("classification", {}).get("primary", "other")
+        for h in true_hits:
+            cat = _hit_category(h)
             cat_counts[cat] = cat_counts.get(cat, 0) + 1
 
-        cat_names = {
-            "social": "Social", "devtools": "Dev Tools", "forum": "Forums",
-            "media": "Media", "blog": "Blogs", "gaming": "Gaming",
-            "music": "Music", "ecommerce": "E-Commerce",
-        }
         sorted_cats = sorted(cat_counts.items(), key=lambda x: -x[1])
         max_count = max(c for _, c in sorted_cats) if sorted_cats else 1
 
@@ -434,7 +608,7 @@ def _render_charts(hits: list[dict], clusters: list) -> str:
         for i, (cat, count) in enumerate(sorted_cats):
             pct = int(count / max_count * 100)
             color = _CHART_COLORS[i % len(_CHART_COLORS)]
-            name = cat_names.get(cat, cat.title())
+            name = _CAT_NAMES.get(cat, cat.title())
             bars.append(
                 f'<div class="chart-bar-row">'
                 f'<span class="chart-bar-label">{_esc(name)}</span>'
@@ -444,7 +618,6 @@ def _render_charts(hits: list[dict], clusters: list) -> str:
                 f'<span class="chart-bar-count">{count}</span>'
                 f'</div>'
             )
-
         sections.append(
             '<div class="chart-col">'
             '<div class="chart-title">Platform Distribution</div>'
@@ -452,7 +625,7 @@ def _render_charts(hits: list[dict], clusters: list) -> str:
             '</div>'
         )
 
-    # Correlation signal distribution
+    # Correlation signals
     if clusters:
         sig_counts: dict[str, int] = {}
         for c in clusters:
