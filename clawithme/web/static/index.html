@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>clawithme — OSINT Identity Panorama</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --card: #fff;
+    --text: #171717;
+    --text-secondary: #4d4d4d;
+    --text-tertiary: #808080;
+    --border: #e5e5e5;
+    --accent: #1e293b;
+    --accent-subtle: #f1f5f9;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .brand { font-family: "SF Mono", "Fira Code", monospace; font-size: 13px; color: var(--text-tertiary); margin-bottom: 4px; }
+  h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 32px; }
+
+  /* Search */
+  .search-box { display:flex; gap:8px; margin-bottom:12px; }
+  .search-box input {
+    flex:1; padding:12px 16px; border:1px solid var(--border); border-radius:6px;
+    font-size:16px; outline:none; background:var(--card);
+  }
+  .search-box input:focus { border-color: var(--accent); }
+  .search-box button {
+    padding:12px 24px; background:var(--accent); color:#fff; border:none;
+    border-radius:6px; font-size:15px; font-weight:500; cursor:pointer;
+  }
+  .search-box button:disabled { opacity:0.4; cursor:not-allowed; }
+  .check-label { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-tertiary); margin-bottom:24px; }
+  .check-label input { width:16px; height:16px; }
+
+  /* Results */
+  .phase-indicator { font-size:13px; color:var(--text-tertiary); padding:8px 0; display:none; }
+  .stats { display:none; gap:20px; margin:24px 0; }
+  .stat { text-align:center; }
+  .stat-num { font-size:28px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--accent); }
+  .stat-label { font-size:11px; text-transform:uppercase; color:var(--text-tertiary); margin-top:2px; letter-spacing:0.5px; }
+
+  /* Cards */
+  .section-title { font-size:13px; font-weight:600; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.5px; margin:32px 0 12px; display:none; }
+  .cards { display:flex; flex-direction:column; gap:8px; }
+  .card {
+    background:var(--card); border:1px solid var(--border); border-radius:8px;
+    padding:16px; display:flex; align-items:center; gap:12px;
+  }
+  .card-avatar {
+    width:40px; height:40px; border-radius:50%; background:var(--accent-subtle);
+    flex-shrink:0; overflow:hidden;
+  }
+  .card-avatar img { width:100%; height:100%; object-fit:cover; }
+  .card-body { flex:1; min-width:0; }
+  .card-name { font-size:15px; font-weight:500; }
+  .card-meta { font-size:12px; color:var(--text-tertiary); margin-top:2px; }
+  .card-url { font-size:11px; color:var(--text-tertiary); word-break:break-all; }
+
+  /* Cluster */
+  .cluster { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:12px; }
+  .cluster-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .cluster-confidence { font-size:13px; font-weight:600; color:var(--accent); }
+  .cluster-signals { font-size:11px; color:var(--text-tertiary); }
+  .cluster-sites { display:flex; flex-wrap:wrap; gap:6px; }
+  .site-tag { font-size:12px; background:var(--accent-subtle); color:var(--text-secondary); padding:4px 10px; border-radius:4px; }
+
+  .error { color:#dc2626; font-size:14px; padding:16px; background:#fef2f2; border-radius:8px; display:none; }
+  .spinner { display:none; width:20px; height:20px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.6s linear infinite; margin:12px auto; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    body { padding:20px 16px 60px; }
+    h1 { font-size:22px; }
+    .search-box { flex-direction:column; }
+    .search-box button { width:100%; }
+    .stats { gap:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">clawithme</div>
+<h1>OSINT Identity Panorama</h1>
+
+<div class="search-box">
+  <input type="text" id="username" placeholder="Enter username..." autofocus>
+  <button id="searchBtn" onclick="search()">Search</button>
+</div>
+<label class="check-label">
+  <input type="checkbox" id="ethics"> I am searching my own account or have authorization
+</label>
+
+<div class="phase-indicator" id="phase"></div>
+<div class="spinner" id="spinner"></div>
+<div class="error" id="error"></div>
+
+<div class="stats" id="stats">
+  <div class="stat"><div class="stat-num" id="statHits">0</div><div class="stat-label">Sites</div></div>
+  <div class="stat"><div class="stat-num" id="statProfiles">0</div><div class="stat-label">Profiles</div></div>
+  <div class="stat"><div class="stat-num" id="statClusters">0</div><div class="stat-label">Clusters</div></div>
+  <div class="stat"><div class="stat-num" id="statTime">0s</div><div class="stat-label">Elapsed</div></div>
+</div>
+
+<div class="section-title" id="hitsTitle">Site Hits</div>
+<div class="cards" id="hitsContainer"></div>
+
+<div class="section-title" id="profilesTitle">Profiles</div>
+<div class="cards" id="profilesContainer"></div>
+
+<div class="section-title" id="clustersTitle">Identity Clusters</div>
+<div id="clustersContainer"></div>
+
+<script>
+const evtSource = { current: null };
+const ethics = document.getElementById('ethics');
+const btn = document.getElementById('searchBtn');
+
+document.getElementById('username').addEventListener('keydown', e => {
+  if (e.key === 'Enter') search();
+});
+
+async function search() {
+  const username = document.getElementById('username').value.trim();
+  if (!username) return;
+  if (!ethics.checked) {
+    alert('Please acknowledge ethical use first.');
+    return;
+  }
+
+  // Reset UI
+  document.getElementById('error').style.display = 'none';
+  document.getElementById('hitsContainer').innerHTML = '';
+  document.getElementById('profilesContainer').innerHTML = '';
+  document.getElementById('clustersContainer').innerHTML = '';
+  document.querySelectorAll('.section-title').forEach(el => el.style.display = 'none');
+  document.getElementById('stats').style.display = 'none';
+  document.getElementById('spinner').style.display = 'block';
+  document.getElementById('phase').style.display = 'block';
+  btn.disabled = true;
+
+  if (evtSource.current) evtSource.current.close();
+
+  const sse = new EventSource(`/api/search/${encodeURIComponent(username)}`);
+  evtSource.current = sse;
+  let hitCount = 0, profileCount = 0;
+
+  sse.addEventListener('phase', e => {
+    const d = JSON.parse(e.data);
+    document.getElementById('phase').textContent = d.message;
+    document.getElementById('spinner').style.display = 'block';
+  });
+
+  sse.addEventListener('hit', e => {
+    const d = JSON.parse(e.data);
+    document.getElementById('hitsTitle').style.display = 'block';
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="card-body">
+      <div class="card-name">${esc(d.site_name)}</div>
+      <div class="card-url">${esc(d.url)}</div>
+    </div>`;
+    document.getElementById('hitsContainer').appendChild(card);
+    hitCount++;
+    document.getElementById('statHits').textContent = hitCount;
+    document.getElementById('stats').style.display = 'flex';
+  });
+
+  sse.addEventListener('profile', e => {
+    const d = JSON.parse(e.data);
+    document.getElementById('profilesTitle').style.display = 'block';
+    const avatar = d.avatar_url ? `<img src="${esc(d.avatar_url)}" onerror="this.style.display='none'">` : '';
+    const meta = [d.location, d.follower_count ? `${d.follower_count} followers` : null].filter(Boolean).join(' · ');
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-avatar">${avatar}</div>
+      <div class="card-body">
+        <div class="card-name">${esc(d.display_name || d.site_id)}</div>
+        <div class="card-meta">${esc(meta)}</div>
+        ${d.bio ? `<div class="card-meta">${esc(d.bio)}</div>` : ''}
+      </div>`;
+    document.getElementById('profilesContainer').appendChild(card);
+    profileCount++;
+    document.getElementById('statProfiles').textContent = profileCount;
+    document.getElementById('stats').style.display = 'flex';
+  });
+
+  sse.addEventListener('cluster', e => {
+    const d = JSON.parse(e.data);
+    document.getElementById('clustersTitle').style.display = 'block';
+    const div = document.createElement('div');
+    div.className = 'cluster';
+    div.innerHTML = `
+      <div class="cluster-header">
+        <div class="cluster-confidence">${Math.round(d.confidence * 100)}% confidence</div>
+        <div class="cluster-signals">${d.signals.join(', ')}</div>
+      </div>
+      <div class="cluster-sites">${d.sites.map(s => `<span class="site-tag">${esc(s)}</span>`).join('')}</div>
+    `;
+    document.getElementById('clustersContainer').appendChild(div);
+    document.getElementById('statClusters').textContent = parseInt(document.getElementById('statClusters').textContent) + 1;
+    document.getElementById('stats').style.display = 'flex';
+  });
+
+  sse.addEventListener('done', e => {
+    const d = JSON.parse(e.data);
+    document.getElementById('statTime').textContent = d.elapsed_s + 's';
+    document.getElementById('phase').style.display = 'none';
+    document.getElementById('spinner').style.display = 'none';
+    btn.disabled = false;
+    sse.close();
+  });
+
+  sse.addEventListener('error', e => {
+    const msg = e.data ? JSON.parse(e.data) : 'Connection lost';
+    document.getElementById('error').textContent = 'Error: ' + msg;
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('spinner').style.display = 'none';
+    btn.disabled = false;
+    sse.close();
+  });
+}
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
