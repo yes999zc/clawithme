@@ -112,9 +112,14 @@ All 36 active sites have `known_accounts` + `known_unclaimed` populated.
 - CONTRIBUTING.md: known_accounts requirements + verification workflow
 - Ruff 0 (fixed 6 pre-existing lint issues from Step 2)
 
-**Step 4 ⬜ — DynamicFetcher for SPA/anti-bot sites**
-- Playwright Chromium integration for 7 degraded sites
-- Targets: sspai, twitter, twitch, hupu, medium, spotify, slideshare
+**Step 4 ✅ — DynamicFetcher engine integration** (`0a4bba9`)
+- Engine.probe() supports `check.dynamic_fetch` → Playwright DynamicFetcher
+- verify_site.py: DynamicFetcher support + 🔒 AUTH-GATED status
+- medium: status_code → message engine → HEALTHY
+- hupu: marked auth-gated (profiles require login)
+- sspai/twitch/twitter/spotify/slideshare: dynamic_fetch=true (infra complete)
+- **Key finding**: DynamicFetcher does NOT solve SPA detection — shells return identical HTML for exist/nonexist users. Accepted as known architecture limitation.
+- CI status: 30 healthy | 1 auth-gated | 5 SPA-degraded | 12 deprecated
 
 ## Key Design Decisions
 
