@@ -1,6 +1,6 @@
 # clawithme — Project State
 
-> Handoff document for fresh session. Last updated: 2026-05-05 (P2 hardening complete — leak tests + ethical gate)
+> Handoff document for fresh session. Last updated: 2026-05-05 (Phase 5 v2 complete — completeness + timeline + charts)
 
 ## What is clawithme
 
@@ -12,7 +12,7 @@ Repo: `github.com/yes999zc/clawithme` (MIT, public)
 ```
 ~4700 lines Python, 43 .py files, 160 tests (119 main + 41 leak sources)
 48 site JSONs (36 active, 12 deprecated), 6 engines, 2 extractors
-Phase 1-5 COMPLETE + jury audit P0/P1 fixed + P2 leak tests + ethical gate
+Phase 1-5 COMPLETE (v2 features: completeness bar, breach timeline, platform/signal charts)
 Ruff 0
 ```
 
@@ -92,7 +92,7 @@ All 36 active sites have `known_accounts` + `known_unclaimed` populated.
 ### Phase 2 ✅ — Site Database Expansion (48 sites, 6 engines, CI)
 ### Phase 3 ✅ — Deep Crawler (jury-audited)
 ### Phase 4 ✅ — Multi-Signal Correlation (jury-audited)
-### Phase 5 ✅ — Panorama Report (jury-audited)
+### Phase 5 ✅ — Panorama Report (v2: completeness + timeline + charts)
 
 ### Hardening Steps (post-audit 4-step plan)
 

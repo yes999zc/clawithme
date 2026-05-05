@@ -26,7 +26,7 @@ clawithme search <username> --report report.html --acknowledge-ethical-use
 | 2 | Profile extraction (GitHub, Zhihu extractors) |
 | 3 | Leak database query (Cavalier + HIBP) |
 | 4 | Multi-signal correlation (email, phone, avatar pHash, username → Union-Find clusters) |
-| 5 | Geist HTML report |
+| 5 | Geist HTML report (completeness bars, breach timeline, platform/signal charts) |
 
 ## License
 
