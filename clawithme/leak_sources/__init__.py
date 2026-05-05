@@ -9,9 +9,10 @@ Implements:
 from __future__ import annotations
 
 import asyncio
+import re
 from abc import ABC, abstractmethod
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from clawithme.engine.http_client import HttpClient, HttpResponse
 from clawithme.logging import get_logger
@@ -36,6 +37,34 @@ class BreachRecord(BaseModel):
     domain: str | None = None
     source: str | None = None
     breach_date: str | None = None
+
+    @field_validator("email")
+    @classmethod
+    def _validate_email(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", v.strip()):
+            raise ValueError(f"Invalid email format: {v!r}")
+        return v.strip().lower()
+
+    @field_validator("phone")
+    @classmethod
+    def _validate_phone(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        digits = re.sub(r"\D", "", v)
+        if len(digits) < 7 or len(digits) > 15:
+            raise ValueError(f"Invalid phone number: {v!r}")
+        return v
+
+    @field_validator("password_sha256")
+    @classmethod
+    def _validate_sha256(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+        if not re.match(r"^[a-f0-9]{64}$", v.lower()):
+            raise ValueError(f"Invalid SHA-256 hash: {v!r}")
+        return v.lower()
 
     def __str__(self) -> str:
         parts = []

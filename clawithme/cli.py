@@ -3,6 +3,7 @@
 Usage:
     clawithme search <username>     Search across all sites + leak sources
     clawithme verify                Verify site detection rules
+    clawithme validate              Validate site JSONs against schema
 """
 
 from __future__ import annotations
@@ -26,16 +27,35 @@ logger = get_logger()
 _USERNAME_RE = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 
-def load_all_sites() -> list[dict]:
-    """Load all non-deprecated site definitions."""
+def load_all_sites(validate: bool = False) -> list[dict]:
+    """Load all non-deprecated site definitions.
+
+    If validate=True, checks each site against data/schema.json.
+    Validation failures are logged but do not block loading.
+    """
     sites_dir = Path(__file__).resolve().parent.parent / "data" / "sites"
+    schema_path = sites_dir.parent / "schema.json"
     sites: list[dict] = []
+
+    schema = None
+    if validate and schema_path.exists():
+        import jsonschema
+        schema = json.loads(schema_path.read_text())
+
     for json_file in sorted(sites_dir.rglob("*.json")):
         if "migrated" in json_file.parts:
             continue
         site = json.loads(json_file.read_text())
-        if not site.get("deprecated", False):
-            sites.append(site)
+        if site.get("deprecated", False):
+            continue
+        if schema:
+            try:
+                jsonschema.validate(instance=site, schema=schema)
+            except jsonschema.ValidationError as e:
+                logger.warning("schema_validation_failed",
+                               site_id=site.get("id", json_file.name),
+                               error=str(e))
+        sites.append(site)
     return sites
 
 
@@ -219,6 +239,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: clawithme search <username> [--report <path>]")
         print("       clawithme verify")
+        print("       clawithme validate")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -249,9 +270,16 @@ def main():
             args = [sys.executable, str(script), sys.argv[2]]
         subprocess.run(args, check=False)  # verify script exits non-zero on failures
 
+    elif command == "validate":
+        print("Validating site definitions against schema...")
+        sites = load_all_sites(validate=True)
+        print(f"  Loaded {len(sites)} sites with schema validation (warnings above)")
+
     else:
         print(f"Unknown command: {command}")
         print("Usage: clawithme search <username>")
+        print("       clawithme verify")
+        print("       clawithme validate")
         sys.exit(1)
 
 

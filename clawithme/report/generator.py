@@ -184,21 +184,53 @@ h3 {{ font-size: 14px; font-weight: 500; color: #555; }}
 def _render_sites(hits: list[dict]) -> str:
     if not hits:
         return '<p style="color:#888">No sites found.</p>'
-    rows = []
+
+    # Group by classification.primary
+    groups: dict[str, list[dict]] = {}
     for h in hits:
-        url = h.get("url", "")
-        rows.append(
-            f'<tr>'
-            f'<td>{h.get("site_name", "")}</td>'
-            f'<td class="url">{url}</td>'
-            f'<td class="status-ok">{h.get("status", "")}</td>'
-            f'</tr>'
+        site_def = h.get("site_def", {})
+        classification = site_def.get("classification", {})
+        primary = classification.get("primary", "other")
+        groups.setdefault(primary, []).append(h)
+
+    # Category display names
+    cat_names = {
+        "social": "Social", "devtools": "Dev Tools", "forum": "Forums",
+        "media": "Media", "blog": "Blogs", "gaming": "Gaming",
+        "music": "Music", "ecommerce": "E-Commerce",
+    }
+
+    # Summary bar
+    summary_parts = []
+    for cat in sorted(groups.keys()):
+        name = cat_names.get(cat, cat.title())
+        count = len(groups[cat])
+        summary_parts.append(f'<span class="signal-tag">{name} {count}</span>')
+    summary_html = '<div class="cluster-signals" style="margin-bottom:16px">' + "".join(summary_parts) + '</div>'
+
+    # Grouped tables
+    sections = []
+    for cat in sorted(groups.keys()):
+        cat_hits = groups[cat]
+        name = cat_names.get(cat, cat.title())
+        rows = []
+        for h in cat_hits:
+            url = h.get("url", "")
+            rows.append(
+                f'<tr>'
+                f'<td>{h.get("site_name", "")}</td>'
+                f'<td class="url">{url}</td>'
+                f'<td class="status-ok">{h.get("status", "")}</td>'
+                f'</tr>'
+            )
+        sections.append(
+            f'<h4 style="margin-top:16px;font-size:13px;color:#666;font-weight:500">{name}</h4>'
+            f'<table class="site-table">'
+            f'<thead><tr><th>Site</th><th>URL</th><th>Status</th></tr></thead>'
+            f'<tbody>' + "".join(rows) + "</tbody></table>"
         )
-    return (
-        '<table class="site-table">'
-        '<thead><tr><th>Site</th><th>URL</th><th>Status</th></tr></thead>'
-        '<tbody>' + "".join(rows) + "</tbody></table>"
-    )
+
+    return summary_html + "".join(sections)
 
 
 def _render_profiles(profiles: list[dict]) -> str:
