@@ -244,7 +244,7 @@ python scripts/verify_site.py --all # Full verification
 | Item | Status |
 |------|:------:|
 | Push 7 commits to GitHub | ⚠️ pending `gh auth login` |
-| v2 scope (12 items, see docs/todo.md) | 🟡 Deferred |
+| v2 scope (13 items, see docs/todo.md) | 🟡 Deferred |
 
 ## v2 Scope (deferred)
 

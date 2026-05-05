@@ -191,6 +191,7 @@
 | 10 | GitHub Actions CI/CD | deploy + release automation |
 | 11 | Profile 提取 P1 梯队 | 11 站（博客园/简书/Keybase/SegmentFault/酷安等） |
 | 12 | 天眼查 API 集成 | 法人/股东/高管/失信查询，公开工商数据 |
+| 13 | 关联引擎：拆分误合并 cluster | 同一 username 但 location/display_name 不一致 → 降权重，避免把不同人合并 |
 
 ---
 
@@ -225,6 +226,6 @@
 | 测试 (160 tests) | **all passing** ✅ |
 | Lint (Ruff) | **0 (by policy)** ✅ |
 | CI 部署 | **已部署** ✅ |
-| v2 scope | **10 项延期** 🟡 |
+| v2 scope | **13 项延期** 🟡 |
 
 > **零待办。** 全部代码完成 + 5 轮独立审计 + CI 就位。
