@@ -14,6 +14,7 @@ import re
 import sys
 from pathlib import Path
 
+from clawithme.cache import ResultCache
 from clawithme.config import load_config
 from clawithme.crawler.base import Profile
 from clawithme.crawler.registry import discover_extractors
@@ -64,7 +65,7 @@ def load_all_sites(validate: bool = False, include_migrated: bool = False) -> li
 
 def _search_leaks(search_term: str, search_type: str,
                   report_path: str | None, report_format: str,
-                  acknowledged: bool):
+                  acknowledged: bool, cache: ResultCache | None = None):
     """Email or phone search: leak database only (no site probing).
 
     search_type: "email" or "phone"
@@ -184,7 +185,8 @@ def _search_leaks(search_term: str, search_type: str,
 
 
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
-           include_migrated: bool = False, acknowledged: bool = False):
+           include_migrated: bool = False, acknowledged: bool = False,
+           no_cache: bool = False):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.

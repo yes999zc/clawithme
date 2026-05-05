@@ -4,7 +4,7 @@ import io
 
 from PIL import Image, ImageDraw
 
-from clawithme.signals.avatar import AvatarMatch, compare_avatars, compute_phash, hamming_distance
+from clawithme.signals.avatar import AvatarMatch, compare_avatars, compute_phash, hamming_distance, is_default_avatar
 
 
 def _make_red_block() -> bytes:
@@ -61,7 +61,42 @@ class TestHammingDistance:
         assert dist > 10
 
 
-# ── compare_avatars ───────────────────────────────────────────
+# ── is_default_avatar / default avatar short-circuit ────────────
+
+class TestDefaultAvatar:
+    def test_known_default_phash_detected(self):
+        # Gravatar mystery person synthetic pHash from data/default_avatars.json
+        assert is_default_avatar("9a6661796786669a") is True
+
+    def test_github_identicon_detected(self):
+        assert is_default_avatar("f9a8f9b8f90606a8") is True
+
+    def test_near_default_within_threshold(self):
+        # Slightly perturbed — Hamming distance ~1, still within threshold 3
+        assert is_default_avatar("9a6661796786669b") is True
+
+    def test_non_default_not_detected(self):
+        assert is_default_avatar("c60c9933d19bcccd") is False
+
+    def test_compare_default_and_valid_returns_no_match(self):
+        r = compare_avatars("9a6661796786669a", "c60c9933d19bcccd")
+        assert r.is_match is False
+        assert r.distance == 0
+
+    def test_compare_valid_and_default_returns_no_match(self):
+        r = compare_avatars("c60c9933d19bcccd", "f9a8f9b8f90606a8")
+        assert r.is_match is False
+        assert r.distance == 0
+
+    def test_compare_two_defaults_returns_no_match(self):
+        r = compare_avatars("9a6661796786669a", "f9a8f9b8f90606a8")
+        assert r.is_match is False
+        assert r.distance == 0
+
+    def test_non_default_phashes_still_match_normally(self):
+        r = compare_avatars("c60c9933d19bcccd", "c60c9933d19bcccd")
+        assert r.is_match is True
+        assert r.distance == 0
 
 class TestCompareAvatars:
     def test_match_same_hash(self):

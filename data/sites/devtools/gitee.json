@@ -2,22 +2,30 @@
   "id": "gitee",
   "name": "Gitee",
   "primary": "devtools",
-  "canonical_url": "",
+  "canonical_url": "https://gitee.com/api/v5/users/{username}",
   "engine_ref": "base_http_status",
   "classification": {
     "primary": "devtools",
     "identity_type": "professional",
     "geo_region": "cn",
-    "user_scale": 0,
-    "tags": []
+    "user_scale": 10000000,
+    "tags": [
+      "git",
+      "code"
+    ]
   },
   "check": {
-    "probe_url": "",
-    "error_flags": {
-      "blocked": "403 blocked"
-    }
+    "probe_url": "https://gitee.com/api/v5/users/{username}",
+    "known_accounts": [
+      "oldratlee"
+    ],
+    "known_unclaimed": [
+      "this_user_does_not_exist_99999"
+    ],
+    "expected": 200
   },
-  "deprecated": true,
+  "nsfw": false,
+  "deprecated": false,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-05T00:00:00Z"
 }

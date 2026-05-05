@@ -3,7 +3,7 @@
   "name": "掘金",
   "primary": "devtools",
   "canonical_url": "https://juejin.cn/user/{username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "devtools",
     "identity_type": "professional",
@@ -16,11 +16,18 @@
   },
   "check": {
     "probe_url": "https://juejin.cn/user/{username}",
-    "error_flags": {
-      "needs_dynamic_fetcher": "JS-rendered SPA, all requests return 404 without JS"
-    }
+    "absence_strs": [
+      "404"
+    ],
+    "known_accounts": [
+      "3782774877627999"
+    ],
+    "known_unclaimed": [
+      "9999999999999999"
+    ]
   },
-  "deprecated": true,
+  "nsfw": false,
+  "deprecated": false,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-05T00:00:00Z"
 }

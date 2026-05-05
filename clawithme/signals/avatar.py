@@ -8,6 +8,8 @@ pHash allows comparing visually similar images via Hamming distance
 from __future__ import annotations
 
 import io
+import json
+from pathlib import Path
 from typing import NamedTuple
 
 import imagehash
@@ -16,6 +18,39 @@ from PIL import Image
 from clawithme.logging import get_logger
 
 logger = get_logger()
+
+# Lazy-loaded list of known default/placeholder avatar pHashes
+_DEFAULT_HAMMING_THRESHOLD = 3
+
+
+def _load_default_avatars() -> list[str]:
+    """Load default avatar pHashes from data file (lazy)."""
+    cache = getattr(_load_default_avatars, "_cache", None)
+    if cache is not None:
+        return cache
+    path = Path(__file__).resolve().parent.parent.parent / "data" / "default_avatars.json"
+    try:
+        data = json.loads(path.read_text())
+        _load_default_avatars._cache = list(data) if isinstance(data, list) else []
+    except (OSError, json.JSONDecodeError) as e:
+        logger.warning("default_avatars_load_failed", error=str(e))
+        _load_default_avatars._cache = []
+    return _load_default_avatars._cache
+
+
+def is_default_avatar(phash: str, threshold: int = _DEFAULT_HAMMING_THRESHOLD) -> bool:
+    """Check if a pHash matches any known default/placeholder avatar.
+
+    Uses Hamming distance <= threshold to catch slight variations.
+    """
+    defaults = _load_default_avatars()
+    for default_hash in defaults:
+        try:
+            if hamming_distance(phash, default_hash) <= threshold:
+                return True
+        except ValueError:
+            continue
+    return False
 
 
 class AvatarMatch(NamedTuple):
@@ -62,8 +97,12 @@ def compare_avatars(
     Returns AvatarMatch(distance, is_match).
     is_match is True when distance <= threshold.
     Returns distance=-1, is_match=False if either pHash is None.
+    If either pHash matches a known default/placeholder avatar,
+    returns is_match=False — default avatars are not identity signals.
     """
     if phash1 is None or phash2 is None:
         return AvatarMatch(distance=-1, is_match=False)
+    if is_default_avatar(phash1) or is_default_avatar(phash2):
+        return AvatarMatch(distance=0, is_match=False)
     dist = hamming_distance(phash1, phash2)
     return AvatarMatch(distance=dist, is_match=dist <= threshold)

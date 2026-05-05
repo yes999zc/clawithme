@@ -27,6 +27,7 @@ dependencies = [
     "scrapling>=0.4",
     "imagehash>=4.3",
     "Pillow>=10.0",
+    "jsonschema>=4.26.0",
 ]
 
 [project.optional-dependencies]
