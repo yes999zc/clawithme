@@ -412,6 +412,19 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 }}
 .completeness-label:hover {{ border-bottom-color: #b0b0b0; }}
 
+/* ── Profile detail table ───────────────────── */
+.field-table {{ width: 100%; border-collapse: collapse; font-size: 12px; }}
+.field-table td {{ padding: 4px 8px; border-bottom: 1px solid #f5f5f5; vertical-align: top; }}
+.field-table td:first-child {{ border-bottom: none; }}
+.field-label {{
+  font-family: 'Geist Mono', monospace; color: #808080; width: 100px;
+  font-size: 11px; padding-top: 6px !important; white-space: nowrap;
+}}
+.field-value {{
+  color: #4d4d4d; line-height: 1.5; word-break: break-word;
+  padding: 6px 8px !important;
+}}
+
 /* ── Clusters ────────────────────────────────── */
 .cluster {{
   background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px;
@@ -607,7 +620,7 @@ def _render_profiles(profiles: list[dict]) -> str:
     if not profiles:
         return '<p style="color:#808080;margin-top:20px">No profiles extracted.</p>'
 
-    _PROFILE_FIELDS = ["display_name", "bio", "location", "avatar_url", "followers"]
+    _PROFILE_FIELDS = ["display_name", "bio", "location", "avatar_url", "follower_count"]
     cards = []
     for p in profiles:
         site_id = p.get("site_id", "?")
@@ -678,6 +691,71 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'{pct}% complete</span>'
         )
 
+        # ── Full profile data (collapsible) ──
+        full_rows = []
+        _PROFILE_DETAIL_FIELDS = [
+            ("username", "Username"),
+            ("display_name", "Display Name"),
+            ("bio", "Bio"),
+            ("location", "Location"),
+            ("email", "Email"),
+            ("phone", "Phone"),
+            ("joined_date", "Joined"),
+            ("post_count", "Posts"),
+            ("follower_count", "Followers"),
+            ("following_count", "Following"),
+            ("avatar_url", "Avatar URL"),
+        ]
+        for field_key, field_label in _PROFILE_DETAIL_FIELDS:
+            val = p.get(field_key)
+            if val is None or val == "":
+                continue
+            if isinstance(val, int):
+                display = f"{val:,}"
+            else:
+                display = _esc(str(val))
+            # Truncate long URLs
+            if field_key == "avatar_url" and len(display) > 60:
+                display = display[:57] + "..."
+            if field_key == "bio" and len(display) > 300:
+                display = display[:297] + "..."
+            full_rows.append(
+                f'<tr><td class="field-label">{field_label}</td>'
+                f'<td class="field-value">{display}</td></tr>'
+            )
+        # Extra dict
+        if extra:
+            for ek, ev in extra.items():
+                if ek in _EXTRA_LABELS:
+                    continue  # already shown as tags
+                if isinstance(ev, dict):
+                    ev_display = ", ".join(
+                        f"{k}:{v:,}" if isinstance(v, int) else f"{k}:{v}"
+                        for k, v in ev.items()
+                    )
+                elif isinstance(ev, list):
+                    ev_display = ", ".join(_esc(str(x)[:60]) for x in ev[:10])
+                elif isinstance(ev, bool):
+                    ev_display = "Yes" if ev else "No"
+                else:
+                    ev_display = _esc(str(ev)[:200])
+                full_rows.append(
+                    f'<tr><td class="field-label">{_esc(ek)}</td>'
+                    f'<td class="field-value">{ev_display}</td></tr>'
+                )
+
+        full_html = ""
+        if full_rows:
+            full_html = (
+                f'<details class="profile-details" style="margin-top:16px">'
+                f'<summary style="cursor:pointer;font-size:12px;color:#808080">'
+                f'Full profile data</summary>'
+                f'<table class="field-table" style="margin-top:8px">'
+                f'{"".join(full_rows)}'
+                f'</table>'
+                f'</details>'
+            )
+
         cards.append(
             f'<div class="card">'
             f'<div class="card-header">'
@@ -689,6 +767,7 @@ def _render_profiles(profiles: list[dict]) -> str:
             f'</div>'
             f'</div>'
             f'{bio_html}{extra_html}{meta_html}'
+            f'{full_html}'
             f'</div>'
         )
     return '<div class="card-grid">' + "".join(cards) + "</div>"

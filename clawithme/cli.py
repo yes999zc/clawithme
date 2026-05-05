@@ -320,11 +320,18 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             if not profile.empty:
                 profiles.append({
                     "site_id": profile.site_id,
+                    "username": profile.username,
                     "display_name": profile.display_name,
                     "bio": profile.bio,
                     "location": profile.location,
                     "avatar_url": profile.avatar_url,
-                    "followers": profile.follower_count,
+                    "email": profile.email,
+                    "phone": profile.phone,
+                    "joined_date": profile.joined_date,
+                    "post_count": profile.post_count,
+                    "follower_count": profile.follower_count,
+                    "following_count": profile.following_count,
+                    "extra": profile.extra,
                     "empty": False,
                 })
                 log.debug("profile_extracted", site=site_id,
@@ -393,8 +400,8 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
                 parts.append(f"→ {p['display_name']}")
             if p["location"]:
                 parts.append(f"📍 {p['location']}")
-            if p["followers"] is not None:
-                parts.append(f"👥 {p['followers']}")
+            if p["follower_count"] is not None:
+                parts.append(f"👥 {p['follower_count']}")
             print(" ".join(parts))
 
     print()
