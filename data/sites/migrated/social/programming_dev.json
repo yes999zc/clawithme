@@ -1,0 +1,36 @@
+{
+  "id": "programming_dev",
+  "name": "programming.dev",
+  "canonical_url": "https://programming.dev",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999827596,
+    "tags": [
+      "lemmy"
+    ]
+  },
+  "rankings": {
+    "alexa": 172404
+  },
+  "check": {
+    "probe_url": "https://programming.dev/u/{username}",
+    "known_accounts": [
+      "pylapp"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis42"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Error!"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.967339+00:00"
+}

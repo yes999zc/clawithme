@@ -1,0 +1,42 @@
+{
+  "id": "archive_transformativeworks_org",
+  "name": "archive.transformativeworks.org",
+  "canonical_url": "https://archive.transformativeworks.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://archive.transformativeworks.org/users/{username}/gifts",
+    "known_accounts": [
+      "sunny2000"
+    ],
+    "known_unclaimed": [
+      "eoiyduyhed"
+    ],
+    "headers": {},
+    "presence_strs": [
+      ">Profile</a></li>",
+      "dashboard",
+      "heading landmark",
+      "region ",
+      "gift work index group"
+    ],
+    "absence_strs": [
+      ">Error 404</h2>",
+      "system errors error-404 region",
+      "          Error",
+      ">The page you were looking for doesn",
+      "          404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.840058+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "writingforums_org",
+  "name": "writingforums.org",
+  "canonical_url": "http://www.writingforums.org/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999968182,
+    "tags": [
+      "ca",
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 31818
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.693995+00:00",
+  "_maigret_engine": "XenForo"
+}

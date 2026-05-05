@@ -1,0 +1,51 @@
+{
+  "id": "unstoppabledomains",
+  "name": "UnstoppableDomains",
+  "canonical_url": "https://ud.me",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999144381,
+    "tags": [
+      "crypto"
+    ]
+  },
+  "rankings": {
+    "alexa": 855619
+  },
+  "check": {
+    "probe_url": "https://ud.me/{username}",
+    "known_accounts": [
+      "mlfed"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/114.0",
+      "Accept": "*/*",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Referer": "https://unstoppabledomains.com/",
+      "Connection": "keep-alive",
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-origin",
+      "Pragma": "no-cache",
+      "Cache-Control": "no-cache",
+      "TE": "trailers"
+    },
+    "presence_strs": [
+      "reservedForUserId",
+      "\"registered\"",
+      "DomainProduct"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.400030+00:00"
+}

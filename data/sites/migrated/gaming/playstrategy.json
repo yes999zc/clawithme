@@ -1,0 +1,30 @@
+{
+  "id": "playstrategy",
+  "name": "Playstrategy",
+  "canonical_url": "https://playstrategy.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://playstrategy.org/@/{username}",
+    "known_accounts": [
+      "oruro"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.531756+00:00"
+}

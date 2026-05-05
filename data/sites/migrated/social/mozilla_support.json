@@ -1,0 +1,44 @@
+{
+  "id": "mozilla_support",
+  "name": "Mozilla Support",
+  "canonical_url": "https://support.mozilla.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://support.mozilla.org/en-US/user/{username}/",
+    "known_accounts": [
+      "derekmarable"
+    ],
+    "known_unclaimed": [
+      "tasgcxxxcz"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
+    },
+    "presence_strs": [
+      "user-nav",
+      "</article>",
+      "sidebar-nav",
+      "noindex",
+      "sidebar-nav--item"
+    ],
+    "absence_strs": [
+      ">Page Not Found</h1>",
+      "error-page",
+      "sumo-page-intro",
+      "search-results-visible page-not-found",
+      "search-empty"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.650048+00:00"
+}

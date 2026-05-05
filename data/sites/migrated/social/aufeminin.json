@@ -1,0 +1,32 @@
+{
+  "id": "aufeminin",
+  "name": "Aufeminin",
+  "canonical_url": "https://www.aufeminin.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999988282,
+    "tags": [
+      "fr"
+    ]
+  },
+  "rankings": {
+    "alexa": 11718
+  },
+  "check": {
+    "probe_url": "https://www.aufeminin.com/profile/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.500230+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "valorant_forums",
+  "name": "Valorant Forums",
+  "canonical_url": "https://valorantforums.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://valorantforums.com/u/{username}",
+    "known_accounts": [
+      "Wolves"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The page you requested could not be found."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.535516+00:00"
+}

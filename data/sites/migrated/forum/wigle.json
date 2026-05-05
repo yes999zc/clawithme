@@ -1,0 +1,33 @@
+{
+  "id": "wigle",
+  "name": "Wigle",
+  "canonical_url": "https://wigle.net",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999936843,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 63157
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "arkasha"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.812852+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

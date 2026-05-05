@@ -1,0 +1,32 @@
+{
+  "id": "flutterforum_org",
+  "name": "flutterforum.org",
+  "canonical_url": "https://flutterforum.org",
+  "engine_ref": "flarum",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "tr"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.220582+00:00",
+  "_maigret_engine": "Flarum"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "darkside",
+  "name": "Darkside",
+  "canonical_url": "https://darkside.black",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "soldier"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.554763+00:00",
+  "_maigret_engine": "XenForo"
+}

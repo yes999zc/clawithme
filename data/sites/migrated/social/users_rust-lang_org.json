@@ -1,0 +1,28 @@
+{
+  "id": "users_rust-lang_org",
+  "name": "users.rust-lang.org",
+  "canonical_url": "https://users.rust-lang.org/u/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://users.rust-lang.org/u/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.436385+00:00"
+}

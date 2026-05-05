@@ -1,0 +1,30 @@
+{
+  "id": "stunited",
+  "name": "Stunited",
+  "canonical_url": "http://stunited.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "education"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://stunited.org/profile/{username}",
+    "known_accounts": [
+      "mani-vel"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.830477+00:00"
+}

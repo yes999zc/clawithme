@@ -1,0 +1,33 @@
+{
+  "id": "101xp_com",
+  "name": "101xp.com",
+  "canonical_url": "https://forum-ru.101xp.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "gaming",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "aida"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.102345+00:00",
+  "_maigret_engine": "XenForo"
+}

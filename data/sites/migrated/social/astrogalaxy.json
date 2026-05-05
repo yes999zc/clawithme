@@ -1,0 +1,36 @@
+{
+  "id": "astrogalaxy",
+  "name": "Astrogalaxy",
+  "canonical_url": "https://astrogalaxy.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999477080,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 522920
+  },
+  "check": {
+    "probe_url": "https://astrogalaxy.ru/forum/phpBB2/search.php?keywords=&terms=all&author={username}",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Подходящих тем или сообщений не найдено."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.272369+00:00"
+}

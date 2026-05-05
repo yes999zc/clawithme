@@ -1,0 +1,38 @@
+{
+  "id": "hackenproof",
+  "name": "Hackenproof",
+  "canonical_url": "https://hackenproof.com/arbin",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999756892,
+    "tags": [
+      "ua"
+    ]
+  },
+  "rankings": {
+    "alexa": 243108
+  },
+  "check": {
+    "probe_url": "https://hackenproof.com/{username}",
+    "known_accounts": [
+      "arbin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Stats"
+    ],
+    "absence_strs": [
+      "Top hackers of"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.063038+00:00"
+}

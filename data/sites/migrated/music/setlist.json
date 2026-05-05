@@ -1,0 +1,38 @@
+{
+  "id": "setlist",
+  "name": "Setlist",
+  "canonical_url": "https://www.setlist.fm",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993387,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 6613
+  },
+  "check": {
+    "probe_url": "https://www.setlist.fm/user/{username}",
+    "known_accounts": [
+      "bendobrin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "s setlist.fm | setlist.fm</title>"
+    ],
+    "absence_strs": [
+      "Sorry, the page you requested doesn't exist"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.240941+00:00"
+}

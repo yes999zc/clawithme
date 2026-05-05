@@ -1,0 +1,32 @@
+{
+  "id": "wordpress",
+  "name": "WordPress",
+  "canonical_url": "https://wordpress.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999966,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 34
+  },
+  "check": {
+    "probe_url": "https://{username}.wordpress.com/",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.649132+00:00"
+}

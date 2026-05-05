@@ -1,0 +1,33 @@
+{
+  "id": "ozcardtrader_com_au",
+  "name": "ozcardtrader.com.au",
+  "canonical_url": "http://www.ozcardtrader.com.au/community/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "au",
+      "forum",
+      "sport"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.951750+00:00",
+  "_maigret_engine": "XenForo"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "baidu",
+  "name": "Baidu",
+  "canonical_url": "https://tieba.baidu.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "cn"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://tieba.baidu.com/home/main?un={username}",
+    "known_accounts": [
+      "reneecong"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user_name"
+    ],
+    "absence_strs": [
+      "error_404_iframe"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.661881+00:00"
+}

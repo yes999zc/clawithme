@@ -1,0 +1,31 @@
+{
+  "id": "forums_destructoid_com",
+  "name": "forums.destructoid.com",
+  "canonical_url": "https://forums.destructoid.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "olibriss"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.244969+00:00",
+  "_maigret_engine": "XenForo"
+}

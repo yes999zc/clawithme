@@ -1,0 +1,32 @@
+{
+  "id": "infourok",
+  "name": "Infourok",
+  "canonical_url": "https://infourok.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999969079,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 30921
+  },
+  "check": {
+    "probe_url": "https://infourok.ru/user/{username}",
+    "known_accounts": [
+      "artemeva-evgeniya-evgenevna"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.684777+00:00"
+}

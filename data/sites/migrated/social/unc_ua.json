@@ -1,0 +1,36 @@
+{
+  "id": "unc_ua",
+  "name": "unc.ua",
+  "canonical_url": "https://unc.ua",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ua"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://unc.ua/{username}",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "page-user_profile"
+    ],
+    "absence_strs": [
+      "Error Site"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.187061+00:00"
+}

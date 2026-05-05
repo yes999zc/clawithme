@@ -1,0 +1,39 @@
+{
+  "id": "promptbase",
+  "name": "PromptBase",
+  "canonical_url": "https://promptbase.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999963557,
+    "tags": [
+      "llm",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 36443
+  },
+  "check": {
+    "probe_url": "https://promptbase.com/profile/{username}",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "1"
+    ],
+    "absence_strs": [
+      "NotFound"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.706947+00:00"
+}

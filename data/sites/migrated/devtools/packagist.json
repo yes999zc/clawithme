@@ -1,0 +1,32 @@
+{
+  "id": "packagist",
+  "name": "Packagist",
+  "canonical_url": "https://packagist.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999998608,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 1392
+  },
+  "check": {
+    "probe_url": "https://packagist.org/packages/{username}/",
+    "known_accounts": [
+      "psr"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.839370+00:00"
+}

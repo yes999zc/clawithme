@@ -1,0 +1,34 @@
+{
+  "id": "samlib",
+  "name": "Samlib",
+  "canonical_url": "http://samlib.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999972349,
+    "tags": [
+      "gb",
+      "ru",
+      "writing"
+    ]
+  },
+  "rankings": {
+    "alexa": 27651
+  },
+  "check": {
+    "probe_url": "http://samlib.ru/e/{username}",
+    "known_accounts": [
+      "e_melokumow"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.660632+00:00"
+}

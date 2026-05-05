@@ -1,0 +1,30 @@
+{
+  "id": "cfire",
+  "name": "Cfire",
+  "canonical_url": "https://cfire.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://cfire.ru/forums/member.php?username={username}",
+    "known_accounts": [
+      "laid1998"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.537975+00:00"
+}

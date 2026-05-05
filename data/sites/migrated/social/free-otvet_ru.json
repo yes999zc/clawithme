@@ -1,0 +1,36 @@
+{
+  "id": "free-otvet_ru",
+  "name": "free-otvet.ru",
+  "canonical_url": "https://free-otvet.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "q&a"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://free-otvet.ru/user/{username}_zn",
+    "known_accounts": [
+      "Triolana"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "userfield-2"
+    ],
+    "absence_strs": [
+      "qam-sidepanel-mobile"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.455035+00:00"
+}

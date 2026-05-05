@@ -1,0 +1,33 @@
+{
+  "id": "cashme",
+  "name": "CashMe",
+  "canonical_url": "https://cash.me/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999893775,
+    "tags": [
+      "finance",
+      "fintech"
+    ]
+  },
+  "rankings": {
+    "alexa": 106225
+  },
+  "check": {
+    "probe_url": "https://cash.me/${username}",
+    "known_accounts": [
+      "Jenny"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.906989+00:00"
+}

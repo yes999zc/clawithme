@@ -1,0 +1,38 @@
+{
+  "id": "tripadvisor",
+  "name": "TripAdvisor",
+  "canonical_url": "https://tripadvisor.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999785,
+    "tags": [
+      "travel"
+    ]
+  },
+  "rankings": {
+    "alexa": 215
+  },
+  "check": {
+    "probe_url": "https://tripadvisor.com/members/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "Accept-Language": "en-US,en;q=0.5"
+    },
+    "presence_strs": [],
+    "absence_strs": [
+      "This page is on vacation…"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.693224+00:00"
+}

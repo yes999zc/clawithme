@@ -1,0 +1,40 @@
+{
+  "id": "zoomir_ir",
+  "name": "Zoomir.ir",
+  "canonical_url": "https://www.zoomit.ir",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999937617,
+    "tags": [
+      "forum",
+      "ir",
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 62383
+  },
+  "check": {
+    "probe_url": "https://www.zoomit.ir/user/{username}",
+    "known_accounts": [
+      "kossher"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Email"
+    ],
+    "absence_strs": [
+      "txtSearch"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.794212+00:00"
+}

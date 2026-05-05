@@ -1,0 +1,35 @@
+{
+  "id": "discord_bio",
+  "name": "Discord.bio",
+  "canonical_url": "https://discord.bio/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming",
+      "social"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://discords.com/api-v2/bio/details/{username}",
+    "known_accounts": [
+      "robert"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "User not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.526228+00:00"
+}

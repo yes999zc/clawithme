@@ -1,0 +1,33 @@
+{
+  "id": "savingadvice_com",
+  "name": "savingadvice.com",
+  "canonical_url": "https://savingadvice.com",
+  "engine_ref": "wordpress_author",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999942574,
+    "tags": [
+      "finance"
+    ]
+  },
+  "rankings": {
+    "alexa": 57426
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.797974+00:00",
+  "_maigret_engine": "Wordpress/Author"
+}

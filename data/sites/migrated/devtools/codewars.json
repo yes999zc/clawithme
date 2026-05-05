@@ -1,0 +1,32 @@
+{
+  "id": "codewars",
+  "name": "Codewars",
+  "canonical_url": "https://www.codewars.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999979715,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 20285
+  },
+  "check": {
+    "probe_url": "https://www.codewars.com/users/{username}",
+    "known_accounts": [
+      "example"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.598346+00:00"
+}

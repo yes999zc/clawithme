@@ -1,0 +1,36 @@
+{
+  "id": "lyricstraining",
+  "name": "lyricsTraining",
+  "canonical_url": "https://lyricstraining.com/search?user={username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://lyricstraining.com/search?user={username}",
+    "known_accounts": [
+      "Purrito"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis12"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Lyrics by"
+    ],
+    "absence_strs": [
+      "Sorry, there are no results for your search."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.494350+00:00"
+}

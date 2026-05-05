@@ -1,0 +1,33 @@
+{
+  "id": "vgtimes_games",
+  "name": "Vgtimes/Games",
+  "canonical_url": "https://vgtimes.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999933806,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 66194
+  },
+  "check": {
+    "probe_url": "https://vgtimes.ru/games/{username}/forum/",
+    "known_accounts": [
+      "rfactor"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.810998+00:00"
+}

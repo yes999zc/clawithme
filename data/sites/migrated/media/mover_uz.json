@@ -1,0 +1,30 @@
+{
+  "id": "mover_uz",
+  "name": "mover.uz",
+  "canonical_url": "https://mover.uz",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://mover.uz/channel/{username}",
+    "known_accounts": [
+      "AlterEgo"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.577357+00:00"
+}

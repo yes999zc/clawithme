@@ -1,0 +1,36 @@
+{
+  "id": "djagi",
+  "name": "Djagi",
+  "canonical_url": "https://www.djagi.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "bg"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.djagi.com/cards/{username}",
+    "known_accounts": [
+      "ivan.ivanov28"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-menu"
+    ],
+    "absence_strs": [
+      "noindex"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.279754+00:00"
+}

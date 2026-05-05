@@ -1,0 +1,31 @@
+{
+  "id": "reactos_org",
+  "name": "reactos.org",
+  "canonical_url": "https://reactos.org/wiki/User:{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding",
+      "wiki"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://reactos.org/wiki/User:{username}",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.415174+00:00"
+}

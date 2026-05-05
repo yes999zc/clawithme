@@ -1,0 +1,38 @@
+{
+  "id": "do100verno_info",
+  "name": "do100verno.info",
+  "canonical_url": "https://do100verno.info",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://do100verno.info/card/{username}",
+    "known_accounts": [
+      "ekostyle"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "white-space: nowrap;"
+    ],
+    "absence_strs": [
+      "l-main",
+      " l-mainDcL",
+      " l-usrMenu"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.190808+00:00"
+}

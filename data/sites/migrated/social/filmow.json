@@ -1,0 +1,33 @@
+{
+  "id": "filmow",
+  "name": "Filmow",
+  "canonical_url": "https://filmow.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999969475,
+    "tags": [
+      "br",
+      "pt"
+    ]
+  },
+  "rankings": {
+    "alexa": 30525
+  },
+  "check": {
+    "probe_url": "https://filmow.com/usuario/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.669846+00:00"
+}

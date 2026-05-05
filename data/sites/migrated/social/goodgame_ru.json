@@ -1,0 +1,44 @@
+{
+  "id": "goodgame_ru",
+  "name": "goodgame.ru",
+  "canonical_url": "https://goodgame.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999972142,
+    "tags": [
+      "ru",
+      "streaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 27858
+  },
+  "check": {
+    "probe_url": "https://goodgame.ru/channel/{username}",
+    "known_accounts": [
+      "Nikichar"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "name",
+      "streamer_name",
+      "user",
+      " role=",
+      "streamer"
+    ],
+    "absence_strs": [
+      "not-found-wrap",
+      "images/404.gif"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.658691+00:00"
+}

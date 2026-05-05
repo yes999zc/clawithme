@@ -1,0 +1,36 @@
+{
+  "id": "scorcher",
+  "name": "Scorcher",
+  "canonical_url": "https://www.glavbukh.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999929379,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 70621
+  },
+  "check": {
+    "probe_url": "https://www.glavbukh.ru/forum/member.php/?username={username}",
+    "known_accounts": [
+      "poli888"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "This user has not registered and therefore does not have a profile to view."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.843856+00:00"
+}

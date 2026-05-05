@@ -1,0 +1,31 @@
+{
+  "id": "bikeradar",
+  "name": "BikeRadar",
+  "canonical_url": "https://forum.bikeradar.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "gb"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forum.bikeradar.com/profile/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.506780+00:00"
+}

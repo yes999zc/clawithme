@@ -1,0 +1,33 @@
+{
+  "id": "trinixy",
+  "name": "Trinixy",
+  "canonical_url": "https://trinixy.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999985288,
+    "tags": [
+      "news",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 14712
+  },
+  "check": {
+    "probe_url": "https://trinixy.ru/user/{username}/",
+    "known_accounts": [
+      "green"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.540626+00:00"
+}

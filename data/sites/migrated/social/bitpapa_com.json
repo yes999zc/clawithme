@@ -1,0 +1,38 @@
+{
+  "id": "bitpapa_com",
+  "name": "bitpapa.com",
+  "canonical_url": "https://bitpapa.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999883290,
+    "tags": [
+      "crypto"
+    ]
+  },
+  "rankings": {
+    "alexa": 116710
+  },
+  "check": {
+    "probe_url": "https://bitpapa.com/ru/user/{username}",
+    "known_accounts": [
+      "Larisa70"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "lbcUsername"
+    ],
+    "absence_strs": [
+      "/static/page-crash.svg"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.945961+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "sysadmins",
+  "name": "Sysadmins",
+  "canonical_url": "https://sysadmins.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999698437,
+    "tags": [
+      "forum",
+      "ru",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 301563
+  },
+  "check": {
+    "probe_url": "https://sysadmins.ru/member{username}.html",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Could not obtain user posts information"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.118164+00:00"
+}

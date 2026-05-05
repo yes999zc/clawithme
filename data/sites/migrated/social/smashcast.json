@@ -1,0 +1,32 @@
+{
+  "id": "smashcast",
+  "name": "Smashcast",
+  "canonical_url": "https://www.smashcast.tv/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999323897,
+    "tags": [
+      "gr"
+    ]
+  },
+  "rankings": {
+    "alexa": 676103
+  },
+  "check": {
+    "probe_url": "https://www.smashcast.tv/api/media/live/{username}",
+    "known_accounts": [
+      "hello"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.334036+00:00"
+}

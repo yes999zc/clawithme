@@ -1,0 +1,32 @@
+{
+  "id": "eurofootball",
+  "name": "EuroFootball",
+  "canonical_url": "https://www.euro-football.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999909564,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 90436
+  },
+  "check": {
+    "probe_url": "https://www.euro-football.ru/user/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.866436+00:00"
+}

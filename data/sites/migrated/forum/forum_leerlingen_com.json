@@ -1,0 +1,31 @@
+{
+  "id": "forum_leerlingen_com",
+  "name": "forum.leerlingen.com",
+  "canonical_url": "http://forum.leerlingen.com",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "john122"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.247736+00:00",
+  "_maigret_engine": "vBulletin"
+}

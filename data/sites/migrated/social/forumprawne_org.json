@@ -1,0 +1,28 @@
+{
+  "id": "forumprawne_org",
+  "name": "Forumprawne.org",
+  "canonical_url": "https://forumprawne.org/members/{username}.html",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forumprawne.org/members/{username}.html",
+    "known_accounts": [
+      "uehkon89"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.588642+00:00"
+}

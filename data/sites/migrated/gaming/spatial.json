@@ -1,0 +1,33 @@
+{
+  "id": "spatial",
+  "name": "Spatial",
+  "canonical_url": "https://www.spatial.io",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999985837,
+    "tags": [
+      "crypto",
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 14163
+  },
+  "check": {
+    "probe_url": "https://www.spatial.io/@{username}",
+    "known_accounts": [
+      "rammy"
+    ],
+    "known_unclaimed": [
+      "noonewouldever"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.546676+00:00"
+}

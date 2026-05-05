@@ -1,0 +1,32 @@
+{
+  "id": "op_gg_lol_brazil",
+  "name": "OP.GG LoL Brazil",
+  "canonical_url": "https://op.gg/lol/summoners/search?q={username}&region=br",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "br",
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://op.gg/lol/summoners/search?q={username}&region=br",
+    "known_accounts": [
+      "Blaze51"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.551459+00:00",
+  "_maigret_engine": "op.gg"
+}

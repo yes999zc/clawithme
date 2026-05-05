@@ -1,0 +1,39 @@
+{
+  "id": "fragment",
+  "name": "Fragment",
+  "canonical_url": "https://fragment.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999875332,
+    "tags": [
+      "crypto",
+      "messaging"
+    ]
+  },
+  "rankings": {
+    "alexa": 124668
+  },
+  "check": {
+    "probe_url": "https://fragment.com/username/{username}",
+    "known_accounts": [
+      "durov"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "tm-wallet"
+    ],
+    "absence_strs": [
+      "Available"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.543860+00:00"
+}

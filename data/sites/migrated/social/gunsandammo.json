@@ -1,0 +1,32 @@
+{
+  "id": "gunsandammo",
+  "name": "GunsAndAmmo",
+  "canonical_url": "https://gunsandammo.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999936501,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 63499
+  },
+  "check": {
+    "probe_url": "https://forums.gunsandammo.com/profile/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.801701+00:00"
+}

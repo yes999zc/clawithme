@@ -1,0 +1,32 @@
+{
+  "id": "ctan",
+  "name": "CTAN",
+  "canonical_url": "https://ctan.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999996919,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 3081
+  },
+  "check": {
+    "probe_url": "https://ctan.org/author/{username}",
+    "known_accounts": [
+      "briggs"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.125892+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "write_as",
+  "name": "write.as",
+  "canonical_url": "https://write.as",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999990696,
+    "tags": [
+      "blog",
+      "writing"
+    ]
+  },
+  "rankings": {
+    "alexa": 9304
+  },
+  "check": {
+    "probe_url": "https://write.as/{username}",
+    "known_accounts": [
+      "pylapp"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis42"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.454575+00:00"
+}

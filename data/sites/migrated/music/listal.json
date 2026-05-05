@@ -1,0 +1,33 @@
+{
+  "id": "listal",
+  "name": "Listal",
+  "canonical_url": "https://listal.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999986135,
+    "tags": [
+      "movies",
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 13865
+  },
+  "check": {
+    "probe_url": "https://{username}.listal.com/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.525392+00:00"
+}

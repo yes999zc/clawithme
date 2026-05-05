@@ -1,0 +1,35 @@
+{
+  "id": "forum_quake2_com_ru",
+  "name": "Forum.quake2.com.ru",
+  "canonical_url": "http://forum.quake2.com.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://forum.quake2.com.ru/profile.php?mode=viewprofile&u={username}",
+    "known_accounts": [
+      "Khidalov"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<span class=\"gen\">,"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.609425+00:00"
+}

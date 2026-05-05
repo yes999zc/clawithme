@@ -1,0 +1,38 @@
+{
+  "id": "anobii",
+  "name": "Anobii",
+  "canonical_url": "https://www.anobii.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993640,
+    "tags": [
+      "books"
+    ]
+  },
+  "rankings": {
+    "alexa": 6360
+  },
+  "check": {
+    "probe_url": "https://www.anobii.com/{username}/profile/activity",
+    "known_accounts": [
+      "jjordan"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "og:site_name"
+    ],
+    "absence_strs": [
+      ">{}</script></body></html>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.226899+00:00"
+}

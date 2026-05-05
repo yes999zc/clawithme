@@ -1,0 +1,38 @@
+{
+  "id": "gumroad",
+  "name": "Gumroad",
+  "canonical_url": "https://www.gumroad.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999129,
+    "tags": [
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 871
+  },
+  "check": {
+    "probe_url": "https://www.gumroad.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "title=\"Gumroad\""
+    ],
+    "absence_strs": [
+      "Page not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.789523+00:00"
+}

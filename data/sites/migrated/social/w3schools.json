@@ -1,0 +1,32 @@
+{
+  "id": "w3schools",
+  "name": "W3Schools",
+  "canonical_url": "https://www.w3schools.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999534,
+    "tags": [
+      "education"
+    ]
+  },
+  "rankings": {
+    "alexa": 466
+  },
+  "check": {
+    "probe_url": "https://pathfinder-api.kai.w3spaces.com/public-profile-api/{username}",
+    "known_accounts": [
+      "rly0nheart"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.739220+00:00"
+}

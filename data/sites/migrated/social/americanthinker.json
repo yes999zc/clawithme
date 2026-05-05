@@ -1,0 +1,39 @@
+{
+  "id": "americanthinker",
+  "name": "Americanthinker",
+  "canonical_url": "https://www.americanthinker.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992481,
+    "tags": [
+      "news",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 7519
+  },
+  "check": {
+    "probe_url": "https://www.americanthinker.com/author/{username}/",
+    "known_accounts": [
+      "monicashowalter"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Articles:"
+    ],
+    "absence_strs": [
+      "<title>American Thinker</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.312718+00:00"
+}

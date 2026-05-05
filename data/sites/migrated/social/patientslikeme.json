@@ -1,0 +1,33 @@
+{
+  "id": "patientslikeme",
+  "name": "PatientsLikeMe",
+  "canonical_url": "https://www.patientslikeme.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999973081,
+    "tags": [
+      "medicine",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 26919
+  },
+  "check": {
+    "probe_url": "https://www.patientslikeme.com/members/{username}",
+    "known_accounts": [
+      "fabu007"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.641951+00:00"
+}

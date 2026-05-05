@@ -1,0 +1,36 @@
+{
+  "id": "dreamwidth",
+  "name": "Dreamwidth",
+  "canonical_url": "https://dreamwidth.org/profile",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994646,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 5354
+  },
+  "check": {
+    "probe_url": "https://{username}.dreamwidth.org/profile",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "isn't currently registered"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.207276+00:00"
+}

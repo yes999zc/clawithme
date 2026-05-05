@@ -1,0 +1,33 @@
+{
+  "id": "basecamphq",
+  "name": "Basecamphq",
+  "canonical_url": "https://basecamphq.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999966923,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 33077
+  },
+  "check": {
+    "probe_url": "https://{username}.basecamphq.com/login",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.686593+00:00",
+  "_maigret_engine": "engine404"
+}

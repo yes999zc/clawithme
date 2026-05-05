@@ -1,0 +1,33 @@
+{
+  "id": "vk",
+  "name": "VK",
+  "canonical_url": "https://vk.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999909,
+    "tags": [
+      "ru",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 91
+  },
+  "check": {
+    "probe_url": "https://vk.com/{username}",
+    "known_accounts": [
+      "smith"
+    ],
+    "known_unclaimed": [
+      "blah62831"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.667539+00:00"
+}

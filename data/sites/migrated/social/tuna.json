@@ -1,0 +1,28 @@
+{
+  "id": "tuna",
+  "name": "Tuna",
+  "canonical_url": "https://tuna.voicemod.net/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://tuna.voicemod.net/user/{username}",
+    "known_accounts": [
+      "bob"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.603867+00:00"
+}

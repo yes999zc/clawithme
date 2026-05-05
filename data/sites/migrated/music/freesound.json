@@ -1,0 +1,32 @@
+{
+  "id": "freesound",
+  "name": "Freesound",
+  "canonical_url": "https://freesound.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995441,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 4559
+  },
+  "check": {
+    "probe_url": "https://freesound.org/people/{username}/",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.191416+00:00"
+}

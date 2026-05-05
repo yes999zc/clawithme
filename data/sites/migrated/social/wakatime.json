@@ -1,0 +1,33 @@
+{
+  "id": "wakatime",
+  "name": "Wakatime",
+  "canonical_url": "https://wakatime.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999914344,
+    "tags": [
+      "ng",
+      "ve"
+    ]
+  },
+  "rankings": {
+    "alexa": 85656
+  },
+  "check": {
+    "probe_url": "https://wakatime.com/@{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.870079+00:00"
+}

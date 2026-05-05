@@ -1,0 +1,39 @@
+{
+  "id": "sessionize_com",
+  "name": "sessionize.com",
+  "canonical_url": "https://sessionize.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999971286,
+    "tags": [
+      "business"
+    ]
+  },
+  "rankings": {
+    "alexa": 28714
+  },
+  "check": {
+    "probe_url": "https://sessionize.com/{username}/",
+    "known_accounts": [
+      "theabbie"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "role=",
+      "filter"
+    ],
+    "absence_strs": [
+      "Page Not Found</h3>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.667983+00:00"
+}

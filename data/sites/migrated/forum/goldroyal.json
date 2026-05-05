@@ -1,0 +1,38 @@
+{
+  "id": "goldroyal",
+  "name": "Goldroyal",
+  "canonical_url": "http://goldroyal.net",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999517038,
+    "tags": [
+      "bd",
+      "by",
+      "forum",
+      "ru",
+      "ua",
+      "ve"
+    ]
+  },
+  "rankings": {
+    "alexa": 482962
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "anton33"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.232737+00:00",
+  "_maigret_engine": "vBulletin"
+}

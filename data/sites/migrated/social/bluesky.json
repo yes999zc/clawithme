@@ -1,0 +1,39 @@
+{
+  "id": "bluesky",
+  "name": "Bluesky",
+  "canonical_url": "https://bsky.app",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999816,
+    "tags": [
+      "messaging",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 184
+  },
+  "check": {
+    "probe_url": "https://bsky.app/profile/{username}.bsky.social",
+    "known_accounts": [
+      "shamerli"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"did\""
+    ],
+    "absence_strs": [
+      "Profile not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.688629+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "wanelo",
+  "name": "Wanelo",
+  "canonical_url": "https://wanelo.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999943941,
+    "tags": [
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 56059
+  },
+  "check": {
+    "probe_url": "https://wanelo.co/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.789465+00:00"
+}

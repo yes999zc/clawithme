@@ -1,0 +1,39 @@
+{
+  "id": "instagram",
+  "name": "Instagram",
+  "canonical_url": "https://www.instagram.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999996,
+    "tags": [
+      "photo",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 4
+  },
+  "check": {
+    "probe_url": "https://www.instagram.com/{username}/",
+    "known_accounts": [
+      "cristiano"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"routePath\":\"\\/{username}"
+    ],
+    "absence_strs": [
+      "\"routePath\":null"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.630565+00:00"
+}

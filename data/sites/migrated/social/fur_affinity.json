@@ -1,0 +1,46 @@
+{
+  "id": "fur_affinity",
+  "name": "Fur Affinity",
+  "canonical_url": "https://www.furaffinity.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994493,
+    "tags": [
+      "art"
+    ]
+  },
+  "rankings": {
+    "alexa": 5507
+  },
+  "check": {
+    "probe_url": "https://www.furaffinity.net/gallery/{username}",
+    "known_accounts": [
+      "astrid7"
+    ],
+    "known_unclaimed": [
+      "djmgizlhqb"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "og:title",
+      "display:flex",
+      "user-title",
+      " /><i title=",
+      "Beach Day"
+    ],
+    "absence_strs": [
+      ">The username ",
+      " could not be found.</div>",
+      "standardpage",
+      "redirect-message",
+      "section-body alignleft"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.210018+00:00"
+}

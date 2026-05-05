@@ -1,0 +1,34 @@
+{
+  "id": "medyczka_pl",
+  "name": "Medyczka.pl",
+  "canonical_url": "http://medyczka.pl/user/{username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://medyczka.pl/user/{username}",
+    "known_accounts": [
+      "uehkon89"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Lista uzytkownikow"
+    ],
+    "absence_strs": [
+      "This user has not registered and therefore does not have a profile to view."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.713483+00:00"
+}

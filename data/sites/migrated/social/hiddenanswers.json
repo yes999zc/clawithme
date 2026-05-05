@@ -1,0 +1,37 @@
+{
+  "id": "hiddenanswers",
+  "name": "HiddenAnswers",
+  "canonical_url": "http://answerszuvs3gg2l64e6hmnryudl5zgrmwm3vh65hzszdghblddvfiqd.onion",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "q&a",
+      "tor"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://answerszuvs3gg2l64e6hmnryudl5zgrmwm3vh65hzszdghblddvfiqd.onion/user/{username}",
+    "known_accounts": [
+      "theredqueen"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "qa-part-form-profile"
+    ],
+    "absence_strs": [
+      "Page not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.249682+00:00"
+}

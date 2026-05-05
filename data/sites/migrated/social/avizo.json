@@ -1,0 +1,32 @@
+{
+  "id": "avizo",
+  "name": "Avizo",
+  "canonical_url": "https://www.avizo.cz/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999813710,
+    "tags": [
+      "cz"
+    ]
+  },
+  "rankings": {
+    "alexa": 186290
+  },
+  "check": {
+    "probe_url": "https://www.avizo.cz/{username}/",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.965511+00:00"
+}

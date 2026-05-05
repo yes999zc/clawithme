@@ -1,0 +1,39 @@
+{
+  "id": "ccmixter",
+  "name": "Ccmixter",
+  "canonical_url": "http://ccmixter.org/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993799,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 6201
+  },
+  "check": {
+    "probe_url": "http://ccmixter.org/people/{username}/profile",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Member since"
+    ],
+    "absence_strs": [
+      "ERROR(2)",
+      "Sorry, we don't know who that is..."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.230568+00:00"
+}

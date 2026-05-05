@@ -1,0 +1,37 @@
+{
+  "id": "packetstormsecurity",
+  "name": "PacketStormSecurity",
+  "canonical_url": "https://packetstormsecurity.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999952888,
+    "tags": [
+      "tr"
+    ]
+  },
+  "rankings": {
+    "alexa": 47112
+  },
+  "check": {
+    "probe_url": "https://packetstormsecurity.com/files/authors/{username}/",
+    "known_accounts": [
+      "3nitro"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>Files: All Authors &#8776; Packet Storm</title>",
+      "No Results Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.746277+00:00"
+}

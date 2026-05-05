@@ -1,0 +1,33 @@
+{
+  "id": "gutefrage",
+  "name": "Gutefrage",
+  "canonical_url": "https://www.gutefrage.net/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999988634,
+    "tags": [
+      "de",
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 11366
+  },
+  "check": {
+    "probe_url": "https://www.gutefrage.net/nutzer/{username}",
+    "known_accounts": [
+      "gutefrage"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.489906+00:00"
+}

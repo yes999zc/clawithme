@@ -1,0 +1,38 @@
+{
+  "id": "shor_by",
+  "name": "shor.by",
+  "canonical_url": "https://shor.by",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999978490,
+    "tags": [
+      "links"
+    ]
+  },
+  "rankings": {
+    "alexa": 21510
+  },
+  "check": {
+    "probe_url": "https://shor.by/{username}",
+    "known_accounts": [
+      "0gs0"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "og:title"
+    ],
+    "absence_strs": [
+      "page-not-found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.602923+00:00"
+}

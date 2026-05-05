@@ -1,0 +1,33 @@
+{
+  "id": "forum-mil_ru",
+  "name": "forum-mil.ru",
+  "canonical_url": "http://forum-mil.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999076948,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 923052
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.439341+00:00",
+  "_maigret_engine": "uCoz"
+}

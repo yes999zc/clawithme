@@ -1,0 +1,38 @@
+{
+  "id": "1337x",
+  "name": "1337x",
+  "canonical_url": "https://1337x.to",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999956379,
+    "tags": [
+      "torrent"
+    ]
+  },
+  "rankings": {
+    "alexa": 43621
+  },
+  "check": {
+    "probe_url": "https://1337x.to/user/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Join Date"
+    ],
+    "absence_strs": [
+      "Bad Username."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.726512+00:00"
+}

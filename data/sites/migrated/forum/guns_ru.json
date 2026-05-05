@@ -1,0 +1,37 @@
+{
+  "id": "guns_ru",
+  "name": "Guns.ru",
+  "canonical_url": "https://forum.guns.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forum.guns.ru/forummisc/show_profile/00098415?username={username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Информация участника"
+    ],
+    "absence_strs": [
+      "не существует"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.517968+00:00"
+}

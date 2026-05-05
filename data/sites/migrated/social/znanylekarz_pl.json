@@ -1,0 +1,28 @@
+{
+  "id": "znanylekarz_pl",
+  "name": "Znanylekarz.pl",
+  "canonical_url": "https://www.znanylekarz.pl/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.znanylekarz.pl/{username}",
+    "known_accounts": [
+      "janusz-nowak"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.992697+00:00"
+}

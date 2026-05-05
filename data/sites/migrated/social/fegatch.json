@@ -1,0 +1,30 @@
+{
+  "id": "fegatch",
+  "name": "Fegatch",
+  "canonical_url": "http://www.fegatch.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://www.fegatch.com/users/{username}/artworks/",
+    "known_accounts": [
+      "margaret-veret"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.599043+00:00"
+}

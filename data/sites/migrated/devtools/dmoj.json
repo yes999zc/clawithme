@@ -1,0 +1,37 @@
+{
+  "id": "dmoj",
+  "name": "DMOJ",
+  "canonical_url": "https://dmoj.ca/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999701540,
+    "tags": [
+      "ca",
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 298460
+  },
+  "check": {
+    "probe_url": "https://dmoj.ca/user/{username}",
+    "known_accounts": [
+      "junferno"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "No such user"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.116324+00:00"
+}

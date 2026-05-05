@@ -1,0 +1,30 @@
+{
+  "id": "cyber_defenders",
+  "name": "Cyber Defenders",
+  "canonical_url": "https://cyberdefenders.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999507257,
+    "tags": []
+  },
+  "rankings": {
+    "alexa": 492743
+  },
+  "check": {
+    "probe_url": "https://cyberdefenders.org/p/{username}",
+    "known_accounts": [
+      "mlohn"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.278007+00:00"
+}

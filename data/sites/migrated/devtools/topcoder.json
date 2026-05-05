@@ -1,0 +1,32 @@
+{
+  "id": "topcoder",
+  "name": "Topcoder",
+  "canonical_url": "https://topcoder.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999980674,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 19326
+  },
+  "check": {
+    "probe_url": "https://profiles.topcoder.com/{username}/",
+    "known_accounts": [
+      "USER"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.587125+00:00"
+}

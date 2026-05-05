@@ -1,0 +1,32 @@
+{
+  "id": "discusspython",
+  "name": "DiscussPython",
+  "canonical_url": "https://discuss.python.org/",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "dustin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.717090+00:00",
+  "_maigret_engine": "Discourse"
+}

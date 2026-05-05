@@ -1,0 +1,42 @@
+{
+  "id": "eksisozluk",
+  "name": "Eksisozluk",
+  "canonical_url": "https://eksisozluk.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999980095,
+    "tags": [
+      "tr"
+    ]
+  },
+  "rankings": {
+    "alexa": 19905
+  },
+  "check": {
+    "probe_url": "https://eksisozluk.com/biri/{username}",
+    "known_accounts": [
+      "kartalbafilerrr"
+    ],
+    "known_unclaimed": [
+      "rlcvuwlxqh"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-dots",
+      "profile-logo",
+      "profile-cards",
+      "profile-biography",
+      " data-title="
+    ],
+    "absence_strs": [
+      "  <h1>böyle bir yazar yok</h1>\r"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.588039+00:00"
+}

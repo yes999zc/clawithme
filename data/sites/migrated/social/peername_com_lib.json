@@ -1,0 +1,38 @@
+{
+  "id": "peername_com_lib",
+  "name": "peername.com/lib",
+  "canonical_url": "https://peername.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "crypto"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://peername.net/api/?name={username}&namespace=lib",
+    "known_accounts": [
+      "everlast"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/112.0",
+      "Origin": "https://peername.com",
+      "Referer": "https://peername.com"
+    },
+    "presence_strs": [
+      "<name>"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.512118+00:00"
+}

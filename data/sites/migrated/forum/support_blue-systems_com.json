@@ -1,0 +1,31 @@
+{
+  "id": "support_blue-systems_com",
+  "name": "support.blue-systems.com",
+  "canonical_url": "https://support.blue-systems.com",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "santosmosley"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.180623+00:00",
+  "_maigret_engine": "Discourse"
+}

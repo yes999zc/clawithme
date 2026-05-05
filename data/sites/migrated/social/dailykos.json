@@ -1,0 +1,38 @@
+{
+  "id": "dailykos",
+  "name": "DailyKos",
+  "canonical_url": "https://www.dailykos.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999996890,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 3110
+  },
+  "check": {
+    "probe_url": "https://www.dailykos.com/user/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "bp-personal-tab"
+    ],
+    "absence_strs": [
+      "bp-nouveau error404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.124906+00:00"
+}

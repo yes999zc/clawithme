@@ -1,0 +1,33 @@
+{
+  "id": "tanks",
+  "name": "Tanks",
+  "canonical_url": "https://tanks.mail.ru",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "gaming",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.768900+00:00",
+  "_maigret_engine": "vBulletin"
+}

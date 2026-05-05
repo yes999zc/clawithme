@@ -1,0 +1,38 @@
+{
+  "id": "au",
+  "name": "Au",
+  "canonical_url": "https://au.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999828706,
+    "tags": [
+      "freelance",
+      "ru",
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 171294
+  },
+  "check": {
+    "probe_url": "https://au.ru/user/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>Пользователь не найден</title"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.944979+00:00"
+}

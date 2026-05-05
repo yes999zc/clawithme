@@ -1,0 +1,38 @@
+{
+  "id": "gamblejoe",
+  "name": "Gamblejoe",
+  "canonical_url": "https://www.gamblejoe.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999856313,
+    "tags": [
+      "de",
+      "mk",
+      "ua"
+    ]
+  },
+  "rankings": {
+    "alexa": 143687
+  },
+  "check": {
+    "probe_url": "https://www.gamblejoe.com/profil/{username}/",
+    "known_accounts": [
+      "matthias"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-page"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.930628+00:00"
+}

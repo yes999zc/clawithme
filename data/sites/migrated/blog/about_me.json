@@ -1,0 +1,32 @@
+{
+  "id": "about_me",
+  "name": "About.me",
+  "canonical_url": "https://about.me/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999315,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 685
+  },
+  "check": {
+    "probe_url": "https://about.me/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.774282+00:00"
+}

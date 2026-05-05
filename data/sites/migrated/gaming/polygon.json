@@ -1,0 +1,33 @@
+{
+  "id": "polygon",
+  "name": "Polygon",
+  "canonical_url": "https://www.polygon.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998332,
+    "tags": [
+      "gaming",
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 1668
+  },
+  "check": {
+    "probe_url": "https://www.polygon.com/users/{username}",
+    "known_accounts": [
+      "swiftstickler"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.863788+00:00"
+}

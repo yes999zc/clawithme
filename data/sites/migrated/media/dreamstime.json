@@ -1,0 +1,34 @@
+{
+  "id": "dreamstime",
+  "name": "Dreamstime",
+  "canonical_url": "https://www.dreamstime.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998167,
+    "tags": [
+      "art",
+      "photo",
+      "stock"
+    ]
+  },
+  "rankings": {
+    "alexa": 1833
+  },
+  "check": {
+    "probe_url": "https://www.dreamstime.com/{username}_info",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.870402+00:00"
+}

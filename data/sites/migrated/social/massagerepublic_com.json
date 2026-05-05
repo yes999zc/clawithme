@@ -1,0 +1,32 @@
+{
+  "id": "massagerepublic_com",
+  "name": "massagerepublic.com",
+  "canonical_url": "https://massagerepublic.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999868007,
+    "tags": [
+      "erotic"
+    ]
+  },
+  "rankings": {
+    "alexa": 131993
+  },
+  "check": {
+    "probe_url": "https://massagerepublic.com/u/{username}",
+    "known_accounts": [
+      "lily88"
+    ],
+    "known_unclaimed": [
+      "xzhsxfyfzi"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.931560+00:00"
+}

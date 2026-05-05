@@ -1,0 +1,32 @@
+{
+  "id": "painters-online",
+  "name": "Painters-online",
+  "canonical_url": "https://www.painters-online.co.uk",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999170268,
+    "tags": [
+      "gb"
+    ]
+  },
+  "rankings": {
+    "alexa": 829732
+  },
+  "check": {
+    "probe_url": "https://www.painters-online.co.uk/artists/{username}/",
+    "known_accounts": [
+      "alanbickley"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.403881+00:00"
+}

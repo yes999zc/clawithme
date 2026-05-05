@@ -1,0 +1,38 @@
+{
+  "id": "weedmaps",
+  "name": "Weedmaps",
+  "canonical_url": "https://weedmaps.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999986680,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 13320
+  },
+  "check": {
+    "probe_url": "https://weedmaps.com/brands/{username}",
+    "known_accounts": [
+      "adams"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Explore Cannabis Brands"
+    ],
+    "absence_strs": [
+      "<title data-next-head=\"\">Find Marijuana Dispensaries, Brands, Delivery, Deals"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.516115+00:00"
+}

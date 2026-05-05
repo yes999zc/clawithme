@@ -1,0 +1,31 @@
+{
+  "id": "satsisinfo",
+  "name": "SatsisInfo",
+  "canonical_url": "https://satsis.info/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru",
+      "ua"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://satsis.info/user/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.797875+00:00"
+}

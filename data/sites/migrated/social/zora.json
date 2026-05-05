@@ -1,0 +1,33 @@
+{
+  "id": "zora",
+  "name": "Zora",
+  "canonical_url": "https://zora.co",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999952709,
+    "tags": [
+      "crypto",
+      "nft"
+    ]
+  },
+  "rankings": {
+    "alexa": 47291
+  },
+  "check": {
+    "probe_url": "https://zora.co/@{username}",
+    "known_accounts": [
+      "jacob"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.542014+00:00"
+}

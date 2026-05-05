@@ -1,0 +1,33 @@
+{
+  "id": "affiliatefix",
+  "name": "Affiliatefix",
+  "canonical_url": "https://www.affiliatefix.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999717554,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 282446
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.113468+00:00",
+  "_maigret_engine": "XenForo"
+}

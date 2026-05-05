@@ -1,0 +1,36 @@
+{
+  "id": "greasyfork",
+  "name": "GreasyFork",
+  "canonical_url": "https://greasyfork.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://greasyfork.org/en/users?q={username}",
+    "known_accounts": [
+      "jcunews"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "class=\"user-list\""
+    ],
+    "absence_strs": [
+      "<p>No users!</p>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.582948+00:00"
+}

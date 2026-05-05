@@ -1,0 +1,30 @@
+{
+  "id": "sociallibremone",
+  "name": "SocialLibremOne",
+  "canonical_url": "https://social.librem.one",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "tech"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://social.librem.one/@{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.068660+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "guitar_by",
+  "name": "guitar.by",
+  "canonical_url": "https://www.guitar.by/forum",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "by",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "god"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.479450+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

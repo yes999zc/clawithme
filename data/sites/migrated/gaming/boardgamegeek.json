@@ -1,0 +1,46 @@
+{
+  "id": "boardgamegeek",
+  "name": "BoardGameGeek",
+  "canonical_url": "https://boardgamegeek.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997574,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 2426
+  },
+  "check": {
+    "probe_url": "https://boardgamegeek.com/user/{username}",
+    "known_accounts": [
+      "ZakuBG"
+    ],
+    "known_unclaimed": [
+      "uzytnhstvj"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "username",
+      " style=",
+      "mail",
+      "  \tstyle=",
+      " data-username="
+    ],
+    "absence_strs": [
+      "\t\tUser not found",
+      "messagebox error",
+      ">\t<div class=",
+      "\t\t\t<title>Profile | BoardGameGeek</title>",
+      "\t</div></div>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.085213+00:00"
+}

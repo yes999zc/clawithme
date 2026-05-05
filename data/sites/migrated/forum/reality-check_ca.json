@@ -1,0 +1,35 @@
+{
+  "id": "reality-check_ca",
+  "name": "reality-check.ca",
+  "canonical_url": "https://www.reality-check.ca",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999953816,
+    "tags": [
+      "ca",
+      "forum",
+      "medicine"
+    ]
+  },
+  "rankings": {
+    "alexa": 46184
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.751911+00:00",
+  "_maigret_engine": "XenForo"
+}

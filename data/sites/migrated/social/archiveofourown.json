@@ -1,0 +1,32 @@
+{
+  "id": "archiveofourown",
+  "name": "ArchiveOfOurOwn",
+  "canonical_url": "https://archiveofourown.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992595,
+    "tags": [
+      "writing"
+    ]
+  },
+  "rankings": {
+    "alexa": 7405
+  },
+  "check": {
+    "probe_url": "https://archiveofourown.org/users/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.315550+00:00"
+}

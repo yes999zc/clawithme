@@ -1,0 +1,32 @@
+{
+  "id": "forum_pkp_sfu_ca",
+  "name": "forum.pkp.sfu.ca",
+  "canonical_url": "https://forum.pkp.sfu.ca",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ca",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.802600+00:00",
+  "_maigret_engine": "Discourse"
+}

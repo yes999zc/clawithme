@@ -1,0 +1,39 @@
+{
+  "id": "max",
+  "name": "Max",
+  "canonical_url": "https://max.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997792,
+    "tags": [
+      "messaging",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 2208
+  },
+  "check": {
+    "probe_url": "https://max.ru/{username}",
+    "known_accounts": [
+      "ivolk"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "channel:{title:\""
+    ],
+    "absence_strs": [
+      "Не нашли чат по этой ссылке"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.787600+00:00"
+}

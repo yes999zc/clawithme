@@ -1,0 +1,40 @@
+{
+  "id": "yandexzenchannel",
+  "name": "YandexZenChannel",
+  "canonical_url": "https://dzen.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998882,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 1118
+  },
+  "check": {
+    "probe_url": "https://dzen.ru/channel/{username}",
+    "known_accounts": [
+      "tema"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {
+      "Cookie": "Session_id=noauth:1; yandex_login=; ys=c_chck.1; mda2_beacon=1; sso_status=sso.passport.yandex.ru:synchronized; _yasc=1; _ym_uid=1; _ym_d=1; _ym_isad=2; yandexuid=1"
+    },
+    "presence_strs": [
+      "zen_object_id"
+    ],
+    "absence_strs": [
+      ".zen-ui-page-404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.810118+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "jigsawplanet",
+  "name": "Jigsawplanet",
+  "canonical_url": "https://www.jigsawplanet.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993072,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 6928
+  },
+  "check": {
+    "probe_url": "https://www.jigsawplanet.com/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.299560+00:00"
+}

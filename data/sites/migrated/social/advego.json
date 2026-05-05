@@ -1,0 +1,32 @@
+{
+  "id": "advego",
+  "name": "Advego",
+  "canonical_url": "https://advego.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999982184,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 17816
+  },
+  "check": {
+    "probe_url": "https://advego.com/profile/{username}/author/",
+    "known_accounts": [
+      "kazakov"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.575937+00:00"
+}

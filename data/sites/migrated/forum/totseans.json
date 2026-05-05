@@ -1,0 +1,32 @@
+{
+  "id": "totseans",
+  "name": "Totseans",
+  "canonical_url": "http://www.totseans.com/bbs/profile/Vizier",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999265875,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 734125
+  },
+  "check": {
+    "probe_url": "http://www.totseans.com/bbs/profile/{username}",
+    "known_accounts": [
+      "Vizier"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.347222+00:00"
+}

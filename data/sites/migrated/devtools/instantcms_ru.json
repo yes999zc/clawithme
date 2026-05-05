@@ -1,0 +1,31 @@
+{
+  "id": "instantcms_ru",
+  "name": "instantcms.ru",
+  "canonical_url": "https://instantcms.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://instantcms.ru/users/{username}",
+    "known_accounts": [
+      "fuze"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.572723+00:00"
+}

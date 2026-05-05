@@ -1,0 +1,38 @@
+{
+  "id": "itemfix",
+  "name": "ItemFix",
+  "canonical_url": "https://www.itemfix.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994389,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 5611
+  },
+  "check": {
+    "probe_url": "https://www.itemfix.com/c/{username}",
+    "known_accounts": [
+      "William_Pickton"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user_token"
+    ],
+    "absence_strs": [
+      "<title>ItemFix - Channel: </title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.183879+00:00"
+}

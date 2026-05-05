@@ -1,0 +1,35 @@
+{
+  "id": "nhattao_com",
+  "name": "nhattao.com",
+  "canonical_url": "https://www.nhattao.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999980018,
+    "tags": [
+      "forum",
+      "shopping",
+      "vn"
+    ]
+  },
+  "rankings": {
+    "alexa": 19982
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.589946+00:00",
+  "_maigret_engine": "XenForo"
+}

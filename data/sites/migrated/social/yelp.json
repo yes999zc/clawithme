@@ -1,0 +1,43 @@
+{
+  "id": "yelp",
+  "name": "Yelp",
+  "canonical_url": "http://www.yelp.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999756,
+    "tags": [
+      "review"
+    ]
+  },
+  "rankings": {
+    "alexa": 244
+  },
+  "check": {
+    "probe_url": "http://{username}.yelp.com/",
+    "known_accounts": [
+      "andrew"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Username",
+      "Birthday",
+      "First Name",
+      "Last Name",
+      "Email"
+    ],
+    "absence_strs": [
+      "viewName",
+      " dropdown_user-name"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.697865+00:00"
+}

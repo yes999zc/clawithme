@@ -1,0 +1,32 @@
+{
+  "id": "kashalot",
+  "name": "Kashalot",
+  "canonical_url": "https://kashalot.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999417763,
+    "tags": [
+      "ua"
+    ]
+  },
+  "rankings": {
+    "alexa": 582237
+  },
+  "check": {
+    "probe_url": "https://kashalot.com/users/{username}/",
+    "known_accounts": [
+      "incognito"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.297616+00:00"
+}

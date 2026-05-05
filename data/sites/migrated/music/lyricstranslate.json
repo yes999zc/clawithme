@@ -1,0 +1,38 @@
+{
+  "id": "lyricstranslate",
+  "name": "LyricsTranslate",
+  "canonical_url": "https://lyricstranslate.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999989269,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 10731
+  },
+  "check": {
+    "probe_url": "https://lyricstranslate.com/sco/translator/{username}",
+    "known_accounts": [
+      "charming43"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profileid"
+    ],
+    "absence_strs": [
+      "Page not found | Lyrics Translate"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.468584+00:00"
+}

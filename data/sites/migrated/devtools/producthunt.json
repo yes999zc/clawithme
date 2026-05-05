@@ -1,0 +1,38 @@
+{
+  "id": "producthunt",
+  "name": "ProductHunt",
+  "canonical_url": "https://www.producthunt.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999998732,
+    "tags": [
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 1268
+  },
+  "check": {
+    "probe_url": "https://www.producthunt.com/@{username}",
+    "known_accounts": [
+      "rajiv_ayyangar"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      ":{\"data\":{\"profile\":{\"__typename\""
+    ],
+    "absence_strs": [
+      "We seem to have lost this page"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.829918+00:00"
+}

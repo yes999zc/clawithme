@@ -1,0 +1,32 @@
+{
+  "id": "community_sphero_com",
+  "name": "community.sphero.com",
+  "canonical_url": "https://community.sphero.com",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "tech"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.590872+00:00",
+  "_maigret_engine": "Discourse"
+}

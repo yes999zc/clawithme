@@ -1,0 +1,36 @@
+{
+  "id": "dalnoboi",
+  "name": "Dalnoboi",
+  "canonical_url": "https://www.dalnoboi.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999000456,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 999544
+  },
+  "check": {
+    "probe_url": "https://www.dalnoboi.ru/phpBB3/search.php?keywords=&terms=all&author={username}",
+    "known_accounts": [
+      "stommof"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Подходящих тем или сообщений не найдено."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.553838+00:00"
+}

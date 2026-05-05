@@ -1,0 +1,33 @@
+{
+  "id": "gfycat",
+  "name": "Gfycat",
+  "canonical_url": "https://gfycat.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999996930,
+    "tags": [
+      "photo",
+      "sharing"
+    ]
+  },
+  "rankings": {
+    "alexa": 3070
+  },
+  "check": {
+    "probe_url": "https://gfycat.com/@{username}",
+    "known_accounts": [
+      "Test"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.121040+00:00"
+}

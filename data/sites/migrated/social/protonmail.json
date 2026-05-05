@@ -1,0 +1,36 @@
+{
+  "id": "protonmail",
+  "name": "ProtonMail",
+  "canonical_url": "https://account.protonmail.com/api/users/available?Name={username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://account.protonmail.com/api/users/available?Name={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "X-Pm-Appversion": "web-account@4.28.2"
+    },
+    "presence_strs": [
+      "Username already used"
+    ],
+    "absence_strs": [
+      "\"Code\": 1000"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.717467+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "chessclub",
+  "name": "Chessclub",
+  "canonical_url": "https://www.chessclub.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999933150,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 66850
+  },
+  "check": {
+    "probe_url": "https://www.chessclub.com/forums/member/{username}",
+    "known_accounts": [
+      "Lyon"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>Internet Chess Club Forum | Forum Home</title>",
+      "The member profile you requested is currently not available",
+      "There are no records on this user."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.822104+00:00"
+}

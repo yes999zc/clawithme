@@ -1,0 +1,35 @@
+{
+  "id": "sexforumixbb",
+  "name": "SexforumIXBB",
+  "canonical_url": "http://sexforum.ixbb.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://sexforum.ixbb.ru/search.php?action=search&keywords=&author={username}",
+    "known_accounts": [
+      "lcf"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "По вашему запросу ничего не найдено."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.841023+00:00"
+}

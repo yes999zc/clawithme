@@ -1,0 +1,36 @@
+{
+  "id": "joomlart",
+  "name": "Joomlart",
+  "canonical_url": "https://www.joomlart.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999985332,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 14668
+  },
+  "check": {
+    "probe_url": "https://www.joomlart.com/user/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "user-scalable=no"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.543792+00:00"
+}

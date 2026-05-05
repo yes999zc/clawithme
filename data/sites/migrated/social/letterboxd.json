@@ -1,0 +1,36 @@
+{
+  "id": "letterboxd",
+  "name": "Letterboxd",
+  "canonical_url": "https://letterboxd.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997974,
+    "tags": [
+      "movies"
+    ]
+  },
+  "rankings": {
+    "alexa": 2026
+  },
+  "check": {
+    "probe_url": "https://letterboxd.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Sorry, we can’t find the page you’ve requested."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.072204+00:00"
+}

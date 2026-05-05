@@ -1,0 +1,35 @@
+{
+  "id": "corsair",
+  "name": "CORSAIR",
+  "canonical_url": "https://forum.corsair.com",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "reputation_alexaRank"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.196954+00:00",
+  "_maigret_engine": "vBulletin"
+}

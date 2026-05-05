@@ -1,0 +1,40 @@
+{
+  "id": "creativemarket",
+  "name": "CreativeMarket",
+  "canonical_url": "https://creativemarket.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995715,
+    "tags": [
+      "art",
+      "stock"
+    ]
+  },
+  "rankings": {
+    "alexa": 4285
+  },
+  "check": {
+    "probe_url": "https://creativemarket.com/users/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Likes"
+    ],
+    "absence_strs": [
+      "Whoomp, there it isn't...",
+      "It looks like the page you’re looking for is no longer available. "
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.177248+00:00"
+}

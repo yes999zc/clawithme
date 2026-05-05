@@ -1,0 +1,32 @@
+{
+  "id": "carbonmade",
+  "name": "Carbonmade",
+  "canonical_url": "https://carbonmade.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994313,
+    "tags": [
+      "design"
+    ]
+  },
+  "rankings": {
+    "alexa": 5687
+  },
+  "check": {
+    "probe_url": "https://{username}.carbonmade.com",
+    "known_accounts": [
+      "jenny"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.214667+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "www_portal-pisarski_pl",
+  "name": "www.portal-pisarski.pl",
+  "canonical_url": "https://www.portal-pisarski.pl",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.portal-pisarski.pl/profil/{username}",
+    "known_accounts": [
+      "sparkles99"
+    ],
+    "known_unclaimed": [
+      "hlwifvxnqw"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profil/"
+    ],
+    "absence_strs": [
+      "obrazki/404.png"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.516922+00:00"
+}

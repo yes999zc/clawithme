@@ -1,0 +1,36 @@
+{
+  "id": "gps-data-team",
+  "name": "Gps-data-team",
+  "canonical_url": "https://www.gps-data-team.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999617260,
+    "tags": [
+      "maps"
+    ]
+  },
+  "rankings": {
+    "alexa": 382740
+  },
+  "check": {
+    "probe_url": "https://www.gps-data-team.com/pda-gps-navigation/profile.php?mode=viewprofile&u={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title></title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.184478+00:00"
+}

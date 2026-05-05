@@ -1,0 +1,33 @@
+{
+  "id": "tistory",
+  "name": "Tistory",
+  "canonical_url": "https://www.tistory.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997569,
+    "tags": [
+      "blog",
+      "kr"
+    ]
+  },
+  "rankings": {
+    "alexa": 2431
+  },
+  "check": {
+    "probe_url": "https://{username}.tistory.com/",
+    "known_accounts": [
+      "notice"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.086137+00:00"
+}

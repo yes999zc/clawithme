@@ -1,0 +1,28 @@
+{
+  "id": "gitbook",
+  "name": "Gitbook",
+  "canonical_url": "https://{username}.gitbook.io/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://{username}.gitbook.io/",
+    "known_accounts": [
+      "gitbook"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.635562+00:00"
+}

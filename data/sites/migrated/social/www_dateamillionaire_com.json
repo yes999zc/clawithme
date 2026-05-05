@@ -1,0 +1,34 @@
+{
+  "id": "www_dateamillionaire_com",
+  "name": "www.dateamillionaire.com",
+  "canonical_url": "https://www.dateamillionaire.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.dateamillionaire.com/members/{username}",
+    "known_accounts": [
+      "pixie23"
+    ],
+    "known_unclaimed": [
+      "vmvasupgog"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "patch_fill profile_box"
+    ],
+    "absence_strs": [
+      "input[name="
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.517854+00:00"
+}

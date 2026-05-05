@@ -1,0 +1,40 @@
+{
+  "id": "darknet_trust",
+  "name": "DarkNet Trust",
+  "canonical_url": "http://dntrustmucd4mwec.onion",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "tor"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://dntrustmucd4mwec.onion/u/{username}",
+    "known_accounts": [
+      "cheshirecat82"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5"
+    },
+    "presence_strs": [
+      "profiles"
+    ],
+    "absence_strs": [
+      "notify notify-red mx-auto text-center"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.270340+00:00"
+}

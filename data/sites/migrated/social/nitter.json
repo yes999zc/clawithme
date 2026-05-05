@@ -1,0 +1,43 @@
+{
+  "id": "nitter",
+  "name": "Nitter",
+  "canonical_url": "https://nitter.net/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999978180,
+    "tags": [
+      "messaging",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 21820
+  },
+  "check": {
+    "probe_url": "{urlMain}{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewould123"
+    ],
+    "headers": {
+      "Accept-Language": "en-US,en;q=0.5"
+    },
+    "presence_strs": [
+      "<div class=\"profile-tabs\">"
+    ],
+    "absence_strs": [
+      "<title>Error | nitter</title>",
+      "The requested URL was not found on this server.",
+      "<div class=\"error-panel\">"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.610328+00:00"
+}

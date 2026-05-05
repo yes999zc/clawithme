@@ -1,0 +1,33 @@
+{
+  "id": "nekto",
+  "name": "Nekto",
+  "canonical_url": "https://nekto.me",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999498801,
+    "tags": [
+      "pt",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 501199
+  },
+  "check": {
+    "probe_url": "https://nekto.me/{username}/",
+    "known_accounts": [
+      "green"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.282803+00:00"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "ebay",
+  "name": "Ebay",
+  "canonical_url": "https://www.ebay.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999832,
+    "tags": [
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 168
+  },
+  "check": {
+    "probe_url": "https://www.ebay.com/usr/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:133.0) Gecko/20100101 Firefox/133.0",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Sec-Fetch-User": "?1",
+      "Priority": "u=0, i",
+      "Pragma": "no-cache",
+      "Cache-Control": "no-cache",
+      "TE": "trailers"
+    },
+    "presence_strs": [
+      "Positive feedback"
+    ],
+    "absence_strs": [
+      "<svg role=\"img\" class=\"icon icon--attention-filled-small\""
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.684842+00:00"
+}

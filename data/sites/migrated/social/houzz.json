@@ -1,0 +1,36 @@
+{
+  "id": "houzz",
+  "name": "Houzz",
+  "canonical_url": "https://houzz.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999037,
+    "tags": [
+      "design"
+    ]
+  },
+  "rankings": {
+    "alexa": 963
+  },
+  "check": {
+    "probe_url": "https://houzz.com/user/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The page you requested was not found."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.803522+00:00"
+}

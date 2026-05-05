@@ -1,0 +1,34 @@
+{
+  "id": "fanscout_com",
+  "name": "fanscout.com",
+  "canonical_url": "https://fanscout.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://fanscout.com/{username}",
+    "known_accounts": [
+      "moonlitraven"
+    ],
+    "known_unclaimed": [
+      "sicuoozvul"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "birthday cake"
+    ],
+    "absence_strs": [
+      "This page is under construction"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.515045+00:00"
+}

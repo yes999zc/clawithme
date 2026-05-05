@@ -1,0 +1,36 @@
+{
+  "id": "nationstates_region",
+  "name": "NationStates Region",
+  "canonical_url": "https://nationstates.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999941559,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 58441
+  },
+  "check": {
+    "probe_url": "https://nationstates.net/region={username}",
+    "known_accounts": [
+      "the_west_pacific"
+    ],
+    "known_unclaimed": [
+      "noonewould"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "does not exist."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.793255+00:00"
+}

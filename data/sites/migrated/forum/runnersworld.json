@@ -1,0 +1,31 @@
+{
+  "id": "runnersworld",
+  "name": "Runnersworld",
+  "canonical_url": "https://forums.runnersworld.co.uk/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "sport"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forums.runnersworld.co.uk/profile/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.029853+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "codecanyon",
+  "name": "Codecanyon",
+  "canonical_url": "https://codecanyon.net",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999998398,
+    "tags": [
+      "coding",
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 1602
+  },
+  "check": {
+    "probe_url": "https://codecanyon.net/user/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.853509+00:00"
+}

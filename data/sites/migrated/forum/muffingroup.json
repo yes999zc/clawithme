@@ -1,0 +1,31 @@
+{
+  "id": "muffingroup",
+  "name": "MuffinGroup",
+  "canonical_url": "https://forum.muffingroup.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forum.muffingroup.com/betheme/profile/{username}",
+    "known_accounts": [
+      "charlie27"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.138192+00:00"
+}

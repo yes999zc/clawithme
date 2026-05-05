@@ -1,0 +1,36 @@
+{
+  "id": "memory_lol",
+  "name": "memory.lol",
+  "canonical_url": "https://memory.lol",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "messaging"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://api.memory.lol/v1/tw/{username}",
+    "known_accounts": [
+      "libsoftiktok"
+    ],
+    "known_unclaimed": [
+      "noonewould123"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "{\"accounts\":[{"
+    ],
+    "absence_strs": [
+      "{\"accounts\":[]}"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.054939+00:00"
+}

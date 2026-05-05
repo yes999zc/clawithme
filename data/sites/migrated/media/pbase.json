@@ -1,0 +1,36 @@
+{
+  "id": "pbase",
+  "name": "Pbase",
+  "canonical_url": "https://pbase.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998612,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 1388
+  },
+  "check": {
+    "probe_url": "https://pbase.com/{username}/profile",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Unknown Artist</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.838456+00:00"
+}

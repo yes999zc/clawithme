@@ -1,0 +1,47 @@
+{
+  "id": "lichess",
+  "name": "Lichess",
+  "canonical_url": "https://lichess.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995074,
+    "tags": [
+      "gaming",
+      "hobby"
+    ]
+  },
+  "rankings": {
+    "alexa": 4926
+  },
+  "check": {
+    "probe_url": "https://lichess.org/@/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "efxvyhnwrh"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "us_profile",
+      "og:title",
+      "profile-side",
+      " data-username=",
+      "og:site_name"
+    ],
+    "absence_strs": [
+      "page-small box box-pad page",
+      "><h1 class=",
+      ">No such player</h1><div><p>This username doesn",
+      "})()</script></body></html>",
+      "IR0Cf7qpkpcOhvI9r03a0QbI"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.197894+00:00"
+}

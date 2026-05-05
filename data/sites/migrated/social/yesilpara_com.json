@@ -1,0 +1,31 @@
+{
+  "id": "yesilpara_com",
+  "name": "yesilpara.com",
+  "canonical_url": "https://yesilpara.com",
+  "engine_ref": "flarum",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "tr"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "Administrator"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.222407+00:00",
+  "_maigret_engine": "Flarum"
+}

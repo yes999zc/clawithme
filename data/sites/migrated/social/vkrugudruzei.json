@@ -1,0 +1,33 @@
+{
+  "id": "vkrugudruzei",
+  "name": "VKruguDruzei",
+  "canonical_url": "http://vkrugudruzei.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999902012,
+    "tags": [
+      "by",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 97988
+  },
+  "check": {
+    "probe_url": "http://{username}.vkrugudruzei.ru/x/blog/all/",
+    "known_accounts": [
+      "irina"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.859843+00:00"
+}

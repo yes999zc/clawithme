@@ -1,0 +1,33 @@
+{
+  "id": "ddo",
+  "name": "Ddo",
+  "canonical_url": "https://www.ddo.com",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999926992,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 73008
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.852481+00:00",
+  "_maigret_engine": "vBulletin"
+}

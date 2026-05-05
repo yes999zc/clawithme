@@ -1,0 +1,47 @@
+{
+  "id": "bongacams",
+  "name": "BongaCams",
+  "canonical_url": "https://sbongacams.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "cz",
+      "webcam"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://bongacams.com/profile/{username}",
+    "known_accounts": [
+      "Icehotangel"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:133.0) Gecko/20100101 Firefox/133.0",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Referer": "https://pt.bongacams.com/",
+      "Upgrade-Insecure-Requests": "1",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-User": "?1"
+    },
+    "presence_strs": [
+      "<title>Informação e página"
+    ],
+    "absence_strs": [
+      "- BongaCams</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.517256+00:00"
+}

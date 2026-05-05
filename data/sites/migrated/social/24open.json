@@ -1,0 +1,33 @@
+{
+  "id": "24open",
+  "name": "24open",
+  "canonical_url": "https://24open.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999269349,
+    "tags": [
+      "dating",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 730651
+  },
+  "check": {
+    "probe_url": "https://24open.ru/user/{username}/",
+    "known_accounts": [
+      "niko3193"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.362269+00:00"
+}

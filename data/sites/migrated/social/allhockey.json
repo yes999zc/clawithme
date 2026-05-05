@@ -1,0 +1,32 @@
+{
+  "id": "allhockey",
+  "name": "Allhockey",
+  "canonical_url": "https://allhockey.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999799597,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 200403
+  },
+  "check": {
+    "probe_url": "https://allhockey.ru/blog/{username}",
+    "known_accounts": [
+      "Dmitri%20Nikulin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.012079+00:00"
+}

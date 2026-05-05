@@ -1,0 +1,47 @@
+{
+  "id": "chess",
+  "name": "Chess",
+  "canonical_url": "https://www.chess.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999996922,
+    "tags": [
+      "gaming",
+      "hobby"
+    ]
+  },
+  "rankings": {
+    "alexa": 3078
+  },
+  "check": {
+    "probe_url": "https://www.chess.com/member/{username}",
+    "known_accounts": [
+      "sexytwerker69"
+    ],
+    "known_unclaimed": [
+      "aublurbrxm"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
+    },
+    "presence_strs": [
+      "\"player_id\":",
+      "\"@id\":\"https://api.chess.com/pub/player/"
+    ],
+    "absence_strs": [
+      "error image",
+      "        <h1>404 Page not found</h1>",
+      "_404-header",
+      "_404-inner-container",
+      " no-nav ",
+      "not found."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.127819+00:00"
+}

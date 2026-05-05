@@ -1,0 +1,46 @@
+{
+  "id": "mynickname_com",
+  "name": "mynickname.com",
+  "canonical_url": "https://mynickname.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999919441,
+    "tags": [
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 80559
+  },
+  "check": {
+    "probe_url": "https://mynickname.com/{username}",
+    "known_accounts": [
+      "godbrithil"
+    ],
+    "known_unclaimed": [
+      "fqiakbtdhu"
+    ],
+    "headers": {},
+    "presence_strs": [
+      " title=",
+      "bold",
+      "title-line",
+      "codehtml",
+      "User offline"
+    ],
+    "absence_strs": [
+      "<h1>Error 404: Page not found</h1>",
+      "Nickname , certificate for username ",
+      "btn green",
+      "mailto:info@mynickname.com",
+      ">Register nickname</span></a></p>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.860752+00:00"
+}

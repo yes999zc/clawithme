@@ -1,0 +1,32 @@
+{
+  "id": "note",
+  "name": "note",
+  "canonical_url": "https://note.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998705,
+    "tags": [
+      "jp"
+    ]
+  },
+  "rankings": {
+    "alexa": 1295
+  },
+  "check": {
+    "probe_url": "https://note.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.832727+00:00"
+}

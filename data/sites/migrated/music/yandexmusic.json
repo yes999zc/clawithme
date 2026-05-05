@@ -1,0 +1,33 @@
+{
+  "id": "yandexmusic",
+  "name": "YandexMusic",
+  "canonical_url": "https://music.yandex.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "music",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://music.yandex.ru/users/{username}/playlists",
+    "known_accounts": [
+      "YandexMusic"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {
+      "Referer": "https://music.yandex.ru/users/test/playlists"
+    }
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.708777+00:00"
+}

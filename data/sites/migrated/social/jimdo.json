@@ -1,0 +1,32 @@
+{
+  "id": "jimdo",
+  "name": "Jimdo",
+  "canonical_url": "https://jimdosite.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998963,
+    "tags": [
+      "de"
+    ]
+  },
+  "rankings": {
+    "alexa": 1037
+  },
+  "check": {
+    "probe_url": "https://{username}.jimdosite.com",
+    "known_accounts": [
+      "jenny"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.809191+00:00"
+}

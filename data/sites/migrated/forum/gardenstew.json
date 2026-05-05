@@ -1,0 +1,33 @@
+{
+  "id": "gardenstew",
+  "name": "Gardenstew",
+  "canonical_url": "https://www.gardenstew.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999968949,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 31051
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis777"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.685683+00:00",
+  "_maigret_engine": "XenForo"
+}

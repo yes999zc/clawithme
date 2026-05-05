@@ -1,0 +1,36 @@
+{
+  "id": "minecraft",
+  "name": "Minecraft",
+  "canonical_url": "https://minecraft.net/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998365,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 1635
+  },
+  "check": {
+    "probe_url": "https://api.mojang.com/users/profiles/minecraft/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Couldn't find any profile with name"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.859222+00:00"
+}

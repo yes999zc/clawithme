@@ -1,0 +1,36 @@
+{
+  "id": "opennet",
+  "name": "OpenNet",
+  "canonical_url": "https://www.opennet.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999977401,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 22599
+  },
+  "check": {
+    "probe_url": "https://www.opennet.ru/~{username}",
+    "known_accounts": [
+      "anonismus"
+    ],
+    "known_unclaimed": [
+      "noneownsthisusername"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Имя участника не найдено"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.620684+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "xtratime_org",
+  "name": "xtratime.org",
+  "canonical_url": "https://www.xtratime.org",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999267230,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 732770
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.334948+00:00",
+  "_maigret_engine": "XenForo"
+}

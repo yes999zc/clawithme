@@ -1,0 +1,32 @@
+{
+  "id": "nothing_community",
+  "name": "Nothing Community",
+  "canonical_url": "https://nothing.community/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999859851,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 140149
+  },
+  "check": {
+    "probe_url": "https://nothing.community/u/{username}",
+    "known_accounts": [
+      "Carl"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.939932+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "hot_ukdeals",
+  "name": "Hot UKdeals",
+  "canonical_url": "https://www.hotukdeals.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999980105,
+    "tags": [
+      "gb",
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 19895
+  },
+  "check": {
+    "probe_url": "https://www.hotukdeals.com/profile/{username}",
+    "known_accounts": [
+      "Blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.578755+00:00"
+}

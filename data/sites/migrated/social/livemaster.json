@@ -1,0 +1,32 @@
+{
+  "id": "livemaster",
+  "name": "Livemaster",
+  "canonical_url": "https://www.livemaster.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999985494,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 14506
+  },
+  "check": {
+    "probe_url": "https://www.livemaster.ru/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.532940+00:00"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "researchgate",
+  "name": "ResearchGate",
+  "canonical_url": "https://www.researchgate.net/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999900,
+    "tags": [
+      "in",
+      "research",
+      "social",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 100
+  },
+  "check": {
+    "probe_url": "https://www.researchgate.net/profile/{username}",
+    "known_accounts": [
+      "John_Smith"
+    ],
+    "known_unclaimed": [
+      "noonewould_everusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.671646+00:00"
+}

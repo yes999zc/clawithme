@@ -1,0 +1,31 @@
+{
+  "id": "mapillary_forum",
+  "name": "Mapillary Forum",
+  "canonical_url": "https://forum.mapillary.com",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "slashme"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.748109+00:00",
+  "_maigret_engine": "Discourse"
+}

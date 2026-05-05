@@ -1,0 +1,37 @@
+{
+  "id": "hunting",
+  "name": "hunting",
+  "canonical_url": "https://www.hunting.ru/forum/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999514164,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 485836
+  },
+  "check": {
+    "probe_url": "https://www.hunting.ru/forum/members/?username={username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Указанный пользователь не найден. Пожалуйста, введите другое имя."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.261081+00:00"
+}

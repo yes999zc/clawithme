@@ -1,0 +1,35 @@
+{
+  "id": "afterellen",
+  "name": "Afterellen",
+  "canonical_url": "https://forums.afterellen.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "pk"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forums.afterellen.com/members/?username={username}",
+    "known_accounts": [
+      "buffaloed"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis777"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The specified member cannot be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.779198+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "id": "chomikuj_pl",
+  "name": "Chomikuj.pl",
+  "canonical_url": "https://chomikuj.pl/{username}/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://chomikuj.pl/{username}/",
+    "known_accounts": [
+      "uheara_konen"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Foldery"
+    ],
+    "absence_strs": [
+      "homik o takiej nazwie nie istnieje"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.531336+00:00"
+}

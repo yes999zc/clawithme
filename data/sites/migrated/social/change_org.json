@@ -1,0 +1,40 @@
+{
+  "id": "change_org",
+  "name": "Change.org",
+  "canonical_url": "https://www.change.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999684,
+    "tags": [
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 316
+  },
+  "check": {
+    "probe_url": "https://www.change.org/o/{username}",
+    "known_accounts": [
+      "changedotorg"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "first_name",
+      "last_name",
+      "Email",
+      "email",
+      "pathname"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.722597+00:00"
+}

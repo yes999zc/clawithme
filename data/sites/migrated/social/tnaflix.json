@@ -1,0 +1,39 @@
+{
+  "id": "tnaflix",
+  "name": "TNAFlix",
+  "canonical_url": "https://www.tnaflix.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999949040,
+    "tags": [
+      "porn"
+    ]
+  },
+  "rankings": {
+    "alexa": 50960
+  },
+  "check": {
+    "probe_url": "https://www.tnaflix.com/profile/{username}",
+    "known_accounts": [
+      "luna92"
+    ],
+    "known_unclaimed": [
+      "krjmekrmlp"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-header",
+      "onerror="
+    ],
+    "absence_strs": [
+      "Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.750947+00:00"
+}

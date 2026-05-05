@@ -1,0 +1,38 @@
+{
+  "id": "donorbox",
+  "name": "Donorbox",
+  "canonical_url": "https://donorbox.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997127,
+    "tags": [
+      "finance"
+    ]
+  },
+  "rankings": {
+    "alexa": 2873
+  },
+  "check": {
+    "probe_url": "https://donorbox.org/{username}",
+    "known_accounts": [
+      "theabbie"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "donation_first_name"
+    ],
+    "absence_strs": [
+      "/orgs/new"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.111794+00:00"
+}

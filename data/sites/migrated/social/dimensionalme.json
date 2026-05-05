@@ -1,0 +1,35 @@
+{
+  "id": "dimensionalme",
+  "name": "DimensionalMe",
+  "canonical_url": "https://www.dimensional.me",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.dimensional.me/{username}",
+    "known_accounts": [
+      "sparkles99"
+    ],
+    "known_unclaimed": [
+      "hbtybxpuon"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "userName",
+      "publicProfile"
+    ],
+    "absence_strs": [
+      "error_main_"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.515977+00:00"
+}

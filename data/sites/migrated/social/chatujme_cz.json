@@ -1,0 +1,38 @@
+{
+  "id": "chatujme_cz",
+  "name": "Chatujme.cz",
+  "canonical_url": "https://chatujme.cz/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999967834,
+    "tags": [
+      "cz",
+      "dating"
+    ]
+  },
+  "rankings": {
+    "alexa": 32166
+  },
+  "check": {
+    "probe_url": "https://profil.chatujme.cz/{username}",
+    "known_accounts": [
+      "david"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Neexistujicí profil",
+      "Stránka nebyla nalezena"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.680993+00:00"
+}

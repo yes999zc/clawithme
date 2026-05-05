@@ -1,0 +1,34 @@
+{
+  "id": "forumtauck",
+  "name": "ForumTauck",
+  "canonical_url": "https://forums.tauck.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forums.tauck.com/profile/{username}",
+    "known_accounts": [
+      "tashager"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "— Tauck Community"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.943991+00:00"
+}

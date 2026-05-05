@@ -1,0 +1,38 @@
+{
+  "id": "threads",
+  "name": "Threads",
+  "canonical_url": "https://www.threads.net/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999591,
+    "tags": [
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 409
+  },
+  "check": {
+    "probe_url": "https://www.threads.net/@{username}",
+    "known_accounts": [
+      "zuck"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "Sec-Fetch-Mode": "navigate"
+    },
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>Threads • Log in</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.735570+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "wikipedia",
+  "name": "Wikipedia",
+  "canonical_url": "https://en.wikipedia.org/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999985,
+    "tags": [
+      "wiki"
+    ]
+  },
+  "rankings": {
+    "alexa": 15
+  },
+  "check": {
+    "probe_url": "https://en.wikipedia.org/wiki/User:{username}",
+    "known_accounts": [
+      "Jimbo_Wales"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"userid\""
+    ],
+    "absence_strs": [
+      "\"missing\""
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.641482+00:00"
+}

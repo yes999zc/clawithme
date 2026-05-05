@@ -1,0 +1,34 @@
+{
+  "id": "trailville_com",
+  "name": "trailville.com",
+  "canonical_url": "https://www.trailville.com/wiki/User:{username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.trailville.com/wiki/User:{username}",
+    "known_accounts": [
+      "Admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldevereverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+    },
+    "presence_strs": [
+      "wgRelevantUserName"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.433584+00:00"
+}

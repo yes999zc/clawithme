@@ -1,0 +1,36 @@
+{
+  "id": "community_adobe_com",
+  "name": "community.adobe.com",
+  "canonical_url": "https://community.adobe.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://community.adobe.com/t5/forums/searchpage/tab/user?q={username}",
+    "known_accounts": [
+      "ecpsys"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "lia-user-item-profile",
+      " lia-user-rank",
+      " View Profile of"
+    ],
+    "absence_strs": [
+      "No search results found."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.647185+00:00"
+}

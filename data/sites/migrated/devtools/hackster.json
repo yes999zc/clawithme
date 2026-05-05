@@ -1,0 +1,32 @@
+{
+  "id": "hackster",
+  "name": "Hackster",
+  "canonical_url": "https://www.hackster.io",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999994750,
+    "tags": [
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 5250
+  },
+  "check": {
+    "probe_url": "https://www.hackster.io/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.206366+00:00"
+}

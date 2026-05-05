@@ -1,0 +1,33 @@
+{
+  "id": "hackerone",
+  "name": "HackerOne",
+  "canonical_url": "https://hackerone.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999996355,
+    "tags": [
+      "coding",
+      "hacking"
+    ]
+  },
+  "rankings": {
+    "alexa": 3645
+  },
+  "check": {
+    "probe_url": "https://hackerone.com/{username}",
+    "known_accounts": [
+      "nahamsec"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.805410+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "sasgis_org",
+  "name": "sasgis.org",
+  "canonical_url": "http://www.sasgis.org/forum",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999274724,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 725276
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.370705+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

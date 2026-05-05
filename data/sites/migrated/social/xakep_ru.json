@@ -1,0 +1,33 @@
+{
+  "id": "xakep_ru",
+  "name": "xakep.ru",
+  "canonical_url": "https://xakep.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999975846,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 24154
+  },
+  "check": {
+    "probe_url": "https://xakep.ru/author/{username}/",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.637198+00:00",
+  "_maigret_engine": "engine404"
+}

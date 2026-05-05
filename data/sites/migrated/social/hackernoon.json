@@ -1,0 +1,38 @@
+{
+  "id": "hackernoon",
+  "name": "HackerNoon",
+  "canonical_url": "https://hackernoon.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998310,
+    "tags": [
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 1690
+  },
+  "check": {
+    "probe_url": "https://hackernoon.com/u/{username}",
+    "known_accounts": [
+      "god"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis71"
+    ],
+    "headers": {},
+    "presence_strs": [
+      " | HackerNoon</title>"
+    ],
+    "absence_strs": [
+      "<title>HackerNoon"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.866539+00:00"
+}

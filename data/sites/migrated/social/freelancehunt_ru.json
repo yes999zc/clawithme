@@ -1,0 +1,32 @@
+{
+  "id": "freelancehunt_ru",
+  "name": "freelancehunt.ru",
+  "canonical_url": "https://freelancehunt.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru",
+      "uz"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://freelancehunt.ru/freelancer/{username}.html",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.164806+00:00",
+  "_maigret_engine": "engine404"
+}

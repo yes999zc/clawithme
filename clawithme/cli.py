@@ -30,11 +30,12 @@ logger = get_logger()
 _USERNAME_RE = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 
-def load_all_sites(validate: bool = False) -> list[dict]:
+def load_all_sites(validate: bool = False, include_migrated: bool = False) -> list[dict]:
     """Load all non-deprecated site definitions.
 
     If validate=True, checks each site against data/schema.json.
     Validation failures are logged but do not block loading.
+    If include_migrated=True, also loads sites from migrated/ directory.
     """
     sites_dir = Path(__file__).resolve().parent.parent / "data" / "sites"
     schema_path = sites_dir.parent / "schema.json"
@@ -46,7 +47,7 @@ def load_all_sites(validate: bool = False) -> list[dict]:
         schema = json.loads(schema_path.read_text())
 
     for json_file in sorted(sites_dir.rglob("*.json")):
-        if "migrated" in json_file.parts:
+        if not include_migrated and "migrated" in json_file.parts:
             continue
         site = json.loads(json_file.read_text())
         if site.get("deprecated", False):
@@ -62,10 +63,12 @@ def load_all_sites(validate: bool = False) -> list[dict]:
     return sites
 
 
-def search(username: str, *, report_path: str | None = None, report_format: str = "html"):
+def search(username: str, *, report_path: str | None = None, report_format: str = "html",
+           include_migrated: bool = False):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.
+    If include_migrated, also search maigret-migrated sites (~2500).
     """
     # Validate username against common pattern
     if not _USERNAME_RE.match(username):
@@ -82,7 +85,7 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
     # ── Phase 1: Site probing (engine) ──
     try:
-        sites = load_all_sites()
+        sites = load_all_sites(include_migrated=include_migrated)
     except (OSError, json.JSONDecodeError) as e:
         log.error("site_load_failed", error=str(e))
         print(f"❌ Failed to load site definitions: {e}")
@@ -259,7 +262,7 @@ def main():
     setup_logging()
 
     if len(sys.argv) < 2:
-        print("Usage: clawithme search <username> [--report <path>]")
+        print("Usage: clawithme search <username> [--report <path>] [--include-migrated]")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)
@@ -268,11 +271,12 @@ def main():
 
     if command == "search":
         if len(sys.argv) < 3:
-            print("Usage: clawithme search <username> [--report <path>]")
+            print("Usage: clawithme search <username> [--report <path>] [--include-migrated]")
             sys.exit(1)
         username = sys.argv[2]
         report_path = None
         report_format = "html"
+        include_migrated = "--include-migrated" in sys.argv
         if "--report" in sys.argv:
             idx = sys.argv.index("--report")
             if idx + 1 < len(sys.argv):
@@ -284,7 +288,8 @@ def main():
         if report_format not in ("html", "json"):
             print(f"❌ Unknown format: {report_format!r}. Use 'html' or 'json'.")
             sys.exit(1)
-        search(username, report_path=report_path, report_format=report_format)
+        search(username, report_path=report_path, report_format=report_format,
+               include_migrated=include_migrated)
 
     elif command == "verify":
         # Delegate to verify_site.py

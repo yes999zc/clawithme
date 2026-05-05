@@ -1,0 +1,47 @@
+{
+  "id": "imgflip",
+  "name": "Imgflip",
+  "canonical_url": "https://imgflip.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995584,
+    "tags": [
+      "photo",
+      "sharing"
+    ]
+  },
+  "rankings": {
+    "alexa": 4416
+  },
+  "check": {
+    "probe_url": "https://imgflip.com/user/{username}",
+    "known_accounts": [
+      "sparkles99"
+    ],
+    "known_unclaimed": [
+      "hrypxleske"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "u-username",
+      "user-page",
+      "user-title",
+      "user-panel",
+      "user-joined"
+    ],
+    "absence_strs": [
+      "\t\t<h1>404 Page Not Found</h1>\r",
+      "<title>404 Page Not Found</title>\r",
+      "info-page ibox",
+      "\t\t<p>Or maybe the <a href=",
+      "\t\t<p>Were you looking for the <a href="
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.175337+00:00"
+}

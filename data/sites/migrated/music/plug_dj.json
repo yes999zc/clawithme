@@ -1,0 +1,32 @@
+{
+  "id": "plug_dj",
+  "name": "Plug.DJ",
+  "canonical_url": "https://plug.dj/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999697492,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 302508
+  },
+  "check": {
+    "probe_url": "https://plug.dj/@/{username}",
+    "known_accounts": [
+      "plug-dj-rock"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.122759+00:00"
+}

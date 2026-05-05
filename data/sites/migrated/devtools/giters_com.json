@@ -1,0 +1,36 @@
+{
+  "id": "giters_com",
+  "name": "giters.com",
+  "canonical_url": "https://giters.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://giters.com/{username}",
+    "known_accounts": [
+      "soxoj"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "nofollow"
+    ],
+    "absence_strs": [
+      "This page could not be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.276042+00:00"
+}

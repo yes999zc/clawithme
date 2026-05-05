@@ -1,0 +1,37 @@
+{
+  "id": "donationsalerts",
+  "name": "DonationsAlerts",
+  "canonical_url": "https://www.donationalerts.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999952192,
+    "tags": [
+      "finance",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 47808
+  },
+  "check": {
+    "probe_url": "https://www.donationalerts.com/r/{username}",
+    "known_accounts": [
+      "r3dhunt"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "/img/404.svg"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.749012+00:00"
+}

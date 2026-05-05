@@ -1,0 +1,33 @@
+{
+  "id": "phpbbguru_net",
+  "name": "phpbbguru.net",
+  "canonical_url": "https://www.phpbbguru.net/community",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999937159,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 62841
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.806383+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "torrent-soft",
+  "name": "Torrent-soft",
+  "canonical_url": "https://torrent-soft.net",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://torrent-soft.net/user/{username}/",
+    "known_accounts": [
+      "Baguvix"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.855375+00:00"
+}

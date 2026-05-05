@@ -1,0 +1,40 @@
+{
+  "id": "999_md",
+  "name": "999.md",
+  "canonical_url": "https://999.md",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999848515,
+    "tags": [
+      "freelance",
+      "md",
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 151485
+  },
+  "check": {
+    "probe_url": "https://999.md/ru/profile/{username}",
+    "known_accounts": [
+      "ivanov25"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user-profile"
+    ],
+    "absence_strs": [
+      "error-404-page"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.958908+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "garden",
+  "name": "Garden",
+  "canonical_url": "https://garden.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999982662,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 17338
+  },
+  "check": {
+    "probe_url": "https://garden.org/users/profile/{username}/",
+    "known_accounts": [
+      "Maynehockeym"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "'s profile - Garden.org</title>"
+    ],
+    "absence_strs": [
+      "<title>Member List - Garden.org</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.565562+00:00"
+}

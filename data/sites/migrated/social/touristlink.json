@@ -1,0 +1,36 @@
+{
+  "id": "touristlink",
+  "name": "Touristlink",
+  "canonical_url": "https://www.touristlink.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999877648,
+    "tags": [
+      "travel"
+    ]
+  },
+  "rankings": {
+    "alexa": 122352
+  },
+  "check": {
+    "probe_url": "https://www.touristlink.com/user/{username}",
+    "known_accounts": [
+      "green"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Members across the World"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.927747+00:00"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "cnet",
+  "name": "CNET",
+  "canonical_url": "https://www.cnet.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999999797,
+    "tags": [
+      "news",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 203
+  },
+  "check": {
+    "probe_url": "https://www.cnet.com/profiles/{username}/",
+    "known_accounts": [
+      "leadicicco"
+    ],
+    "known_unclaimed": [
+      "chexowcxzm"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
+    },
+    "presence_strs": [
+      "},firstName:",
+      "#email",
+      ",cmsDisplayName:",
+      "og:title",
+      "c-pageProfile"
+    ],
+    "absence_strs": [
+      "error_404",
+      "c-error404",
+      "Author not found",
+      "c-error404_back",
+      "c-error404_header"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.692276+00:00"
+}

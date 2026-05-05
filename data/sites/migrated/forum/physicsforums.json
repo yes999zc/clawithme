@@ -1,0 +1,36 @@
+{
+  "id": "physicsforums",
+  "name": "Physicsforums",
+  "canonical_url": "https://www.physicsforums.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999981468,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 18532
+  },
+  "check": {
+    "probe_url": "https://www.physicsforums.com/members/?username={username}",
+    "known_accounts": [
+      "zap"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The specified member cannot be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.577805+00:00"
+}

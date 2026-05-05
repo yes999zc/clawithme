@@ -1,0 +1,28 @@
+{
+  "id": "allthesoft",
+  "name": "AllTheSoft",
+  "canonical_url": "http://www.allthesoft.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://www.allthesoft.com/member/{username}.html",
+    "known_accounts": [
+      "marmon4270"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.470345+00:00"
+}

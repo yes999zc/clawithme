@@ -1,0 +1,38 @@
+{
+  "id": "clarity_fm",
+  "name": "clarity.fm",
+  "canonical_url": "https://clarity.fm",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999955055,
+    "tags": [
+      "business"
+    ]
+  },
+  "rankings": {
+    "alexa": 44945
+  },
+  "check": {
+    "probe_url": "https://clarity.fm/{username}",
+    "known_accounts": [
+      "theabbie"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user-profile-image"
+    ],
+    "absence_strs": [
+      "On Demand Business Advice</title"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.719886+00:00"
+}

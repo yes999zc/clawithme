@@ -1,0 +1,36 @@
+{
+  "id": "dealabs",
+  "name": "Dealabs",
+  "canonical_url": "https://www.dealabs.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999975397,
+    "tags": [
+      "fr"
+    ]
+  },
+  "rankings": {
+    "alexa": 24603
+  },
+  "check": {
+    "probe_url": "https://www.dealabs.com/profile/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "La page que vous essayez"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.623494+00:00"
+}

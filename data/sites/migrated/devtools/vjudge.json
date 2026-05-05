@@ -1,0 +1,32 @@
+{
+  "id": "vjudge",
+  "name": "Vjudge",
+  "canonical_url": "https://VJudge.net/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999937304,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 62696
+  },
+  "check": {
+    "probe_url": "https://VJudge.net/user/{username}",
+    "known_accounts": [
+      "tokitsukaze"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.798905+00:00"
+}

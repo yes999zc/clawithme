@@ -1,0 +1,36 @@
+{
+  "id": "liberapay",
+  "name": "Liberapay",
+  "canonical_url": "https://liberapay.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999986302,
+    "tags": [
+      "finance"
+    ]
+  },
+  "rankings": {
+    "alexa": 13698
+  },
+  "check": {
+    "probe_url": "https://liberapay.com/{username}",
+    "known_accounts": [
+      "geekyretronerds"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The requested page could not be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.531942+00:00"
+}

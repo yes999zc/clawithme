@@ -1,0 +1,39 @@
+{
+  "id": "codecademy",
+  "name": "Codecademy",
+  "canonical_url": "https://www.codecademy.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999998358,
+    "tags": [
+      "coding",
+      "education"
+    ]
+  },
+  "rankings": {
+    "alexa": 1642
+  },
+  "check": {
+    "probe_url": "https://www.codecademy.com/profiles/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Codecademy profile page for"
+    ],
+    "absence_strs": [
+      "This profile could not be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.861929+00:00"
+}

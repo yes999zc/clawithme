@@ -1,0 +1,38 @@
+{
+  "id": "google_maps",
+  "name": "Google Maps",
+  "canonical_url": "https://maps.google.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999983,
+    "tags": [
+      "maps"
+    ]
+  },
+  "rankings": {
+    "alexa": 17
+  },
+  "check": {
+    "probe_url": "https://www.google.com/maps/contrib/{username}",
+    "known_accounts": [
+      "105054951427011407574"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "[\"Contributions by"
+    ],
+    "absence_strs": [
+      "My Contributions to Google Maps"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.642429+00:00"
+}

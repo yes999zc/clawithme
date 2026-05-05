@@ -1,0 +1,37 @@
+{
+  "id": "codeforces_com",
+  "name": "codeforces.com",
+  "canonical_url": "http://codeforces.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999981564,
+    "tags": [
+      "coding",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 18436
+  },
+  "check": {
+    "probe_url": "http://codeforces.com/profile/{username}",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Contest rating"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.584351+00:00"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "livios",
+  "name": "Livios",
+  "canonical_url": "https://www.livios.be",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999832101,
+    "tags": [
+      "be",
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 167899
+  },
+  "check": {
+    "probe_url": "https://www.livios.be/nl/forum/leden/{username}",
+    "known_accounts": [
+      "lily88"
+    ],
+    "known_unclaimed": [
+      "ldbdpisozv"
+    ],
+    "headers": {
+      "User-Agent": "python-requests/2.25.1"
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.960843+00:00"
+}

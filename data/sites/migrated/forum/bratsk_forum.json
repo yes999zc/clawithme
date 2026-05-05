@@ -1,0 +1,35 @@
+{
+  "id": "bratsk_forum",
+  "name": "Bratsk Forum",
+  "canonical_url": "http://forum.bratsk.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://forum.bratsk.org/member.php?username={username}",
+    "known_accounts": [
+      "nekto"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Пользователь не зарегистрирован и не имеет профиля для просмотра."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.026122+00:00"
+}

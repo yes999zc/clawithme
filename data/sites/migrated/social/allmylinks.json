@@ -1,0 +1,36 @@
+{
+  "id": "allmylinks",
+  "name": "AllMyLinks",
+  "canonical_url": "https://allmylinks.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994371,
+    "tags": [
+      "links"
+    ]
+  },
+  "rankings": {
+    "alexa": 5629
+  },
+  "check": {
+    "probe_url": "https://allmylinks.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Page not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.212805+00:00"
+}

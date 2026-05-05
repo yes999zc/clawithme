@@ -1,0 +1,32 @@
+{
+  "id": "psnprofiles_com",
+  "name": "PSNProfiles.com",
+  "canonical_url": "https://psnprofiles.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999976385,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 23615
+  },
+  "check": {
+    "probe_url": "https://psnprofiles.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.616970+00:00"
+}

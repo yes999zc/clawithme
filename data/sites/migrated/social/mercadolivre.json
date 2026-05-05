@@ -1,0 +1,40 @@
+{
+  "id": "mercadolivre",
+  "name": "MercadoLivre",
+  "canonical_url": "https://www.mercadolivre.com.br",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993680,
+    "tags": [
+      "br"
+    ]
+  },
+  "rankings": {
+    "alexa": 6320
+  },
+  "check": {
+    "probe_url": "https://www.mercadolivre.com.br/perfil/{username}",
+    "known_accounts": [
+      "MLB"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Anúncios do vendedor",
+      "Publicaciones del Vendedor"
+    ],
+    "absence_strs": [
+      "Parece que esta página não existe",
+      "Este usuário foi temporariamente desativado ou excluído"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.232451+00:00"
+}

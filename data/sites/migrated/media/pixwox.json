@@ -1,0 +1,42 @@
+{
+  "id": "pixwox",
+  "name": "Pixwox",
+  "canonical_url": "https://www.pixwox.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999272118,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 727882
+  },
+  "check": {
+    "probe_url": "https://www.pixwox.com/profile/{username}/",
+    "known_accounts": [
+      "mami_ishioka"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "username",
+      "profile",
+      " data-name=",
+      "fullname",
+      "alternate"
+    ],
+    "absence_strs": [
+      "Page not found</div>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.356645+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "dcinside",
+  "name": "Dcinside",
+  "canonical_url": "https://www.dcinside.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999979428,
+    "tags": [
+      "forum",
+      "kr"
+    ]
+  },
+  "rankings": {
+    "alexa": 20572
+  },
+  "check": {
+    "probe_url": "https://gallog.dcinside.com/{username}",
+    "known_accounts": [
+      "anrbrb"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.593710+00:00"
+}

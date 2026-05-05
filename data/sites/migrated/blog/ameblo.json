@@ -1,0 +1,39 @@
+{
+  "id": "ameblo",
+  "name": "Ameblo",
+  "canonical_url": "https://ameblo.jp",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999299,
+    "tags": [
+      "blog",
+      "jp"
+    ]
+  },
+  "rankings": {
+    "alexa": 701
+  },
+  "check": {
+    "probe_url": "https://ameblo.jp/{username}",
+    "known_accounts": [
+      "senpai"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile"
+    ],
+    "absence_strs": [
+      "THROW_NOT_FOUND_EXCEPTION"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.778215+00:00"
+}

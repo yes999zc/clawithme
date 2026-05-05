@@ -1,0 +1,31 @@
+{
+  "id": "gam1ng",
+  "name": "Gam1ng",
+  "canonical_url": "https://gam1ng.com.br",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "br",
+      "webcam"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://gam1ng.com.br/user/{username}",
+    "known_accounts": [
+      "PinKgirl"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.294855+00:00"
+}

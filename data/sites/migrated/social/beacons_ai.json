@@ -1,0 +1,38 @@
+{
+  "id": "beacons_ai",
+  "name": "beacons.ai",
+  "canonical_url": "https://beacons.ai",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997320,
+    "tags": [
+      "links"
+    ]
+  },
+  "rankings": {
+    "alexa": 2680
+  },
+  "check": {
+    "probe_url": "https://beacons.ai/{username}",
+    "known_accounts": [
+      "pasteljellies"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "https://cdn.beacons.ai/profile_pictures"
+    ],
+    "absence_strs": [
+      "https://beacons.ai/bw_logo_full.png"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.103546+00:00"
+}

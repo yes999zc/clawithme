@@ -1,0 +1,33 @@
+{
+  "id": "lobsters",
+  "name": "Lobsters",
+  "canonical_url": "https://lobste.rs/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999981100,
+    "tags": [
+      "coding",
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 18900
+  },
+  "check": {
+    "probe_url": "https://lobste.rs/u/{username}",
+    "known_accounts": [
+      "jcs"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.624467+00:00"
+}

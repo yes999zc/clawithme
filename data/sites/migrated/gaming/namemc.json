@@ -1,0 +1,38 @@
+{
+  "id": "namemc",
+  "name": "NameMC",
+  "canonical_url": "https://namemc.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999910006,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 89994
+  },
+  "check": {
+    "probe_url": "https://namemc.com/profile/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Minecraft Profile"
+    ],
+    "absence_strs": [
+      "row align-items-center"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.877355+00:00"
+}

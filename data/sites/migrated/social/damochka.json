@@ -1,0 +1,33 @@
+{
+  "id": "damochka",
+  "name": "Damochka",
+  "canonical_url": "https://www.damochka.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999253613,
+    "tags": [
+      "kz",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 746387
+  },
+  "check": {
+    "probe_url": "https://www.damochka.ru/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.352896+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "seoforum",
+  "name": "SEOForum",
+  "canonical_url": "https://www.seoforum.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://seoforum.com/@{username}",
+    "known_accounts": [
+      "ko"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.532678+00:00"
+}

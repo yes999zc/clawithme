@@ -1,0 +1,35 @@
+{
+  "id": "movie-list",
+  "name": "Movie-list",
+  "canonical_url": "https://www.movie-list.com",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999852322,
+    "tags": [
+      "ca",
+      "forum",
+      "pk"
+    ]
+  },
+  "rankings": {
+    "alexa": 147678
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.946988+00:00",
+  "_maigret_engine": "vBulletin"
+}

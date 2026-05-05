@@ -1,0 +1,31 @@
+{
+  "id": "kazanlashkigalab_com",
+  "name": "kazanlashkigalab.com",
+  "canonical_url": "https://kazanlashkigalab.com",
+  "engine_ref": "wordpress_author",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "kz"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "boncho-bonev"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.280665+00:00",
+  "_maigret_engine": "Wordpress/Author"
+}

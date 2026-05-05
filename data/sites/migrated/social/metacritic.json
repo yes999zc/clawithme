@@ -1,0 +1,38 @@
+{
+  "id": "metacritic",
+  "name": "Metacritic",
+  "canonical_url": "https://www.metacritic.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997661,
+    "tags": [
+      "review"
+    ]
+  },
+  "rankings": {
+    "alexa": 2339
+  },
+  "check": {
+    "probe_url": "https://www.metacritic.com/user/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewould"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Avg. User score"
+    ],
+    "absence_strs": [
+      "This user hasn’t rated anything yet"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.078726+00:00"
+}

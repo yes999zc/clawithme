@@ -1,0 +1,41 @@
+{
+  "id": "f6s",
+  "name": "F6S",
+  "canonical_url": "https://f6s.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995011,
+    "tags": [
+      "business"
+    ]
+  },
+  "rankings": {
+    "alexa": 4989
+  },
+  "check": {
+    "probe_url": "https://www.f6s.com/{username}",
+    "known_accounts": [
+      "vidheeshnacode"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "Accept-Language": "en-US,en;q=0.5",
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/116.0"
+    },
+    "presence_strs": [
+      "profile-heading"
+    ],
+    "absence_strs": [
+      "Nothing to see here - 404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.199803+00:00"
+}

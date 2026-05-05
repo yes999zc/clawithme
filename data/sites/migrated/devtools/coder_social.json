@@ -1,0 +1,36 @@
+{
+  "id": "coder_social",
+  "name": "coder.social",
+  "canonical_url": "https://coder.social",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://coder.social/{username}",
+    "known_accounts": [
+      "soxoj"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      " - Coder Social</title>"
+    ],
+    "absence_strs": [
+      "<title>Coder Social Home</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.276968+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "club_passion_ru",
+  "name": "club.passion.ru",
+  "canonical_url": "http://club.passion.ru",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "mo47"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.777311+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

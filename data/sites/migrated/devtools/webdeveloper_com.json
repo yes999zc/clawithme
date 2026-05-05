@@ -1,0 +1,34 @@
+{
+  "id": "webdeveloper_com",
+  "name": "webdeveloper.com",
+  "canonical_url": "https://webdeveloper.com",
+  "engine_ref": "flarum",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999955839,
+    "tags": [
+      "coding",
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 44161
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.731208+00:00",
+  "_maigret_engine": "Flarum"
+}

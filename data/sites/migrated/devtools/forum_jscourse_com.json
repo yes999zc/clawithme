@@ -1,0 +1,32 @@
+{
+  "id": "forum_jscourse_com",
+  "name": "forum.jscourse.com",
+  "canonical_url": "https://forum.jscourse.com",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "kharkovhipster"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.569045+00:00",
+  "_maigret_engine": "Discourse"
+}

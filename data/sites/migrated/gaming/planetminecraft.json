@@ -1,0 +1,40 @@
+{
+  "id": "planetminecraft",
+  "name": "PlanetMinecraft",
+  "canonical_url": "https://www.planetminecraft.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992588,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 7412
+  },
+  "check": {
+    "probe_url": "https://www.planetminecraft.com/member/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile on Planet Minecraft to see their public Minecraft community activity"
+    ],
+    "absence_strs": [
+      "Hmm, it seems that you've come across an invalid username",
+      "404 Not Found",
+      "Member Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.303303+00:00"
+}

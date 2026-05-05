@@ -1,0 +1,36 @@
+{
+  "id": "imgsrc_ru",
+  "name": "imgsrc.ru",
+  "canonical_url": "https://imgsrc.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999826618,
+    "tags": [
+      "be",
+      "de",
+      "es",
+      "pt",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 173382
+  },
+  "check": {
+    "probe_url": "https://imgsrc.ru/main/user.php?user={username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.970161+00:00"
+}

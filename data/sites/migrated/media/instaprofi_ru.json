@@ -1,0 +1,36 @@
+{
+  "id": "instaprofi_ru",
+  "name": "instaprofi.ru",
+  "canonical_url": "https://instaprofi.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://instaprofi.ru/profile/{username}",
+    "known_accounts": [
+      "morgen_shtern"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile__nextProfile flex-ajc"
+    ],
+    "absence_strs": [
+      "/static/img/pages/profile/nobody.jpg"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.493357+00:00"
+}

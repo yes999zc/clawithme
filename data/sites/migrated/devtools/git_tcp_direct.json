@@ -1,0 +1,38 @@
+{
+  "id": "git_tcp_direct",
+  "name": "git.tcp.direct",
+  "canonical_url": "https://git.tcp.direct",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://git.tcp.direct/{username}",
+    "known_accounts": [
+      "decoded"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile",
+      " user profile",
+      " name"
+    ],
+    "absence_strs": [
+      "og:site_name"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.192675+00:00"
+}

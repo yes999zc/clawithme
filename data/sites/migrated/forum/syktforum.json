@@ -1,0 +1,35 @@
+{
+  "id": "syktforum",
+  "name": "Syktforum",
+  "canonical_url": "http://syktforum.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://syktforum.ru/profile/{username}",
+    "known_accounts": [
+      "TonyT"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Такого пользователя не существует."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.834996+00:00"
+}

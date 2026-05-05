@@ -1,0 +1,34 @@
+{
+  "id": "banki_ru",
+  "name": "banki.ru",
+  "canonical_url": "https://banki.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992096,
+    "tags": [
+      "finance",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 7904
+  },
+  "check": {
+    "probe_url": "https://banki.ru/blog/{username}/",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.373829+00:00",
+  "_maigret_engine": "engine404"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "s-forum",
+  "name": "S-forum",
+  "canonical_url": "https://s-forum.biz",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999154946,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 845054
+  },
+  "check": {
+    "probe_url": "https://s-forum.biz/members/?username={username}",
+    "known_accounts": [
+      "ducat"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The specified member cannot be found. Please enter a member's entire name"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.406622+00:00"
+}

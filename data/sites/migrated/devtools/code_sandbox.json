@@ -1,0 +1,36 @@
+{
+  "id": "code_sandbox",
+  "name": "Code Sandbox",
+  "canonical_url": "https://codesandbox.io",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999991950,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 8050
+  },
+  "check": {
+    "probe_url": "https://codesandbox.io/u/{username}",
+    "known_accounts": [
+      "icyjoseph"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Could not find user with username"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.399734+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "7cups",
+  "name": "7Cups",
+  "canonical_url": "https://www.7cups.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999960070,
+    "tags": [
+      "medicine"
+    ]
+  },
+  "rankings": {
+    "alexa": 39930
+  },
+  "check": {
+    "probe_url": "https://www.7cups.com/@{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.714345+00:00"
+}

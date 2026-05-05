@@ -1,0 +1,32 @@
+{
+  "id": "phrack",
+  "name": "Phrack",
+  "canonical_url": "http://phrack.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999975039,
+    "tags": [
+      "hacking"
+    ]
+  },
+  "rankings": {
+    "alexa": 24961
+  },
+  "check": {
+    "probe_url": "http://phrack.org/author_{username}.html",
+    "known_accounts": [
+      "Dispater"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.646648+00:00"
+}

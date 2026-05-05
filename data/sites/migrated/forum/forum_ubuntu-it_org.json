@@ -1,0 +1,33 @@
+{
+  "id": "forum_ubuntu-it_org",
+  "name": "forum.ubuntu-it.org",
+  "canonical_url": "https://forum.ubuntu-it.org",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ch",
+      "forum",
+      "it"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.807303+00:00",
+  "_maigret_engine": "phpBB"
+}

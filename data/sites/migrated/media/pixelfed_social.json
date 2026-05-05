@@ -1,0 +1,33 @@
+{
+  "id": "pixelfed_social",
+  "name": "pixelfed.social",
+  "canonical_url": "https://pixelfed.social/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999987004,
+    "tags": [
+      "art",
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 12996
+  },
+  "check": {
+    "probe_url": "https://pixelfed.social/{username}/",
+    "known_accounts": [
+      "pylapp"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis42"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.526301+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "wix",
+  "name": "Wix",
+  "canonical_url": "https://wix.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999999778,
+    "tags": [
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 222
+  },
+  "check": {
+    "probe_url": "https://{username}.wix.com",
+    "known_accounts": [
+      "support"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.694168+00:00"
+}

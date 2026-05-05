@@ -1,0 +1,46 @@
+{
+  "id": "polywork",
+  "name": "Polywork",
+  "canonical_url": "https://www.polywork.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999905356,
+    "tags": [
+      "career"
+    ]
+  },
+  "rankings": {
+    "alexa": 94644
+  },
+  "check": {
+    "probe_url": "https://www.polywork.com/{username}",
+    "known_accounts": [
+      "zoey123"
+    ],
+    "known_unclaimed": [
+      "timhhdgent"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "</style>",
+      "profile-name",
+      "profile_display_name",
+      "profile-username",
+      "active"
+    ],
+    "absence_strs": [
+      ">404</h3>",
+      "ml-1",
+      "twitter:site",
+      "/users/sign_in",
+      " data-toggle="
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.865489+00:00"
+}

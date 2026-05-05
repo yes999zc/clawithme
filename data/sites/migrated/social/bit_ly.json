@@ -1,0 +1,32 @@
+{
+  "id": "bit_ly",
+  "name": "Bit.ly",
+  "canonical_url": "https://bit.ly",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999968,
+    "tags": [
+      "links"
+    ]
+  },
+  "rankings": {
+    "alexa": 32
+  },
+  "check": {
+    "probe_url": "https://bit.ly/{username}",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.648137+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "segmentfault",
+  "name": "SegmentFault",
+  "canonical_url": "https://segmentfault.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994113,
+    "tags": [
+      "cn"
+    ]
+  },
+  "rankings": {
+    "alexa": 5887
+  },
+  "check": {
+    "probe_url": "https://segmentfault.com/u/{username}",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "- SegmentFault 思否</title>"
+    ],
+    "absence_strs": [
+      "message\":\"Not Found\""
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.216495+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "linuxfr",
+  "name": "Linuxfr",
+  "canonical_url": "https://linuxfr.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999977234,
+    "tags": [
+      "fr",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 22766
+  },
+  "check": {
+    "probe_url": "https://linuxfr.org/users/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.614073+00:00"
+}

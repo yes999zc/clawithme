@@ -1,0 +1,33 @@
+{
+  "id": "discourse_haskell_org",
+  "name": "discourse.haskell.org",
+  "canonical_url": "https://discourse.haskell.org",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding",
+      "forum",
+      "za"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "philipgaudreau"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.189563+00:00",
+  "_maigret_engine": "Discourse"
+}

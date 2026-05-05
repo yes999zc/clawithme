@@ -1,0 +1,32 @@
+{
+  "id": "weforum",
+  "name": "Weforum",
+  "canonical_url": "https://www.weforum.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999999735,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 265
+  },
+  "check": {
+    "probe_url": "https://www.weforum.org/people/{username}",
+    "known_accounts": [
+      "adam-leismark"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.713433+00:00"
+}

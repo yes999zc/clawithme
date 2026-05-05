@@ -1,0 +1,32 @@
+{
+  "id": "flightradar24",
+  "name": "Flightradar24",
+  "canonical_url": "https://www.flightradar24.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997836,
+    "tags": [
+      "maps"
+    ]
+  },
+  "rankings": {
+    "alexa": 2164
+  },
+  "check": {
+    "probe_url": "https://my.flightradar24.com/{username}",
+    "known_accounts": [
+      "jebbrooks"
+    ],
+    "known_unclaimed": [
+      "xgtrq"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.075912+00:00"
+}

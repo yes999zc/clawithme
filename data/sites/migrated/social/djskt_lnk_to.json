@@ -1,0 +1,35 @@
+{
+  "id": "djskt_lnk_to",
+  "name": "djskt.lnk.to",
+  "canonical_url": "https://djskt.lnk.to",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://djskt.lnk.to/{username}",
+    "known_accounts": [
+      "LoveDontFadeTW"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "artistName",
+      " legalName"
+    ],
+    "absence_strs": [
+      "No page with this URL exists"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.818720+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "fixya",
+  "name": "fixya",
+  "canonical_url": "https://www.fixya.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999976508,
+    "tags": [
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 23492
+  },
+  "check": {
+    "probe_url": "https://www.fixya.com/users/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.608455+00:00"
+}

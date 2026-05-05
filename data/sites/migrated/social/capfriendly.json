@@ -1,0 +1,36 @@
+{
+  "id": "capfriendly",
+  "name": "CapFriendly",
+  "canonical_url": "https://www.capfriendly.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999876950,
+    "tags": [
+      "ca"
+    ]
+  },
+  "rankings": {
+    "alexa": 123050
+  },
+  "check": {
+    "probe_url": "https://www.capfriendly.com/users/{username}",
+    "known_accounts": [
+      "thisactuallyexists"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<div class=\"err show p5\">No results found</div>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.922058+00:00"
+}

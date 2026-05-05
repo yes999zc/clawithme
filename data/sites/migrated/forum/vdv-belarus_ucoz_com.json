@@ -1,0 +1,33 @@
+{
+  "id": "vdv-belarus_ucoz_com",
+  "name": "vdv-belarus.ucoz.com",
+  "canonical_url": "http://vdv-belarus.ucoz.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "by",
+      "forum",
+      "military"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.141966+00:00",
+  "_maigret_engine": "uCoz"
+}

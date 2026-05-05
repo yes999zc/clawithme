@@ -1,0 +1,38 @@
+{
+  "id": "likee",
+  "name": "Likee",
+  "canonical_url": "https://likee.video",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999907337,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 92663
+  },
+  "check": {
+    "probe_url": "https://likee.video/@{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user_name"
+    ],
+    "absence_strs": [
+      "https://likee.video/@/"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.887557+00:00"
+}

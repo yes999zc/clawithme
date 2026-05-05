@@ -1,0 +1,32 @@
+{
+  "id": "rottentomatoes",
+  "name": "Rottentomatoes",
+  "canonical_url": "https://www.rottentomatoes.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998899,
+    "tags": [
+      "movies"
+    ]
+  },
+  "rankings": {
+    "alexa": 1101
+  },
+  "check": {
+    "probe_url": "https://www.rottentomatoes.com/critic/{username}/movies",
+    "known_accounts": [
+      "ben-allen"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.811961+00:00"
+}

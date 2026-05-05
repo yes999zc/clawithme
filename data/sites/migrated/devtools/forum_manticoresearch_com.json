@@ -1,0 +1,31 @@
+{
+  "id": "forum_manticoresearch_com",
+  "name": "forum.manticoresearch.com",
+  "canonical_url": "https://forum.manticoresearch.com",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "gloria"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.568124+00:00",
+  "_maigret_engine": "Discourse"
+}

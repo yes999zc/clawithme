@@ -1,0 +1,33 @@
+{
+  "id": "free-lancers",
+  "name": "Free-lancers",
+  "canonical_url": "http://www.free-lancers.net",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999096375,
+    "tags": [
+      "freelance",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 903625
+  },
+  "check": {
+    "probe_url": "http://www.free-lancers.net/users/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.415071+00:00"
+}

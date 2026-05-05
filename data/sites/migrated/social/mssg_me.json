@@ -1,0 +1,32 @@
+{
+  "id": "mssg_me",
+  "name": "mssg.me",
+  "canonical_url": "https://mssg.me",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992264,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 7736
+  },
+  "check": {
+    "probe_url": "https://mssg.me/{username}",
+    "known_accounts": [
+      "siamparagon"
+    ],
+    "known_unclaimed": [
+      "asadasdsd"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.308051+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "blitz_tactics",
+  "name": "Blitz Tactics",
+  "canonical_url": "https://blitztactics.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://blitztactics.com/{username}",
+    "known_accounts": [
+      "Lance5500"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "That page doesn't exist"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.521647+00:00"
+}

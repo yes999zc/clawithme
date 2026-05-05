@@ -1,0 +1,33 @@
+{
+  "id": "pluralsight",
+  "name": "Pluralsight",
+  "canonical_url": "https://app.pluralsight.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://app.pluralsight.com/profile/author/{username}",
+    "known_accounts": [
+      "adam-crahen"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>Not available | Profile</title>",
+      "renderErrorPage(404)"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.120115+00:00"
+}

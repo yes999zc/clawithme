@@ -1,0 +1,39 @@
+{
+  "id": "niftygateway",
+  "name": "Niftygateway",
+  "canonical_url": "https://api.niftygateway.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://niftygateway.com/profile/{username}",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile_url",
+      "name",
+      "profile_pic_url",
+      "verified",
+      "bio"
+    ],
+    "absence_strs": [
+      "not_found",
+      " User profile not located in our system."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.448001+00:00"
+}

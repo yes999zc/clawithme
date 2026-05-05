@@ -1,0 +1,33 @@
+{
+  "id": "twentysix_ru",
+  "name": "twentysix.ru",
+  "canonical_url": "https://twentysix.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999378942,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 621058
+  },
+  "check": {
+    "probe_url": "https://twentysix.ru/profile/{username}/",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.289291+00:00",
+  "_maigret_engine": "engine404"
+}

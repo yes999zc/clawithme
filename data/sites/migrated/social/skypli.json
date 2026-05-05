@@ -1,0 +1,36 @@
+{
+  "id": "skypli",
+  "name": "Skypli",
+  "canonical_url": "https://www.skypli.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "messaging"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.skypli.com/profile/{username}",
+    "known_accounts": [
+      "roxana19739"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-box__info"
+    ],
+    "absence_strs": [
+      "Nothing found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.242983+00:00"
+}

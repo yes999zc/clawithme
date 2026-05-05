@@ -1,0 +1,33 @@
+{
+  "id": "4x4_tomsk_ru",
+  "name": "4x4.tomsk.ru",
+  "canonical_url": "http://4x4.tomsk.ru",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "auto",
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "ale"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.185822+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

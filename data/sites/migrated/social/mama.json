@@ -1,0 +1,36 @@
+{
+  "id": "mama",
+  "name": "Mama",
+  "canonical_url": "https://mama.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999868374,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 131626
+  },
+  "check": {
+    "probe_url": "https://mama.ru/members/{username}",
+    "known_accounts": [
+      "irina"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "b-user-fullname"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.933442+00:00"
+}

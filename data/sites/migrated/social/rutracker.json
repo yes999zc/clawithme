@@ -1,0 +1,39 @@
+{
+  "id": "rutracker",
+  "name": "Rutracker",
+  "canonical_url": "https://rutracker.org/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992694,
+    "tags": [
+      "ru",
+      "torrent"
+    ]
+  },
+  "rankings": {
+    "alexa": 7306
+  },
+  "check": {
+    "probe_url": "{urlMain}forum/profile.php?mode=viewprofile&u={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Профиль пользователя"
+    ],
+    "absence_strs": [
+      "Пользователь не найден"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.305208+00:00"
+}

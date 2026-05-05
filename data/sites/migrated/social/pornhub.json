@@ -1,0 +1,39 @@
+{
+  "id": "pornhub",
+  "name": "Pornhub",
+  "canonical_url": "https://pornhub.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997492,
+    "tags": [
+      "porn"
+    ]
+  },
+  "rankings": {
+    "alexa": 2508
+  },
+  "check": {
+    "probe_url": "https://pornhub.com/users/{username}",
+    "known_accounts": [
+      "verified"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profileInformation"
+    ],
+    "absence_strs": [
+      "Error Page Not Found",
+      "cannot be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.088930+00:00"
+}

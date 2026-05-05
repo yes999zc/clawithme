@@ -1,0 +1,32 @@
+{
+  "id": "nightbot",
+  "name": "nightbot",
+  "canonical_url": "https://nightbot.tv/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999702639,
+    "tags": [
+      "jp"
+    ]
+  },
+  "rankings": {
+    "alexa": 297361
+  },
+  "check": {
+    "probe_url": "https://nightbot.tv/t/{username}/commands",
+    "known_accounts": [
+      "green"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.119089+00:00"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "11x2",
+  "name": "11x2",
+  "canonical_url": "https://11x2.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://11x2.com/user/home/{username}",
+    "known_accounts": [
+      "hazelamy"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.458142+00:00"
+}

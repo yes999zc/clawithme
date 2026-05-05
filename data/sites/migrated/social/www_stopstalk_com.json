@@ -1,0 +1,42 @@
+{
+  "id": "www_stopstalk_com",
+  "name": "www.stopstalk.com",
+  "canonical_url": "https://www.stopstalk.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.stopstalk.com/user/profile/{username}",
+    "known_accounts": [
+      "sunny2000"
+    ],
+    "known_unclaimed": [
+      "vgjxobkpsp"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "<html>",
+      "  <body>",
+      "><tbody>",
+      "uva-profile-url",
+      "    <style>"
+    ],
+    "absence_strs": [
+      "pupil",
+      "my-owlie",
+      "/user/custom_friend",
+      "owl",
+      "beak"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.518787+00:00"
+}

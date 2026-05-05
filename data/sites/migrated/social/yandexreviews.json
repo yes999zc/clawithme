@@ -1,0 +1,40 @@
+{
+  "id": "yandexreviews",
+  "name": "YandexReviews",
+  "canonical_url": "https://yandex.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999745,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 255
+  },
+  "check": {
+    "probe_url": "https://reviews.yandex.ru/user/{username}",
+    "known_accounts": [
+      "20vpvmmwpnwyb0dpbnjvy3k14c"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"
+    },
+    "presence_strs": [
+      "content=\"Отзывы и оценки"
+    ],
+    "absence_strs": [
+      "Пользователь скрыл свою публичную страницу"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.704214+00:00"
+}

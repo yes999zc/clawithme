@@ -1,0 +1,46 @@
+{
+  "id": "hotcopper",
+  "name": "Hotcopper",
+  "canonical_url": "https://hotcopper.com.au",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999884694,
+    "tags": [
+      "finance"
+    ]
+  },
+  "rankings": {
+    "alexa": 115306
+  },
+  "check": {
+    "probe_url": "https://hotcopper.com.au/search/search?type=post&users={username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "ggyeplcpod"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "title-td",
+      "title is-1",
+      "pagination ",
+      "toggle",
+      "active "
+    ],
+    "absence_strs": [
+      "error-page",
+      "error-page home container",
+      "card-footer-item",
+      "><main id=",
+      "card-content"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.918218+00:00"
+}

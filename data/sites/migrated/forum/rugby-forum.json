@@ -1,0 +1,31 @@
+{
+  "id": "rugby-forum",
+  "name": "Rugby-forum",
+  "canonical_url": "http://rugby-forum.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://rugby-forum.ru/polzovateli/{username}/",
+    "known_accounts": [
+      "bold"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.791215+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "giantbomb",
+  "name": "Giantbomb",
+  "canonical_url": "https://www.giantbomb.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999996811,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 3189
+  },
+  "check": {
+    "probe_url": "https://www.giantbomb.com/profile/{username}",
+    "known_accounts": [
+      "green"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.113636+00:00"
+}

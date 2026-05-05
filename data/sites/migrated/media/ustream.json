@@ -1,0 +1,33 @@
+{
+  "id": "ustream",
+  "name": "Ustream",
+  "canonical_url": "http://www.ustream.tv",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998857,
+    "tags": [
+      "streaming",
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 1143
+  },
+  "check": {
+    "probe_url": "http://www.ustream.tv/channel/adam{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.817700+00:00"
+}

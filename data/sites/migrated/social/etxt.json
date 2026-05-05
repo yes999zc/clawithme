@@ -1,0 +1,32 @@
+{
+  "id": "etxt",
+  "name": "Etxt",
+  "canonical_url": "https://www.etxt.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999889864,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 110136
+  },
+  "check": {
+    "probe_url": "https://www.etxt.ru/{username}.html",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.916250+00:00"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "computerbase",
+  "name": "Computerbase",
+  "canonical_url": "https://www.computerbase.de",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999989399,
+    "tags": [
+      "de"
+    ]
+  },
+  "rankings": {
+    "alexa": 10601
+  },
+  "check": {
+    "probe_url": "https://www.computerbase.de/forum/members/?username={username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Das gewünschte Mitglied kann nicht gefunden werden"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.473302+00:00"
+}

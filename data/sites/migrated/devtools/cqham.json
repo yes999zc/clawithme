@@ -1,0 +1,37 @@
+{
+  "id": "cqham",
+  "name": "Cqham",
+  "canonical_url": "http://www.cqham.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999912968,
+    "tags": [
+      "ru",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 87032
+  },
+  "check": {
+    "probe_url": "http://www.cqham.ru/forum/member.php?username={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Пользователь не зарегистрирован и не имеет профиля для просмотра."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.864507+00:00"
+}

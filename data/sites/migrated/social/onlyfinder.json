@@ -1,0 +1,43 @@
+{
+  "id": "onlyfinder",
+  "name": "Onlyfinder",
+  "canonical_url": "https://onlyfinder.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999796610,
+    "tags": [
+      "webcam"
+    ]
+  },
+  "rankings": {
+    "alexa": 203390
+  },
+  "check": {
+    "probe_url": "https://onlyfinder.com/json/search?q={username}&start=0",
+    "known_accounts": [
+      "wilaribeiro"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36",
+      "accept": "application/json, text/javascript, */*; q=0.01",
+      "x-requested-with": "XMLHttpRequest",
+      "cookie": "t=93712308; __cflb=02DiuFyCGPVyrmPMNwK31DjBY5udTKcbYh9HYtAX6rR1n"
+    },
+    "presence_strs": [
+      "Username"
+    ],
+    "absence_strs": [
+      "\"rows\":[]"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.028882+00:00"
+}

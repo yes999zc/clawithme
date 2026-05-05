@@ -1,0 +1,29 @@
+{
+  "id": "cs-ru_ucoz_org",
+  "name": "cs-ru.ucoz.org",
+  "canonical_url": "http://cs-ru.ucoz.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.518895+00:00",
+  "_maigret_engine": "uCoz"
+}

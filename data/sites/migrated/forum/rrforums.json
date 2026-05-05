@@ -1,0 +1,35 @@
+{
+  "id": "rrforums",
+  "name": "RRForums",
+  "canonical_url": "http://au.rrforums.net/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "au",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://au.rrforums.net/cgi-bin/forum/board-profile.pl?action=view_profile&profile={username}-users",
+    "known_accounts": [
+      "guyslp"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Profile Does Not Exist"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.774507+00:00"
+}

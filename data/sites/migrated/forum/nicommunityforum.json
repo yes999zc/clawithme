@@ -1,0 +1,33 @@
+{
+  "id": "nicommunityforum",
+  "name": "NICommunityForum",
+  "canonical_url": "https://www.native-instruments.com/forum/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999991486,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 8514
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.405290+00:00",
+  "_maigret_engine": "XenForo"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "domestika_org",
+  "name": "domestika.org",
+  "canonical_url": "https://www.domestika.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993521,
+    "tags": [
+      "education"
+    ]
+  },
+  "rankings": {
+    "alexa": 6479
+  },
+  "check": {
+    "probe_url": "https://www.domestika.org/{username}",
+    "known_accounts": [
+      "zenzuke"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.239976+00:00"
+}

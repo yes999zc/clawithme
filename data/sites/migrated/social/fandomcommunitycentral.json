@@ -1,0 +1,36 @@
+{
+  "id": "fandomcommunitycentral",
+  "name": "FandomCommunityCentral",
+  "canonical_url": "https://community.fandom.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "wiki"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://community.fandom.com/wiki/User:{username}",
+    "known_accounts": [
+      "Red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"userid\""
+    ],
+    "absence_strs": [
+      "\"missing\""
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.727224+00:00"
+}

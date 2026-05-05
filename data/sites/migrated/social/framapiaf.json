@@ -1,0 +1,32 @@
+{
+  "id": "framapiaf",
+  "name": "Framapiaf",
+  "canonical_url": "https://framapiaf.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999953233,
+    "tags": [
+      "mastodon"
+    ]
+  },
+  "rankings": {
+    "alexa": 46767
+  },
+  "check": {
+    "probe_url": "https://framapiaf.org/@{username}",
+    "known_accounts": [
+      "pylapp"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis42"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.741633+00:00"
+}

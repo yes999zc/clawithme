@@ -1,0 +1,35 @@
+{
+  "id": "animeforum",
+  "name": "Animeforum",
+  "canonical_url": "https://www.animeforum.com",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999767290,
+    "tags": [
+      "forum",
+      "pk",
+      "vn"
+    ]
+  },
+  "rankings": {
+    "alexa": 232710
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.053712+00:00",
+  "_maigret_engine": "vBulletin"
+}

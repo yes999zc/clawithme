@@ -1,0 +1,35 @@
+{
+  "id": "egpu",
+  "name": "eGPU",
+  "canonical_url": "https://egpu.io/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999811678,
+    "tags": [
+      "forum",
+      "jp",
+      "tech",
+      "tw"
+    ]
+  },
+  "rankings": {
+    "alexa": 188322
+  },
+  "check": {
+    "probe_url": "https://egpu.io/forums/profile/{username}/",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.962721+00:00"
+}

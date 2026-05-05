@@ -1,0 +1,33 @@
+{
+  "id": "digitalocean",
+  "name": "DigitalOcean",
+  "canonical_url": "https://www.digitalocean.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999999341,
+    "tags": [
+      "forum",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 659
+  },
+  "check": {
+    "probe_url": "https://www.digitalocean.com/community/users/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.773361+00:00"
+}

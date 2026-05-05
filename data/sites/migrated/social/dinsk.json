@@ -1,0 +1,30 @@
+{
+  "id": "dinsk",
+  "name": "Dinsk",
+  "canonical_url": "https://dinsk.su",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://dinsk.su/user/{username}",
+    "known_accounts": [
+      "dinsk"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.560271+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "empretienda_ar",
+  "name": "Empretienda AR",
+  "canonical_url": "https://empretienda.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999179072,
+    "tags": []
+  },
+  "rankings": {
+    "alexa": 820928
+  },
+  "check": {
+    "probe_url": "https://{username}.empretienda.com.ar",
+    "known_accounts": [
+      "camalote"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.427236+00:00"
+}

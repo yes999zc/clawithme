@@ -1,0 +1,40 @@
+{
+  "id": "google_scholar",
+  "name": "Google Scholar",
+  "canonical_url": "https://scholar.google.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999758,
+    "tags": [
+      "education",
+      "research"
+    ]
+  },
+  "rankings": {
+    "alexa": 242
+  },
+  "check": {
+    "probe_url": "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q={username}&btnG=",
+    "known_accounts": [
+      "Blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "class=\"gs_a\""
+    ],
+    "absence_strs": [
+      "did not match any articles",
+      "not match"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.702381+00:00"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "brusheezy",
+  "name": "Brusheezy",
+  "canonical_url": "https://www.brusheezy.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999982737,
+    "tags": [
+      "photo",
+      "stock"
+    ]
+  },
+  "rankings": {
+    "alexa": 17263
+  },
+  "check": {
+    "probe_url": "https://www.brusheezy.com/members/{username}",
+    "known_accounts": [
+      "artistmef"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "canonical\" href=\"https://www.brusheezy.com/members/"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.561835+00:00"
+}

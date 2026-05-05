@@ -1,0 +1,32 @@
+{
+  "id": "facenama",
+  "name": "Facenama",
+  "canonical_url": "https://facenama.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999546370,
+    "tags": [
+      "ir"
+    ]
+  },
+  "rankings": {
+    "alexa": 453630
+  },
+  "check": {
+    "probe_url": "https://facenama.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.193821+00:00"
+}

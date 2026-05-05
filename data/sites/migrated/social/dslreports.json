@@ -1,0 +1,38 @@
+{
+  "id": "dslreports",
+  "name": "DSLReports",
+  "canonical_url": "https://www.dslreports.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999991766,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 8234
+  },
+  "check": {
+    "probe_url": "https://www.dslreports.com/profile/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Kudos Received"
+    ],
+    "absence_strs": [
+      "alert:"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.402538+00:00"
+}

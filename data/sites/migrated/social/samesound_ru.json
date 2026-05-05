@@ -1,0 +1,33 @@
+{
+  "id": "samesound_ru",
+  "name": "samesound.ru",
+  "canonical_url": "https://samesound.ru",
+  "engine_ref": "wordpress_author",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999339961,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 660039
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.327538+00:00",
+  "_maigret_engine": "Wordpress/Author"
+}

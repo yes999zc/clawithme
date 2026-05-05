@@ -1,0 +1,40 @@
+{
+  "id": "liinks",
+  "name": "Liinks",
+  "canonical_url": "https://www.liinks.co",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999814944,
+    "tags": [
+      "links"
+    ]
+  },
+  "rankings": {
+    "alexa": 185056
+  },
+  "check": {
+    "probe_url": "https://www.liinks.co/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user",
+      " thumbnail"
+    ],
+    "absence_strs": [
+      "_fs_namespace",
+      " CUSTOM_HOSTNAME"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.988637+00:00"
+}

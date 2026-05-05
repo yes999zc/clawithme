@@ -1,0 +1,32 @@
+{
+  "id": "weasyl",
+  "name": "Weasyl",
+  "canonical_url": "https://www.weasyl.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999881009,
+    "tags": [
+      "art"
+    ]
+  },
+  "rankings": {
+    "alexa": 118991
+  },
+  "check": {
+    "probe_url": "https://www.weasyl.com/~{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.925876+00:00"
+}

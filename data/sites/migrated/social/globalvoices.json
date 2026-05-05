@@ -1,0 +1,36 @@
+{
+  "id": "globalvoices",
+  "name": "Globalvoices",
+  "canonical_url": "https://globalvoices.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999991015,
+    "tags": [
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 8985
+  },
+  "check": {
+    "probe_url": "https://globalvoices.org/author/{username}/",
+    "known_accounts": [
+      "7iber"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "404 ERROR: PAGE NOT FOUND"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.448947+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "chaos_social",
+  "name": "chaos.social",
+  "canonical_url": "https://chaos.social/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999985704,
+    "tags": [
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 14296
+  },
+  "check": {
+    "probe_url": "https://chaos.social/@{username}",
+    "known_accounts": [
+      "rixx"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.544791+00:00"
+}

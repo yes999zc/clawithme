@@ -1,0 +1,38 @@
+{
+  "id": "contently",
+  "name": "Contently",
+  "canonical_url": "https://contently.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995897,
+    "tags": [
+      "freelance"
+    ]
+  },
+  "rankings": {
+    "alexa": 4103
+  },
+  "check": {
+    "probe_url": "https://{username}.contently.com/",
+    "known_accounts": [
+      "jordanteicher"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "<h4>\nPROJECTS"
+    ],
+    "absence_strs": [
+      "Request A Meeting</a></div>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.168837+00:00"
+}

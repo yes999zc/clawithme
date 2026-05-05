@@ -1,0 +1,33 @@
+{
+  "id": "airliners",
+  "name": "Airliners",
+  "canonical_url": "https://www.airliners.net/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999991223,
+    "tags": [
+      "hobby",
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 8777
+  },
+  "check": {
+    "probe_url": "https://www.airliners.net/user/{username}/profile/photos",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.408089+00:00"
+}

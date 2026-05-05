@@ -1,0 +1,34 @@
+{
+  "id": "vimeo",
+  "name": "Vimeo",
+  "canonical_url": "https://vimeo.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999980,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 20
+  },
+  "check": {
+    "probe_url": "https://vimeo.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "smbepezbrg"
+    ],
+    "headers": {
+      "Authorization": "jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NzcxMzM4ODAsInVzZXJfaWQiOm51bGwsImFwcF9pZCI6NTg0NzksInNjb3BlcyI6InB1YmxpYyIsInRlYW1fdXNlcl9pZCI6bnVsbCwianRpIjoiZjFiMGJjNWUtMjIyOC00Y2I1LWFlNmItODk0YjZhNGNmODJhIn0.YCPXekRrHnJy8iH1gX4iVuNURiw6sU_FlmsfHnM2oug"
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.644323+00:00"
+}

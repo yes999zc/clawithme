@@ -1,0 +1,31 @@
+{
+  "id": "hacker_sploit",
+  "name": "Hacker Sploit",
+  "canonical_url": "https://forum.hackersploit.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forum.hackersploit.org/u/{username}",
+    "known_accounts": [
+      "hackersploit"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.527172+00:00"
+}

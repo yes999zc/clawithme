@@ -1,0 +1,32 @@
+{
+  "id": "gvectors",
+  "name": "Gvectors",
+  "canonical_url": "https://gvectors.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999896830,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 103170
+  },
+  "check": {
+    "probe_url": "https://gvectors.com/forum/profile/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.935302+00:00"
+}

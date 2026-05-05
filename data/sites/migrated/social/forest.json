@@ -1,0 +1,32 @@
+{
+  "id": "forest",
+  "name": "Forest",
+  "canonical_url": "https://forest.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999832027,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 167973
+  },
+  "check": {
+    "probe_url": "https://forest.ru/forum/user/{username}/",
+    "known_accounts": [
+      "veter"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.957040+00:00"
+}

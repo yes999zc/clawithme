@@ -1,0 +1,36 @@
+{
+  "id": "flyertalk",
+  "name": "Flyertalk",
+  "canonical_url": "https://www.flyertalk.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999984426,
+    "tags": [
+      "travel"
+    ]
+  },
+  "rankings": {
+    "alexa": 15574
+  },
+  "check": {
+    "probe_url": "https://www.flyertalk.com/forum/members/{username}.html",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "- View Profile:"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.552317+00:00"
+}

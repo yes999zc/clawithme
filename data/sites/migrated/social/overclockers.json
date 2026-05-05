@@ -1,0 +1,32 @@
+{
+  "id": "overclockers",
+  "name": "Overclockers",
+  "canonical_url": "https://overclockers.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999981270,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 18730
+  },
+  "check": {
+    "probe_url": "https://overclockers.ru/cpubase/user/{username}",
+    "known_accounts": [
+      "Rasamaha"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.580616+00:00"
+}

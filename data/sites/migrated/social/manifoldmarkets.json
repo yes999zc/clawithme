@@ -1,0 +1,42 @@
+{
+  "id": "manifoldmarkets",
+  "name": "ManifoldMarkets",
+  "canonical_url": "https://manifold.markets/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999966138,
+    "tags": [
+      "finance"
+    ]
+  },
+  "rankings": {
+    "alexa": 33862
+  },
+  "check": {
+    "probe_url": "https://manifold.markets/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      ">Comments</div>",
+      ">Balance log</div>",
+      ">Payments</div>",
+      "@<!-- -->{username}<!-- --> </span>"
+    ],
+    "absence_strs": [
+      "404: Oops!",
+      "Less than 1% chance anything exists at this url."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.698618+00:00"
+}

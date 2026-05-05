@@ -1,0 +1,42 @@
+{
+  "id": "onlyfans",
+  "name": "OnlyFans",
+  "canonical_url": "https://onlyfans.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997002,
+    "tags": [
+      "porn"
+    ]
+  },
+  "rankings": {
+    "alexa": 2998
+  },
+  "check": {
+    "probe_url": "https://onlyfans.com/{username}",
+    "known_accounts": [
+      "onlyfans"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7xyz"
+    ],
+    "headers": {
+      "accept": "application/json, text/plain, */*",
+      "app-token": "33d57ade8c02dbc5a333db99ff9ae26a",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "user-id": "0",
+      "x-bc": "0a106d301866494c873ae3a05bc3c97cee59a749",
+      "time": "1777132991121",
+      "sign": "57203:3723aa7d500e76eabca29df74e4e97c483f14204:66d:69cfa6d8",
+      "referer": "https://onlyfans.com/",
+      "cookie": "__cf_bm=YovfzPN0T_wg6F60L5eZKPOQvlGESws3UDGgEkmPb9A-1776790253-1.0.1.1-KRZgptNe5P9epBZSdITa12VfTEDlDdLckPY3I2FDAacvCPxOj0PqeK86J5mcC7UQ_TM8_O24bAh21ElYINovqk2386EoJYyLmknHJ5UsFts"
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.087962+00:00"
+}

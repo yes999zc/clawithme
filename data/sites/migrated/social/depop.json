@@ -1,0 +1,39 @@
+{
+  "id": "depop",
+  "name": "Depop",
+  "canonical_url": "https://www.depop.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999988516,
+    "tags": [
+      "fashion",
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 11484
+  },
+  "check": {
+    "probe_url": "https://www.depop.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "first_name"
+    ],
+    "absence_strs": [
+      "invalidUrlError__message"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.465773+00:00"
+}

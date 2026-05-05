@@ -1,0 +1,32 @@
+{
+  "id": "slack",
+  "name": "Slack",
+  "canonical_url": "https://slack.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999578,
+    "tags": [
+      "messaging"
+    ]
+  },
+  "rankings": {
+    "alexa": 422
+  },
+  "check": {
+    "probe_url": "https://{username}.slack.com",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.736509+00:00"
+}

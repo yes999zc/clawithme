@@ -1,0 +1,36 @@
+{
+  "id": "younow",
+  "name": "YouNow",
+  "canonical_url": "https://www.younow.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999878556,
+    "tags": [
+      "be"
+    ]
+  },
+  "rankings": {
+    "alexa": 121444
+  },
+  "check": {
+    "probe_url": "https://www.younow.com/{username}/",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "No users found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.921010+00:00"
+}

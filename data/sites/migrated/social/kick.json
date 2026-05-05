@@ -1,0 +1,32 @@
+{
+  "id": "kick",
+  "name": "Kick",
+  "canonical_url": "https://kick.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993526,
+    "tags": [
+      "streaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 6474
+  },
+  "check": {
+    "probe_url": "https://kick.com/{username}",
+    "known_accounts": [
+      "xqc"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.247736+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "open_game_art",
+  "name": "Open Game Art",
+  "canonical_url": "https://opengameart.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999981141,
+    "tags": [
+      "gaming",
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 18859
+  },
+  "check": {
+    "probe_url": "https://opengameart.org/users/{username}",
+    "known_accounts": [
+      "ski"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.585275+00:00"
+}

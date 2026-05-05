@@ -1,0 +1,39 @@
+{
+  "id": "linktr_ee",
+  "name": "linktr.ee",
+  "canonical_url": "https://linktr.ee",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999880,
+    "tags": [
+      "links"
+    ]
+  },
+  "rankings": {
+    "alexa": 120
+  },
+  "check": {
+    "probe_url": "https://linktr.ee/{username}",
+    "known_accounts": [
+      "Blisscartoos"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "@container/profile-container"
+    ],
+    "absence_strs": [
+      "The page you’re looking for doesn’t exist.",
+      "Want this to be your username?"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.678323+00:00"
+}

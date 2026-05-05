@@ -1,0 +1,32 @@
+{
+  "id": "vlr",
+  "name": "VLR",
+  "canonical_url": "https://www.vlr.gg",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999925451,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 74549
+  },
+  "check": {
+    "probe_url": "https://www.vlr.gg/user/{username}",
+    "known_accounts": [
+      "optms"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.836303+00:00"
+}

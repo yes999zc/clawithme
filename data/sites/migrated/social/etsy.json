@@ -1,0 +1,32 @@
+{
+  "id": "etsy",
+  "name": "Etsy",
+  "canonical_url": "https://www.etsy.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999854,
+    "tags": [
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 146
+  },
+  "check": {
+    "probe_url": "https://www.etsy.com/shop/{username}",
+    "known_accounts": [
+      "JennyKrafts"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.682065+00:00"
+}

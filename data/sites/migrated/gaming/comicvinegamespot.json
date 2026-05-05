@@ -1,0 +1,30 @@
+{
+  "id": "comicvinegamespot",
+  "name": "ComicvineGamespot",
+  "canonical_url": "https://comicvine.gamespot.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://comicvine.gamespot.com/profile/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.797952+00:00"
+}

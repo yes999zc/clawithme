@@ -1,0 +1,38 @@
+{
+  "id": "thechive",
+  "name": "Thechive",
+  "canonical_url": "https://thechive.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999984847,
+    "tags": [
+      "sharing"
+    ]
+  },
+  "rankings": {
+    "alexa": 15153
+  },
+  "check": {
+    "probe_url": "https://thechive.com/author/{username}",
+    "known_accounts": [
+      "bhgilliland"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Posts By"
+    ],
+    "absence_strs": [
+      "Find something else."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.549476+00:00"
+}

@@ -1,0 +1,40 @@
+{
+  "id": "calendly",
+  "name": "Calendly",
+  "canonical_url": "https://calendly.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999855,
+    "tags": [
+      "business",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 145
+  },
+  "check": {
+    "probe_url": "https://calendly.com/{username}",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile",
+      " User"
+    ],
+    "absence_strs": [
+      "The page you are looking for could not be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.681140+00:00"
+}

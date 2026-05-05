@@ -1,0 +1,39 @@
+{
+  "id": "guru",
+  "name": "Guru",
+  "canonical_url": "https://www.guru.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999989105,
+    "tags": [
+      "freelance"
+    ]
+  },
+  "rankings": {
+    "alexa": 10895
+  },
+  "check": {
+    "probe_url": "https://www.guru.com/freelancers/{username}",
+    "known_accounts": [
+      "longhui-zhao"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "id=\"profileApp\""
+    ],
+    "absence_strs": [
+      "Guru.com - Page Not Found",
+      "Guru.com - Content Deleted"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.476082+00:00"
+}

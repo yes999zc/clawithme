@@ -1,0 +1,33 @@
+{
+  "id": "playstationtrophies",
+  "name": "PlaystationTrophies",
+  "canonical_url": "https://www.playstationtrophies.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999930913,
+    "tags": [
+      "forum",
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 69087
+  },
+  "check": {
+    "probe_url": "https://www.playstationtrophies.org/forum/members/{username}.html",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.816511+00:00"
+}

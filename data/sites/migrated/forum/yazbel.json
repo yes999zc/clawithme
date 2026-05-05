@@ -1,0 +1,30 @@
+{
+  "id": "yazbel",
+  "name": "Yazbel",
+  "canonical_url": "https://forum.yazbel.com/u/{username}/summary",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forum.yazbel.com/u/{username}/summary",
+    "known_accounts": [
+      "abdullah189"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.894887+00:00"
+}

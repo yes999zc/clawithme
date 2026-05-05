@@ -1,0 +1,34 @@
+{
+  "id": "oglaszamy24h",
+  "name": "Oglaszamy24h",
+  "canonical_url": "https://oglaszamy24h.pl/profil,{username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://oglaszamy24h.pl/profil,{username}",
+    "known_accounts": [
+      "janek"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Profil użytkownika:"
+    ],
+    "absence_strs": [
+      "Nieprawidłowy link, w bazie danych nie istnieje użytkownik o podanym loginie"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.743509+00:00"
+}

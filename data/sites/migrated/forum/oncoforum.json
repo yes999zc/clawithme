@@ -1,0 +1,31 @@
+{
+  "id": "oncoforum",
+  "name": "Oncoforum",
+  "canonical_url": "https://www.oncoforum.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.oncoforum.ru/blog/blogs/{username}/",
+    "known_accounts": [
+      "admin13"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.747300+00:00"
+}

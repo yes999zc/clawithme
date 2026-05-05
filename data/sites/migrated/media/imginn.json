@@ -1,0 +1,40 @@
+{
+  "id": "imginn",
+  "name": "ImgInn",
+  "canonical_url": "https://imginn.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999918365,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 81635
+  },
+  "check": {
+    "probe_url": "https://imginn.com/{username}/",
+    "known_accounts": [
+      "morgen_shtern"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "followers",
+      "{username}"
+    ],
+    "absence_strs": [
+      "Page Not Found",
+      "The content has been deleted"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.868263+00:00"
+}

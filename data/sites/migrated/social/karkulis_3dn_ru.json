@@ -1,0 +1,29 @@
+{
+  "id": "karkulis_3dn_ru",
+  "name": "karkulis.3dn.ru",
+  "canonical_url": "http://karkulis.3dn.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.342300+00:00",
+  "_maigret_engine": "uCoz"
+}

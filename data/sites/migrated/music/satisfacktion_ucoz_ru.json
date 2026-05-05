@@ -1,0 +1,32 @@
+{
+  "id": "satisfacktion_ucoz_ru",
+  "name": "satisfacktion.ucoz.ru",
+  "canonical_url": "http://satisfacktion.ucoz.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "music",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.932954+00:00",
+  "_maigret_engine": "uCoz"
+}

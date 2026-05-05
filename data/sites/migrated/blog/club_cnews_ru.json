@@ -1,0 +1,36 @@
+{
+  "id": "club_cnews_ru",
+  "name": "club.cnews.ru",
+  "canonical_url": "https://club.cnews.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "blog",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://club.cnews.ru/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Пользователь не найден",
+      "Страница не найдена"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.200727+00:00"
+}

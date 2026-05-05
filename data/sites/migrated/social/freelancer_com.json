@@ -1,0 +1,36 @@
+{
+  "id": "freelancer_com",
+  "name": "Freelancer.com",
+  "canonical_url": "https://www.freelancer.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997138,
+    "tags": [
+      "freelance"
+    ]
+  },
+  "rankings": {
+    "alexa": 2862
+  },
+  "check": {
+    "probe_url": "https://www.freelancer.com/api/users/0.1/users?usernames%5B%5D={username}&compact=true",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "\"users\":{}"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.112706+00:00"
+}

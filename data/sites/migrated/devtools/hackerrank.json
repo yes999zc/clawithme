@@ -1,0 +1,32 @@
+{
+  "id": "hackerrank",
+  "name": "Hackerrank",
+  "canonical_url": "https://www.hackerrank.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999993997,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 6003
+  },
+  "check": {
+    "probe_url": "https://www.hackerrank.com/profile/{username}",
+    "known_accounts": [
+      "uheara_konen"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.646744+00:00"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "chaturbate",
+  "name": "ChaturBate",
+  "canonical_url": "https://chaturbate.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999996389,
+    "tags": [
+      "porn",
+      "webcam"
+    ]
+  },
+  "rankings": {
+    "alexa": 3611
+  },
+  "check": {
+    "probe_url": "https://chaturbate.com/{username}/",
+    "known_accounts": [
+      "cute18cute"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"broadcaster_username\""
+    ],
+    "absence_strs": [
+      "<title>Chaturbate"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.131611+00:00"
+}

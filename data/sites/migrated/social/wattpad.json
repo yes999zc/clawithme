@@ -1,0 +1,37 @@
+{
+  "id": "wattpad",
+  "name": "Wattpad",
+  "canonical_url": "https://www.wattpad.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998080,
+    "tags": [
+      "reading",
+      "writing"
+    ]
+  },
+  "rankings": {
+    "alexa": 1920
+  },
+  "check": {
+    "probe_url": "https://www.wattpad.com/user/{username}",
+    "known_accounts": [
+      "Dogstho7951"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "userError-404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.875995+00:00"
+}

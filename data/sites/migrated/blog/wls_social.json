@@ -1,0 +1,31 @@
+{
+  "id": "wls_social",
+  "name": "wls.social",
+  "canonical_url": "https://wls.social",
+  "engine_ref": "wordpress_author",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "nathaliemariel"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.240293+00:00",
+  "_maigret_engine": "Wordpress/Author"
+}

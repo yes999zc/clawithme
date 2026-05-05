@@ -1,0 +1,39 @@
+{
+  "id": "lomography",
+  "name": "Lomography",
+  "canonical_url": "https://www.lomography.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999987022,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 12978
+  },
+  "check": {
+    "probe_url": "https://www.lomography.com/homes/{username}",
+    "known_accounts": [
+      "steved7755"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Lomography",
+      " @lomography"
+    ],
+    "absence_strs": [
+      "<title>404 · Lomography</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.513289+00:00"
+}

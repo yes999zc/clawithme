@@ -1,0 +1,32 @@
+{
+  "id": "kwejk",
+  "name": "Kwejk",
+  "canonical_url": "https://kwejk.pl",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999832918,
+    "tags": [
+      "pl"
+    ]
+  },
+  "rankings": {
+    "alexa": 167082
+  },
+  "check": {
+    "probe_url": "https://kwejk.pl/uzytkownik/{username}#/tablica/",
+    "known_accounts": [
+      "ralia"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.961782+00:00"
+}

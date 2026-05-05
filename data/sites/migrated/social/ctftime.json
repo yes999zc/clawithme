@@ -1,0 +1,34 @@
+{
+  "id": "ctftime",
+  "name": "CTFtime",
+  "canonical_url": "https://ctftime.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999959906,
+    "tags": [
+      "hacking"
+    ]
+  },
+  "rankings": {
+    "alexa": 40094
+  },
+  "check": {
+    "probe_url": "https://ctftime.org/team/{username}",
+    "known_accounts": [
+      "1"
+    ],
+    "known_unclaimed": [
+      "999999999"
+    ],
+    "headers": {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+    }
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.539208+00:00"
+}

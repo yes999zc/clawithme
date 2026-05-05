@@ -1,0 +1,32 @@
+{
+  "id": "bookcrossing",
+  "name": "Bookcrossing",
+  "canonical_url": "https://www.bookcrossing.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999988978,
+    "tags": [
+      "books"
+    ]
+  },
+  "rankings": {
+    "alexa": 11022
+  },
+  "check": {
+    "probe_url": "https://www.bookcrossing.com/mybookshelf/{username}/",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.477959+00:00"
+}

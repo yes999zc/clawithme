@@ -1,0 +1,42 @@
+{
+  "id": "youtube_user",
+  "name": "YouTube User",
+  "canonical_url": "https://www.youtube.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999997,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 3
+  },
+  "check": {
+    "probe_url": "https://www.youtube.com/@{username}/about",
+    "known_accounts": [
+      "test"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis777"
+    ],
+    "headers": {
+      "User-Agent": "curl/8.6.0",
+      "Accept": "*/*"
+    },
+    "presence_strs": [
+      "visitorData",
+      "userAgent"
+    ],
+    "absence_strs": [
+      "404 Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.629526+00:00"
+}

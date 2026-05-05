@@ -1,0 +1,32 @@
+{
+  "id": "dailymotion",
+  "name": "DailyMotion",
+  "canonical_url": "https://www.dailymotion.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999771,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 229
+  },
+  "check": {
+    "probe_url": "https://www.dailymotion.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "rstnodkwzr"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.695106+00:00"
+}

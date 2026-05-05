@@ -1,0 +1,33 @@
+{
+  "id": "subforums_net",
+  "name": "subforums.net",
+  "canonical_url": "https://subforums.net",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999293145,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 706855
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.312603+00:00",
+  "_maigret_engine": "XenForo"
+}

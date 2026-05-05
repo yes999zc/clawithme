@@ -1,0 +1,38 @@
+{
+  "id": "awd_ru",
+  "name": "awd.ru",
+  "canonical_url": "https://forum.awd.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru",
+      "travel"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forum.awd.ru/search.php?keywords=&terms=all&author={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Результатов поиска:"
+    ],
+    "absence_strs": [
+      "Подходящих тем или сообщений не найдено."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.764308+00:00"
+}

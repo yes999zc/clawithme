@@ -1,0 +1,42 @@
+{
+  "id": "steamdb_info",
+  "name": "steamdb.info",
+  "canonical_url": "https://steamdb.info",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999993326,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 6674
+  },
+  "check": {
+    "probe_url": "https://steamdb.info/calculator/{username}",
+    "known_accounts": [
+      "76561197978866368"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profileForm",
+      " player-name",
+      " progress",
+      "  data-not-game="
+    ],
+    "absence_strs": [
+      "error-page",
+      " Error 404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.237118+00:00"
+}

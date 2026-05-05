@@ -1,0 +1,40 @@
+{
+  "id": "dlive",
+  "name": "DLive",
+  "canonical_url": "https://dlive.tv",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999982035,
+    "tags": [
+      "streaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 17965
+  },
+  "check": {
+    "probe_url": "https://dlive.tv/{username}",
+    "known_accounts": [
+      "TomTourettes"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "username",
+      "profile-part",
+      "profile-about"
+    ],
+    "absence_strs": [
+      "Channel not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.571215+00:00"
+}

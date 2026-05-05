@@ -1,0 +1,39 @@
+{
+  "id": "dota2",
+  "name": "Dota2",
+  "canonical_url": "https://dota2.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999866472,
+    "tags": [
+      "gaming",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 133528
+  },
+  "check": {
+    "probe_url": "https://dota2.ru/forum/search?type=user&keywords={username}&sort_by=username",
+    "known_accounts": [
+      "farts"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Результаты отсутствуют",
+      "Поиск временно отключен",
+      "<h2>Поиск временно отключен</h2>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.914323+00:00"
+}

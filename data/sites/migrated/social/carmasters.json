@@ -1,0 +1,37 @@
+{
+  "id": "carmasters",
+  "name": "Carmasters",
+  "canonical_url": "https://carmasters.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999200776,
+    "tags": [
+      "fi",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 799224
+  },
+  "check": {
+    "probe_url": "https://carmasters.org/search/?q={username}&quick=1&type=core_members",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Результатов поиска нет. Расширьте критерии поиска."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.372547+00:00"
+}

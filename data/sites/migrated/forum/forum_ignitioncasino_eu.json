@@ -1,0 +1,31 @@
+{
+  "id": "forum_ignitioncasino_eu",
+  "name": "forum.ignitioncasino.eu",
+  "canonical_url": "https://forum.ignitioncasino.eu",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "Bnim81"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.681922+00:00",
+  "_maigret_engine": "Discourse"
+}

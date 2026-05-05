@@ -1,0 +1,32 @@
+{
+  "id": "fortnitetracker",
+  "name": "FortniteTracker",
+  "canonical_url": "https://fortnitetracker.com/challenges",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999836940,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 163060
+  },
+  "check": {
+    "probe_url": "https://fortnitetracker.com/profile/all/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.954129+00:00"
+}

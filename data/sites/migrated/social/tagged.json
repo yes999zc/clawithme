@@ -1,0 +1,44 @@
+{
+  "id": "tagged",
+  "name": "Tagged",
+  "canonical_url": "http://www.tagged.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999968754,
+    "tags": [
+      "networking"
+    ]
+  },
+  "rankings": {
+    "alexa": 31246
+  },
+  "check": {
+    "probe_url": "http://www.tagged.com/{username}",
+    "known_accounts": [
+      "chanelthebagg"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile",
+      " profileLink",
+      " profile_box"
+    ],
+    "absence_strs": [
+      "lastName",
+      "birthDay",
+      "firstName",
+      "birth_day",
+      "Email"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.674496+00:00"
+}

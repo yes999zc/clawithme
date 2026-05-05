@@ -1,0 +1,38 @@
+{
+  "id": "app_airnfts_com",
+  "name": "app.airnfts.com",
+  "canonical_url": "https://app.airnfts.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://app.airnfts.com/creators/{username}",
+    "known_accounts": [
+      "test"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "username",
+      "ownerUsername",
+      "creatorUsername",
+      "name",
+      "user"
+    ],
+    "absence_strs": [
+      "user-not-found-div"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.269474+00:00"
+}

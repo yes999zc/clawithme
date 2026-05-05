@@ -1,0 +1,36 @@
+{
+  "id": "typeracer",
+  "name": "Typeracer",
+  "canonical_url": "https://typeracer.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999931297,
+    "tags": [
+      "hobby"
+    ]
+  },
+  "rankings": {
+    "alexa": 68703
+  },
+  "check": {
+    "probe_url": "https://data.typeracer.com/pit/profile?user={username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Profile Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.823154+00:00"
+}

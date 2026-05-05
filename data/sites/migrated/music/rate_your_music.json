@@ -1,0 +1,32 @@
+{
+  "id": "rate_your_music",
+  "name": "Rate Your Music",
+  "canonical_url": "https://rateyourmusic.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999991420,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 8580
+  },
+  "check": {
+    "probe_url": "https://rateyourmusic.com/~{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.406210+00:00"
+}

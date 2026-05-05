@@ -1,0 +1,30 @@
+{
+  "id": "wolframalpha_forum",
+  "name": "Wolframalpha Forum",
+  "canonical_url": "https://community.wolfram.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://community.wolfram.com/web/{username}/home",
+    "known_accounts": [
+      "unico"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.865631+00:00"
+}

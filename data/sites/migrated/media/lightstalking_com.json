@@ -1,0 +1,39 @@
+{
+  "id": "lightstalking_com",
+  "name": "lightstalking.com",
+  "canonical_url": "https://www.lightstalking.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999890756,
+    "tags": [
+      "blog",
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 109244
+  },
+  "check": {
+    "probe_url": "https://www.lightstalking.com/author/{username}/",
+    "known_accounts": [
+      "jasonrow"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "NPRL.onLoadStyle"
+    ],
+    "absence_strs": [
+      "location:"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.893196+00:00"
+}

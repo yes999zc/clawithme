@@ -1,0 +1,41 @@
+{
+  "id": "virustotal",
+  "name": "VirusTotal",
+  "canonical_url": "https://www.virustotal.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999998771,
+    "tags": [
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 1229
+  },
+  "check": {
+    "probe_url": "https://www.virustotal.com/ui/users/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "accept-language": "en-US,en;q=0.9,es;q=0.8",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+      "x-tool": "vt-ui-main",
+      "x-vt-anti-abuse-header": "MTM0NTMxNTA3MTItWkc5dWRDQmlaU0JsZG1scy0xNjA3NDMzMzM3LjI3MQ=="
+    },
+    "presence_strs": [],
+    "absence_strs": [
+      "not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.828040+00:00"
+}

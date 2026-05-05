@@ -1,0 +1,38 @@
+{
+  "id": "roblox",
+  "name": "Roblox",
+  "canonical_url": "https://www.roblox.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999997933,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {
+    "alexa": 2067
+  },
+  "check": {
+    "probe_url": "https://www.roblox.com/user.aspx?username={username}",
+    "known_accounts": [
+      "bluewolfekiller"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "class=\"profile-container\""
+    ],
+    "absence_strs": [
+      "request-error"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.074968+00:00"
+}

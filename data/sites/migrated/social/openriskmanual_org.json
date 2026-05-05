@@ -1,0 +1,31 @@
+{
+  "id": "openriskmanual_org",
+  "name": "openriskmanual.org",
+  "canonical_url": "https://openriskmanual.org/wiki/User:{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "finance",
+      "wiki"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://openriskmanual.org/wiki/User:{username}",
+    "known_accounts": [
+      "test"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.401170+00:00"
+}

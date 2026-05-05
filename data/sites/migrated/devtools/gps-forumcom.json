@@ -1,0 +1,32 @@
+{
+  "id": "gps-forumcom",
+  "name": "Gps-forumCOM",
+  "canonical_url": "https://www.gps-forums.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "tech"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "johnash"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.641131+00:00",
+  "_maigret_engine": "XenForo"
+}

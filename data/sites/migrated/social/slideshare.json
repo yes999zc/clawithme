@@ -1,0 +1,45 @@
+{
+  "id": "slideshare",
+  "name": "SlideShare",
+  "canonical_url": "https://www.slideshare.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999829,
+    "tags": [
+      "documents",
+      "sharing"
+    ]
+  },
+  "rankings": {
+    "alexa": 171
+  },
+  "check": {
+    "probe_url": "https://www.slideshare.net/{username}",
+    "known_accounts": [
+      "KumarSurya7"
+    ],
+    "known_unclaimed": [
+      "kwbmsonxvp"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user-name",
+      "pageInfo",
+      "listitem",
+      "strippedTitle"
+    ],
+    "absence_strs": [
+      "blankProfile",
+      "username-available",
+      "robots",
+      "noindex,nofollow"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.685838+00:00"
+}

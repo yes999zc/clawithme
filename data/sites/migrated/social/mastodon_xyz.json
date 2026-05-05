@@ -1,0 +1,32 @@
+{
+  "id": "mastodon_xyz",
+  "name": "mastodon.xyz",
+  "canonical_url": "https://mastodon.xyz/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999949943,
+    "tags": [
+      "th"
+    ]
+  },
+  "rankings": {
+    "alexa": 50057
+  },
+  "check": {
+    "probe_url": "https://mastodon.xyz/@{username}",
+    "known_accounts": [
+      "TheKinrar"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.754670+00:00"
+}

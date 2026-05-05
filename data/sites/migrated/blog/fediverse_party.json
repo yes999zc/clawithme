@@ -1,0 +1,43 @@
+{
+  "id": "fediverse_party",
+  "name": "fediverse.party",
+  "canonical_url": "https://fediverse.party",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999955222,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 44778
+  },
+  "check": {
+    "probe_url": "https://fediverse.party/en/{username}",
+    "known_accounts": [
+      "misskey"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "mastodon-share",
+      "mastodon",
+      "socialhome",
+      "></label> <input name=",
+      "diaspora"
+    ],
+    "absence_strs": [
+      "<title>Fediverse.Party - explore federated networks</title>",
+      " error__page"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.732158+00:00"
+}

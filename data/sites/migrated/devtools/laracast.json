@@ -1,0 +1,33 @@
+{
+  "id": "laracast",
+  "name": "Laracast",
+  "canonical_url": "https://laracasts.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999999262,
+    "tags": [
+      "coding",
+      "education"
+    ]
+  },
+  "rankings": {
+    "alexa": 738
+  },
+  "check": {
+    "probe_url": "https://laracasts.com/@{username}",
+    "known_accounts": [
+      "user1"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.784012+00:00"
+}

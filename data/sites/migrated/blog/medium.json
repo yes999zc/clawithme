@@ -1,0 +1,33 @@
+{
+  "id": "medium",
+  "name": "Medium",
+  "canonical_url": "https://medium.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999934,
+    "tags": [
+      "blog",
+      "writing"
+    ]
+  },
+  "rankings": {
+    "alexa": 66
+  },
+  "check": {
+    "probe_url": "https://medium.com/@{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.660951+00:00"
+}

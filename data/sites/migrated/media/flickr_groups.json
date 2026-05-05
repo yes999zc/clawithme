@@ -1,0 +1,46 @@
+{
+  "id": "flickr_groups",
+  "name": "Flickr Groups",
+  "canonical_url": "https://www.flickr.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999936,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 64
+  },
+  "check": {
+    "probe_url": "https://www.flickr.com/groups/{username}",
+    "known_accounts": [
+      "sunny2000"
+    ],
+    "known_unclaimed": [
+      "vozkxyhksz"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "username",
+      "\tstyle=",
+      "og:title",
+      "\t title=",
+      "blastUserName"
+    ],
+    "absence_strs": [
+      ":404,",
+      "registryName",
+      "parentName",
+      "error-id",
+      "searchType"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.660005+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "id": "pikabu_monster",
+  "name": "pikabu.monster",
+  "canonical_url": "https://pikabu.monster",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "ru",
+      "sharing"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://pikabu.monster/user/{username}-summary",
+    "known_accounts": [
+      "Avezenit"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "usertotalcomments",
+      " usertotalposts"
+    ],
+    "absence_strs": [
+      "<title>Ошибка</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.188960+00:00"
+}

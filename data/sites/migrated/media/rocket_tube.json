@@ -1,0 +1,36 @@
+{
+  "id": "rocket_tube",
+  "name": "Rocket Tube",
+  "canonical_url": "https://www.rockettube.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999167104,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 832896
+  },
+  "check": {
+    "probe_url": "https://www.rockettube.com/{username}",
+    "known_accounts": [
+      "Tatteddick5600"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "OOPS! Houston, we have a problem"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.392541+00:00"
+}

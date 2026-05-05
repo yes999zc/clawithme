@@ -1,0 +1,32 @@
+{
+  "id": "prog_hu",
+  "name": "prog.hu",
+  "canonical_url": "https://prog.hu",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999276755,
+    "tags": [
+      "hu"
+    ]
+  },
+  "rankings": {
+    "alexa": 723245
+  },
+  "check": {
+    "probe_url": "https://prog.hu/azonosito/info/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.359445+00:00"
+}

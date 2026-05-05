@@ -1,0 +1,32 @@
+{
+  "id": "muse_score",
+  "name": "Muse Score",
+  "canonical_url": "https://musescore.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992565,
+    "tags": [
+      "music"
+    ]
+  },
+  "rankings": {
+    "alexa": 7435
+  },
+  "check": {
+    "probe_url": "https://musescore.com/{username}",
+    "known_accounts": [
+      "arrangeme"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.300498+00:00"
+}

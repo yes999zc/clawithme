@@ -1,0 +1,32 @@
+{
+  "id": "forums_battlefield_com",
+  "name": "forums.battlefield.com",
+  "canonical_url": "https://forums.battlefield.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "gaming",
+      "gb"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forums.battlefield.com/en-us/profile/{username}",
+    "known_accounts": [
+      "NLBartmaN"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.537557+00:00"
+}

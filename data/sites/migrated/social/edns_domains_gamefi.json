@@ -1,0 +1,36 @@
+{
+  "id": "edns_domains_gamefi",
+  "name": "edns.domains/gamefi",
+  "canonical_url": "https://api.edns.domains",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "crypto"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://api.edns.domains/domain/lookup/{username}.gamefi",
+    "known_accounts": [
+      "everlast88"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "PURCHASED_BY_OTHER"
+    ],
+    "absence_strs": [
+      "\"available\":true"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.506507+00:00"
+}

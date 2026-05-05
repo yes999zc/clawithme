@@ -1,0 +1,39 @@
+{
+  "id": "cent",
+  "name": "Cent",
+  "canonical_url": "https://cent.co/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999937523,
+    "tags": [
+      "art",
+      "writing"
+    ]
+  },
+  "rankings": {
+    "alexa": 62477
+  },
+  "check": {
+    "probe_url": "https://beta.cent.co/@{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "display_name"
+    ],
+    "absence_strs": [
+      "\"results\":[]"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.838182+00:00"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "theguardian",
+  "name": "TheGuardian",
+  "canonical_url": "https://theguardian.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999920,
+    "tags": [
+      "gb",
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 80
+  },
+  "check": {
+    "probe_url": "https://profile.theguardian.com/user/{username}",
+    "known_accounts": [
+      "frogprincess"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>public profile | Identity | The Guardian</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.664765+00:00"
+}

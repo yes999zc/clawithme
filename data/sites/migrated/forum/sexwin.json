@@ -1,0 +1,35 @@
+{
+  "id": "sexwin",
+  "name": "Sexwin",
+  "canonical_url": "https://sexforum.win",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://sexforum.win/search.php?keywords=&terms=all&author={username}",
+    "known_accounts": [
+      "foks67"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Подходящих тем или сообщений не найдено."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.804369+00:00"
+}

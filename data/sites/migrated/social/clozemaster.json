@@ -1,0 +1,36 @@
+{
+  "id": "clozemaster",
+  "name": "Clozemaster",
+  "canonical_url": "https://www.clozemaster.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999859254,
+    "tags": [
+      "education"
+    ]
+  },
+  "rankings": {
+    "alexa": 140746
+  },
+  "check": {
+    "probe_url": "https://www.clozemaster.com/players/{username}",
+    "known_accounts": [
+      "green"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Oh no! Player not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.938092+00:00"
+}

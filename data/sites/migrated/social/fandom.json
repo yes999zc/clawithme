@@ -1,0 +1,32 @@
+{
+  "id": "fandom",
+  "name": "Fandom",
+  "canonical_url": "https://www.fandom.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999677,
+    "tags": [
+      "wiki"
+    ]
+  },
+  "rankings": {
+    "alexa": 323
+  },
+  "check": {
+    "probe_url": "https://www.fandom.com/u/{username}",
+    "known_accounts": [
+      "Jungypoo"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.726301+00:00"
+}

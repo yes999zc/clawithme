@@ -1,0 +1,33 @@
+{
+  "id": "raidforums",
+  "name": "Raidforums",
+  "canonical_url": "https://raidforums.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999276202,
+    "tags": [
+      "cybercriminal",
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 723798
+  },
+  "check": {
+    "probe_url": "https://raidforums.com/User-{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.353862+00:00"
+}

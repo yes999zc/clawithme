@@ -1,0 +1,32 @@
+{
+  "id": "forum_paradox_network",
+  "name": "forum.paradox.network",
+  "canonical_url": "https://forum.paradox.network",
+  "engine_ref": "flarum",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "de",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.217812+00:00",
+  "_maigret_engine": "Flarum"
+}

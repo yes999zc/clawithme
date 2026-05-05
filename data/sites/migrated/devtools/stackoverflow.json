@@ -1,0 +1,38 @@
+{
+  "id": "stackoverflow",
+  "name": "StackOverflow",
+  "canonical_url": "https://stackoverflow.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999999822,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 178
+  },
+  "check": {
+    "probe_url": "https://stackoverflow.com/users/filter?search={username}",
+    "known_accounts": [
+      "maigret"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"items\":[{"
+    ],
+    "absence_strs": [
+      "\"items\":[]"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.687706+00:00"
+}

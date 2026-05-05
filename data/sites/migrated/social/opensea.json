@@ -1,0 +1,33 @@
+{
+  "id": "opensea",
+  "name": "OpenSea",
+  "canonical_url": "https://opensea.io",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998125,
+    "tags": [
+      "crypto",
+      "nft"
+    ]
+  },
+  "rankings": {
+    "alexa": 1875
+  },
+  "check": {
+    "probe_url": "https://opensea.io/{username}",
+    "known_accounts": [
+      "opensea"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.876952+00:00"
+}

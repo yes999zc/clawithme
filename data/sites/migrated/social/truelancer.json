@@ -1,0 +1,38 @@
+{
+  "id": "truelancer",
+  "name": "Truelancer",
+  "canonical_url": "https://www.truelancer.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999909193,
+    "tags": [
+      "in"
+    ]
+  },
+  "rankings": {
+    "alexa": 90807
+  },
+  "check": {
+    "probe_url": "https://www.truelancer.com/freelancer/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "https://schema.org/BreadcrumbList"
+    ],
+    "absence_strs": [
+      "This page could not be found."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.876444+00:00"
+}

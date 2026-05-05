@@ -1,0 +1,38 @@
+{
+  "id": "dumskaya_net",
+  "name": "dumskaya.net",
+  "canonical_url": "https://dumskaya.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999968411,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 31589
+  },
+  "check": {
+    "probe_url": "https://dumskaya.net/user/{username}/",
+    "known_accounts": [
+      "test"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "><img  class=nobo  src=/banner/prague_/ alt="
+    ],
+    "absence_strs": [
+      "><img  class=nobo  src=/banner/ps2_/ alt="
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.682857+00:00"
+}

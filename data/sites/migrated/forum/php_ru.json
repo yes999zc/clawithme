@@ -1,0 +1,34 @@
+{
+  "id": "php_ru",
+  "name": "php.ru",
+  "canonical_url": "https://php.ru/forum/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999953939,
+    "tags": [
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 46061
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "apple"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.728405+00:00",
+  "_maigret_engine": "XenForo"
+}

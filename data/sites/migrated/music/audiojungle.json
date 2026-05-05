@@ -1,0 +1,33 @@
+{
+  "id": "audiojungle",
+  "name": "Audiojungle",
+  "canonical_url": "https://audiojungle.net/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "music",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994059,
+    "tags": [
+      "music",
+      "shopping"
+    ]
+  },
+  "rankings": {
+    "alexa": 5941
+  },
+  "check": {
+    "probe_url": "https://audiojungle.net/user/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.215582+00:00"
+}

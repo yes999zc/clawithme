@@ -1,0 +1,36 @@
+{
+  "id": "coderwall",
+  "name": "Coderwall",
+  "canonical_url": "https://coderwall.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999987989,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 12011
+  },
+  "check": {
+    "probe_url": "https://coderwall.com/{username}",
+    "known_accounts": [
+      "jenny"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "404! Our feels when that url is used"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.509565+00:00"
+}

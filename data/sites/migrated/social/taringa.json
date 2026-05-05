@@ -1,0 +1,41 @@
+{
+  "id": "taringa",
+  "name": "Taringa",
+  "canonical_url": "https://www.taringa.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999990249,
+    "tags": [
+      "ar",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 9751
+  },
+  "check": {
+    "probe_url": "https://www.taringa.net/{username}",
+    "known_accounts": [
+      "UniversoGIA"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "User",
+      " user-username",
+      " UserFeed"
+    ],
+    "absence_strs": [
+      "problema"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.456418+00:00"
+}

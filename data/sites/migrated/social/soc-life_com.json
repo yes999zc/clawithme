@@ -1,0 +1,35 @@
+{
+  "id": "soc-life_com",
+  "name": "soc-life.com",
+  "canonical_url": "http://soc-life.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999424217,
+    "tags": []
+  },
+  "rankings": {
+    "alexa": 575783
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "sc-tabs\"><div>Логин:"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.290217+00:00",
+  "_maigret_engine": "uCoz"
+}

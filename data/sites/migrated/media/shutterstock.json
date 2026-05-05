@@ -1,0 +1,43 @@
+{
+  "id": "shutterstock",
+  "name": "Shutterstock",
+  "canonical_url": "https://www.shutterstock.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999436,
+    "tags": [
+      "music",
+      "photo",
+      "stock"
+    ]
+  },
+  "rankings": {
+    "alexa": 564
+  },
+  "check": {
+    "probe_url": "https://www.shutterstock.com/g/{username}/about",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "{username}",
+      "Information"
+    ],
+    "absence_strs": [
+      "This surprising...",
+      "Unfortunately, we can't find what you're looking for.",
+      "<title>Not Found | Shutterstock</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.747456+00:00"
+}

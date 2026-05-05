@@ -1,0 +1,38 @@
+{
+  "id": "e621",
+  "name": "E621",
+  "canonical_url": "https://e621.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999897228,
+    "tags": [
+      "art"
+    ]
+  },
+  "rankings": {
+    "alexa": 102772
+  },
+  "check": {
+    "probe_url": "https://e621.net/users/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "<title>  User"
+    ],
+    "absence_strs": [
+      "<title>  Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.902061+00:00"
+}

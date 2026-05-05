@@ -1,0 +1,30 @@
+{
+  "id": "forums_grandstream_com",
+  "name": "forums.grandstream.com",
+  "canonical_url": "https://forums.grandstream.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://forums.grandstream.com/u/{username}/summary",
+    "known_accounts": [
+      "EricPitz"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.569968+00:00"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "rusforum",
+  "name": "Rusforum",
+  "canonical_url": "https://www.rusforum.com/",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999678892,
+    "tags": [
+      "forum",
+      "pk",
+      "ru",
+      "ua"
+    ]
+  },
+  "rankings": {
+    "alexa": 321108
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.140834+00:00",
+  "_maigret_engine": "vBulletin"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "telescope_ac",
+  "name": "telescope.ac",
+  "canonical_url": "https://telescope.ac",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999985720,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 14280
+  },
+  "check": {
+    "probe_url": "https://telescope.ac/{username}",
+    "known_accounts": [
+      "theabbie"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "og:site_name",
+      "alternate",
+      "article",
+      "project",
+      "og:title"
+    ],
+    "absence_strs": [
+      ">Not found</h1>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.535459+00:00"
+}

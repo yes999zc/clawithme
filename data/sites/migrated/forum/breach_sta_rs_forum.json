@@ -1,0 +1,34 @@
+{
+  "id": "breach_sta_rs_forum",
+  "name": "Breach Sta.rs Forum",
+  "canonical_url": "https://breachsta.rs/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://breachsta.rs/profile/{username}",
+    "known_accounts": [
+      "Sleepybubble"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<title>Error - BreachStars</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.522557+00:00"
+}

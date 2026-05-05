@@ -1,0 +1,38 @@
+{
+  "id": "beermoneyforum",
+  "name": "BeerMoneyForum",
+  "canonical_url": "https://www.beermoneyforum.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999716327,
+    "tags": [
+      "finance",
+      "forum",
+      "gambling"
+    ]
+  },
+  "rankings": {
+    "alexa": 283673
+  },
+  "check": {
+    "probe_url": "https://www.beermoneyforum.com/members/?username={username}",
+    "known_accounts": [
+      "Yugocean"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The specified member cannot be found."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.105141+00:00"
+}

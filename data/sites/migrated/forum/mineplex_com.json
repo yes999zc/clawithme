@@ -1,0 +1,33 @@
+{
+  "id": "mineplex_com",
+  "name": "mineplex.com",
+  "canonical_url": "https://www.mineplex.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999227607,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 772393
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.382930+00:00",
+  "_maigret_engine": "XenForo"
+}

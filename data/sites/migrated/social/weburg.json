@@ -1,0 +1,36 @@
+{
+  "id": "weburg",
+  "name": "Weburg",
+  "canonical_url": "https://weburg.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999931412,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 68588
+  },
+  "check": {
+    "probe_url": "https://weburg.net/search?where=10&search=1&q={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "&raquo;,"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.820274+00:00"
+}

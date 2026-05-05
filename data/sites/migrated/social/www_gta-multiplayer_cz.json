@@ -1,0 +1,42 @@
+{
+  "id": "www_gta-multiplayer_cz",
+  "name": "www.gta-multiplayer.cz",
+  "canonical_url": "https://www.gta-multiplayer.cz",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.gta-multiplayer.cz/en/profile/{username}/gaming",
+    "known_accounts": [
+      "sonic99"
+    ],
+    "known_unclaimed": [
+      "nujfwykqxc"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "ProfileTabs",
+      "ProfileLevel",
+      "ProfileTitles",
+      "TabItem",
+      "FriendsTitle"
+    ],
+    "absence_strs": [
+      "\t      <h2>Page not found</h2>\r",
+      "Content FullContent",
+      "Container ErrorContainer",
+      ">home page</a> or back to the <a href=",
+      "/images/404-squirrel.jpg"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.520677+00:00"
+}

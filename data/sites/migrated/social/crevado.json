@@ -1,0 +1,32 @@
+{
+  "id": "crevado",
+  "name": "Crevado",
+  "canonical_url": "https://crevado.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999898762,
+    "tags": [
+      "design"
+    ]
+  },
+  "rankings": {
+    "alexa": 101238
+  },
+  "check": {
+    "probe_url": "https://{username}.crevado.com",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.890355+00:00"
+}

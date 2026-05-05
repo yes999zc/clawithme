@@ -1,0 +1,34 @@
+{
+  "id": "ethereum-magicians",
+  "name": "Ethereum-magicians",
+  "canonical_url": "https://ethereum-magicians.org",
+  "engine_ref": "discourse",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999917824,
+    "tags": [
+      "cr",
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 82176
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "amxx"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.863591+00:00",
+  "_maigret_engine": "Discourse"
+}

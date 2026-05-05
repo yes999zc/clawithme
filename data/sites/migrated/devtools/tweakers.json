@@ -1,0 +1,33 @@
+{
+  "id": "tweakers",
+  "name": "Tweakers",
+  "canonical_url": "https://tweakers.net",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999993164,
+    "tags": [
+      "nl",
+      "tech"
+    ]
+  },
+  "rankings": {
+    "alexa": 6836
+  },
+  "check": {
+    "probe_url": "https://tweakers.net/gallery/{username}",
+    "known_accounts": [
+      "femme"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.243048+00:00"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "giphy",
+  "name": "Giphy",
+  "canonical_url": "https://giphy.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999588,
+    "tags": [
+      "video"
+    ]
+  },
+  "rankings": {
+    "alexa": 412
+  },
+  "check": {
+    "probe_url": "https://giphy.com/channel/{username}",
+    "known_accounts": [
+      "theabbie"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Giphy",
+      "al:ios:app_name"
+    ],
+    "absence_strs": [
+      "404 Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.734622+00:00"
+}

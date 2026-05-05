@@ -1,0 +1,32 @@
+{
+  "id": "notabug_org",
+  "name": "notabug.org",
+  "canonical_url": "https://notabug.org/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999985607,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 14393
+  },
+  "check": {
+    "probe_url": "https://notabug.org/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.530095+00:00"
+}

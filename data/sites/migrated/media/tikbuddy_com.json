@@ -1,0 +1,35 @@
+{
+  "id": "tikbuddy_com",
+  "name": "tikbuddy.com",
+  "canonical_url": "https://tikbuddy.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "hobby",
+      "video"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://tikbuddy.com/en/tiktok/{username}",
+    "known_accounts": [
+      "sergey.ivanov29"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis9"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "nickName"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.278843+00:00"
+}

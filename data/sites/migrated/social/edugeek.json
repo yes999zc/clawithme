@@ -1,0 +1,33 @@
+{
+  "id": "edugeek",
+  "name": "EduGeek",
+  "canonical_url": "https://www.edugeek.net",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999760050,
+    "tags": [
+      "education"
+    ]
+  },
+  "rankings": {
+    "alexa": 239950
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "witch"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.059347+00:00",
+  "_maigret_engine": "vBulletin"
+}

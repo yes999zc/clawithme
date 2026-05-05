@@ -1,0 +1,32 @@
+{
+  "id": "asciinema",
+  "name": "Asciinema",
+  "canonical_url": "https://asciinema.org",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999977481,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 22519
+  },
+  "check": {
+    "probe_url": "https://asciinema.org/~{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.612252+00:00"
+}

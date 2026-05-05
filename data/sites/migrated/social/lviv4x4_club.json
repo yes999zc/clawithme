@@ -1,0 +1,29 @@
+{
+  "id": "lviv4x4_club",
+  "name": "lviv4x4.club",
+  "canonical_url": "http://lviv4x4.club/forum",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.485003+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

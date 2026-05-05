@@ -1,0 +1,32 @@
+{
+  "id": "forum_ss-iptv_com",
+  "name": "forum.ss-iptv.com",
+  "canonical_url": "https://forum.ss-iptv.com",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "tr"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.177754+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

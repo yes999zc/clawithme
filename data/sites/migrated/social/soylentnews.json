@@ -1,0 +1,38 @@
+{
+  "id": "soylentnews",
+  "name": "SoylentNews",
+  "canonical_url": "https://soylentnews.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999738299,
+    "tags": [
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 261701
+  },
+  "check": {
+    "probe_url": "https://soylentnews.org/~{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "class=\"data_head\""
+    ],
+    "absence_strs": [
+      "The user you requested does not exist, no matter how much you wish this might be the case."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.076222+00:00"
+}

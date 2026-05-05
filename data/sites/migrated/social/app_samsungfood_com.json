@@ -1,0 +1,35 @@
+{
+  "id": "app_samsungfood_com",
+  "name": "app.samsungfood.com",
+  "canonical_url": "https://app.samsungfood.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://app.samsungfood.com/u/{username}",
+    "known_accounts": [
+      "moonlitraven"
+    ],
+    "known_unclaimed": [
+      "onpigjbowo"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "alternateName",
+      "totalTime"
+    ],
+    "absence_strs": [
+      ">User not found</h1></div>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.926803+00:00"
+}

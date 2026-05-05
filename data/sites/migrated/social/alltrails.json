@@ -1,0 +1,39 @@
+{
+  "id": "alltrails",
+  "name": "AllTrails",
+  "canonical_url": "https://www.alltrails.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998544,
+    "tags": [
+      "sport",
+      "travel"
+    ]
+  },
+  "rankings": {
+    "alexa": 1456
+  },
+  "check": {
+    "probe_url": "https://www.alltrails.com/members/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Profile"
+    ],
+    "absence_strs": [
+      "You are being"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.842159+00:00"
+}

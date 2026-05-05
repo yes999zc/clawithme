@@ -1,0 +1,36 @@
+{
+  "id": "interpals",
+  "name": "InterPals",
+  "canonical_url": "https://www.interpals.net/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999951514,
+    "tags": [
+      "dating"
+    ]
+  },
+  "rankings": {
+    "alexa": 48486
+  },
+  "check": {
+    "probe_url": "https://www.interpals.net/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noneownsthisusername"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "User not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.738744+00:00"
+}

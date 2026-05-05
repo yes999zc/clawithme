@@ -1,0 +1,32 @@
+{
+  "id": "badoo",
+  "name": "Badoo",
+  "canonical_url": "https://badoo.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999988752,
+    "tags": [
+      "dating"
+    ]
+  },
+  "rankings": {
+    "alexa": 11248
+  },
+  "check": {
+    "probe_url": "https://badoo.com/profile/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.490847+00:00"
+}

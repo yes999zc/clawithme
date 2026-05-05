@@ -1,0 +1,32 @@
+{
+  "id": "discuss_flarum_org_cn",
+  "name": "discuss.flarum.org.cn",
+  "canonical_url": "https://discuss.flarum.org.cn",
+  "engine_ref": "flarum",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "cn",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.548551+00:00",
+  "_maigret_engine": "Flarum"
+}

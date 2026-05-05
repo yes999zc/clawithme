@@ -1,0 +1,33 @@
+{
+  "id": "namuwiki",
+  "name": "Namuwiki",
+  "canonical_url": "https://namu.wiki/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992953,
+    "tags": [
+      "kr",
+      "wiki"
+    ]
+  },
+  "rankings": {
+    "alexa": 7047
+  },
+  "check": {
+    "probe_url": "https://namu.wiki/w/%EC%82%AC%EC%9A%A9%EC%9E%90:{username}",
+    "known_accounts": [
+      "namu"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.269852+00:00"
+}

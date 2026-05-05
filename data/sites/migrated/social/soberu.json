@@ -1,0 +1,32 @@
+{
+  "id": "soberu",
+  "name": "Soberu",
+  "canonical_url": "https://yasobe.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999617166,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 382834
+  },
+  "check": {
+    "probe_url": "https://yasobe.ru/na/{username}",
+    "known_accounts": [
+      "snoop_project"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.198491+00:00"
+}

@@ -1,0 +1,40 @@
+{
+  "id": "deepdreamgenerator",
+  "name": "DeepDreamGenerator",
+  "canonical_url": "https://deepdreamgenerator.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999973665,
+    "tags": [
+      "art"
+    ]
+  },
+  "rankings": {
+    "alexa": 26335
+  },
+  "check": {
+    "probe_url": "https://deepdreamgenerator.com/u/{username}",
+    "known_accounts": [
+      "sparkles99"
+    ],
+    "known_unclaimed": [
+      "lyazybfqoh"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user-name",
+      "profile-cover",
+      "user-info"
+    ],
+    "absence_strs": [
+      "Page not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.644787+00:00"
+}

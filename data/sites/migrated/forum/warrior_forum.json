@@ -1,0 +1,32 @@
+{
+  "id": "warrior_forum",
+  "name": "Warrior Forum",
+  "canonical_url": "https://www.warriorforum.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999990408,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 9592
+  },
+  "check": {
+    "probe_url": "https://www.warriorforum.com/members/{username}.html",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.452740+00:00"
+}

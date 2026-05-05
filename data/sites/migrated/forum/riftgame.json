@@ -1,0 +1,35 @@
+{
+  "id": "riftgame",
+  "name": "Riftgame",
+  "canonical_url": "http://forums.riftgame.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "cr",
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "http://forums.riftgame.com/members/{username}.html",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "This user has not registered and therefore does not have a profile to view."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.991447+00:00"
+}

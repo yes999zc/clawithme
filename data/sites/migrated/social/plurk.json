@@ -1,0 +1,40 @@
+{
+  "id": "plurk",
+  "name": "Plurk",
+  "canonical_url": "https://gab.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999995977,
+    "tags": [
+      "social",
+      "tw",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 4023
+  },
+  "check": {
+    "probe_url": "https://gab.com/{username}",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis777"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "display_name"
+    ],
+    "absence_strs": [
+      "Record not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.165991+00:00"
+}

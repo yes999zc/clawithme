@@ -1,0 +1,33 @@
+{
+  "id": "tl",
+  "name": "Tl",
+  "canonical_url": "https://tl.net",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999899687,
+    "tags": [
+      "de",
+      "dk"
+    ]
+  },
+  "rankings": {
+    "alexa": 100313
+  },
+  "check": {
+    "probe_url": "https://tl.net/forum/profile.php?user={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.872765+00:00"
+}

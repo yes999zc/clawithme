@@ -1,0 +1,38 @@
+{
+  "id": "thoughts_com",
+  "name": "thoughts.com",
+  "canonical_url": "http://thoughts.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999951665,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 48335
+  },
+  "check": {
+    "probe_url": "http://thoughts.com/members/{username}",
+    "known_accounts": [
+      "jules60"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user-activity"
+    ],
+    "absence_strs": [
+      "<title>Page not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.735895+00:00"
+}

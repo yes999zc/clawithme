@@ -1,0 +1,39 @@
+{
+  "id": "gaiaonline",
+  "name": "GaiaOnline",
+  "canonical_url": "https://www.gaiaonline.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999992868,
+    "tags": [
+      "gaming",
+      "ro",
+      "social",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 7132
+  },
+  "check": {
+    "probe_url": "https://www.gaiaonline.com/profiles/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "No user ID specified or user does not exist!"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.272643+00:00"
+}

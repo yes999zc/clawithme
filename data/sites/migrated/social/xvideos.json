@@ -1,0 +1,32 @@
+{
+  "id": "xvideos",
+  "name": "Xvideos",
+  "canonical_url": "https://xvideos.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999994632,
+    "tags": [
+      "porn"
+    ]
+  },
+  "rankings": {
+    "alexa": 5368
+  },
+  "check": {
+    "probe_url": "https://xvideos.com/profiles/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.208200+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "substack",
+  "name": "Substack",
+  "canonical_url": "https://substack.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "blog",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999810,
+    "tags": [
+      "blog"
+    ]
+  },
+  "rankings": {
+    "alexa": 190
+  },
+  "check": {
+    "probe_url": "https://substack.com/@{username}",
+    "known_accounts": [
+      "user23"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.689562+00:00"
+}

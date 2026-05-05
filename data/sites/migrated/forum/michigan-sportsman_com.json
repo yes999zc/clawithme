@@ -1,0 +1,34 @@
+{
+  "id": "michigan-sportsman_com",
+  "name": "michigan-sportsman.com",
+  "canonical_url": "http://www.michigan-sportsman.com/forum/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999742423,
+    "tags": [
+      "forum",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 257577
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.079962+00:00",
+  "_maigret_engine": "XenForo"
+}

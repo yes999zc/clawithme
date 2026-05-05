@@ -1,0 +1,38 @@
+{
+  "id": "observable",
+  "name": "Observable",
+  "canonical_url": "https://observablehq.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999987690,
+    "tags": [
+      "sharing"
+    ]
+  },
+  "rankings": {
+    "alexa": 12310
+  },
+  "check": {
+    "probe_url": "https://observablehq.com/@{username}",
+    "known_accounts": [
+      "theabbie"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile_email"
+    ],
+    "absence_strs": [
+      "<title>Observable</title>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.514225+00:00"
+}

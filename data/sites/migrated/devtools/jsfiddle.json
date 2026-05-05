@@ -1,0 +1,34 @@
+{
+  "id": "jsfiddle",
+  "name": "JSFiddle",
+  "canonical_url": "https://jsfiddle.net",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999997528,
+    "tags": [
+      "coding",
+      "sharing"
+    ]
+  },
+  "rankings": {
+    "alexa": 2472
+  },
+  "check": {
+    "probe_url": "https://jsfiddle.net/user/{username}/",
+    "known_accounts": [
+      "john"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.087036+00:00",
+  "_maigret_engine": "engine404"
+}

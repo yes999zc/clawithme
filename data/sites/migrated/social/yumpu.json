@@ -1,0 +1,38 @@
+{
+  "id": "yumpu",
+  "name": "Yumpu",
+  "canonical_url": "https://www.yumpu.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999105,
+    "tags": [
+      "stock"
+    ]
+  },
+  "rankings": {
+    "alexa": 895
+  },
+  "check": {
+    "probe_url": "https://www.yumpu.com/user/{username}",
+    "known_accounts": [
+      "26vadim.ivanov26"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "yp-grid-mag-container yp-content-container"
+    ],
+    "absence_strs": [
+      "float-left"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.790452+00:00"
+}

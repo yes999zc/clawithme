@@ -1,0 +1,35 @@
+{
+  "id": "crunchyroll",
+  "name": "Crunchyroll",
+  "canonical_url": "https://www.crunchyroll.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999997179,
+    "tags": [
+      "forum",
+      "movies"
+    ]
+  },
+  "rankings": {
+    "alexa": 2821
+  },
+  "check": {
+    "probe_url": "https://www.crunchyroll.com/user/{username}",
+    "known_accounts": [
+      "adan"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "'User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/117.0"
+    }
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.109969+00:00"
+}

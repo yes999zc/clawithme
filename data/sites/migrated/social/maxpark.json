@@ -1,0 +1,38 @@
+{
+  "id": "maxpark",
+  "name": "Maxpark",
+  "canonical_url": "https://maxpark.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999943358,
+    "tags": [
+      "news",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 56642
+  },
+  "check": {
+    "probe_url": "https://maxpark.com/user/{username}",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "ОШИБКА 50x",
+      "ОШИБКА 404"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.788535+00:00"
+}

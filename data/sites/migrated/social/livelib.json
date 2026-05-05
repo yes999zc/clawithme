@@ -1,0 +1,42 @@
+{
+  "id": "livelib",
+  "name": "LiveLib",
+  "canonical_url": "https://www.livelib.ru/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999988593,
+    "tags": [
+      "books",
+      "reading",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 11407
+  },
+  "check": {
+    "probe_url": "https://www.livelib.ru/reader/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": ""
+    },
+    "presence_strs": [
+      "на livelib.ru"
+    ],
+    "absence_strs": [
+      "не найден"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.502080+00:00"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "reddit",
+  "name": "Reddit",
+  "canonical_url": "https://www.reddit.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999951,
+    "tags": [
+      "discussion",
+      "news",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 49
+  },
+  "check": {
+    "probe_url": "https://www.reddit.com/user/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "User-Agent": "maigret/0.4"
+    },
+    "presence_strs": [
+      "\"name\":"
+    ],
+    "absence_strs": [
+      "Not Found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.655364+00:00"
+}

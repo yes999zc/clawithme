@@ -1,0 +1,36 @@
+{
+  "id": "universocraft",
+  "name": "universocraft",
+  "canonical_url": "https://stats.universocraft.com/stats.php?player={username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://stats.universocraft.com/stats.php?player={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis12"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Última conexión"
+    ],
+    "absence_strs": [
+      "No se ha encontrado ningún usuario con ese nombre"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.499871+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "forum_ua-vet_com",
+  "name": "forum.ua-vet.com",
+  "canonical_url": "http://forum.ua-vet.com",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.437501+00:00",
+  "_maigret_engine": "phpBB/Search"
+}

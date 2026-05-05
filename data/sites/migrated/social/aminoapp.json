@@ -1,0 +1,34 @@
+{
+  "id": "aminoapp",
+  "name": "AminoApp",
+  "canonical_url": "https://aminoapps.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999989927,
+    "tags": [
+      "br",
+      "social",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 10073
+  },
+  "check": {
+    "probe_url": "https://aminoapps.com/u/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.426678+00:00"
+}

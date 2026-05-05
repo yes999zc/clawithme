@@ -1,0 +1,40 @@
+{
+  "id": "codeberg_org",
+  "name": "codeberg.org",
+  "canonical_url": "https://codeberg.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999998570,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 1430
+  },
+  "check": {
+    "probe_url": "https://codeberg.org/{username}",
+    "known_accounts": [
+      "pcastela"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "user profile",
+      " username text center"
+    ],
+    "absence_strs": [
+      "og:description",
+      " ui centered image"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.852534+00:00"
+}

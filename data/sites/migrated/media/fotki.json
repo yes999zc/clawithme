@@ -1,0 +1,42 @@
+{
+  "id": "fotki",
+  "name": "Fotki",
+  "canonical_url": "https://fotki.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "media",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999991753,
+    "tags": [
+      "photo"
+    ]
+  },
+  "rankings": {
+    "alexa": 8247
+  },
+  "check": {
+    "probe_url": "https://members.fotki.com/{username}/about/",
+    "known_accounts": [
+      "normargab"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-cities",
+      "profile-friends",
+      "profile-aboutme",
+      "profile-country",
+      "user_profile_info"
+    ],
+    "absence_strs": [
+      "'404 - Member Not Found'"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.397858+00:00"
+}

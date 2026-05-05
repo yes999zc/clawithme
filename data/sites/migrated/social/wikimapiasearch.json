@@ -1,0 +1,39 @@
+{
+  "id": "wikimapiasearch",
+  "name": "WikimapiaSearch",
+  "canonical_url": "http://wikimapia.org",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999998089,
+    "tags": [
+      "maps",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 1911
+  },
+  "check": {
+    "probe_url": "http://wikimapia.org/user/tools/users_rating/?username={username}",
+    "known_accounts": [
+      "Voronoff"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis77777"
+    ],
+    "headers": {
+      "Cookie": "verified=1"
+    },
+    "presence_strs": [
+      "<tr class=\"current\">"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.879837+00:00"
+}

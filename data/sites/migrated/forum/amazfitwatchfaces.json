@@ -1,0 +1,39 @@
+{
+  "id": "amazfitwatchfaces",
+  "name": "AmazfitWatchFaces",
+  "canonical_url": "https://amazfitwatchfaces.com",
+  "engine_ref": "phpbb",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999421250,
+    "tags": [
+      "ae",
+      "es",
+      "forum",
+      "gr",
+      "id",
+      "ir",
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 578750
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.254420+00:00",
+  "_maigret_engine": "phpBB"
+}

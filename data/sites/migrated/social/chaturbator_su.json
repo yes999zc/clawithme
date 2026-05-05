@@ -1,0 +1,38 @@
+{
+  "id": "chaturbator_su",
+  "name": "chaturbator.su",
+  "canonical_url": "https://chaturbator.su",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://chaturbator.su/{username}?pagespeed=noscript",
+    "known_accounts": [
+      "pixie23"
+    ],
+    "known_unclaimed": [
+      "qfrpuzyanx"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "h5 text-uppercase",
+      "<h2 class=",
+      "h5",
+      ">Посмотри видеочат других моделей.</div>",
+      ">\t<h1 class="
+    ],
+    "absence_strs": [
+      "error-details"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.519734+00:00"
+}

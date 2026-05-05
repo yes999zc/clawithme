@@ -1,0 +1,34 @@
+{
+  "id": "exploretalent_com",
+  "name": "exploretalent.com",
+  "canonical_url": "https://exploretalent.com/{username}",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://exploretalent.com/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "userNode\":{\"id\""
+    ],
+    "absence_strs": [
+      "userNode\":{}"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.342646+00:00"
+}

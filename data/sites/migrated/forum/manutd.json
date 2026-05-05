@@ -1,0 +1,31 @@
+{
+  "id": "manutd",
+  "name": "Manutd",
+  "canonical_url": "https://manutd.one",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "sport"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://manutd.one/user/{username}",
+    "known_accounts": [
+      "Becks"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.702340+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "empowher",
+  "name": "Empowher",
+  "canonical_url": "https://www.empowher.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999991876,
+    "tags": [
+      "medicine"
+    ]
+  },
+  "rankings": {
+    "alexa": 8124
+  },
+  "check": {
+    "probe_url": "https://www.empowher.com/users/{username}",
+    "known_accounts": [
+      "susanc"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.376568+00:00"
+}

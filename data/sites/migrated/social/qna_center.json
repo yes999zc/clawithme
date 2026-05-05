@@ -1,0 +1,32 @@
+{
+  "id": "qna_center",
+  "name": "qna.center",
+  "canonical_url": "https://qna.center",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999306077,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 693923
+  },
+  "check": {
+    "probe_url": "https://qna.center/user/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.351949+00:00"
+}

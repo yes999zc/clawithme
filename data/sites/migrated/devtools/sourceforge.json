@@ -1,0 +1,36 @@
+{
+  "id": "sourceforge",
+  "name": "SourceForge",
+  "canonical_url": "https://sourceforge.net/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999999921,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 79
+  },
+  "check": {
+    "probe_url": "https://sourceforge.net/u/{username}/profile",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "Personal Tools"
+    ],
+    "absence_strs": []
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.663769+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "ruanekdot_ru",
+  "name": "ruanekdot.ru",
+  "canonical_url": "http://ruanekdot.ru",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999481825,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 518175
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "admin"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.262950+00:00",
+  "_maigret_engine": "uCoz"
+}

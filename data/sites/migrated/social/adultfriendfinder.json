@@ -1,0 +1,36 @@
+{
+  "id": "adultfriendfinder",
+  "name": "AdultFriendFinder",
+  "canonical_url": "https://adultfriendfinder.com",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999990014,
+    "tags": [
+      "dating"
+    ]
+  },
+  "rankings": {
+    "alexa": 9986
+  },
+  "check": {
+    "probe_url": "https://adultfriendfinder.com/profile/{username}",
+    "known_accounts": [
+      "havefunwing"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "<select name=\"REG_sex\" >"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.581539+00:00"
+}

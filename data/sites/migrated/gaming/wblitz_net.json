@@ -1,0 +1,40 @@
+{
+  "id": "wblitz_net",
+  "name": "wblitz.net",
+  "canonical_url": "https://wblitz.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://wblitz.net/stat/ru/{username}",
+    "known_accounts": [
+      "lucklev12"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profileBlock",
+      "tournaments",
+      "serverna",
+      " role=",
+      " name="
+    ],
+    "absence_strs": [
+      "<html><head><title>404 Страница не найдена</title></head><body><h2>404 Страница не найдена</h2></body></html>"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.186046+00:00"
+}

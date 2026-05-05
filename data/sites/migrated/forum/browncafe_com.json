@@ -1,0 +1,33 @@
+{
+  "id": "browncafe_com",
+  "name": "browncafe.com",
+  "canonical_url": "http://www.browncafe.com/community/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999263178,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 736822
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.350048+00:00",
+  "_maigret_engine": "XenForo"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "autolenta",
+  "name": "Autolenta",
+  "canonical_url": "https://community.autolenta.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "auto",
+      "forum",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://community.autolenta.ru/profile/{username}",
+    "known_accounts": [
+      "serzhhh"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Пользователь не найден"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.493678+00:00"
+}

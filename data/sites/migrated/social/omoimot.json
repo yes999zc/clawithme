@@ -1,0 +1,32 @@
+{
+  "id": "omoimot",
+  "name": "Omoimot",
+  "canonical_url": "https://omoimot.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999487769,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 512231
+  },
+  "check": {
+    "probe_url": "https://omoimot.ru/users/{username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.255382+00:00"
+}

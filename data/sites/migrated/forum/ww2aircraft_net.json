@@ -1,0 +1,33 @@
+{
+  "id": "ww2aircraft_net",
+  "name": "ww2aircraft.net",
+  "canonical_url": "https://ww2aircraft.net/forum/",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999758155,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 241845
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "alex"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.048930+00:00",
+  "_maigret_engine": "XenForo"
+}

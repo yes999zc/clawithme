@@ -1,0 +1,32 @@
+{
+  "id": "libraries",
+  "name": "Libraries",
+  "canonical_url": "https://libraries.io",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 999932414,
+    "tags": [
+      "coding"
+    ]
+  },
+  "rankings": {
+    "alexa": 67586
+  },
+  "check": {
+    "probe_url": "https://libraries.io/github/{username}/",
+    "known_accounts": [
+      "snooppr"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.824214+00:00"
+}

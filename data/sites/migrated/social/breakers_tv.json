@@ -1,0 +1,39 @@
+{
+  "id": "breakers_tv",
+  "name": "breakers.tv",
+  "canonical_url": "https://breakers.tv",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "streaming"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://breakers.tv/{username}",
+    "known_accounts": [
+      "friendlyboxbreaks"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "</span> followers",
+      "{username}</span>",
+      "{username} on Breakers.TV"
+    ],
+    "absence_strs": [
+      "Channel you are looking for doesn't exist",
+      "Stream Not Found - Breakers.TV"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:13.492410+00:00"
+}

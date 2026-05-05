@@ -1,0 +1,44 @@
+{
+  "id": "twitter",
+  "name": "Twitter",
+  "canonical_url": "https://www.twitter.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999995,
+    "tags": [
+      "messaging",
+      "social"
+    ]
+  },
+  "rankings": {
+    "alexa": 5
+  },
+  "check": {
+    "probe_url": "https://twitter.com/{username}",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewould123"
+    ],
+    "headers": {
+      "sec-ch-ua": "Google Chrome\";v=\"87\", \" Not;A Brand\";v=\"99\", \"Chromium\";v=\"87\"",
+      "authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+      "x-guest-token": "2048070238281826593"
+    },
+    "presence_strs": [
+      "\"legacy\""
+    ],
+    "absence_strs": [
+      " not found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.631595+00:00"
+}

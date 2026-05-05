@@ -1,0 +1,38 @@
+{
+  "id": "kosmetista",
+  "name": "Kosmetista",
+  "canonical_url": "https://kosmetista.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999802106,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 197894
+  },
+  "check": {
+    "probe_url": "https://kosmetista.ru/profile/{username}/",
+    "known_accounts": [
+      "red"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "profile-content"
+    ],
+    "absence_strs": [
+      "Упс! Вот это поворот!"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.990531+00:00"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "wirednewyork",
+  "name": "WiredNewYork",
+  "canonical_url": "http://wirednewyork.com/",
+  "engine_ref": "vbulletin",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999791642,
+    "tags": [
+      "forum",
+      "pk",
+      "us"
+    ]
+  },
+  "rankings": {
+    "alexa": 208358
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.024267+00:00",
+  "_maigret_engine": "vBulletin"
+}

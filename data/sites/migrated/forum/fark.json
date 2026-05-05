@@ -1,0 +1,37 @@
+{
+  "id": "fark",
+  "name": "Fark",
+  "canonical_url": "https://www.fark.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999990655,
+    "tags": [
+      "forum",
+      "news"
+    ]
+  },
+  "rankings": {
+    "alexa": 9345
+  },
+  "check": {
+    "probe_url": "https://www.fark.com/users/{username}/",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Tastes like chicken."
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.447064+00:00"
+}

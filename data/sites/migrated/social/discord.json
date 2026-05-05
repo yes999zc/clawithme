@@ -1,0 +1,39 @@
+{
+  "id": "discord",
+  "name": "Discord",
+  "canonical_url": "https://discord.com/",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999999867,
+    "tags": [
+      "gaming",
+      "messaging"
+    ]
+  },
+  "rankings": {
+    "alexa": 133
+  },
+  "check": {
+    "probe_url": "https://discord.com",
+    "known_accounts": [
+      "blue"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "presence_strs": [],
+    "absence_strs": [
+      "{\"taken\":false}"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.679269+00:00"
+}

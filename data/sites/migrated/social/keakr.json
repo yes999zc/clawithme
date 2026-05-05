@@ -1,0 +1,28 @@
+{
+  "id": "keakr",
+  "name": "Keakr",
+  "canonical_url": "https://www.keakr.com/en/profile/{username}",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": []
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.keakr.com/en/profile/{username}",
+    "known_accounts": [
+      "beats"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.673454+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "pyha",
+  "name": "Pyha",
+  "canonical_url": "https://pyha.ru/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 999554803,
+    "tags": [
+      "ru"
+    ]
+  },
+  "rankings": {
+    "alexa": 445197
+  },
+  "check": {
+    "probe_url": "https://pyha.ru/users/{username}",
+    "known_accounts": [
+      "Sinkler"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.204171+00:00"
+}

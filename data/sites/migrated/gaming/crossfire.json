@@ -1,0 +1,35 @@
+{
+  "id": "crossfire",
+  "name": "Crossfire",
+  "canonical_url": "https://cfire.mail.ru",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "gaming",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "gaming",
+      "ru"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://cfire.mail.ru/forums/member.php?username={username}",
+    "known_accounts": [
+      "wizard"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "Пользователь не зарегистрирован и не имеет профиля для просмотра"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:10.756527+00:00"
+}

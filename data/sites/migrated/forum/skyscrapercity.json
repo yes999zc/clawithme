@@ -1,0 +1,33 @@
+{
+  "id": "skyscrapercity",
+  "name": "SkyscraperCity",
+  "canonical_url": "https://www.skyscrapercity.com",
+  "engine_ref": "xenforo",
+  "classification": {
+    "primary": "forum",
+    "identity_type": "anonymous",
+    "geo_region": "global",
+    "user_scale": 999991939,
+    "tags": [
+      "forum"
+    ]
+  },
+  "rankings": {
+    "alexa": 8061
+  },
+  "check": {
+    "probe_url": "",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {}
+  },
+  "nsfw": false,
+  "deprecated": true,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:11.374746+00:00",
+  "_maigret_engine": "XenForo"
+}

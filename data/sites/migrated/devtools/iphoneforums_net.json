@@ -1,0 +1,35 @@
+{
+  "id": "iphoneforums_net",
+  "name": "iPhoneForums.net",
+  "canonical_url": "https://www.iphoneforums.net",
+  "engine_ref": "base_http_message",
+  "classification": {
+    "primary": "devtools",
+    "identity_type": "professional",
+    "geo_region": "global",
+    "user_scale": 0,
+    "tags": [
+      "forum",
+      "tech"
+    ]
+  },
+  "rankings": {},
+  "check": {
+    "probe_url": "https://www.iphoneforums.net/members/?username={username}",
+    "known_accounts": [
+      "adam"
+    ],
+    "known_unclaimed": [
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [],
+    "absence_strs": [
+      "The specified member cannot be found"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "maigret_migration",
+  "last_updated": "2026-05-05T03:44:12.931310+00:00"
+}
