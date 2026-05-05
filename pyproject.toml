@@ -46,6 +46,18 @@ bilibili = "clawithme.crawler.extractors.bilibili:BilibiliExtractor"
 gitlab = "clawithme.crawler.extractors.gitlab:GitlabExtractor"
 devto = "clawithme.crawler.extractors.devto:DevtoExtractor"
 stackoverflow = "clawithme.crawler.extractors.stackoverflow:StackoverflowExtractor"
+tianyancha = "clawithme.crawler.extractors.tianyancha:TianyanchaExtractor"
+keybase = "clawithme.crawler.extractors.keybase:KeybaseExtractor"
+segmentfault = "clawithme.crawler.extractors.segmentfault:SegmentfaultExtractor"
+behance = "clawithme.crawler.extractors.behance:BehanceExtractor"
+dribbble = "clawithme.crawler.extractors.dribbble:DribbbleExtractor"
+flickr = "clawithme.crawler.extractors.flickr:FlickrExtractor"
+patreon = "clawithme.crawler.extractors.patreon:PatreonExtractor"
+csdn = "clawithme.crawler.extractors.csdn:CsdnExtractor"
+cnblogs = "clawithme.crawler.extractors.cnblogs:CnblogsExtractor"
+jianshu = "clawithme.crawler.extractors.jianshu:JianshuExtractor"
+coolapk = "clawithme.crawler.extractors.coolapk:CoolapkExtractor"
+huaban = "clawithme.crawler.extractors.huaban:HuabanExtractor"
 
 [tool.setuptools.packages.find]
 include = ["clawithme*"]

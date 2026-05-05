@@ -39,9 +39,15 @@ class BilibiliExtractor(ProfileExtractor):
         # Bilibili API requires numeric UID. If username is text, resolve via search.
         mid = username if username.isdigit() else self._search_mid(username)
         if not mid:
-            return Profile.empty(site_id=self.site_id)
+            return Profile(
+                site_id=self.site_id,
+                site_name="Bilibili",
+                url=f"https://space.bilibili.com/{username}" if not username.isdigit() else f"https://space.bilibili.com/{mid}",
+                username=username,
+            )
 
         api_url = f"https://api.bilibili.com/x/web-interface/card?mid={mid}"
+        bilibili_url = f"https://space.bilibili.com/{mid}"
         try:
             req = urllib.request.Request(api_url, headers={
                 "Referer": "https://www.bilibili.com",
@@ -54,11 +60,21 @@ class BilibiliExtractor(ProfileExtractor):
                 code = data.get("code")
                 msg = data.get("message", "")
                 logger.info(f"bilibili_api_error code={code} msg={msg}")
-                return Profile.empty(site_id=self.site_id)
+                return Profile(
+                    site_id=self.site_id,
+                    site_name="Bilibili",
+                    url=bilibili_url,
+                    username=username,
+                )
 
             card = data.get("data", {}).get("card", {})
             if not card:
-                return Profile.empty(site_id=self.site_id)
+                return Profile(
+                    site_id=self.site_id,
+                    site_name="Bilibili",
+                    url=bilibili_url,
+                    username=username,
+                )
 
             display_name = card.get("name") or username
             sign = card.get("sign") or None
@@ -90,7 +106,12 @@ class BilibiliExtractor(ProfileExtractor):
             )
         except (OSError, json.JSONDecodeError, KeyError) as e:
             logger.warning(f"bilibili_parse_failed username={username} error={e}")
-            return Profile.empty(site_id=self.site_id)
+            return Profile(
+                site_id=self.site_id,
+                site_name="Bilibili",
+                url=bilibili_url,
+                username=username,
+            )
 
     @staticmethod
     def _search_mid(username: str) -> str | None:
