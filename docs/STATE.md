@@ -243,7 +243,7 @@ python scripts/verify_site.py --all # Full verification
 
 | Item | Status |
 |------|:------:|
-| Push 7 commits to GitHub | ⚠️ pending `gh auth login` |
+| Local ↔ GitHub | ✅ aligned, no pending commits |
 | v2 scope (13 items, see docs/todo.md) | 🟡 Deferred |
 
 ## v2 Scope (deferred)
@@ -262,5 +262,6 @@ python scripts/verify_site.py --all # Full verification
 | 10 | GitHub Actions CI/CD |
 | 11 | Profile 提取 P1 梯队 (11 站 — ✅ P0+P1 done) |
 | 12 | 天眼查 API 集成 (stub done, 需 token) |
+| 13 | 关联引擎：拆分误合并 cluster |
 
-> Phase 1-5 全部完成。P0/P1 Profile 提取 DONE。CI 已部署。6 commits 待推。
+> Phase 1-5 全部完成。19 extractors (7 P0 + 11 P1 + 天眼查 stub)。160 tests。CI 已部署。Local ↔ GitHub 对齐。
