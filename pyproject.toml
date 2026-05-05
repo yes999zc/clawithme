@@ -58,7 +58,12 @@ csdn = "clawithme.crawler.extractors.csdn:CsdnExtractor"
 cnblogs = "clawithme.crawler.extractors.cnblogs:CnblogsExtractor"
 jianshu = "clawithme.crawler.extractors.jianshu:JianshuExtractor"
 coolapk = "clawithme.crawler.extractors.coolapk:CoolapkExtractor"
+hackernews = "clawithme.crawler.extractors.hackernews:HackernewsExtractor"
 huaban = "clawithme.crawler.extractors.huaban:HuabanExtractor"
+linkedin = "clawithme.crawler.extractors.linkedin:LinkedinExtractor"
+medium = "clawithme.crawler.extractors.medium:MediumExtractor"
+reddit = "clawithme.crawler.extractors.reddit:RedditExtractor"
+youtube = "clawithme.crawler.extractors.youtube:YoutubeExtractor"
 
 [tool.setuptools.packages.find]
 include = ["clawithme*"]

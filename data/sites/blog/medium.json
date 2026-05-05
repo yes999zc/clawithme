@@ -16,7 +16,8 @@
     "probe_url": "https://medium.com/@{username}",
     "absence_strs": ["PAGE NOT FOUND"],
     "known_accounts": [
-      "ev"
+      "ev",
+      "barackobama"
     ],
     "known_unclaimed": [
       "xkcdxkcdxkcdxkcd_nope"

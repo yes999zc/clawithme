@@ -19,7 +19,7 @@
     ],
     "known_accounts": [
       "pg",
-      "tptacek"
+      "dang"
     ],
     "known_unclaimed": [
       "xzzyqwerty987654"
@@ -29,9 +29,11 @@
   "deprecated": false,
   "known_accounts": [
     "pg",
-    "tptacek"
+    "dang"
   ],
-  "known_unclaimed": "xzzyqwerty987654",
+  "known_unclaimed": [
+    "xzzyqwerty987654"
+  ],
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

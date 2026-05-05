@@ -2,22 +2,26 @@
   "id": "reddit",
   "name": "Reddit",
   "primary": "social",
-  "canonical_url": "",
+  "canonical_url": "https://www.reddit.com/user/{username}",
   "engine_ref": "base_http_status",
   "classification": {
     "primary": "social",
     "identity_type": "virtual_social",
-    "geo_region": "cn",
-    "user_scale": 0,
+    "geo_region": "global",
+    "user_scale": 500000000,
     "tags": []
   },
   "check": {
-    "probe_url": "",
-    "error_flags": {
-      "blocked": "403 — API probeable via old.reddit.com"
-    }
+    "probe_url": "https://www.reddit.com/user/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "spez",
+      "kn0thing"
+    ],
+    "known_unclaimed": [
+      "thisuserdoesnotexist999999"
+    ]
   },
-  "deprecated": true,
   "source": "manual",
   "last_updated": "2026-05-04T00:00:00Z"
 }

@@ -13,10 +13,11 @@
   },
   "rankings": {},
   "check": {
-    "probe_url": "https://www.youtube.com/@{username}",
+    "probe_url": "https://www.youtube.com/@{username}/about",
     "expected": 200,
     "known_accounts": [
-      "youtube"
+      "mkbhd",
+      "MrBeast"
     ],
     "known_unclaimed": [
       "thisuserdoesnotexist999999"
