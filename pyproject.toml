@@ -39,6 +39,7 @@ dev = [
 web = [
     "fastapi>=0.100",
     "uvicorn>=0.30",
+    "weasyprint>=60",
 ]
 
 [project.scripts]
@@ -107,4 +108,4 @@ ignore = [
 "clawithme/engine/engines.py" = ["PLC0415", "PLW0603"]
 "clawithme/leak_sources/__init__.py" = ["PLC0415"]
 "clawithme/logging.py" = ["PLC0415"]
-"clawithme/report/generator.py" = ["E501"]  # CSS in template strings
+"clawithme/report/generator.py" = ["E501", "PLR0913", "PLC0415"]  # CSS templates + optional weasyprint import

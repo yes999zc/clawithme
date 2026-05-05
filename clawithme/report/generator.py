@@ -108,6 +108,24 @@ def export_json(
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
+def export_pdf(
+    hits: list[dict], profiles: list[dict], clusters: list,
+    username: str, *, trace_id: str = "", breach_dates: list[str] | None = None,
+) -> bytes:
+    """Generate a self-contained PDF report via WeasyPrint.
+
+    Renders the same Geist HTML as generate_report() and converts to PDF.
+    Returns raw PDF bytes — caller writes to file.
+    """
+    from weasyprint import HTML
+
+    html = generate_report(
+        hits, profiles, clusters, username,
+        trace_id=trace_id, breach_dates=breach_dates or [],
+    )
+    return HTML(string=html).write_pdf()
+
+
 # ── Auto-summary composition ──────────────────────────────────
 
 def _compose_summary(profiles: list[dict]) -> str:

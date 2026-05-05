@@ -189,6 +189,32 @@ def _search_leaks(search_term: str, search_type: str,
 
 
 
+def _write_report(output: str | bytes, path_str: str, fmt: str,
+                  log, *, mode: str = "text") -> None:
+    """Write a report file with path traversal protection.
+
+    mode='text' → write_text, mode='bytes' → write_bytes (for PDF).
+    """
+    try:
+        safe_path = Path(path_str).resolve()
+        cwd = Path.cwd().resolve()
+        try:
+            safe_path.relative_to(cwd)
+        except ValueError:
+            log.error("report_path_traversal", path=path_str)
+            print("\n❌ Report path must be within current directory")
+            return
+        if mode == "bytes":
+            safe_path.write_bytes(output)  # type: ignore[arg-type]
+        else:
+            safe_path.write_text(output)  # type: ignore[arg-type]
+        log.info("report_written", path=path_str, format=fmt)
+        print(f"\n📄 Report ({fmt}): {path_str}")
+    except OSError as e:
+        log.error("report_write_failed", path=path_str, error=str(e))
+        print(f"\n❌ Failed to write report: {e}")
+
+
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
            include_migrated: bool = False, acknowledged: bool = False,
            no_cache: bool = False, async_mode: bool = True):
@@ -369,26 +395,19 @@ def _search_async(username: str, *, report_path: str | None = None,
             from clawithme.report.generator import export_json
             output = export_json(result.hits, result.profiles, clusters,
                                  username, trace_id=trace_id)
+            _write_report(output, report_path, report_format, log, mode="text")
+        elif report_format == "pdf":
+            from clawithme.report.generator import export_pdf
+            output = export_pdf(result.hits, result.profiles, clusters,
+                                username, trace_id=trace_id,
+                                breach_dates=breach_dates)
+            _write_report(output, report_path, report_format, log, mode="bytes")
         else:
             from clawithme.report.generator import generate_report
             output = generate_report(result.hits, result.profiles, clusters,
                                      username, trace_id=trace_id,
                                      breach_dates=breach_dates)
-        try:
-            safe_path = Path(report_path).resolve()
-            cwd = Path.cwd().resolve()
-            try:
-                safe_path.relative_to(cwd)
-            except ValueError:
-                log.error("report_path_traversal", path=report_path)
-                print("\n❌ Report path must be within current directory")
-                return
-            safe_path.write_text(output)
-            log.info("report_written", path=report_path, format=report_format)
-            print(f"\n📄 Report ({report_format}): {report_path}")
-        except OSError as e:
-            log.error("report_write_failed", path=report_path, error=str(e))
-            print(f"\n❌ Failed to write report: {e}")
+            _write_report(output, report_path, report_format, log, mode="text")
 
 
 def _search_sync(username: str, *, search_type: str, report_path: str | None,
@@ -658,25 +677,17 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
         if report_format == "json":
             from clawithme.report.generator import export_json
             output = export_json(hits, profiles, clusters, username, trace_id=trace_id)
+            _write_report(output, report_path, report_format, log, mode="text")
+        elif report_format == "pdf":
+            from clawithme.report.generator import export_pdf
+            output = export_pdf(hits, profiles, clusters, username,
+                                trace_id=trace_id, breach_dates=breach_dates)
+            _write_report(output, report_path, report_format, log, mode="bytes")
         else:
             from clawithme.report.generator import generate_report
             output = generate_report(hits, profiles, clusters, username,
                                      trace_id=trace_id, breach_dates=breach_dates)
-        try:
-            safe_path = Path(report_path).resolve()
-            cwd = Path.cwd().resolve()
-            try:
-                safe_path.relative_to(cwd)
-            except ValueError:
-                log.error("report_path_traversal", path=report_path)
-                print("\n❌ Report path must be within current directory")
-                return
-            safe_path.write_text(output)
-            log.info("report_written", path=report_path, format=report_format)
-            print(f"\n📄 Report ({report_format}): {report_path}")
-        except OSError as e:
-            log.error("report_write_failed", path=report_path, error=str(e))
-            print(f"\n❌ Failed to write report: {e}")
+            _write_report(output, report_path, report_format, log, mode="text")
 
 
 def main():
@@ -714,8 +725,8 @@ def main():
             idx = sys.argv.index("--format")
             if idx + 1 < len(sys.argv):
                 report_format = sys.argv[idx + 1]
-        if report_format not in ("html", "json"):
-            print(f"❌ Unknown format: {report_format!r}. Use 'html' or 'json'.")
+        if report_format not in ("html", "json", "pdf"):
+            print(f"❌ Unknown format: {report_format!r}. Use 'html', 'json', or 'pdf'.")
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
                include_migrated=include_migrated, acknowledged=acknowledged,
