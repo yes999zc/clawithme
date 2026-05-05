@@ -24,6 +24,7 @@ from clawithme.leak_sources.hibp import HIBPSource
 from clawithme.leak_sources.manager import query_breaches
 from clawithme.logging import get_logger, new_trace_id, setup_logging
 from clawithme.signals.correlation import CorrelationEngine
+from clawithme.signals.llm_verifier import LLMVerifier
 
 logger = get_logger()
 
@@ -224,6 +225,19 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
     # ── Load config ──
     cfg = load_config()
 
+    # ── Init cache (skip if --no-cache) ──
+    cache: ResultCache | None = None
+    if not no_cache:
+        try:
+            cache = ResultCache()
+        except OSError as e:
+            log.warning("cache_init_failed", error=str(e))
+
+    # ── Init LLM verifier (if API key available) ──
+    llm_verifier: LLMVerifier | None = None
+    if LLMVerifier.is_configured():
+        llm_verifier = LLMVerifier()
+
     # Email/phone search: leak DB only, no site probing
     if search_type != "username":
         return _search_leaks(username, search_type, report_path, report_format, acknowledged)
@@ -253,21 +267,40 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             log.warning("engine_missing", site_id=site["id"])
             continue
 
+        site_id = site["id"]
+        cache_key = f"probe:{username}:{site_id}"
+
+        # Check cache first
+        cached = None
+        if cache is not None:
+            cached = cache.get(cache_key)
+
+        if cached is not None:
+            if cached.get("exists"):
+                hits.append(cached["hit"])
+                log.info("hit_cache", site=cached["hit"]["site_name"])
+            continue
+
         try:
             result = engine.probe(site, username)
         except ValueError as e:
-            log.warning("probe_template_error", site_id=site["id"], error=str(e))
+            log.warning("probe_template_error", site_id=site_id, error=str(e))
             continue
 
         if result.exists:
-            hits.append({
+            hit = {
                 "site_id": result.site_id,
                 "site_name": result.site_name,
                 "url": result.url_probed,
                 "status": result.status_code,
-                "site_def": site,  # pass site definition to extractor
-            })
+                "site_def": site,
+            }
+            hits.append(hit)
             log.info("hit", site=result.site_name, status=result.status_code)
+            if cache is not None:
+                cache.set(cache_key, {"exists": True, "hit": hit})
+        elif cache is not None:
+            cache.set(cache_key, {"exists": False})
 
     # ── Phase 1.5: SearXNG fallback for un-hit sites ──
     searxng_total = 0
@@ -378,7 +411,7 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
             phone=r.phone,
         ))
 
-    engine = CorrelationEngine()
+    engine = CorrelationEngine(llm_verifier=llm_verifier)
     clusters = engine.correlate(profile_objects)
 
     # ── Output ──
@@ -453,8 +486,8 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
                                      trace_id=trace_id, breach_dates=breach_dates)
         try:
             safe_path = Path(report_path).resolve()
-            # Only block paths that escape cwd — allow /tmp and subdirs
-            if ".." in str(Path(report_path)):
+            # Check resolved path for traversal
+            if ".." in str(safe_path):
                 log.error("report_path_traversal", path=report_path)
                 print("\n❌ Report path must not contain '..'")
                 return
@@ -472,7 +505,8 @@ def main():
 
     if len(sys.argv) < 2:
         print("Usage: clawithme search <username> [--report <path>] "
-              "[--include-migrated] [--acknowledge-ethical-use]")
+              "[--format html|json] [--include-migrated] [--no-cache] "
+              "[--acknowledge-ethical-use]")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)
@@ -482,12 +516,14 @@ def main():
     if command == "search":
         if len(sys.argv) < 3:
             print("Usage: clawithme search <username> [--report <path>] "
-                  "[--include-migrated] [--acknowledge-ethical-use]")
+                  "[--format html|json] [--include-migrated] [--no-cache] "
+                  "[--acknowledge-ethical-use]")
             sys.exit(1)
         username = sys.argv[2]
         report_path = None
         report_format = "html"
         include_migrated = "--include-migrated" in sys.argv
+        no_cache = "--no-cache" in sys.argv
         acknowledged = "--acknowledge-ethical-use" in sys.argv
         if "--report" in sys.argv:
             idx = sys.argv.index("--report")
@@ -501,7 +537,8 @@ def main():
             print(f"❌ Unknown format: {report_format!r}. Use 'html' or 'json'.")
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
-               include_migrated=include_migrated, acknowledged=acknowledged)
+               include_migrated=include_migrated, acknowledged=acknowledged,
+               no_cache=no_cache)
 
     elif command == "verify":
         # Delegate to verify_site.py

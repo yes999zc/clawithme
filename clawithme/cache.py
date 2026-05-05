@@ -24,10 +24,13 @@ class ResultCache:
             cache_dir = Path.home() / ".cache" / "clawithme"
         self._db_path = Path(cache_dir) / "cache.db"
         self._db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._conn: sqlite3.Connection | None = None
         self._init_db()
 
     def _init_db(self) -> None:
         with self._connect() as conn:
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA busy_timeout=5000")
             conn.execute(
                 "CREATE TABLE IF NOT EXISTS cache ("
                 "  key TEXT PRIMARY KEY,"
@@ -37,7 +40,17 @@ class ResultCache:
             )
 
     def _connect(self) -> sqlite3.Connection:
-        return sqlite3.connect(str(self._db_path))
+        if self._conn is None:
+            self._conn = sqlite3.connect(
+                str(self._db_path), check_same_thread=False
+            )
+        return self._conn
+
+    def close(self) -> None:
+        """Close the persistent connection. Safe to call multiple times."""
+        if self._conn is not None:
+            self._conn.close()
+            self._conn = None
 
     def get(self, key: str) -> dict | None:
         """Return cached dict or None if expired or missing."""

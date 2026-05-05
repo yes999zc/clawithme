@@ -81,17 +81,17 @@ class TestDefaultAvatar:
     def test_compare_default_and_valid_returns_no_match(self):
         r = compare_avatars("9a6661796786669a", "c60c9933d19bcccd")
         assert r.is_match is False
-        assert r.distance == 0
+        assert r.distance == -1
 
     def test_compare_valid_and_default_returns_no_match(self):
         r = compare_avatars("c60c9933d19bcccd", "f9a8f9b8f90606a8")
         assert r.is_match is False
-        assert r.distance == 0
+        assert r.distance == -1
 
     def test_compare_two_defaults_returns_no_match(self):
         r = compare_avatars("9a6661796786669a", "f9a8f9b8f90606a8")
         assert r.is_match is False
-        assert r.distance == 0
+        assert r.distance == -1
 
     def test_non_default_phashes_still_match_normally(self):
         r = compare_avatars("c60c9933d19bcccd", "c60c9933d19bcccd")

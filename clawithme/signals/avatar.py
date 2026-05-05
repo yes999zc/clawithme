@@ -28,7 +28,15 @@ def _load_default_avatars() -> list[str]:
     cache = getattr(_load_default_avatars, "_cache", None)
     if cache is not None:
         return cache
-    path = Path(__file__).resolve().parent.parent.parent / "data" / "default_avatars.json"
+    try:
+        from importlib.resources import files
+        path = files("clawithme.data").joinpath("default_avatars.json")
+    except (ModuleNotFoundError, TypeError):
+        # Fallback: filesystem-relative path for dev installs
+        path = (
+            Path(__file__).resolve().parent.parent.parent
+            / "data" / "default_avatars.json"
+        )
     try:
         data = json.loads(path.read_text())
         _load_default_avatars._cache = list(data) if isinstance(data, list) else []
@@ -103,6 +111,6 @@ def compare_avatars(
     if phash1 is None or phash2 is None:
         return AvatarMatch(distance=-1, is_match=False)
     if is_default_avatar(phash1) or is_default_avatar(phash2):
-        return AvatarMatch(distance=0, is_match=False)
+        return AvatarMatch(distance=-1, is_match=False)
     dist = hamming_distance(phash1, phash2)
     return AvatarMatch(distance=dist, is_match=dist <= threshold)

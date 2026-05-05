@@ -17,14 +17,15 @@
   "check": {
     "probe_url": "https://juejin.cn/user/{username}",
     "absence_strs": [
-      "404"
+      "用户不存在"
     ],
     "known_accounts": [
       "3782774877627999"
     ],
     "known_unclaimed": [
       "9999999999999999"
-    ]
+    ],
+    "dynamic_fetch": true
   },
   "nsfw": false,
   "deprecated": false,

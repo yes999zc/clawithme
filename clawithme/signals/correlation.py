@@ -8,6 +8,7 @@ Uses Union-Find for transitive closure.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 from clawithme.crawler.base import Profile
 from clawithme.signals.avatar import compare_avatars
@@ -15,6 +16,9 @@ from clawithme.signals.extraction import normalize_phone
 from clawithme.signals.location import compare_locations
 from clawithme.signals.time import compare_joined_dates
 from clawithme.signals.username import compare_usernames, levenshtein_distance
+
+if TYPE_CHECKING:
+    from clawithme.signals.llm_verifier import LLMVerifier
 
 
 @dataclass
@@ -35,6 +39,9 @@ class CorrelationEngine:
       - email: exact, case-insensitive — weight 1.0
       - phone: exact, digits-only — weight 0.95
       - avatar_phash: Hamming distance ≤ 10 — weight 0.8
+
+    If *llm_verifier* is provided, high-conflict cases (username match
+    contradicted by display_name/location) are escalated to LLM arbitration.
     """
 
     PHASH_THRESHOLD = 10
@@ -48,6 +55,9 @@ class CorrelationEngine:
         "joined_date": 0.15,
         "location": 0.15,
     }
+
+    def __init__(self, llm_verifier: "LLMVerifier | None" = None) -> None:
+        self._llm = llm_verifier
 
     def correlate(self, profiles: list[Profile]) -> list[Cluster]:  # noqa: PLR0912
         """Return clusters. Each profile belongs to exactly one cluster."""
@@ -153,8 +163,16 @@ class CorrelationEngine:
                 normalize_phone(a.phone) == normalize_phone(b.phone)):
             matched.add("phone")
         sim = compare_usernames(a.username, b.username)
-        if sim >= self.USERNAME_THRESHOLD and not self._is_username_contradicted(a, b):
-            matched.add("username")
+        if sim >= self.USERNAME_THRESHOLD:
+            if self._is_username_contradicted(a, b):
+                # High-conflict — escalate to LLM if available
+                if self._llm is not None and self._llm.is_configured():
+                    is_same, _ = self._llm.verify_same_person(a, b)
+                    if is_same:
+                        matched.add("username")
+                # If no LLM or LLM says DIFFERENT: don't add username signal
+            else:
+                matched.add("username")
         if compare_joined_dates(a.joined_date, b.joined_date) > 0:
             matched.add("joined_date")
         if compare_locations(a.location, b.location) > 0:
