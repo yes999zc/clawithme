@@ -166,8 +166,8 @@ class CorrelationEngine:
             if self._is_username_contradicted(a, b):
                 # High-conflict — escalate to LLM if available
                 if self._llm is not None and self._llm.is_configured():
-                    is_same, _ = self._llm.verify_same_person(a, b)
-                    if is_same:
+                    is_same, confidence, _ = self._llm.verify_same_person(a, b)
+                    if is_same and confidence >= self._llm.CONFIDENCE_THRESHOLD:
                         matched.add("username")
                 # If no LLM or LLM says DIFFERENT: don't add username signal
             else:
