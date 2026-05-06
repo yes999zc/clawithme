@@ -4,22 +4,28 @@ from clawithme.crawler.extractors.baidu_zhidao import BaiduZhidaoExtractor
 from clawithme.crawler.extractors.behance import BehanceExtractor
 from clawithme.crawler.extractors.bilibili import BilibiliExtractor
 from clawithme.crawler.extractors.blogger import BloggerExtractor
+from clawithme.crawler.extractors.chess import ChessExtractor
 from clawithme.crawler.extractors.cnblogs import CnblogsExtractor
+from clawithme.crawler.extractors.codepen import CodepenExtractor
 from clawithme.crawler.extractors.coolapk import CoolapkExtractor
 from clawithme.crawler.extractors.csdn import CsdnExtractor
 from clawithme.crawler.extractors.devto import DevtoExtractor
+from clawithme.crawler.extractors.discogs import DiscogsExtractor
 from clawithme.crawler.extractors.douban import DoubanExtractor
 from clawithme.crawler.extractors.dribbble import DribbbleExtractor
 from clawithme.crawler.extractors.flickr import FlickrExtractor
 from clawithme.crawler.extractors.gitee import GiteeExtractor
 from clawithme.crawler.extractors.github import GithubExtractor
 from clawithme.crawler.extractors.gitlab import GitlabExtractor
+from clawithme.crawler.extractors.goodreads import GoodreadsExtractor
 from clawithme.crawler.extractors.hackernews import HackernewsExtractor
 from clawithme.crawler.extractors.huaban import HuabanExtractor
+from clawithme.crawler.extractors.hupu import HupuExtractor
 from clawithme.crawler.extractors.instagram import InstagramExtractor
 from clawithme.crawler.extractors.jianshu import JianshuExtractor
 from clawithme.crawler.extractors.juejin import JuejinExtractor
 from clawithme.crawler.extractors.keybase import KeybaseExtractor
+from clawithme.crawler.extractors.leetcode import LeetcodeExtractor
 from clawithme.crawler.extractors.linkedin import LinkedinExtractor
 from clawithme.crawler.extractors.medium import MediumExtractor
 from clawithme.crawler.extractors.netease_music import NeteaseMusicExtractor
@@ -49,22 +55,28 @@ __all__ = [
     "BehanceExtractor",
     "BilibiliExtractor",
     "BloggerExtractor",
+    "ChessExtractor",
     "CnblogsExtractor",
+    "CodepenExtractor",
     "CoolapkExtractor",
     "CsdnExtractor",
     "DevtoExtractor",
+    "DiscogsExtractor",
     "DoubanExtractor",
     "DribbbleExtractor",
     "FlickrExtractor",
     "GiteeExtractor",
     "GithubExtractor",
     "GitlabExtractor",
+    "GoodreadsExtractor",
     "HackernewsExtractor",
     "HuabanExtractor",
+    "HupuExtractor",
     "InstagramExtractor",
     "JianshuExtractor",
     "JuejinExtractor",
     "KeybaseExtractor",
+    "LeetcodeExtractor",
     "LinkedinExtractor",
     "MediumExtractor",
     "NeteaseMusicExtractor",

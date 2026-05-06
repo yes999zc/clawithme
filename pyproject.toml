@@ -90,6 +90,12 @@ gitee = "clawithme.crawler.extractors.gitee:GiteeExtractor"
 tieba = "clawithme.crawler.extractors.tieba:TiebaExtractor"
 wordpress = "clawithme.crawler.extractors.wordpress:WordpressExtractor"
 blogger = "clawithme.crawler.extractors.blogger:BloggerExtractor"
+leetcode = "clawithme.crawler.extractors.leetcode:LeetcodeExtractor"
+goodreads = "clawithme.crawler.extractors.goodreads:GoodreadsExtractor"
+chess = "clawithme.crawler.extractors.chess:ChessExtractor"
+discogs = "clawithme.crawler.extractors.discogs:DiscogsExtractor"
+codepen = "clawithme.crawler.extractors.codepen:CodepenExtractor"
+hupu = "clawithme.crawler.extractors.hupu:HupuExtractor"
 
 [tool.setuptools.packages.find]
 include = ["clawithme*"]
