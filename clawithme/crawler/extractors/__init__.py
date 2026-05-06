@@ -27,10 +27,15 @@ from clawithme.crawler.extractors.producthunt import ProducthuntExtractor
 from clawithme.crawler.extractors.quora import QuoraExtractor
 from clawithme.crawler.extractors.reddit import RedditExtractor
 from clawithme.crawler.extractors.segmentfault import SegmentfaultExtractor
+from clawithme.crawler.extractors.slideshare import SlideshareExtractor
+from clawithme.crawler.extractors.sspai import SspaiExtractor
 from clawithme.crawler.extractors.stackoverflow import StackoverflowExtractor
 from clawithme.crawler.extractors.steam import SteamExtractor
 from clawithme.crawler.extractors.telegram import TelegramExtractor
+from clawithme.crawler.extractors.twitter import TwitterExtractor
+from clawithme.crawler.extractors.twitch import TwitchExtractor
 from clawithme.crawler.extractors.v2ex import V2exExtractor
+from clawithme.crawler.extractors.weibo import WeiboExtractor
 from clawithme.crawler.extractors.youtube import YoutubeExtractor
 from clawithme.crawler.extractors.zcool import ZcoolExtractor
 
@@ -62,10 +67,15 @@ __all__ = [
     "QuoraExtractor",
     "RedditExtractor",
     "SegmentfaultExtractor",
+    "SlideshareExtractor",
+    "SspaiExtractor",
     "SteamExtractor",
     "StackoverflowExtractor",
     "TelegramExtractor",
+    "TwitterExtractor",
+    "TwitchExtractor",
     "V2exExtractor",
+    "WeiboExtractor",
     "YoutubeExtractor",
     "ZcoolExtractor",
 ]
