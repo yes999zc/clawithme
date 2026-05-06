@@ -451,7 +451,7 @@ def _compose_summary(profiles: list[dict], lang: str = "zh") -> str:
     parts = []
 
     # Name — filter out generic/default placeholder display names
-    _GENERIC_NAMES = frozenset({"用户分享", "用户", "user", "anonymous", "unknown"})
+    _GENERIC_NAMES = frozenset({"用户分享", "用户", "user", "anonymous", "unknown", "Level"})
     names = [
         p.get("display_name") for p in profiles
         if p.get("display_name") and p.get("display_name") not in _GENERIC_NAMES
