@@ -1,8 +1,8 @@
-"""Twitter/X profile extractor — static HTML + meta tags + JSON-LD.
+"""Twitter/X profile extractor — dynamic fetch via Playwright (SPA).
 
-URL: https://twitter.com/{username} (or x.com/{username})
-Twitter renders server-side meta tags for crawlers.
-We parse: display_name (og:title), avatar_url (og:image), bio (og:description).
+URL: https://x.com/{username} or https://twitter.com/{username}
+Twitter/X no longer renders profile meta tags in static HTML (SPA shell).
+Uses DynamicFetcher (Playwright) to render JS and parse the page content.
 """
 
 from __future__ import annotations
@@ -18,13 +18,13 @@ logger = get_logger()
 
 
 class TwitterExtractor(ProfileExtractor):
-    """Extract public profile data from Twitter/X."""
+    """Extract public profile data from Twitter/X (dynamic fetch)."""
 
     site_id = "twitter"
-    requires_dynamic = False
+    requires_dynamic = True
 
     def extract(self, site: dict, username: str) -> Profile:
-        url = f"https://twitter.com/{username}"
+        url = f"https://x.com/{username}"
         profile = Profile(
             site_id=self.site_id,
             site_name=site.get("name", "Twitter/X"),
@@ -32,75 +32,60 @@ class TwitterExtractor(ProfileExtractor):
             username=username,
         )
 
-        client = CrawlerClient(timeout_ms=15000)
+        client = CrawlerClient(timeout_ms=20000)
         try:
-            response = client.fetch_static(url)
+            response = client.fetch_dynamic(url)
             if response is None or response.status != 200:
                 return profile
 
-            html = response.text or ""
-            if not html:
+            html = str(response.html_content) if response.html_content else ""
+            if not html or len(html) < 3000:
                 return profile
 
-            # Display name from og:title (format: "@username • Display Name")
-            for sel in ("meta[property='og:title']", "meta[name='twitter:title']"):
-                tag = response.css(sel)
-                if tag and tag[0].attrib.get("content"):
-                    title = tag[0].attrib["content"]
-                    # Strip "@username •" prefix
-                    clean = re.sub(r"^@\S+\s*[•·]\s*", "", title)
-                    profile.display_name = clean.strip()
-                    break
-
-            # Avatar from og:image or twitter:image
-            for sel in ("meta[property='og:image']", "meta[name='twitter:image']"):
-                tag = response.css(sel)
-                if tag and tag[0].attrib.get("content"):
-                    src = tag[0].attrib["content"]
-                    if not src.startswith("data:"):
-                        profile.avatar_url = src
-                        break
-
-            # Bio from og:description (also contains follower/location info)
-            for sel in ("meta[property='og:description']", "meta[name='description']"):
-                tag = response.css(sel)
-                if tag and tag[0].attrib.get("content"):
-                    desc = tag[0].attrib["content"]
-                    # Strip trailing "username.github.io • ... followers • ... following"
-                    clean = re.sub(
-                        r"\s•\s+\d+[KkMmBb]?\s*(Followers|Following).*$", "", desc
-                    )
-                    clean = re.sub(r"\s•\s+.*\.(com|io|org|net)\s*.*$", "", clean)
-                    if clean.strip():
-                        profile.bio = clean.strip()
-                    break
-
-            # Follower count from JSON-LD or __NEXT_DATA__
-            for script in response.css("script[type='application/ld+json']"):
-                try:
-                    data = json.loads(script.text_content() or "{}")
-                    if isinstance(data, dict) and data.get("@type") == "ProfilePage":
-                        stats = data.get("mainEntityofPage", {}).get(
-                            "interactionStatistic", []
-                        )
-                        if isinstance(stats, list):
-                            for s in stats:
-                                if s.get("interactionType") == "FollowAction":
-                                    profile.follower_count = s.get(
-                                        "userInteractionCount"
-                                    )
-                        break
-                except (json.JSONDecodeError, AttributeError):
-                    continue
-
-            # Fallback: regex for follower count in script bundles
-            if profile.follower_count is None:
+            # Twitter embeds user data in __NEXT_DATA__ JSON
+            m = re.search(
+                r'<script id="__NEXT_DATA__"[^>]*type="application/json"[^>]*>'
+                r'(.*?)</script>',
+                html, re.DOTALL,
+            )
+            if not m:
+                # Try alternative: window.__INITIAL_STATE__
                 m = re.search(
-                    r'"followers_count"\s*:\s*(\d+)',
-                    html,
+                    r'window\.__INITIAL_STATE__\s*=\s*({.*?});',
+                    html, re.DOTALL,
                 )
-                if m:
-                    profile.follower_count = int(m.group(1))
+            if not m:
+                return profile
+
+            try:
+                data = json.loads(m.group(1))
+            except json.JSONDecodeError:
+                return profile
+
+            # __INITIAL_STATE__ path: entities.users.entities.{user_id}
+            users_map = (
+                data.get("entities", {})
+                .get("users", {})
+                .get("entities", {})
+            )
+            # Find user by matching screen_name
+            for uid, user_data in users_map.items():
+                if isinstance(user_data, dict) and user_data.get("screen_name", "").lower() == username.lower():
+                    user = user_data
+                    break
+            else:
+                user = None
+
+            if not user:
+                return profile
+
+            profile.display_name = user.get("name") or None
+            profile.bio = user.get("description") or None
+            profile.avatar_url = user.get("profile_image_url_https") or None
+            profile.follower_count = user.get("followers_count")
+            profile.following_count = user.get("friends_count")
+            profile.post_count = user.get("statuses_count")
+            profile.location = user.get("location") or None
 
         finally:
             client.close()
