@@ -79,6 +79,17 @@ steam = "clawithme.crawler.extractors.steam:SteamExtractor"
 telegram = "clawithme.crawler.extractors.telegram:TelegramExtractor"
 youtube = "clawithme.crawler.extractors.youtube:YoutubeExtractor"
 zcool = "clawithme.crawler.extractors.zcool:ZcoolExtractor"
+instagram = "clawithme.crawler.extractors.instagram:InstagramExtractor"
+twitter = "clawithme.crawler.extractors.twitter:TwitterExtractor"
+weibo = "clawithme.crawler.extractors.weibo:WeiboExtractor"
+sspai = "clawithme.crawler.extractors.sspai:SspaiExtractor"
+twitch = "clawithme.crawler.extractors.twitch:TwitchExtractor"
+slideshare = "clawithme.crawler.extractors.slideshare:SlideshareExtractor"
+zhihu = "clawithme.crawler.extractors.zhihu:ZhihuExtractor"
+gitee = "clawithme.crawler.extractors.gitee:GiteeExtractor"
+tieba = "clawithme.crawler.extractors.tieba:TiebaExtractor"
+wordpress = "clawithme.crawler.extractors.wordpress:WordpressExtractor"
+blogger = "clawithme.crawler.extractors.blogger:BloggerExtractor"
 
 [tool.setuptools.packages.find]
 include = ["clawithme*"]
