@@ -223,14 +223,18 @@
 - [x] **8.2.1** PDF 报告 — WeasyPrint 渲染同一 Geist HTML。`--report report.pdf --format pdf`。
 - [x] **8.2.2** HTML/JSON 报告 — 已有（Phase 5）。
 
-### 8.3 审计修复（6 issues）
+### 8.3 审计修复（6 issues → 17 issues after jury）
 
 - [x] **8.3.1** DRY 修复 — 删除 `cli_web.py`，统一从 `cli` 导入。
 - [x] **8.3.2** SSE 异常处理 — 外层 catch-all。
-- [x] **8.3.3** 前端重连 — EventSource 断连 3s 自动 retry。
+- [x] **8.3.3** 前端重连 — EventSource 断连 3s 自动 retry（jury 后改为 max 1 retry）。
 - [x] **8.3.4** 死代码移除 — `/api/report` 空壳 endpoint。
 - [x] **8.3.5** Web 测试 — 8 tests（SSE/error/edge）。
 - [x] **8.3.6** PDF 测试 — 5 tests（skip-safe）。
+- [x] **8.3.7** 陪审团全量审计修复（17 items）：
+  - 🔴 C1-C7：XSS quot 转义 / 服务端认证 / slowapi 限流 / SSE 断连检测 / 超时 / 天眼查删除 / startup 预加载
+  - 🟠 H1-H5：clawithme-web CLI / SSE retry 计数器 / 路径泄露脱敏 / setup_class ImportError / JSON.parse try/catch
+  - 🟡 M1,M2,M3,M5,M6：/health 端点 / username 校验 / CSP header / NaN 计数器 / 优雅关闭
 
 ### ❌ 天眼查
 
@@ -261,6 +265,7 @@
 | 5 | Claude Code 架构审计 | 5 代码 + 10 边界 | ✅ 全部执行 |
 | **6** | **四方 V2 路线评审** | **重新排名 V2、KILL #1/#6、新增 LLM POC** | ✅ **Phase 6 执行完毕** |
 | **7** | **Phase 8 定点审计** | **6 issues（3 🔴 + 3 🟡），13 新 tests** | ✅ **全部修复（290a41e）** |
+| **8** | **Phase 8 陪审团全量审计** | **28 findings → 17 fixed（3 agents cross-ref）** | ✅ **全部修复（211cd2a）** |
 
 ---
 

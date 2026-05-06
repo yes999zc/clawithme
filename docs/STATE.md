@@ -1,7 +1,7 @@
 # clawithme — Project State
 
-> 2026-05-05 更新（P0 Profile 提取 5/5 + P1 Profile 提取 11/11 + 天眼查 stub）
-> 源：真实代码库验证（43 .py files, 160 tests all passing, 9 engines, 19 extractors, 3119 migrated sites）
+> 2026-05-06 更新（Phase 8 陪审团审计完成，17 issues fixed，天眼查删除）
+> 源：真实代码库验证（243 tests all passing, 9 engines, 33 extractors, 3119 migrated sites）
 
 ## What is clawithme
 
@@ -15,7 +15,7 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 | Detection | Single `checking.py` (~1200 lines, hardcoded) | 9 pluggable Engines in `engines.json` |
 | HTTP layer | aiohttp + requests | Scrapling (anti-bot fingerprinting) |
 | Quality gate | None | CI: daily verify + Schema validation + Ruff 0 |
-| Deep extraction | None | **19 extractors** (7 P0 + 11 P1 + 天眼查 stub) |
+| Deep extraction | None | **33 extractors** (7 P0 + 11 P1 + 15 Phase 7) |
 | Leak DB | None | Cavalier + HIBP with parallel manager |
 | Correlation | None | Union-Find: email/phone/avatar_phash/username |
 | Site scale | 3000+ (unverified) | 36 curated (verified) + 2487 migrated (engine-assigned) |
@@ -25,10 +25,10 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 
 ```
 ~6600 lines Python, 43 .py files + tests + scripts
-235 tests, all passing, Ruff 0 (by policy)
+243 tests, all passing, Ruff 0 (by policy)
 48 site JSONs (40 active, 8 deprecated), 3119 migrated sites (2487 active)
-9 engines, 34 extractors
-Phase 1-7 code COMPLETE. V2 Phase 1-7 DONE. Async + LLM live.
+9 engines, 33 extractors (天眼查 deleted)
+Phase 1-8 code COMPLETE. Web UI + PDF + jury audit DONE.
 ```
 
 ### Key source files
@@ -258,7 +258,7 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 1. **Ruff 0 (by policy)** — 2 intentional exceptions: `PLC0415` for lazy Fetcher import, `UP037` quoted type annotation
 2. **Schema validation** — `python scripts/validate.py` before merge
 3. **Site verification** — `python scripts/verify_site.py --all` daily
-4. **209 tests passing** — `python -m pytest tests/ -v`
+4. **243 tests passing** — `python -m pytest tests/ -v`
 
 ## Pending Work
 
@@ -266,8 +266,8 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 |------|:------:|
 | Local ↔ GitHub | ✅ aligned, no pending commits |
 | Phase 6 (33h) | ✅ DONE (2026-05-06) |
-| Phase 7 (88h) | 🟡 Pending |
-| Phase 8 (60h) | 🟡 Pending |
+| Phase 7 (88h) | ✅ DONE |
+| Phase 8 (60h) | ✅ DONE |
 | V2 total | ~181h across 3 phases
 
 ## V2 Direction (2026-05-05 四方评审 + 9哥决策)
