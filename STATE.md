@@ -44,44 +44,45 @@ Last updated: 2026-05-07
 ## Architecture
 
 ```
-clawithme/
-├── cli.py              # CLI entry (sync + async)
-├── pipeline.py         # AsyncPipeline — orchestrator
-├── config.py           # Config + API keys from env
-├── cache.py            # SQLite TTL cache (WAL mode)
-├── logging.py          # structlog
+clawithme/                          # Monorepo — all 49 extractors unified
+├── cli.py                          # CLI entry (sync + async)
+├── pipeline.py                     # AsyncPipeline — orchestrator
+├── config.py                       # Config + API keys from env
+├── cache.py                        # SQLite TTL cache (WAL mode)
+├── logging.py                      # structlog
 ├── engine/
-│   ├── engines.py      # 9 detection engines
-│   ├── loader.py       # load from engines.json
-│   └── http_client.py  # Scrapling DynamicFetcher
+│   ├── engines.py                  # 9 detection engines
+│   ├── loader.py                   # load from engines.json
+│   └── http_client.py              # Scrapling DynamicFetcher
 ├── crawler/
-│   ├── base.py         # Profile, ProfileExtractor
-│   ├── client.py       # CrawlerClient
-│   ├── registry.py     # discover_extractors()
-│   └── extractors/     # 49 profile extractors
+│   ├── base.py                     # Profile, ProfileExtractor ABC
+│   ├── client.py                   # CrawlerClient
+│   ├── registry.py                 # discover_extractors() via entry_points
+│   └── extractors/                 # 49 extractors (CN + international combined)
 ├── signals/
-│   ├── correlation.py  # CorrelationEngine + Cluster
-│   ├── avatar.py       # pHash + default avatar filter
-│   └── llm_verifier.py  # Multi-provider LLM identity scoring
+│   ├── correlation.py              # CorrelationEngine + Cluster
+│   ├── avatar.py                   # pHash + default avatar filter
+│   └── llm_verifier.py             # Multi-provider LLM identity scoring
 ├── leak_sources/
-│   ├── manager.py      # Parallel breach query
-│   ├── cavalier.py     # Cavalier infostealer DB
-│   └── hibp.py         # HaveIBeenPwned API
+│   ├── manager.py                  # Parallel breach query
+│   ├── cavalier.py                 # Cavalier infostealer DB
+│   └── hibp.py                     # HaveIBeenPwned API
 ├── report/
-│   ├── i18n.py         # Bilingual strings + constants
-│   ├── template.py     # Geist HTML template
-│   ├── renderers.py    # All _render_*() helper functions
-│   └── generator.py    # HTML + JSON + PDF + Markdown export
+│   ├── i18n.py                     # Bilingual strings + constants
+│   ├── template.py                 # Geist HTML template
+│   ├── renderers.py                # All _render_*() helper functions
+│   └── generator.py                # HTML + JSON + PDF + Markdown export
 ├── web/
-│   ├── app.py          # FastAPI + SSE streaming (lifespan)
+│   ├── app.py                      # FastAPI + SSE streaming (lifespan)
 │   ├── routes/
-│   │   └── report.py   # Report download API endpoint
+│   │   └── report.py               # Report download API endpoint
 │   └── static/
-│       └── index.html  # Geist frontend (i18n, search params, clusters)
-└── data/
-    ├── sites/          # 44 curated site JSONs
-    ├── sites/migrated/ # 2,487 migrated site JSONs
-    └── schema.json     # JSON Schema
+│       └── index.html              # Geist frontend (i18n, search params, clusters)
+├── data/
+│   ├── sites/                      # 44 curated site JSONs
+│   ├── sites/migrated/             # 2,487 migrated site JSONs
+│   └── schema.json                 # JSON Schema
+└── webui.sh                        # One-command launcher script
 ```
 
 ## Key Design Decisions
@@ -99,6 +100,7 @@ clawithme/
 - **Evidence with site pairs** — every evidence string includes `siteA ↔ siteB: value`
 - **WebUI i18n via data-i18n** — HTML attribute-driven, runtime switchable
 - **DYLD_LIBRARY_PATH auto-fix** — macOS/Homebrew WeasyPrint path handled in main()
+- **All extractors in main repo** — `clawithme-cn` plugin repo [archived](https://github.com/yes999zc/clawithme-cn); all 49 extractors live in monorepo
 
 ## New in Phase 10
 

@@ -182,6 +182,7 @@
 | 11 | Profile 提取 P1 | **✅ DONE** | 已在 Phase 3 完成 |
 | 3 | Louvain 图聚类 | **v3** | 等 face recognition 方向确定 |
 | 12 | 天眼查 API | **❌ CANCELLED** | 9 哥决定取消 |
+| 13 | clawithme-cn 插件仓 | **📦 ARCHIVED** | 所有 CN extractor 已合入主仓 |
 
 ---
 

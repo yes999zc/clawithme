@@ -75,7 +75,7 @@ username
 - **Identity correlation** — Union-Find clustering across email, phone, avatar hash, and username similarity, with anti-merge gate
 - **Geist report** — self-contained HTML + PDF via WeasyPrint, grayscale design, CSS-only charts, PII redacted
 - **Web UI** — FastAPI + SSE streaming search, Geist frontend, zero-config deploy
-- **Plugin architecture** — CN site extractors via `entry_points`, main repo stays jurisdiction-clean
+- **Plugin architecture** — Extractor discovery via `entry_points`; CN and international extractors unified in monorepo ([clawithme-cn](https://github.com/yes999zc/clawithme-cn) archived)
 - **Schema-first** — JSON Schema validation on every site definition, CI-enforced
 - **CI/CD** — PR schema validation + daily site verification + auto-release to PyPI
 
