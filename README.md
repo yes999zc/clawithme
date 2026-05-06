@@ -5,6 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=flat-square)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![CI](https://github.com/yes999zc/clawithme/actions/workflows/ci.yml/badge.svg)](https://github.com/yes999zc/clawithme/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/clawithme?style=flat-square)](https://pypi.org/project/clawithme/)
 [![tests](https://img.shields.io/badge/tests-243%20passed-brightgreen?style=flat-square)](https://github.com/yes999zc/clawithme/actions)
 
 **Username to identity panorama — for the Chinese internet and beyond.**
@@ -17,18 +18,41 @@ Input a username. Discover their presence across 3000+ platforms — from social
 
 ## Quick Start
 
+### Docker
+
 ```bash
-pip install -e ".[dev]"
-clawithme search <username> --acknowledge-ethical-use
-clawithme search <username> --report report.html --acknowledge-ethical-use
-clawithme search <username> --report report.pdf --format pdf --acknowledge-ethical-use
+docker pull ghcr.io/yes999zc/clawithme
+docker run -p 8000:8000 ghcr.io/yes999zc/clawithme
 ```
 
-### Web UI
+Then open http://localhost:8000 to use the Web UI. For CLI usage:
 
 ```bash
-pip install -e ".[web]"
-python -m clawithme.web.app  # → http://localhost:8000
+docker run ghcr.io/yes999zc/clawithme clawithme search <username> --acknowledge-ethical-use
+```
+
+### PyPI
+
+```bash
+pip install clawithme[web]
+clawithme-web  # → http://localhost:8000
+clawithme search <username> --acknowledge-ethical-use
+```
+
+### From Source
+
+```bash
+git clone https://github.com/yes999zc/clawithme.git
+cd clawithme
+pip install -e ".[dev]"
+clawithme search <username> --acknowledge-ethical-use
+```
+
+### Generate Reports
+
+```bash
+clawithme search <username> --report report.html --acknowledge-ethical-use
+clawithme search <username> --report report.pdf --format pdf --acknowledge-ethical-use
 ```
 
 ## Pipeline
@@ -42,7 +66,7 @@ username
   |     +-- Scrapling anti-bot fingerprinting
   |     +-- SearXNG fallback for un-hit sites
   |
-  +-- Phase 2: Profile extraction (34 extractors: GitHub, Zhihu, Reddit, LinkedIn, ...)
+  +-- Phase 2: Profile extraction (49 extractors: GitHub, Zhihu, Reddit, LinkedIn, ...)
   |     +-- CSS/XPath selectors, Playwright for JS-rendered pages
   |     +-- Avatar perceptual hash (pHash)
   |
@@ -68,7 +92,7 @@ username
 
 - **9 detection engines** — status code, body message, headers, plus XenForo/Discourse/phpBB/vBulletin/WordPress/Discuz! CMS
 - **3000+ sites** — 44 hand-curated + 2487 migrated from maigret_china, all engine-assigned
-- **34 profile extractors** — GitHub, Zhihu, Reddit, LinkedIn, HackerNews, Douban, Juejin, NGA, and more
+- **49 profile extractors** — GitHub, Zhihu, Reddit, LinkedIn, HackerNews, Douban, Juejin, NGA, and more
 - **Async pipeline** — 10-concurrent asyncio.gather, cold search 180s→14s
 - **Leak database** — Cavalier infostealer records + HIBP breach database, parallel query with graceful degradation
 - **LLM verifier** — DeepSeek/Kimi/百炼 multi-provider, auto-discovery, structured confidence scoring
@@ -78,6 +102,10 @@ username
 - **Plugin architecture** — Extractor discovery via `entry_points`; CN and international extractors unified in monorepo ([clawithme-cn](https://github.com/yes999zc/clawithme-cn) archived)
 - **Schema-first** — JSON Schema validation on every site definition, CI-enforced
 - **CI/CD** — PR schema validation + daily site verification + auto-release to PyPI
+
+## Screenshots
+
+> Screenshots coming soon — showing the Web UI with donut/bar charts, cluster cards, and report previews.
 
 ## vs maigret
 
@@ -93,6 +121,27 @@ username
 | Chinese sites | Limited | 16 CN platforms + Discuz! engine |
 
 ## Installation
+
+### PyPI
+
+```bash
+pip install clawithme[web]
+```
+
+### Docker
+
+```bash
+docker pull ghcr.io/yes999zc/clawithme
+docker run -p 8000:8000 ghcr.io/yes999zc/clawithme
+```
+
+The image includes all dependencies (WeasyPrint, Noto CJK fonts) and runs the Web UI on port 8000. Override the entrypoint for CLI usage:
+
+```bash
+docker run ghcr.io/yes999zc/clawithme clawithme search <username> --acknowledge-ethical-use
+```
+
+### From Source
 
 ```bash
 git clone https://github.com/yes999zc/clawithme.git

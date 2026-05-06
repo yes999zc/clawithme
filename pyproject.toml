@@ -40,6 +40,7 @@ web = [
     "fastapi>=0.100",
     "uvicorn>=0.30",
     "weasyprint>=60",
+    "slowapi>=0.1",
 ]
 
 [project.scripts]
@@ -96,6 +97,11 @@ chess = "clawithme.crawler.extractors.chess:ChessExtractor"
 discogs = "clawithme.crawler.extractors.discogs:DiscogsExtractor"
 codepen = "clawithme.crawler.extractors.codepen:CodepenExtractor"
 hupu = "clawithme.crawler.extractors.hupu:HupuExtractor"
+
+[project.urls]
+Homepage = "https://github.com/yes999zc/clawithme"
+Repository = "https://github.com/yes999zc/clawithme"
+Documentation = "https://github.com/yes999zc/clawithme#readme"
 
 [tool.setuptools.packages.find]
 include = ["clawithme*"]
