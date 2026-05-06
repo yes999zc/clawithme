@@ -719,6 +719,12 @@ def main():
                include_migrated=include_migrated, acknowledged=acknowledged,
                no_cache=no_cache, async_mode=async_mode, lang=report_lang)
 
+    elif command == "tui":
+        """Launch the interactive Terminal UI."""
+        from clawithme.tui.app import TUIApp
+
+        TUIApp().run()
+
     elif command == "verify":
         # Delegate to verify_site.py
         import subprocess
@@ -736,6 +742,7 @@ def main():
     else:
         print(f"Unknown command: {command}")
         print("Usage: clawithme search <username>")
+        print("       clawithme tui")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)

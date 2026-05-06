@@ -43,6 +43,10 @@ web = [
     "slowapi>=0.1",
 ]
 
+tui = [
+    "textual>=8.0",
+]
+
 [project.scripts]
 clawithme = "clawithme.cli:main"
 clawithme-web = "clawithme.web.app:main"
