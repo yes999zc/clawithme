@@ -3,7 +3,7 @@
   "name": "Stack Overflow",
   "primary": "devtools",
   "canonical_url": "https://stackoverflow.com/users/{username}",
-  "engine_ref": "base_http_status",
+  "engine_ref": "base_http_message",
   "classification": {
     "primary": "devtools",
     "identity_type": "professional",
@@ -13,17 +13,23 @@
   },
   "rankings": {},
   "check": {
-    "probe_url": "https://stackoverflow.com/users/22656/{username}",
-    "expected": 200,
+    "probe_url": "https://stackoverflow.com/users/filter?search={username}",
     "known_accounts": [
-      "22656"
+      "maigret"
     ],
     "known_unclaimed": [
-      "thisuserdoesnotexist999999"
+      "noonewouldeverusethis7"
+    ],
+    "headers": {},
+    "presence_strs": [
+      "\"items\":[{"
+    ],
+    "absence_strs": [
+      "\"items\":[]"
     ]
   },
   "nsfw": false,
   "deprecated": false,
   "source": "manual",
-  "last_updated": "2026-05-04T00:00:00Z"
+  "last_updated": "2026-05-06T00:00:00Z"
 }

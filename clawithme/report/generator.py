@@ -87,6 +87,10 @@ _STRINGS = {
         "summary_contact_header": "联系方式： {contact}",
         "summary_no_contact": "公开资料中未发现邮箱或电话。",
         "spa_explanation": "{sites} — 这些是单页应用 (SPA) 站点，对所有用户名返回 HTTP 200，自动检测不可靠。默认隐藏，点击链接手动验证。",
+        "badge_confirmed": "确认",
+        "badge_uncertain": "待验证",
+        "badge_low": "低置信",
+        "badge_wrong_person": "可能不是同一人",
         "categories": {
             "social": "社交", "devtools": "开发工具", "forum": "论坛",
             "media": "媒体", "blog": "博客", "gaming": "游戏",
@@ -155,6 +159,10 @@ _STRINGS = {
         "summary_contact_header": "Contact: {contact}",
         "summary_no_contact": "No email or phone found in public profiles.",
         "spa_explanation": "{sites} — These are Single-Page Application (SPA) sites that return HTTP 200 for all usernames, making automated detection unreliable. They are hidden by default. Click the links to manually verify.",
+        "badge_confirmed": "Confirmed",
+        "badge_uncertain": "Uncertain",
+        "badge_low": "Low conf.",
+        "badge_wrong_person": "Likely wrong person",
         "categories": {
             "social": "Social", "devtools": "Dev Tools", "forum": "Forums",
             "media": "Media", "blog": "Blogs", "gaming": "Gaming",
@@ -172,28 +180,109 @@ def L(lang, key):
 # ── Known false-positive sites ──
 _SPA_SITES = frozenset({"sspai", "twitch", "twitter", "weibo", "instagram", "slideshare"})
 _DROPPED_STATUSES = frozenset({403, 500, 502, 503})
+_GENERIC_NAMES = frozenset({"用户分享", "用户", "user", "anonymous", "unknown", "Level"})
+
+_CONFIDENCE_THRESHOLDS = {
+    "confirmed": 0.75,
+    "uncertain": 0.30,
+}
 
 
-def _is_false_positive(site_id: str) -> bool:
-    return site_id in _SPA_SITES
+def _username_similarity(a: str, b: str) -> float:
+    """Levenshtein-based similarity. 1.0 = identical, 0.0 = completely different."""
+    if not a or not b:
+        return 0.0
+    a, b = a.strip().lower(), b.strip().lower()
+    if a == b:
+        return 1.0
+    # Short string optimization
+    if len(a) < 3 or len(b) < 3:
+        return 1.0 if a[0] == b[0] else 0.0
+    # Levenshtein
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a):
+        curr = [i + 1]
+        for j, cb in enumerate(b):
+            cost = 1 if ca != cb else 0
+            curr.append(min(curr[j] + 1, prev[j + 1] + 1, prev[j] + cost))
+        prev = curr
+    dist = prev[-1]
+    return max(0.0, 1.0 - dist / max(len(a), len(b)))
 
 
-def _classify_hit(hit: dict) -> str:
-    """Classify a hit into 'confirmed', 'uncertain', or 'dropped'.
-
-    - confirmed: HTTP 200, non-SPA site — reliable hit
-    - uncertain: SPA site (always 200) or engine-detected (non-200 but body match)
-    - dropped: 403/502/500 — anti-bot or server error, not meaningful
-    """
+def _compute_hit_confidence(
+    hit: dict,
+    profile_by_site: dict[str, dict],
+    username: str,
+) -> float:
+    """Compute confidence score 0.0-1.0 for a hit."""
     site_id = _hit_site_id(hit)
     status = hit.get("status", 0)
+    has_profile = site_id in profile_by_site
+    is_spa = site_id in _SPA_SITES
+
+    # Dropped: server errors
     if status in _DROPPED_STATUSES:
-        return "dropped"
-    if site_id in _SPA_SITES:
-        return "uncertain"
-    if status == 200:
-        return "confirmed"
-    return "uncertain"
+        return 0.0
+
+    # Base score by detection method
+    if status == 200 and not is_spa:
+        base = 0.85
+    elif status == 200 and is_spa and has_profile:
+        base = 0.80
+    elif status == 200 and is_spa and not has_profile:
+        base = 0.40
+    elif status == 0:
+        base = 0.30
+    else:
+        base = 0.20
+
+    # Profile verification boosts
+    if has_profile:
+        profile = profile_by_site[site_id]
+        display_name = profile.get("display_name", "")
+        # Name match = same person
+        if display_name and username.lower() in display_name.lower():
+            base += 0.10
+        # More filled fields = more reliable
+        filled = sum(1 for f in ("bio", "location", "avatar_url", "email") if profile.get(f))
+        base += filled * 0.03
+
+    return min(base, 1.0)
+
+
+def _is_wrong_person(
+    hit: dict,
+    profile_by_site: dict[str, dict],
+    username: str,
+) -> bool:
+    """Check if hit's extracted profile clearly belongs to a different person."""
+    site_id = _hit_site_id(hit)
+    profile = profile_by_site.get(site_id)
+    if not profile:
+        return False
+    display_name = profile.get("display_name", "")
+    if not display_name:
+        return False
+    # Generic/unset names don't count
+    if display_name.strip() in _GENERIC_NAMES:
+        return False
+    # Username appears in display_name → same person
+    dl = display_name.lower()
+    ul = username.lower()
+    if ul in dl or dl in ul:
+        return False
+    # Shared token → same person
+    if any(ul == t or ul in t or t in ul for t in dl.split()):
+        return False
+    # Different scripts (CJK vs Latin) → can't determine
+    def _has_cjk(s: str) -> bool:
+        return any("\u4e00" <= c <= "\u9fff" or "\u3040" <= c <= "\u30ff" for c in s)
+    if _has_cjk(display_name) != _has_cjk(ul):
+        return False
+    # Same script: Levenshtein similarity
+    sim = _username_similarity(username, display_name)
+    return sim < 0.3
 
 
 def generate_report(  # noqa: PLR0913
@@ -209,14 +298,42 @@ def generate_report(  # noqa: PLR0913
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
     safe_username = _fmt_esc(username)
 
-    true_hits = [h for h in hits if not _is_false_positive(_hit_site_id(h))]
-    fp_hits = [h for h in hits if _is_false_positive(_hit_site_id(h))]
+    # Build profile lookup by site_id
+    profile_by_site: dict[str, dict] = {}
+    for p in profiles:
+        sid = p.get("site_id")
+        if sid:
+            profile_by_site[sid] = p
+
+    # Compute confidence for every hit
+    hit_data = []
+    for h in hits:
+        c = _compute_hit_confidence(h, profile_by_site, username)
+        wp = _is_wrong_person(h, profile_by_site, username)
+        hit_data.append((h, c, wp))
+
+    # Categorize by confidence threshold
+    confirmed_hits = [h for h, c, wp in hit_data if c >= _CONFIDENCE_THRESHOLDS["confirmed"]]
+    uncertain_hits = [h for h, c, wp in hit_data if _CONFIDENCE_THRESHOLDS["uncertain"] <= c < _CONFIDENCE_THRESHOLDS["confirmed"]]
+    dropped_hits = [h for h, c, wp in hit_data if c == 0]
+    true_hits = confirmed_hits + uncertain_hits  # non-dropped hits
 
     true_hit_count = len(true_hits)
-    fp_count = len(fp_hits)
+    fp_count = sum(1 for h, c, wp in hit_data if c == 0)  # dropped
     profile_count = len(profiles)
     cluster_count = len(clusters)
     leak_count = len(breach_dates or [])
+
+    # Wrong-person sets for display
+    wrong_person_ids: set[str] = {_hit_site_id(h) for h, c, wp in hit_data if wp}
+
+    # Build confidence map for _render_sites
+    def _fmt_confidence(c: float) -> str:
+        if c >= _CONFIDENCE_THRESHOLDS["confirmed"]:
+            return "confirmed"
+        if c >= _CONFIDENCE_THRESHOLDS["uncertain"]:
+            return "uncertain"
+        return "low"
 
     disp_names = {p.get("display_name") for p in profiles if p.get("display_name")}
     name_consensus = len(disp_names) == 1 and profile_count >= 2
@@ -228,14 +345,15 @@ def generate_report(  # noqa: PLR0913
     # Pick best display name for title
     display_title = _pick_display_name(profiles, safe_username)
 
-    # Three-tier classification for site display
-    confirmed_hits = [h for h in hits if _classify_hit(h) == "confirmed"]
-    uncertain_hits = [h for h in hits if _classify_hit(h) == "uncertain"]
-    dropped_count = sum(1 for h in hits if _classify_hit(h) == "dropped")
-
-    confirmed_table = _render_sites(lang, confirmed_hits, "confirmed")
-    uncertain_section = _render_sites(lang, uncertain_hits, "uncertain")
-    dropped_note = _render_dropped_note(lang, dropped_count)
+    confirmed_table = _render_sites(lang, confirmed_hits, "confirmed",
+                                    wrong_person_ids=wrong_person_ids,
+                                    profile_by_site=profile_by_site,
+                                    username=safe_username)
+    uncertain_section = _render_sites(lang, uncertain_hits, "uncertain",
+                                      wrong_person_ids=wrong_person_ids,
+                                      profile_by_site=profile_by_site,
+                                      username=safe_username)
+    dropped_note = _render_dropped_note(lang, len(dropped_hits))
 
     # Fallback for empty results
     LANG = _STRINGS.get(lang, _STRINGS["en"])
@@ -650,6 +768,20 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
   margin-top: 20px; text-transform: uppercase; letter-spacing: 0.5px;
 }}
 
+/* ── Confidence badge & wrong-person warning ─── */
+.conf-badge {{
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 6px; border-radius: 3px; margin-left: 6px;
+  text-transform: uppercase; letter-spacing: 0.3px;
+}}
+.conf-badge.badge-ok {{ background: #e8f5e9; color: #2e7d32; }}
+.conf-badge.badge-warn {{ background: #fff8e1; color: #b8860b; }}
+.conf-badge.badge-low {{ background: #fce4ec; color: #c62828; }}
+.wp-warn {{
+  display: inline-block; font-size: 11px; color: #c62828;
+  margin-left: 6px; font-weight: 500;
+}}
+
 /* ── Cluster cards ──────────────────────────── */
 .cluster-hd {{
   display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
@@ -884,15 +1016,53 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 
 # ── Render helpers ──────────────────────────────────────────────
 
-def _render_sites(lang: str, hits_list: list[dict], tier: str) -> str:
+def _render_sites(lang: str, hits_list: list[dict], tier: str,
+                  wrong_person_ids: set[str] | None = None,
+                  profile_by_site: dict[str, dict] | None = None,
+                  username: str = "") -> str:
     """Render a list of hits as categorized site tables.
 
     tier='confirmed': expanded table with category grouping.
     tier='uncertain': collapsed details, same table format.
+    Shows confidence badge and wrong-person warning per hit.
     """
     LANG = _STRINGS.get(lang, _STRINGS["en"])
     CATS = LANG["categories"]
     if not hits_list:
+        return ""
+
+    pbs = profile_by_site or {}
+
+    # Badge lookup
+    _BADGE_LABELS = {
+        "confirmed": LANG.get("badge_confirmed", "Confirmed"),
+        "uncertain": LANG.get("badge_uncertain", "Uncertain"),
+        "low": LANG.get("badge_low", "Low"),
+    }
+    _BADGE_CLS = {
+        "confirmed": "badge-ok",
+        "uncertain": "badge-warn",
+        "low": "badge-low",
+    }
+
+    def _badge(h: dict) -> str:
+        """Render a confidence badge for a hit."""
+        if not pbs:
+            return ""
+        c = _compute_hit_confidence(h, pbs, username.replace("&amp;", "&") if "&amp;" in username else username)
+        if c >= _CONFIDENCE_THRESHOLDS["confirmed"]:
+            level, label = "confirmed", _BADGE_LABELS["confirmed"]
+        elif c >= _CONFIDENCE_THRESHOLDS["uncertain"]:
+            level, label = "uncertain", _BADGE_LABELS["uncertain"]
+        else:
+            level, label = "low", _BADGE_LABELS["low"]
+        cls = _BADGE_CLS.get(level, "badge-warn")
+        return f'<span class="conf-badge {cls}">{_esc(label)}</span>'
+
+    def _wrong_person_warning(site_id: str) -> str:
+        if wrong_person_ids and site_id in wrong_person_ids:
+            warn = LANG.get("badge_wrong_person", "Likely wrong person")
+            return f'<span class="wp-warn">⚠ {_esc(warn)}</span>'
         return ""
 
     parts = []
@@ -919,6 +1089,7 @@ def _render_sites(lang: str, hits_list: list[dict], tier: str) -> str:
         name = cat_names.get(cat, cat.title())
         rows = []
         for h in cat_hits:
+            sid = _hit_site_id(h)
             url = h.get("url", "")
             favicon = _site_favicon_url(h)
             favicon_html = (
@@ -932,17 +1103,21 @@ def _render_sites(lang: str, hits_list: list[dict], tier: str) -> str:
                 f'<a href="{_esc(url)}" target="_blank" rel="noopener">{_esc(url)}</a>'
                 if url else ""
             )
+            badge_html = _badge(h)
+            wp_html = _wrong_person_warning(sid)
+            extra_col = badge_html + wp_html if (badge_html or wp_html) else ""
             rows.append(
                 f'<tr>'
                 f'<td>{favicon_html}<span>{_esc(site_name)}</span></td>'
                 f'<td class="url">{url_html}</td>'
                 f'<td class="{status_cls}">{status}</td>'
+                f'<td style="text-align:right;white-space:nowrap">{extra_col}</td>'
                 f'</tr>'
             )
         parts.append(
             f'<div class="cat-label">{name}</div>'
             f'<table class="site-table">'
-            f'<thead><tr><th>{LANG["th_site"]}</th><th>{LANG["th_url"]}</th><th>{LANG["th_status"]}</th></tr></thead>'
+            f'<thead><tr><th>{LANG["th_site"]}</th><th>{LANG["th_url"]}</th><th>{LANG["th_status"]}</th><th></th></tr></thead>'
             f'<tbody>' + "".join(rows) + "</tbody></table>"
         )
 
