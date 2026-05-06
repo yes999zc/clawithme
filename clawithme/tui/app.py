@@ -15,9 +15,48 @@ Screen {
     background: $surface;
 }
 
-Static.title {
+#banner {
+    width: 100%;
+    text-align: center;
+    color: $text-muted;
+    padding: 1 0;
+}
+
+#results-layout {
+    height: 100%;
+    layout: vertical;
+}
+
+#status-bar {
+    height: 1;
+    color: $text-muted;
+    padding: 0 1;
+}
+
+#overview-panel {
+    height: 3;
+    layout: horizontal;
+}
+
+#hits-log, #profiles-log, #clusters-log, #leaks-log {
+    height: 1fr;
+    border: solid $primary;
+    margin: 0 1;
+}
+
+.panel-title {
     text-style: bold;
     color: $accent;
+    padding: 0 1;
+    margin-top: 1;
+}
+
+#action-bar {
+    dock: bottom;
+    height: 3;
+    background: $panel;
+    padding: 0 1;
+    layout: horizontal;
 }
 
 Button {
@@ -29,51 +68,37 @@ Button.primary {
     color: $text;
 }
 
-#banner {
-    width: 100%;
-    text-align: center;
-    color: $text-muted;
-    padding: 1 0;
+Button.error {
+    background: $error;
+    color: $text;
 }
 
-#results-layout {
-    height: 100%;
-}
-
-#overview-panel {
-    height: 5;
-    border: solid $primary;
-    margin: 0 1;
-}
-
-#hits-panel {
-    height: 1fr;
-    border: solid $primary;
-    margin: 0 1;
-}
-
-#profiles-panel {
-    height: 1fr;
-    border: solid $primary;
-    margin: 0 1;
-}
-
-#clusters-panel {
-    height: auto;
-    border: solid $primary;
-    margin: 0 1;
-}
-
-#action-bar {
-    dock: bottom;
-    height: 3;
-    background: $panel;
+.search-title {
+    text-style: bold;
+    color: $accent;
     padding: 0 1;
+}
+
+#options {
+    layout: horizontal;
+    height: 3;
+}
+
+#lang-row {
+    layout: horizontal;
+    height: 3;
+}
+
+.stats-line {
+    color: $text-muted;
+    padding: 1;
 }
 """
 
     BINDINGS = [
         Binding("ctrl+c", "quit", "Quit"),
+        Binding("escape", "go_home", "Home"),
+        Binding("ctrl+n", "go_home", "New Search"),
     ]
 
     def on_mount(self) -> None:
@@ -81,9 +106,13 @@ Button.primary {
         self.push_screen("search")
 
     def action_go_home(self) -> None:
-        """Return to search screen."""
-        self.pop_screen()
-        self.push_screen("search")
+        """Return to search screen from results."""
+        # Only pop if not already on search screen
+        if len(self.screen_stack) > 1:
+            screen = self.screen_stack[-1]
+            if hasattr(screen, "_searching"):
+                screen._searching = False
+            self.pop_screen()
 
 
 # Lazy screen registration — deferred import avoids circular deps

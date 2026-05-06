@@ -6,7 +6,6 @@ from pathlib import Path
 
 from textual.app import ComposeResult
 from textual.containers import Horizontal
-from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Button, Checkbox, Input, Select, Static
 
@@ -14,7 +13,9 @@ _BANNER_PATH = Path(__file__).resolve().parent.parent.parent / "web" / "app.py"
 
 
 def _load_banner() -> str:
-    """Extract the Unicode banner from web/app.py."""
+    """Extract the Unicode banner from web/app.py, cached."""
+    if getattr(_load_banner, "_cache", None):
+        return _load_banner._cache
     try:
         text = _BANNER_PATH.read_text()
         start = text.find('_BANNER = """')
@@ -24,7 +25,8 @@ def _load_banner() -> str:
         end = text.find('"""', start)
         if end == -1:
             return ""
-        return text[start:end]
+        _load_banner._cache = text[start:end]
+        return _load_banner._cache
     except Exception:
         return ""
 
@@ -38,8 +40,6 @@ _BANNER = _load_banner() or (
 
 class SearchScreen(Screen):
     """Search input screen with banner and options."""
-
-    can_go_back = reactive(False)
 
     def compose(self) -> ComposeResult:
         yield Static(_BANNER, id="banner")
@@ -89,8 +89,9 @@ class SearchScreen(Screen):
 
         migrated = self.query_one("#opt-migrated", Checkbox).value
         no_cache = self.query_one("#opt-nocache", Checkbox).value
-        sync = self.query_one("#opt-sync", Checkbox).value
-        lang = self.query_one("#lang-select", Select).value
+        sync_mode = self.query_one("#opt-sync", Checkbox).value
+        lang_val = self.query_one("#lang-select", Select).value
+        lang = lang_val if lang_val else "zh"
 
         self.app.push_screen("results")
         results_screen = self.app.get_screen("results")
@@ -98,6 +99,6 @@ class SearchScreen(Screen):
             username=username,
             include_migrated=migrated,
             no_cache=no_cache,
-            sync_mode=sync,
+            sync_mode=sync_mode,
             lang=lang,
         )
