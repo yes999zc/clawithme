@@ -41,14 +41,14 @@ from clawithme.crawler.extractors.stackoverflow import StackoverflowExtractor
 from clawithme.crawler.extractors.steam import SteamExtractor
 from clawithme.crawler.extractors.telegram import TelegramExtractor
 from clawithme.crawler.extractors.tieba import TiebaExtractor
-from clawithme.crawler.extractors.twitter import TwitterExtractor
 from clawithme.crawler.extractors.twitch import TwitchExtractor
+from clawithme.crawler.extractors.twitter import TwitterExtractor
 from clawithme.crawler.extractors.v2ex import V2exExtractor
 from clawithme.crawler.extractors.weibo import WeiboExtractor
 from clawithme.crawler.extractors.wordpress import WordpressExtractor
 from clawithme.crawler.extractors.youtube import YoutubeExtractor
-from clawithme.crawler.extractors.zhihu import ZhihuExtractor
 from clawithme.crawler.extractors.zcool import ZcoolExtractor
+from clawithme.crawler.extractors.zhihu import ZhihuExtractor
 
 __all__ = [
     "BaiduZhidaoExtractor",

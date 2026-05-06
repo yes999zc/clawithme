@@ -251,7 +251,7 @@ def _compute_hit_confidence(
     return min(base, 1.0)
 
 
-def _is_wrong_person(
+def _is_wrong_person(  # noqa: PLR0911
     hit: dict,
     profile_by_site: dict[str, dict],
     username: str,

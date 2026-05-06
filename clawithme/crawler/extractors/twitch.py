@@ -23,7 +23,7 @@ class TwitchExtractor(ProfileExtractor):
     site_id = "twitch"
     requires_dynamic = False
 
-    def extract(self, site: dict, username: str) -> Profile:
+    def extract(self, site: dict, username: str) -> Profile:  # noqa: PLR0912
         url = f"https://www.twitch.tv/{username}"
         profile = Profile(
             site_id=self.site_id,

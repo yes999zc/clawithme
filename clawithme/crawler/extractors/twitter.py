@@ -69,7 +69,7 @@ class TwitterExtractor(ProfileExtractor):
                 .get("entities", {})
             )
             # Find user by matching screen_name
-            for uid, user_data in users_map.items():
+            for _uid, user_data in users_map.items():
                 if isinstance(user_data, dict) and user_data.get("screen_name", "").lower() == username.lower():
                     user = user_data
                     break

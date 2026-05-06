@@ -1,7 +1,7 @@
 # clawithme — Project State
 
-> 2026-05-06 更新（Phase 8 陪审团审计完成，17 issues fixed，天眼查删除）
-> 源：真实代码库验证（243 tests all passing, 9 engines, 33 extractors, 3119 migrated sites）
+> 2026-05-06 更新（Phase 9 全部完成，49 extractors，Ruff 真实 0 by policy）
+> 源：代码统计验证（243 tests passing, 9 engines, 49 extractors, 49 curated sites + 3119 migrated）
 
 ## What is clawithme
 
@@ -14,21 +14,21 @@ Reference projects: [maigret](https://github.com/soxoj/maigret) (25k★) + [maig
 | Site storage | Monolithic `data.json` | One JSON per site + JSON Schema validation |
 | Detection | Single `checking.py` (~1200 lines, hardcoded) | 9 pluggable Engines in `engines.json` |
 | HTTP layer | aiohttp + requests | Scrapling (anti-bot fingerprinting) |
-| Quality gate | None | CI: daily verify + Schema validation + Ruff 0 |
-| Deep extraction | None | **33 extractors** (7 P0 + 11 P1 + 15 Phase 7) |
+| Quality gate | None | CI: daily verify + Schema validation + Ruff 0 (by policy) |
+| Deep extraction | None | **49 extractors** across P0/P1/P2 |
 | Leak DB | None | Cavalier + HIBP with parallel manager |
 | Correlation | None | Union-Find: email/phone/avatar_phash/username |
-| Site scale | 3000+ (unverified) | 36 curated (verified) + 2487 migrated (engine-assigned) |
+| Site scale | 3000+ (unverified) | 44 curated (verified) + 2487 migrated (engine-assigned) |
 | CLI search | username only | username + email + phone (auto-detect) |
 
 ## Current Code State
 
 ```
-~6600 lines Python, 43 .py files + tests + scripts
-243 tests, all passing, Ruff 0 (by policy)
-48 site JSONs (40 active, 8 deprecated), 3119 migrated sites (2487 active)
-9 engines, 33 extractors (天眼查 deleted)
-Phase 1-8 code COMPLETE. Web UI + PDF + jury audit DONE.
+~5700 lines Python, 81 .py files + tests + scripts
+243 tests passing, 5 skipped, Ruff 0 by policy (6 exceptions: 4 PLC0415 + 2 E501)
+49 curated site JSONs (44 active, 5 deprecated), 3119 migrated sites (2487 active)
+9 engines, 49 extractors
+Phase 1-9 COMPLETE. Web UI + PDF + multi-format reports + confidence scoring DONE.
 ```
 
 ### Key source files
@@ -48,8 +48,8 @@ Phase 1-8 code COMPLETE. Web UI + PDF + jury audit DONE.
 | `clawithme/crawler/client.py` | 300 | CrawlerClient: rate limiting, UA rotation, static+dynamic fetch |
 | `clawithme/crawler/registry.py` | — | Plugin discovery via `importlib.metadata` entry_points |
 | `clawithme/crawler/utils.py` | — | Shared: `first_text()`, `parse_count()` |
-| `clawithme/pipeline.py` | 380 | Async pipeline orchestrator (Phase 7): semaphore-bounded parallel probes + extraction |
-| `clawithme/crawler/extractors/` | 32 files | See extractor table below |
+| `clawithme/pipeline.py` | 380 | Async pipeline orchestrator: semaphore-bounded parallel probes + extraction |
+| `clawithme/crawler/extractors/` | 49 files | See extractor table below |
 | `clawithme/signals/avatar.py` | — | pHash + Hamming distance + AvatarMatch |
 | `clawithme/signals/correlation.py` | 169 | Union-Find, 4-signal weighted matching |
 | `clawithme/signals/extraction.py` | — | Phone regex (E.164) + email extraction + disposable filter |
@@ -60,9 +60,9 @@ Phase 1-8 code COMPLETE. Web UI + PDF + jury audit DONE.
 | `data/default_avatars.json` | 5 | Default avatar pHash library (GitHub identicon, forum defaults) |
 | `scripts/extractor_health.py` | 132 | Weekly extractor smoke tests, breakage detection |
 
-**New in this update**: Report i18n — `_STRINGS` dict with 60+ zh/en keys, `lang` parameter on `generate_report()`, all render functions localized. Default `lang="zh"`.
+**Report i18n**: `_STRINGS` dict with 60+ zh/en keys, `lang` parameter on `generate_report()`, all render functions localized. Default `lang="zh"`.
 
-### Extractors (34 total)
+### Extractors (49 total)
 
 **P0 (7 extractors) — public API-first:**
 
@@ -92,11 +92,41 @@ Phase 1-8 code COMPLETE. Web UI + PDF + jury audit DONE.
 | FlickrExtractor | CSS | flickr.com |
 | PatreonExtractor | CSS | patreon.com |
 
-**天眼查 stub:**
+**P2 (31 extractors) — Phase 7-9 expansion:**
 
-| Extractor | Method | Site | Status |
-|-----------|--------|------|:------:|
-| TianyanchaExtractor | API (open.tianyancha.com) | 天眼查 | stub (需 token, ¥6/次) |
+| Extractor | Method | Site |
+|-----------|--------|------|
+| BaiduZhidaoExtractor | CSS | zhidao.baidu.com |
+| BloggerExtractor | og:meta | blogger.com |
+| ChessExtractor | API | chess.com |
+| CodepenExtractor | og:meta | codepen.io |
+| DiscogsExtractor | API | discogs.com |
+| DoubanExtractor | CSS | douban.com |
+| GiteeExtractor | API | gitee.com |
+| GoodreadsExtractor | og:meta | goodreads.com |
+| HackernewsExtractor | CSS | news.ycombinator.com |
+| HupuExtractor | CSS | hupu.com |
+| InstagramExtractor | og:meta | instagram.com |
+| JuejinExtractor | CSS | juejin.cn |
+| LeetcodeExtractor | og:meta | leetcode.com |
+| LinkedinExtractor | CSS | linkedin.com |
+| MediumExtractor | CSS | medium.com |
+| NeteaseMusicExtractor | CSS | music.163.com |
+| NgaExtractor | CSS | nga.cn |
+| ProducthuntExtractor | CSS | producthunt.com |
+| QuoraExtractor | CSS | quora.com |
+| RedditExtractor | CSS | reddit.com |
+| SlideshareExtractor | regex | slideshare.net |
+| SspaiExtractor | Playwright | sspai.com |
+| SteamExtractor | CSS | steamcommunity.com |
+| TelegramExtractor | CSS | t.me |
+| TiebaExtractor | CSS | tieba.baidu.com |
+| TwitchExtractor | og:meta | twitch.tv |
+| TwitterExtractor | Playwright | twitter.com |
+| WeiboExtractor | regex | weibo.com |
+| WordpressExtractor | og:meta | wordpress.com |
+| YoutubeExtractor | Playwright | youtube.com |
+| ZcoolExtractor | CSS | zcool.com.cn |
 
 ### Plugin: clawithme-cn
 
@@ -135,17 +165,24 @@ Separate repo at `~/AI_Workspace/01_Code/tools/clawithme-cn/`. Contains ZhihuExt
 |:-----:|------|:------:|
 | 1 | Basic Verification | ✅ Code complete |
 | 2 | Site DB Expansion | ✅ Code complete |
-| 3 | Deep Crawler | ✅ **19 extractors (P0+P1 done)** |
+| 3 | Deep Crawler | ✅ 19 extractors (P0+P1 done) |
 | 4 | Multi-Signal Correlation | ✅ Jury-audited |
 | 5 | Panorama Report | ✅ v2 features done |
+| 6 | Correlation Engine + Infra | ✅ LLM POC + CI/CD + health monitoring |
+| 7 | Engine Upgrade + Site Expansion | ✅ Async pipeline + 15 extractors |
+| 8 | Web UI + PDF + i18n | ✅ FastAPI + Geist + WeasyPrint |
+| 9 | Confidence + Wrong-Person + Extractor Expansion | ✅ 16 new extractors + scoring system |
 
-### Audit rounds (5 completed)
+### Audit rounds (8 completed)
 
 1. ✅ Jury Round 1 — maigret dead code purge, empty stubs fix, HTTP unification
 2. ✅ Jury Round 2 — stubs marked, migration artifacts deleted, test gaps filled
 3. ✅ Code-Review-Excellence — Python quality + Security dual-perspective (29 findings, 8 fixed)
 4. ✅ Functional QA — 7 false completions resolved, 3 bugs fixed
 5. ✅ Claude Code Architecture — 5 code issues + 10 edge cases → 4-step dev plan
+6. ✅ 四方 V2 路线评审 — V2 re-prioritization, KILL #1/#6, LLM POC added
+7. ✅ Phase 8 定点审计 — 6 issues (3🔴+3🟡), 13 new tests
+8. ✅ Phase 8 陪审团全量审计 — 28 findings → 17 fixed (3 agents cross-ref)
 
 ### Migration: maigret → clawithme
 
@@ -160,24 +197,41 @@ Commit `57be4e2`: Batch-migrated 3120 sites from maigret_china (MIT) to `data/si
 verify_site --all (curated): 29 healthy | 0 no-checks | 7 degraded | 12 deprecated
 ```
 
-GitHub Actions workflows deployed and verified (2026-05-05):
-- `.github/workflows/ci.yml` — PR: schema validate + stats on push to main (✅ always green)
-- `.github/workflows/daily-verify.yml` — Daily 08:00 UTC: verify all sites (⚠️ expected non-zero on degraded sites — monitoring signal, not failure)
+GitHub Actions workflows deployed:
+- `.github/workflows/ci.yml` — PR: schema validate + stats on push to main
+- `.github/workflows/daily-verify.yml` — Daily 08:00 UTC: verify all sites
+- `.github/workflows/release.yml` — GitHub Release → PyPI on tag push
+
+### Phase 9: Confidence Scoring (核心变更)
+
+**Confidence system** replaces old 3-tier classification:
+- `_compute_hit_confidence()` — continuous 0.0–1.0 score (HTTP status + SPA + extractor data + display_name + field completeness)
+- `_is_wrong_person()` — Levenshtein similarity + CJK script detection (avoids mislabeling Chinese names)
+- `_username_similarity()` — helper for cross-site comparison
+- Report: new "确认"/"待验证" badges + wrong-person ⚠ warnings + identity assessment card
 
 ### SPA Limitation
 
-5 sites fundamentally undetectable via HTTP: Twitter/X, Twitch, 少数派, SlideShare, 微博. Marked `dynamic_fetch: true` with known architecture limitation — no engine type can solve SPA shells returning identical HTML for exist/nonexist users.
+5 sites fundamentally undetectable via HTTP: Twitter/X, Twitch, 少数派, SlideShare, 微博. Marked `dynamic_fetch: true` with known architecture limitation. Phase 9 added Playwright-based extractors for all 5.
 
-## Test Results (2026-05-05)
+## Quality Gates
 
-### Unit
-- **160 tests** all passing, Ruff 0, 2.06s
+1. **Ruff 0 (by policy)** — 6 pre-existing exceptions: `PLC0415` lazy imports (scrapling Fetcher, bilibili, avatar) and `E501` line length (keybase, twitter)
+2. **Schema validation** — `python scripts/validate.py` before merge
+3. **Site verification** — `python scripts/verify_site.py --all` daily
+4. **243 tests passing** — `python -m pytest tests/ -v`
 
-### End-to-end (liberborn)
-- 13/36 hits, 3 profiles (dev.to/github/gitlab), 1 cluster (confidence 0.7)
+## Git Status (2026-05-06)
 
-### End-to-end (yes999zc)
-- 10/36 hits, 3 profiles (github/zhihu/coolapk), 1 cluster (confidence 0.7)
+Local ↔ GitHub aligned. Phase 1-9 all complete.
+
+| Phase | Status | Commits |
+|:-----:|:------:|---------|
+| 1-5 | ✅ | v1 baseline |
+| 6 | ✅ | 5 commits (B1-B4 + jury audit 🔴🟡 fixes) |
+| 7 | ✅ | 7 commits, 30h (Batches 1-5 all done) |
+| 8 | ✅ | 5 commits (Web UI + PDF + i18n + 2 audit rounds) |
+| 9 | ✅ | 5 commits (confidence + P0 SPA + P1 + P2 + YouTube fix) |
 
 ## How to run
 
@@ -185,7 +239,7 @@ GitHub Actions workflows deployed and verified (2026-05-05):
 cd ~/AI_Workspace/01_Code/tools/clawithme
 pip install -e ".[dev]"
 
-# Search username (curated 36 sites)
+# Search username (curated 44 sites)
 clawithme search yes999zc --acknowledge-ethical-use
 
 # Search email (auto-detected)
@@ -199,42 +253,46 @@ clawithme search yes999zc --report report.html --acknowledge-ethical-use
 clawithme search yes999zc --report report.json --format json --acknowledge-ethical-use
 
 # Tests & validation
-python -m pytest tests/ -v          # 160 tests
+python -m pytest tests/ -v          # 243 tests
 python scripts/validate.py          # Schema validation
 python scripts/stats.py             # Database statistics
 python scripts/verify_site.py zhihu # Single site verification
 python scripts/verify_site.py --all # Full verification
 ```
 
-## Git Status (2026-05-06)
+## V2 Direction (2026-05-05 四方评审 + 9哥决策)
 
-Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
+**产品方向**：国际客户为主，中国站探测作为竞争优势。最终上线 SaaS。
+**核心差异化**：LLM 身份推理引擎（规则 + DeepSeek Flash API 混合）。
+**终局**：人脸识别 → 跨实名平台关联 → nuwa.world 式大图。
 
-| Phase | Status | Commits |
-|:-----:|:------:|---------|
-| 1-5 | ✅ | v1 baseline |
-| 6 + V2 P1 | ✅ | 5 commits (e657aa1: B1-B4 + jury audit 🔴🟡 fixes) |
-| 7 | ✅ | 7 commits, 30h (Batches 1-5 all done) |
-| 8 | 🟡 | ~60h pending (Web UI + PDF + Tianyancha) |
+| # | Item | Status |
+|:--:|------|:------:|
+| 1 | 关联引擎：拆分误合并 cluster | ✅ Phase 6 |
+| 2 | 默认头像哈希库 | ✅ Phase 6 |
+| 3 | 时间关联信号 | ✅ Phase 6 |
+| 4 | Extractor 健康监控 | ✅ Phase 6 |
+| 5 | 修复误判 deprecated CN站 (Gitee/掘金/网易云/AcFun) | ✅ Phase 6 |
+| 6 | CI/CD 自动发布 | ✅ Phase 6 |
+| 7 | LLM 身份推理 POC (DeepSeek Flash) | ✅ Phase 6 |
+| 8 | 结果缓存层 | ✅ Phase 6 |
+| 9 | 位置邻近信号 | ✅ Phase 6 |
+| 10 | CLI async 重构 | ✅ Phase 7 |
+| 11 | LLM 推理正式化 | ✅ Phase 7 |
+| 12 | 国际站扩展 (LinkedIn/Reddit/Medium 等 10+ 站) | ✅ Phase 7 |
+| 13 | CN 站扩展至 30 (国际精华 + 中国金矿) | ✅ Phase 7 |
+| 14 | Web UI | ✅ Phase 8 |
+| 15 | PDF/Markdown 报告 | ✅ Phase 8 |
+| 16 | 天眼查 API | ❌ CANCELLED |
+| — | 自建泄露库 | ❌ KILLED |
+| — | 微信弱信号实验 | ❌ KILLED |
+| — | Profile 提取 P1 | ✅ DONE (v1) |
+| — | Louvain 图聚类 | ⏸️ v3 |
 
-**Phase 7 deliverables** (HEAD f50a13a):
-- Anti-merge logic for username-only weak links
-- Async pipeline (semaphore=10, 180s→~14s)
-- Multi-provider LLM verifier (DeepSeek/Kimi/DashScope) with structured confidence scoring
-- 9 international extractors: Reddit, HN, LinkedIn, Medium, YouTube, Telegram, Steam, Quora, ProductHunt
-- 6 CN extractors: Douban, Juejin, Baidu Zhidao, NGA, Zcool, Netease Music
-- 34 extractors total (was 19). 235 tests. Ruff 0.
+| Phase 10 | **🔜 更多 extractor + 跨人聚类增强 + 服务器部署** |
 
-**Phase 6 + V2 Phase 1 deliverables** (HEAD e657aa1):
-- 7-signal rules engine with weighted Union-Find (avatar_phash=0.8, username=0.7, email=1.0, phone=0.95)
-- LLM Verifier (DeepSeek Flash, provider-agnostic openai-compatible client)
-- SQLite ResultCache with TTL (prerequisite for Web UI)
-- Default avatar hash library (GitHub identicon + forum defaults)
-- 4 deprecated CN sites revived: Gitee (API, email/weibo/QQ fields!), 掘金, AcFun, 网易云音乐
-- Extractor health monitoring (weekly smoke tests, breakage detection)
-- CI/CD auto release (GitHub Release → PyPI on tag push)
-- 2 rounds jury audit, 🔴🟡 all fixed
-- 209 tests (160 → 209), Ruff 0 (by policy)
+> Phase 1-9 全部完成。243 tests。49 extractors。Web UI + PDF + 置信度系统 + 8 轮审计 DONE。
+> 技术路线文档见 `docs/technical-roadmap.md`（截至 Phase 8 的计划文档，Phase 9 的实际执行记录在 `TODO.md`）。
 
 ## Key Design Decisions
 
@@ -254,53 +312,4 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 | CN code | Separate plugin repo (`clawithme-cn`), entry_points discovery |
 | Extractor dispatch | `entry_points` group `clawithme.extractors`, `can_handle()` |
 | Profile empty | `Profile.empty` is a property (bool), NOT a factory — return `Profile(site_id=..., ...)` for empty profiles |
-
-## Quality Gates
-
-1. **Ruff 0 (by policy)** — 5 pre-existing exceptions: `PLC0415` lazy imports (scrapling Fetcher, urllib) and `E501` line length (keybase)
-2. **Schema validation** — `python scripts/validate.py` before merge
-3. **Site verification** — `python scripts/verify_site.py --all` daily
-4. **243 tests passing** — `python -m pytest tests/ -v`
-
-## Pending Work
-
-| Item | Status |
-|------|:------:|
-| Local ↔ GitHub | ✅ aligned, no pending commits |
-| Phase 6 (33h) | ✅ DONE (2026-05-06) |
-| Phase 7 (88h) | ✅ DONE |
-| Phase 8 (60h) | ✅ DONE |
-| V2 total | ~181h across 3 phases
-
-## V2 Direction (2026-05-05 四方评审 + 9哥决策)
-
-**产品方向**：国际客户为主，中国站探测作为竞争优势。最终上线 SaaS。
-**核心差异化**：LLM 身份推理引擎（规则 + DeepSeek Flash API 混合）。
-**终局**：人脸识别 → 跨实名平台关联 → nuwa.world 式大图。
-
-| # | Item | Status |
-|:--:|------|:------:|
-| 1 | 关联引擎：拆分误合并 cluster | 🟡 Phase 7 |
-| 2 | 默认头像哈希库 | ✅ Phase 6 |
-| 3 | 时间关联信号 | 🟡 Phase 7 |
-| 4 | Extractor 健康监控 | ✅ Phase 6 |
-| 5 | 修复误判 deprecated CN站 (Gitee/掘金/网易云/AcFun) | ✅ Phase 6 |
-| 6 | CI/CD 自动发布 | ✅ Phase 6 |
-| 7 | LLM 身份推理 POC (DeepSeek Flash) | ✅ Phase 6 |
-| 8 | 结果缓存层 | ✅ Phase 6 |
-| 9 | 位置邻近信号 | 🟡 Phase 7 |
-| 10 | CLI async 重构 | 🟡 Phase 7 |
-| 11 | LLM 推理正式化 | 🟡 Phase 7 |
-| 12 | 国际站扩展 (LinkedIn/Reddit/Medium 等 10+ 站) | 🟡 Phase 7 |
-| 13 | CN 站扩展至 30 (国际精华 + 中国金矿) | 🟡 Phase 7 |
-| 14 | Web UI | ✅ Phase 8 |
-| 15 | PDF/Markdown 报告 | ✅ Phase 8 |
-| 16 | 天眼查 API | ❌ DELETED |
-| — | 自建泄露库 | ❌ KILLED |
-| — | 微信弱信号实验 | ❌ KILLED |
-| — | Profile 提取 P1 | ✅ DONE (v1) |
-| — | Louvain 图聚类 | ⏸️ v3 |
-
-| Phase 9 (expansion) | **🔜 16-24 extractors + HK 服务器部署** |
-
-> Phase 1-8 全部完成。243 tests。33 extractors。Web UI + PDF + jury audit DONE。Phase 9: extractor 扩展 + 部署。
+| Confidence | Continuous 0.0-1.0 score (not 3-tier), CJK-aware wrong-person detection |

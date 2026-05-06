@@ -25,7 +25,7 @@ class YoutubeExtractor(ProfileExtractor):
     site_id = "youtube"
     requires_dynamic = True
 
-    def extract(self, site: dict, username: str) -> Profile:
+    def extract(self, site: dict, username: str) -> Profile:  # noqa: PLR0912
         url = f"https://www.youtube.com/@{quote(username)}/about"
         profile = Profile(
             site_id=self.site_id,

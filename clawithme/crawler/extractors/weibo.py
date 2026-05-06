@@ -11,7 +11,7 @@ import re
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
-from clawithme.crawler.utils import first_text, parse_count
+from clawithme.crawler.utils import first_text
 from clawithme.logging import get_logger
 
 logger = get_logger()
@@ -23,7 +23,7 @@ class WeiboExtractor(ProfileExtractor):
     site_id = "weibo"
     requires_dynamic = False
 
-    def extract(self, site: dict, username: str) -> Profile:
+    def extract(self, site: dict, username: str) -> Profile:  # noqa: PLR0912
         # Try both URL formats — /u/{uid} and /{username}
         url = f"https://weibo.com/u/{username}"
         profile = Profile(

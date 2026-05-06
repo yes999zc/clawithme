@@ -1,6 +1,6 @@
 # clawithme — Work Scope & TODO
 
-> 2026-05-06 | 243 tests ✅ | Ruff 0 (5 pre-existing by-policy) ✅
+> 2026-05-06 | 243 tests ✅ | Ruff 0 (6 pre-existing by-policy) ✅
 > Phase 9 全部完成：置信度系统 + wrong-person 检测 + 17 个新 extractor + YouTube 修复。
 > Phase 10 规划中：服务器部署。
 
@@ -70,7 +70,7 @@
 
 ## Phase 3：深度爬虫 ✅ 100%
 
-> **交付物**：43 extractors（32 original + 11 Phase 9），CrawlerClient 完整。
+> **交付物**：49 extractors（32 original + 17 Phase 9），CrawlerClient 完整。
 
 ### 3.1 爬虫核心
 
@@ -253,8 +253,8 @@
 
 ## Phase 9：置信度系统 + Extractor 扩展 ✅ 100%
 
-> **交付物**：hit 置信度打分 + wrong-person 检测 + 11 新 extractor + Stack Overflow 探针修复 + 报告 UX boost。
-> **243 tests** all passing。43 extractors 全部注册上线。
+> **交付物**：hit 置信度打分 + wrong-person 检测 + 17 新 extractor + Stack Overflow 探针修复 + 报告 UX boost。
+> **243 tests** all passing。49 extractors 全部注册上线。
 
 ### 9.1 置信度系统
 
@@ -352,7 +352,7 @@
 | Phase 1-8 代码 | **100%** ✅ |
 | Phase 9 （置信度 + 扩展） | **100%** ✅ |
 | 测试 (243 tests) | **all passing** ✅ |
-| Lint (Ruff, Phase 8 files) | **0** ✅ |
+| Lint (Ruff, all files) | **0 (6 by-policy)** ✅ |
 | CI 部署 | **已部署** ✅ |
 | Profile extractors | **49** (up from 32) |
 | Phase 10 | **🔜 更多 extractor + 跨人聚类增强 + 服务器部署** |

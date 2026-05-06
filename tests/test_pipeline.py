@@ -48,7 +48,7 @@ def _miss_result(site_id, url="https://example.com/u"):
 
 class TestPipelineInit:
     def test_creates_search_result(self):
-        pipeline = AsyncPipeline([], {}, {}, FakeConfig())
+        _pipeline = AsyncPipeline([], {}, {}, FakeConfig())
         result = SearchResult()
         assert result.hits == []
         assert result.clusters == []

@@ -23,7 +23,7 @@ class LeetcodeExtractor(ProfileExtractor):
     site_id = "leetcode"
     requires_dynamic = False
 
-    def extract(self, site: dict, username: str) -> Profile:
+    def extract(self, site: dict, username: str) -> Profile:  # noqa: PLR0912
         url = f"https://leetcode.com/u/{username}/"
         profile = Profile(
             site_id=self.site_id,

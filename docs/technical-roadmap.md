@@ -1,7 +1,10 @@
-# clawithme — 技术路线 v4
+# clawithme — 技术路线 v4（历史计划文档）
 
 > V2 路线重写。四方评审（Brutal Pragmatist + China Internet Expert + Architect + Claude Code 独立评估）+ 9 哥方向确认。
-> 2026-05-05
+> 2026-05-05（Phase 8 之前制定）
+>
+> **⚠️ 本文档截至 Phase 8 的计划。Phase 9 的实际执行偏离了计划 — 详见 `TODO.md` 和 `docs/STATE.md`。**
+> Phase 9 实际成果：17 新 extractor（6 P0 SPA + 5 P1 CN/API + 6 P2 meta/API），置信度打分系统，wrong-person 检测，而非 roadmap 中计划的 Phase 9 内容。Phase 8（Web UI + PDF + i18n）已按计划完成。
 
 ---
 

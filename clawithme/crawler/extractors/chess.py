@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 import urllib.request
+from contextlib import suppress
+from datetime import datetime
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.logging import get_logger
@@ -46,11 +48,8 @@ class ChessExtractor(ProfileExtractor):
 
             joined = data.get("joined")
             if joined:
-                from datetime import datetime
-                try:
+                with suppress(OSError, ValueError):
                     profile.joined_date = datetime.fromtimestamp(joined).strftime("%Y-%m-%d")
-                except (OSError, ValueError):
-                    pass
 
         except (OSError, json.JSONDecodeError) as e:
             logger.debug("chess_api_failed", username=username, error=str(e))

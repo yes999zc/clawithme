@@ -7,7 +7,6 @@ Requires Playwright rendering to get the actual profile content.
 
 from __future__ import annotations
 
-import json
 import re
 
 from clawithme.crawler.base import Profile, ProfileExtractor
