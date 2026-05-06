@@ -8,3 +8,4 @@ venv/
 dist/
 build/
 uv.lock
+karpathy_en.html
