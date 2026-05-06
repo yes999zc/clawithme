@@ -9,11 +9,13 @@ Usage::
 from __future__ import annotations
 
 import asyncio
-import contextlib
 import json
+import os
 import re
 import signal
+import sys
 import time
+from contextlib import asynccontextmanager, suppress
 from pathlib import Path
 
 import uvicorn
@@ -30,11 +32,39 @@ from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import load_engines
 from clawithme.logging import get_logger, new_trace_id
 from clawithme.pipeline import AsyncPipeline
+from clawithme.report.generator import _compute_hit_confidence, _is_wrong_person
 from clawithme.signals.llm_verifier import LLMVerifier
+from clawithme.web.routes.report import router as report_router, store_result
 
 logger = get_logger()
 
-app = FastAPI(title="clawithme", version="0.2.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Startup: preload resources. Shutdown: clean up connections."""
+    # ── Startup ──
+    app.state.config = load_config()
+    app.state.sites = load_all_sites(include_migrated=False)
+    app.state.engines = load_engines()
+    app.state.extractors = discover_extractors()
+    app.state.cache = ResultCache()
+    # Print banner after startup succeeds
+    print()
+    print(_BANNER)
+    print(f"  🚀  WebUI running at http://localhost:8000\n")
+
+    yield
+
+    # ── Shutdown ──
+    # ── Shutdown ──
+    if hasattr(app.state, "cache") and app.state.cache is not None:
+        app.state.cache.close()
+    logger.info("app_shutdown")
+
+
+limiter = Limiter(key_func=get_remote_address)
+
+app = FastAPI(title="clawithme", version="0.2.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,8 +73,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-limiter = Limiter(key_func=get_remote_address)
-app.state.limiter = limiter
+# Register sub-routers
+app.include_router(report_router)
 
 
 @app.middleware("http")
@@ -55,16 +85,6 @@ async def add_csp_header(request: Request, call_next):
         "style-src 'self' 'unsafe-inline'; img-src * data:; connect-src 'self'"
     )
     return response
-
-
-@app.on_event("startup")
-async def _preload_state():
-    """Preload expensive resources at startup so requests don't pay the cost."""
-    app.state.config = load_config()
-    app.state.sites = load_all_sites(include_migrated=False)
-    app.state.engines = load_engines()
-    app.state.extractors = discover_extractors()
-    app.state.cache = ResultCache()
 
 # ── Static frontend ────────────────────────────────────────────
 
@@ -79,7 +99,10 @@ async def health():
 @app.get("/")
 async def index():
     html = (_STATIC_DIR / "index.html").read_text()
-    return HTMLResponse(html)
+    return HTMLResponse(
+        content=html,
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+    )
 
 
 # ── SSE Search ─────────────────────────────────────────────────
@@ -131,6 +154,12 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
         cache=cache, llm_verifier=llm_verifier,
     )
 
+    # Pre-pipeline status so the user knows something is happening
+    yield _sse("phase", json.dumps({
+        "phase": "scanning",
+        "message": "Scanning sites and querying leak databases...",
+    }))
+
     try:
         try:
             result = await asyncio.wait_for(pipeline.run(username), timeout=120)
@@ -146,15 +175,29 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
 
         elapsed = round(time.monotonic() - t0, 1)
 
+        # Build profile_by_site for confidence scoring
+        profile_by_site: dict[str, dict] = {}
+        for p in result.profiles:
+            sid = p.get("site_id")
+            if sid:
+                profile_by_site[sid] = p
+
         # Stream hits
         for h in result.hits:
             if await request.is_disconnected():
                 log.info("client_disconnected", phase="stream_hits")
                 return
+            site_id = h["site_id"]
+            conf = _compute_hit_confidence(h, profile_by_site, username)
+            wp = _is_wrong_person(h, profile_by_site, username)
             yield _sse("hit", json.dumps({
-                "site_id": h["site_id"],
+                "site_id": site_id,
                 "site_name": h["site_name"],
                 "url": h["url"],
+                "status": h.get("status"),
+                "category": h.get("site_def", {}).get("classification", {}).get("primary", "other"),
+                "confidence": round(conf, 2),
+                "wrong_person": wp,
             }))
 
         # Stream profiles
@@ -164,11 +207,19 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
                 return
             yield _sse("profile", json.dumps({
                 "site_id": p["site_id"],
+                "username": p.get("username"),
                 "display_name": p.get("display_name"),
                 "location": p.get("location"),
                 "bio": p.get("bio", "")[:200] if p.get("bio") else None,
                 "avatar_url": p.get("avatar_url"),
+                "email": p.get("email"),
+                "phone": p.get("phone"),
+                "joined_date": p.get("joined_date"),
+                "post_count": p.get("post_count"),
                 "follower_count": p.get("follower_count"),
+                "following_count": p.get("following_count"),
+                "extra": p.get("extra"),
+                "empty": p.get("empty", True),
             }))
 
         # Stream clusters
@@ -182,7 +233,38 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
                     "sites": [p.site_id for p in c.profiles],
                     "confidence": c.confidence,
                     "signals": c.signals,
+                    "evidence": c.evidence,
+                    "profile_count": len(c.profiles),
                 }))
+
+        # Sources used
+        sources_used = ["Cavalier"]
+        if cfg.apis.hibp_api_key:
+            sources_used.append("HIBP")
+
+        # Stream leak records
+        # First emit a status event showing per-source counts
+        leak_by_source: dict[str, int] = {}
+        for r in result.leak_records:
+            src = r.source or "unknown"
+            leak_by_source[src] = leak_by_source.get(src, 0) + 1
+        yield _sse("leakstatus", json.dumps({
+            "total": len(result.leak_records),
+            "per_source": leak_by_source,
+            "sources_used": sources_used,
+        }))
+        for r in result.leak_records:
+            if await request.is_disconnected():
+                log.info("client_disconnected", phase="stream_leaks")
+                return
+            yield _sse("leak", json.dumps({
+                "email": r.email,
+                "username": r.username,
+                "phone": r.phone,
+                "domain": r.domain,
+                "source": r.source,
+                "breach_date": r.breach_date,
+            }))
 
         # Done
         yield _sse("done", json.dumps({
@@ -193,7 +275,13 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
             "clusters": len(result.clusters),
             "searxng_hits": result.searxng_hits,
             "elapsed_s": elapsed,
+            "sources_used": sources_used,
+            "llm_configured": llm_verifier is not None,
         }))
+
+        # Store result for later report download
+        req_lang = request.query_params.get("lang", "zh")
+        store_result(trace_id, result, lang=req_lang if req_lang in ("zh", "en") else "zh")
     except Exception as e:
         log.error("search_stream_failed", error=str(e), type=type(e).__name__)
         yield _sse("error", f"Internal error: {type(e).__name__}")
@@ -238,7 +326,33 @@ def _sse(event: str, data: str) -> str:
 # ── Entry point ────────────────────────────────────────────────
 
 
+_BANNER = """╭────────────────────────────────── clawithme v0.1 · OSINT Identity Panorama ──────────────────────────────────╮
+│                                                                                                                    │
+│       █▀▀ █░░ ▄▀█ █░▄░█ ▀█▀ ▀█▀ █░█ █▄░▄█ █▀▀                         44 curated sites                        │
+│       █▄▄ █▄▄ █▀█ █▀░▀█ ▄█▄ ░█░ █▀█ █░▀░█ ██▄                         49 profile extractors                  │
+│                                                                           9 detection engines                    │
+│     🔍 Username → Identity Panorama                                      4 report formats (html/json/pdf/md)    │
+│                                                                                                                    │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯"""
+
+
 def main():
+    """Start the WebUI server.
+
+    On macOS with Homebrew, we automatically add /opt/homebrew/lib to
+    DYLD_LIBRARY_PATH so WeasyPrint (PDF export) can find system libraries
+    like libgobject-2.0.
+    """
+    import os
+    import sys
+
+    # macOS Homebrew library path fix for WeasyPrint
+    if sys.platform == "darwin":
+        brew_lib = "/opt/homebrew/lib"
+        if os.path.isdir(brew_lib) and brew_lib not in os.environ.get("DYLD_LIBRARY_PATH", ""):
+            current = os.environ.get("DYLD_LIBRARY_PATH", "")
+            os.environ["DYLD_LIBRARY_PATH"] = f"{brew_lib}:{current}" if current else brew_lib
+
     config = uvicorn.Config(app, host="0.0.0.0", port=8000, log_level="info")
     server = uvicorn.Server(config)
 
@@ -246,7 +360,7 @@ def main():
         server.should_exit = True
 
     for sig in (signal.SIGTERM, signal.SIGINT):
-        with contextlib.suppress(ValueError, NotImplementedError):
+        with suppress(ValueError, NotImplementedError):
             signal.signal(sig, lambda s, f: asyncio.create_task(shutdown()))
 
     server.run()

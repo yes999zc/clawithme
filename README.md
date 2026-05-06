@@ -13,7 +13,7 @@
 
 ---
 
-Input a username. Discover their presence across 3000+ platforms — from social networks to dev communities, from Chinese local forums to global sites. Link identities through email, phone, avatar hashes, and leaked credentials. Export a self-contained Geist-style HTML or PDF report. All powered by an async pipeline with LLM identity verification.
+Input a username. Discover their presence across 3000+ platforms — from social networks to dev communities, from Chinese local forums to global sites. Link identities through email, phone, avatar hashes, and leaked credentials. Export self-contained reports in HTML, PDF, JSON, or **Markdown**. All powered by an async pipeline with LLM identity verification.
 
 ## Quick Start
 
@@ -105,17 +105,19 @@ Requires Python 3.11+.
 ## Usage
 
 ```bash
-# Basic search (curated 36 sites)
+# Basic search (curated 44 sites)
 clawithme search yes999zc --acknowledge-ethical-use
 
-# Full search (all 2500+ sites)
+# Full search (all 3000+ sites)
 clawithme search yes999zc --include-migrated --acknowledge-ethical-use
 
 # Generate HTML report
 clawithme search yes999zc --report report.html --acknowledge-ethical-use
 
-# Generate JSON report
+# Generate JSON / PDF / Markdown report
 clawithme search yes999zc --report report.json --format json --acknowledge-ethical-use
+clawithme search yes999zc --report report.pdf --format pdf --acknowledge-ethical-use
+clawithme search yes999zc --report report.md --format md --acknowledge-ethical-use
 
 # Validate site database
 python scripts/validate.py

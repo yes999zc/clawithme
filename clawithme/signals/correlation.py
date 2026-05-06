@@ -90,28 +90,29 @@ class CorrelationEngine:
                     union(i, j)
                     matched_edges.append((i, j, sigs))
                     evidence_map: dict[str, str] = {}
+                    pair_key = f"{pi.site_id} ↔ {pj.site_id}"
                     if "email" in sigs:
-                        evidence_map["email"] = pi.email or ""
+                        evidence_map["email"] = f"{pair_key}: {pi.email or ''}"
                     if "phone" in sigs:
-                        evidence_map["phone"] = normalize_phone(pi.phone or "")
+                        evidence_map["phone"] = f"{pair_key}: {normalize_phone(pi.phone or '')}"
                     if "avatar_phash" in sigs:
                         match = compare_avatars(
                             pi.avatar_phash, pj.avatar_phash, self.PHASH_THRESHOLD
                         )
-                        evidence_map["avatar_phash"] = f"distance={match.distance}"
+                        evidence_map["avatar_phash"] = f"{pair_key}: distance={match.distance}"
                     if "username" in sigs:
                         sim = compare_usernames(pi.username, pj.username)
-                        evidence_map["username"] = f"{pi.username} ↔ {pj.username} (sim={sim:.2f})"
+                        evidence_map["username"] = f"{pair_key}: {pi.username} ↔ {pj.username} (sim={sim:.2f})"
                     if "joined_date" in sigs:
                         score = compare_joined_dates(pi.joined_date, pj.joined_date)
                         evidence_map["joined_date"] = (
-                            f"{pi.joined_date} ↔ {pj.joined_date} "
+                            f"{pair_key}: {pi.joined_date} ↔ {pj.joined_date} "
                             f"(score={score:.2f})"
                         )
                     if "location" in sigs:
                         score = compare_locations(pi.location, pj.location)
                         evidence_map["location"] = (
-                            f"{pi.location} ↔ {pj.location} "
+                            f"{pair_key}: {pi.location} ↔ {pj.location} "
                             f"(score={score:.2f})"
                         )
                     edge_evidence[(i, j)] = evidence_map

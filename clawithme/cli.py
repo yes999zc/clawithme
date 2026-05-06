@@ -78,33 +78,13 @@ def _search_leaks(search_term: str, search_type: str,
 
     log.info("search_start", search_type=search_type)
 
-    # Phase 3: Leak database
-    async def query_leaks():
-        sources: list = [CavalierSource()]
-        if cfg.apis.hibp_api_key:
-            sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
-        kwargs = {search_type: search_term}
-        records = await query_breaches(sources, **kwargs)
-        # Follow-up: cross-search with the other identifier
-        if search_type == "email":
-            phones = [r.phone for r in records if r.phone]
-            if phones:
-                phone_records = await query_breaches(sources, phone=phones[0])
-                records.extend(phone_records)
-        else:  # phone
-            emails = [r.email for r in records if r.email]
-            if emails:
-                email_records = await query_breaches(sources, email=emails[0])
-                records.extend(email_records)
-        for src in sources:
-            await src.close()
-        return records
-
-    try:
-        leak_records = asyncio.run(query_leaks())
-    except (OSError, ValueError, TimeoutError, RuntimeError) as e:
-        log.warning("leak_query_failed", error=str(e))
-        leak_records = []
+    # Phase 3: Leak database (shared helper)
+    kwargs = {}
+    if search_type == "email":
+        kwargs["email"] = search_term
+    else:
+        kwargs["phone"] = search_term
+    leak_records = _query_all_leaks(cfg, **kwargs)
 
     # Phase 4: Correlation
     profile_objects: list[Profile] = []
@@ -117,74 +97,29 @@ def _search_leaks(search_term: str, search_type: str,
             email=r.email,
             phone=r.phone,
         ))
-    engine = CorrelationEngine()
-    clusters = engine.correlate(profile_objects)
-
-    # Output
-    print()
-    label = {"email": "email", "phone": "phone"}[search_type]
-    print(f"═══ clawithme search ({label}): {search_term} ═══")
-    print()
+    clusters = CorrelationEngine().correlate(profile_objects)
 
     sources_used = ["Cavalier"]
     if cfg.apis.hibp_api_key:
         sources_used.append("HIBP")
-    if leak_records:
-        print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
-        for r in leak_records:
-            print(f"   ⚠️  {r}")
-        leak_domains: set[str] = {r.domain for r in leak_records if r.domain}
-        if leak_domains:
-            print(f"📧 Breach-associated platforms: {', '.join(sorted(leak_domains))}")
-        leak_phones: set[str] = {r.phone for r in leak_records if r.phone}
-        if leak_phones:
-            print(f"📱 Phone numbers revealed: {', '.join(sorted(leak_phones))}")
-        leak_emails: set[str] = {r.email for r in leak_records if r.email}
-        if leak_emails:
-            print(f"📧 Emails revealed: {', '.join(sorted(leak_emails))}")
-    else:
-        print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
 
-    if len(clusters) > 0:
-        print()
-        multi = sum(1 for c in clusters if len(c.profiles) > 1)
-        print(f"🔗 Identity clusters: {len(clusters)} total, {multi} multi-profile")
-        for i, c in enumerate(clusters, 1):
-            if len(c.profiles) == 1:
-                continue
-            sites = [p.site_id for p in c.profiles]
-            print(f"   Cluster {i}: {', '.join(sites)}")
-            print(f"      confidence={c.confidence}  signals={c.signals}")
+    # Output
+    _print_search_results(
+        search_term, search_type, hits=[], profiles=[], leak_records=leak_records,
+        clusters=clusters, searxng_hits=None, sources_used=sources_used,
+        trace_id=trace_id,
+    )
 
-    print()
     log.info("search_done", leaks=len(leak_records))
-    print(f"trace_id: {trace_id}")
 
     # Report
     if report_path:
         breach_dates = [r.breach_date for r in leak_records if r.breach_date]
-        if report_format == "json":
-            from clawithme.report.generator import export_json
-            output = export_json([], [], clusters, search_term, trace_id=trace_id)
-        else:
-            from clawithme.report.generator import generate_report
-            output = generate_report([], [], clusters, search_term,
-                                     trace_id=trace_id, breach_dates=breach_dates)
-        try:
-            safe_path = Path(report_path).resolve()
-            cwd = Path.cwd().resolve()
-            try:
-                safe_path.relative_to(cwd)
-            except ValueError:
-                log.error("report_path_traversal", path=report_path)
-                print("\n❌ Report path must be within current directory")
-                return
-            safe_path.write_text(output)
-            log.info("report_written", path=report_path, format=report_format)
-            print(f"\n📄 Report ({report_format}): {report_path}")
-        except OSError as e:
-            log.error("report_write_failed", path=report_path, error=str(e))
-            print(f"\n❌ Failed to write report: {e}")
+        _write_search_report(
+            report_path, report_format, hits=[], profiles=[], clusters=clusters,
+            username=search_term, trace_id=trace_id, breach_dates=breach_dates,
+            log=log, lang="zh",
+        )
 
 
 
@@ -326,88 +261,27 @@ def _search_async(username: str, *, report_path: str | None = None,
         return
 
     # Output
-    print()
-    print(f"═══ clawithme search: {username} ═══")
-    print()
-
-    if result.hits:
-        print(f"📊 Sites found: {len(result.hits)}/{len(sites)}")
-        for h in result.hits:
-            print(f"   ✅ {h['site_name']:12s} → {h['url']}")
-    else:
-        print(f"📊 Sites found: 0/{len(sites)}")
-
-    if result.profiles:
-        print()
-        print(f"👤 Profiles extracted: {len(result.profiles)}")
-        for p in result.profiles:
-            parts = [f"   {p['site_id']}"]
-            if p["display_name"]:
-                parts.append(f"→ {p['display_name']}")
-            if p["location"]:
-                parts.append(f"📍 {p['location']}")
-            if p["follower_count"] is not None:
-                parts.append(f"👥 {p['follower_count']}")
-            print(" ".join(parts))
-
-    print()
-    leak_records = result.leak_records
     sources_used = ["Cavalier"]
     if cfg.apis.hibp_api_key:
         sources_used.append("HIBP")
-    if leak_records:
-        print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
-        for r in leak_records:
-            print(f"   ⚠️  {r}")
-        leak_domains: set[str] = {r.domain for r in leak_records if r.domain}
-        if leak_domains:
-            print(f"📧 Breach-associated platforms: {', '.join(sorted(leak_domains))}")
-        leak_phones: set[str] = {r.phone for r in leak_records if r.phone}
-        if leak_phones:
-            print(f"📱 Phone numbers revealed: {', '.join(sorted(leak_phones))}")
-        leak_emails: set[str] = {r.email for r in leak_records if r.email}
-        if leak_emails:
-            print(f"📧 Emails revealed: {', '.join(sorted(leak_emails))}")
-    else:
-        print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
+    _print_search_results(
+        username, search_type="username", hits=result.hits, profiles=result.profiles,
+        leak_records=result.leak_records, clusters=result.clusters,
+        searxng_hits=result.searxng_hits, sources_used=sources_used,
+        trace_id=trace_id, sites_total=len(sites),
+    )
 
-    clusters = result.clusters
-    if len(clusters) > 0:
-        print()
-        multi = sum(1 for c in clusters if len(c.profiles) > 1)
-        print(f"🔗 Identity clusters: {len(clusters)} total, {multi} multi-profile")
-        for i, c in enumerate(clusters, 1):
-            if len(c.profiles) == 1:
-                continue
-            sids = [p.site_id.replace("leak:", "🔓") for p in c.profiles]
-            print(f"   Cluster {i}: {', '.join(sids)}")
-            print(f"      confidence={c.confidence}  signals={c.signals}")
-
-    print()
     log.info("search_done", hits=len(result.hits), profiles=len(result.profiles),
-             leaks=len(leak_records), searxng_hits=result.searxng_hits)
-    print(f"trace_id: {trace_id}")
+             leaks=len(result.leak_records), searxng_hits=result.searxng_hits)
 
     # Report
     if report_path:
-        breach_dates = [r.breach_date for r in leak_records if r.breach_date]
-        if report_format == "json":
-            from clawithme.report.generator import export_json
-            output = export_json(result.hits, result.profiles, clusters,
-                                 username, trace_id=trace_id)
-            _write_report(output, report_path, report_format, log, mode="text")
-        elif report_format == "pdf":
-            from clawithme.report.generator import export_pdf
-            output = export_pdf(result.hits, result.profiles, clusters,
-                                username, trace_id=trace_id,
-                                breach_dates=breach_dates)
-            _write_report(output, report_path, report_format, log, mode="bytes")
-        else:
-            from clawithme.report.generator import generate_report
-            output = generate_report(result.hits, result.profiles, clusters,
-                                     username, trace_id=trace_id,
-                                     breach_dates=breach_dates, lang=lang)
-            _write_report(output, report_path, report_format, log, mode="text")
+        breach_dates = [r.breach_date for r in result.leak_records if r.breach_date]
+        _write_search_report(
+            report_path, report_format, hits=result.hits, profiles=result.profiles,
+            clusters=result.clusters, username=username, trace_id=trace_id,
+            breach_dates=breach_dates, log=log, lang=lang,
+        )
 
 
 def _search_sync(username: str, *, search_type: str, report_path: str | None,
@@ -571,31 +445,8 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
         except (OSError, ValueError, TimeoutError) as e:
             log.warning("extract_failed", site=site_id, error=str(e))
 
-    # ── Phase 3: Leak database ──
-    async def query_leaks():
-        sources: list = [CavalierSource()]
-        if cfg.apis.hibp_api_key:
-            sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
-        records = await query_breaches(sources, username=username)
-        # Follow-up: query by email if username search returned emails
-        emails_found = [r.email for r in records if r.email]
-        if emails_found:
-            email_records = await query_breaches(sources, email=emails_found[0])
-            records.extend(email_records)
-        # Follow-up: query by phone if username search returned phone numbers
-        phones_found = [r.phone for r in records if r.phone]
-        if phones_found:
-            phone_records = await query_breaches(sources, phone=phones_found[0])
-            records.extend(phone_records)
-        for src in sources:
-            await src.close()
-        return records
-
-    try:
-        leak_records = asyncio.run(query_leaks())
-    except (OSError, ValueError, TimeoutError, RuntimeError) as e:
-        log.warning("leak_query_failed", error=str(e))
-        leak_records = []
+    # ── Phase 3: Leak database (shared helper) ──
+    leak_records = _query_all_leaks(cfg, username=username)
 
     # ── Phase 4: Correlation ──
     for r in leak_records:
@@ -611,47 +462,94 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
     engine = CorrelationEngine(llm_verifier=llm_verifier)
     clusters = engine.correlate(profile_objects)
 
-    # ── Output ──
-    print()
-    print(f"═══ clawithme search: {username} ═══")
-    print()
-
-    if hits:
-        print(f"📊 Sites found: {len(hits)}/{len(sites)}")
-        for h in hits:
-            print(f"   ✅ {h['site_name']:12s} → {h['url']}")
-    else:
-        print(f"📊 Sites found: 0/{len(sites)}")
-
-    if profiles:
-        print()
-        print(f"👤 Profiles extracted: {len(profiles)}")
-        for p in profiles:
-            parts = [f"   {p['site_id']}"]
-            if p["display_name"]:
-                parts.append(f"→ {p['display_name']}")
-            if p["location"]:
-                parts.append(f"📍 {p['location']}")
-            if p["follower_count"] is not None:
-                parts.append(f"👥 {p['follower_count']}")
-            print(" ".join(parts))
-
-    print()
     sources_used = ["Cavalier"]
     if cfg.apis.hibp_api_key:
         sources_used.append("HIBP")
+
+    # ── Output ──
+    _print_search_results(
+        username, search_type="username", hits=hits, profiles=profiles,
+        leak_records=leak_records, clusters=clusters, searxng_hits=searxng_total,
+        sources_used=sources_used, trace_id=trace_id, sites_total=len(sites),
+    )
+
+    log.info("search_done", hits=len(hits), profiles=len(profiles),
+             leaks=len(leak_records), searxng_hits=searxng_total)
+
+    # ── Report (optional) ──
+    if report_path:
+        breach_dates = [r.breach_date for r in leak_records if r.breach_date]
+        _write_search_report(
+            report_path, report_format, hits=hits, profiles=profiles,
+            clusters=clusters, username=username, trace_id=trace_id,
+            breach_dates=breach_dates, log=log, lang="zh",
+        )
+
+
+# ── Shared pipeline helpers (consolidated from _search_async / _search_sync / _search_leaks) ──
+
+
+def _print_search_results(
+    username: str,
+    search_type: str,
+    hits: list[dict],
+    profiles: list[dict],
+    leak_records: list,
+    clusters: list,
+    searxng_hits: int | None,
+    sources_used: list[str],
+    trace_id: str,
+    sites_total: int = 0,
+) -> None:
+    """Print formatted search results to stdout.
+
+    Called by _search_async, _search_sync, and _search_leaks.
+    *sites_total* is the total number of sites probed (for the denominator).
+    """
+    print()
+    if search_type in ("email", "phone"):
+        label = {"email": "email", "phone": "phone"}[search_type]
+        print(f"═══ clawithme search ({label}): {username} ═══")
+    else:
+        print(f"═══ clawithme search: {username} ═══")
+    print()
+
+    if search_type == "username":
+        denom = f"/{sites_total}" if sites_total else ""
+        if hits:
+            print(f"📊 Sites found: {len(hits)}{denom}")
+            for h in hits:
+                print(f"   ✅ {h['site_name']:12s} → {h['url']}")
+        else:
+            print(f"📊 Sites found: 0{denom}")
+        print()
+
+        if profiles:
+            print(f"👤 Profiles extracted: {len(profiles)}")
+            for p in profiles:
+                parts = [f"   {p['site_id']}"]
+                if p["display_name"]:
+                    parts.append(f"→ {p['display_name']}")
+                if p["location"]:
+                    parts.append(f"📍 {p['location']}")
+                if p["follower_count"] is not None:
+                    parts.append(f"👥 {p['follower_count']}")
+                print(" ".join(parts))
+        print()
+
     if leak_records:
         print(f"🔓 Leak records: {len(leak_records)} (sources: {', '.join(sources_used)})")
         for r in leak_records:
             print(f"   ⚠️  {r}")
-        # Extract associated platforms from breach domains
-        leak_domains: set[str] = {r.domain for r in leak_records if r.domain}
+        leak_domains = {r.domain for r in leak_records if r.domain}
         if leak_domains:
             print(f"📧 Breach-associated platforms: {', '.join(sorted(leak_domains))}")
-        # Extract phone numbers found in breaches
-        leak_phones: set[str] = {r.phone for r in leak_records if r.phone}
+        leak_phones = {r.phone for r in leak_records if r.phone}
         if leak_phones:
             print(f"📱 Phone numbers revealed: {', '.join(sorted(leak_phones))}")
+        leak_emails = {r.email for r in leak_records if r.email}
+        if leak_emails:
+            print(f"📧 Emails revealed: {', '.join(sorted(leak_emails))}")
     else:
         print(f"🔓 Leak records: 0 (sources: {', '.join(sources_used)})")
 
@@ -661,42 +559,122 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
         print(f"🔗 Identity clusters: {len(clusters)} total, {multi} multi-profile")
         for i, c in enumerate(clusters, 1):
             if len(c.profiles) == 1:
-                continue  # skip singletons for cleaner output
-            sites = [p.site_id.replace("leak:", "🔓") for p in c.profiles]
-            print(f"   Cluster {i}: {', '.join(sites)}")
+                continue
+            site_ids = [p.site_id for p in c.profiles]
+            print(f"   Cluster {i}: {', '.join(site_ids)}")
             print(f"      confidence={c.confidence}  signals={c.signals}")
 
     print()
-    log.info("search_done", hits=len(hits), profiles=len(profiles),
-             leaks=len(leak_records), searxng_hits=searxng_total)
     print(f"trace_id: {trace_id}")
 
-    # ── Report (optional) ──
-    if report_path:
-        breach_dates = [r.breach_date for r in leak_records if r.breach_date]
-        if report_format == "json":
-            from clawithme.report.generator import export_json
-            output = export_json(hits, profiles, clusters, username, trace_id=trace_id)
-            _write_report(output, report_path, report_format, log, mode="text")
-        elif report_format == "pdf":
-            from clawithme.report.generator import export_pdf
-            output = export_pdf(hits, profiles, clusters, username,
-                                trace_id=trace_id, breach_dates=breach_dates)
-            _write_report(output, report_path, report_format, log, mode="bytes")
-        else:
-            from clawithme.report.generator import generate_report
-            output = generate_report(hits, profiles, clusters, username,
-                                     trace_id=trace_id, breach_dates=breach_dates)
-            _write_report(output, report_path, report_format, log, mode="text")
+
+def _write_search_report(
+    report_path: str,
+    report_format: str,
+    hits: list[dict],
+    profiles: list[dict],
+    clusters: list,
+    username: str,
+    trace_id: str,
+    breach_dates: list[str],
+    log,
+    lang: str = "zh",
+) -> None:
+    """Write HTML/JSON/PDF report with path traversal protection.
+
+    Called by _search_async, _search_sync, and _search_leaks.
+    """
+    if report_format == "json":
+        from clawithme.report.generator import export_json
+        output = export_json(hits, profiles, clusters, username, trace_id=trace_id)
+        _write_report(output, report_path, report_format, log, mode="text")
+    elif report_format == "pdf":
+        from clawithme.report.generator import export_pdf
+        output = export_pdf(hits, profiles, clusters, username,
+                            trace_id=trace_id, breach_dates=breach_dates)
+        _write_report(output, report_path, report_format, log, mode="bytes")
+    elif report_format == "md":
+        from clawithme.report.generator import export_markdown
+        output = export_markdown(hits, profiles, clusters, username,
+                                 trace_id=trace_id, breach_dates=breach_dates, lang=lang)
+        _write_report(output, report_path, report_format, log, mode="text")
+    else:
+        from clawithme.report.generator import generate_report
+        output = generate_report(hits, profiles, clusters, username,
+                                 trace_id=trace_id, breach_dates=breach_dates, lang=lang)
+        _write_report(output, report_path, report_format, log, mode="text")
+
+
+def _query_all_leaks(
+    cfg,
+    *,
+    username: str | None = None,
+    email: str | None = None,
+    phone: str | None = None,
+) -> list:
+    """Query all configured leak sources (Cavalier + optional HIBP).
+
+    Performs follow-up cross-queries: if username search returns emails,
+    also queries those emails; returns phones, also queries those phones.
+    """
+    async def _query():
+        sources: list = [CavalierSource()]
+        if cfg.apis.hibp_api_key:
+            sources.append(HIBPSource(api_key=cfg.apis.hibp_api_key))
+        kwargs = {}
+        if username:
+            kwargs["username"] = username
+        if email:
+            kwargs["email"] = email
+        if phone:
+            kwargs["phone"] = phone
+        records = await query_breaches(sources, **kwargs)
+        # Follow-up cross-queries
+        if username or email:
+            phones_found = [r.phone for r in records if r.phone]
+            if phones_found:
+                phone_records = await query_breaches(sources, phone=phones_found[0])
+                records.extend(phone_records)
+        if username or phone:
+            emails_found = [r.email for r in records if r.email]
+            if emails_found:
+                email_records = await query_breaches(sources, email=emails_found[0])
+                records.extend(email_records)
+        for src in sources:
+            await src.close()
+        return records
+
+    try:
+        return asyncio.run(_query())
+    except (OSError, ValueError, TimeoutError, RuntimeError) as e:
+        logger = get_logger()
+        logger.warning("leak_query_failed", error=str(e))
+        return []
+
+
+_BANNER = """╭────────────────────────────────── clawithme v0.1 · OSINT Identity Panorama ──────────────────────────────────╮
+│                                                                                                                    │
+│       █▀▀ █░░ ▄▀█ █░▄░█ ▀█▀ ▀█▀ █░█ █▄░▄█ █▀▀                         44 curated sites                        │
+│       █▄▄ █▄▄ █▀█ █▀░▀█ ▄█▄ ░█░ █▀█ █░▀░█ ██▄                         49 profile extractors                  │
+│                                                                           9 detection engines                    │
+│     🔍 Username → Identity Panorama                                      4 report formats (html/json/pdf/md)    │
+│                                                                                                                    │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯"""
 
 
 def main():
     """CLI entry point."""
     setup_logging()
 
+    # ── Banner ────────────────────────────────────────────────
+    if len(sys.argv) >= 2 and sys.argv[1] != "help":
+        print()
+        print(_BANNER)
+        print()
+
     if len(sys.argv) < 2:
         print("Usage: clawithme search <username> [--report <path>] "
-              "[--format html|json] [--include-migrated] [--no-cache] "
+              "[--format html|json|pdf|md] [--include-migrated] [--no-cache] "
               "[--sync] [--lang zh|en] [--acknowledge-ethical-use]")
         print("       clawithme verify")
         print("       clawithme validate")
@@ -707,7 +685,7 @@ def main():
     if command == "search":
         if len(sys.argv) < 3:
             print("Usage: clawithme search <username> [--report <path>] "
-                  "[--format html|json] [--include-migrated] [--no-cache] "
+                  "[--format html|json|pdf|md] [--include-migrated] [--no-cache] "
                   "[--sync] [--lang zh|en] [--acknowledge-ethical-use]")
             sys.exit(1)
         username = sys.argv[2]
@@ -733,8 +711,8 @@ def main():
         if report_lang not in ("zh", "en"):
             print(f"❌ Unknown lang: {report_lang!r}. Use 'zh' or 'en'.")
             sys.exit(1)
-        if report_format not in ("html", "json", "pdf"):
-            print(f"❌ Unknown format: {report_format!r}. Use 'html', 'json', or 'pdf'.")
+        if report_format not in ("html", "json", "pdf", "md"):
+            print(f"❌ Unknown format: {report_format!r}. Use 'html', 'json', 'pdf', or 'md'.")
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
                include_migrated=include_migrated, acknowledged=acknowledged,

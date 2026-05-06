@@ -32,7 +32,7 @@ class TestIndexPage:
         assert resp.status_code == 200
         assert "text/html" in resp.headers["content-type"]
         assert "OSINT Identity Panorama" in resp.text
-        assert "id=\"username\"" in resp.text
+        assert "id=\"usernameInput\"" in resp.text
 
 
 class TestSearchEndpoint:

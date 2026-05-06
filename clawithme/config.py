@@ -22,8 +22,6 @@ class ProxyConfig:
 @dataclass
 class ApiConfig:
     hibp_api_key: str = ""
-    dehashed_api_key: str = ""
-    dehashed_email: str = ""
 
 
 @dataclass
@@ -88,8 +86,6 @@ def load_config(path: str | Path | None = None) -> Config:
     apis_raw = raw.get("apis", {})
     config.apis = ApiConfig(
         hibp_api_key=apis_raw.get("hibp_api_key", ""),
-        dehashed_api_key=apis_raw.get("dehashed_api_key", ""),
-        dehashed_email=apis_raw.get("dehashed_email", ""),
     )
 
     # Scanning
