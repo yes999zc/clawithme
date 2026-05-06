@@ -1,11 +1,13 @@
-"""Instagram profile extractor — best-effort static fetch.
+"""Instagram profile extractor — static HTML + meta tags.
 
 URL: https://www.instagram.com/{username}/
-Instagram is a SPA with Login walls. Most extraction methods fail.
-This extractor tries og:meta tags and gracefully returns empty on failure.
+Instagram renders og:title, og:image meta tags in static HTML.
+We parse: display_name from og:title, avatar_url from og:image.
 """
 
 from __future__ import annotations
+
+import re
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
@@ -15,7 +17,7 @@ logger = get_logger()
 
 
 class InstagramExtractor(ProfileExtractor):
-    """Extract public profile data from Instagram (best-effort)."""
+    """Extract public profile data from Instagram via og:meta tags."""
 
     site_id = "instagram"
     requires_dynamic = False
@@ -35,20 +37,19 @@ class InstagramExtractor(ProfileExtractor):
             if response is None or response.status != 200:
                 return profile
 
-            # Try og:title for display name
+            # Display name from og:title
             # Format: "陈丹 (@oadank) • Instagram photos and videos"
             tag = response.css("meta[property='og:title']")
             if tag and tag[0].attrib.get("content"):
-                import re
                 title = tag[0].attrib["content"]
                 # Strip trailing " • Instagram photos and videos"
                 clean = re.sub(r"\s*[•·]\s*Instagram.*$", "", title).strip()
-                # Also remove leading username in parens
+                # Remove parenthesized username
                 clean = re.sub(r"\s*\(@\S+\)\s*", "", clean).strip()
                 if clean:
                     profile.display_name = clean
 
-            # Try og:image for avatar
+            # Avatar from og:image
             tag = response.css("meta[property='og:image']")
             if tag and tag[0].attrib.get("content"):
                 src = tag[0].attrib["content"]
