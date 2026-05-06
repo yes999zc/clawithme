@@ -36,11 +36,15 @@ class InstagramExtractor(ProfileExtractor):
                 return profile
 
             # Try og:title for display name
+            # Format: "陈丹 (@oadank) • Instagram photos and videos"
             tag = response.css("meta[property='og:title']")
             if tag and tag[0].attrib.get("content"):
                 import re
                 title = tag[0].attrib["content"]
-                clean = re.sub(r"^@\S+\s*[•·]\s*", "", title).strip()
+                # Strip trailing " • Instagram photos and videos"
+                clean = re.sub(r"\s*[•·]\s*Instagram.*$", "", title).strip()
+                # Also remove leading username in parens
+                clean = re.sub(r"\s*\(@\S+\)\s*", "", clean).strip()
                 if clean:
                     profile.display_name = clean
 
