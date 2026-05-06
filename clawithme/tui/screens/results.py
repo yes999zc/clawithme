@@ -48,6 +48,7 @@ class ResultsScreen(Screen):
         self._cancel_event: asyncio.Event | None = None
         self._searching = False
         self._last_result = None
+        self._search_lang = "zh"
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -81,7 +82,7 @@ class ResultsScreen(Screen):
                 yield Button("🔍 New Search", id="btn-new", variant="default")
 
     def on_mount(self) -> None:
-        self.query_one("#loading", LoadingIndicator).display = False
+        """Initialize results screen."""
 
     def watch_status_text(self, value: str) -> None:
         self.query_one("#status-bar", Static).update(f"  {value}")
@@ -118,6 +119,7 @@ class ResultsScreen(Screen):
         self.username = username
         self._searching = True
         self._cancel_event = asyncio.Event()
+        self._search_lang = lang
 
         # Clear previous results
         for wid in ("hits-log", "profiles-log", "clusters-log", "leaks-log"):
@@ -132,7 +134,7 @@ class ResultsScreen(Screen):
         self.status_text = f"🔍 Searching {username}..."
 
         self.run_worker(
-            self._do_search(username, include_migrated, no_cache, lang),
+            self._do_search(username, include_migrated, no_cache, sync_mode, lang),
             exclusive=True,
         )
 
@@ -141,7 +143,8 @@ class ResultsScreen(Screen):
         username: str,
         include_migrated: bool,
         no_cache: bool,
-        lang: str,
+        sync_mode: bool = False,
+        lang: str = "zh",
     ) -> None:
         """Run the pipeline and display results."""
         t0 = time.monotonic()
@@ -266,8 +269,8 @@ class ResultsScreen(Screen):
                 profiles=self._last_result.profiles,
                 clusters=self._last_result.clusters,
                 username=self.username,
-                leak_records=self._last_result.leak_records,
-                lang="zh",
+                breach_dates=self._last_result.leak_records,
+                lang=self._search_lang,
             )
 
             if fmt == "html":
@@ -311,7 +314,7 @@ class ResultsScreen(Screen):
                     profiles=self._last_result.profiles,
                     clusters=self._last_result.clusters,
                     username=self.username,
-                    leak_records=self._last_result.leak_records,
+                    breach_dates=self._last_result.leak_records,
                 )
                 path.write_text(md, encoding="utf-8")
 

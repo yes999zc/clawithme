@@ -38,6 +38,10 @@ Screen {
     layout: horizontal;
 }
 
+#loading {
+    display: none;
+}
+
 #hits-log, #profiles-log, #clusters-log, #leaks-log {
     height: 1fr;
     border: solid $primary;
