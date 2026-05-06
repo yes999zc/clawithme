@@ -1,27 +1,29 @@
-"""YouTube channel extractor — static HTML from channel About page.
+"""YouTube channel extractor — dynamic fetch via Playwright.
 
-YouTube About pages (/about) include server-rendered metadata and
-JSON-LD structured data in the initial HTML, before JS hydration.
+URL: https://www.youtube.com/@{username}/about
+YouTube About pages now require JS rendering. Static HTML returns empty shell.
+We use DynamicFetcher (Playwright) and parse og:meta tags + JSON-LD.
 """
 
 from __future__ import annotations
 
 import json
+import re
 from urllib.parse import quote
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
-from clawithme.crawler.utils import first_text, parse_count
+from clawithme.crawler.utils import parse_count
 from clawithme.logging import get_logger
 
 logger = get_logger()
 
 
 class YoutubeExtractor(ProfileExtractor):
-    """Extract public channel data from YouTube About page."""
+    """Extract public channel data from YouTube (dynamic fetch)."""
 
     site_id = "youtube"
-    requires_dynamic = False
+    requires_dynamic = True
 
     def extract(self, site: dict, username: str) -> Profile:
         url = f"https://www.youtube.com/@{quote(username)}/about"
@@ -32,99 +34,65 @@ class YoutubeExtractor(ProfileExtractor):
             username=username,
         )
 
-        client = CrawlerClient(timeout_ms=15000)
+        client = CrawlerClient(timeout_ms=20000)
         try:
-            response = client.fetch_static(url)
+            response = client.fetch_dynamic(url)
             if response is None or response.status != 200:
                 return profile
 
-            page_text = response.text
-
-            # Handle "This channel doesn't exist" page
-            if "This channel doesn" in page_text or "channel does not exist" in page_text.lower():
+            html = str(response.html_content) if response.html_content else ""
+            if not html or len(html) < 5000:
                 return profile
 
-            # Try JSON-LD structured data first (most reliable)
-            profile = _extract_jsonld(response, profile)
+            # Extract from JSON-LD
+            _extract_jsonld(html, profile)
 
-            # Fall back to CSS selectors if JSON-LD didn't yield display_name
+            # Fallback: og:title
             if not profile.display_name:
-                profile = _extract_css(response, profile, page_text)
+                m = re.search(r'<meta\s+property="og:title"\s+content="([^"]+)"', html)
+                if m:
+                    profile.display_name = m.group(1)
 
-            logger.debug("youtube_extracted", username=username, display_name=profile.display_name)
+            # Avatar from og:image
+            if not profile.avatar_url:
+                m = re.search(r'<meta\s+property="og:image"\s+content="([^"]+)"', html)
+                if m:
+                    src = m.group(1)
+                    if not src.startswith("data:"):
+                        profile.avatar_url = src
+
+            # Bio from og:description
+            if not profile.bio:
+                m = re.search(r'<meta\s+property="og:description"\s+content="([^"]+)"', html)
+                if m:
+                    desc = m.group(1)
+                    if desc:
+                        profile.bio = desc
+
+            # Subscriber count from JSON-LD or inline data
+            if profile.follower_count is None:
+                m = re.search(r'"subscriberCount"\s*:\s*"([^"]+)"', html)
+                if m:
+                    profile.follower_count = parse_count(m.group(1))
+
         finally:
             client.close()
 
         return profile
 
 
-def _extract_jsonld(response, profile: Profile) -> Profile:
-    """Extract channel data from embedded JSON-LD/structured data."""
-    for script in response.css("script[type=\"application/ld+json\"]"):
+def _extract_jsonld(html: str, profile: Profile) -> None:
+    """Extract channel data from embedded JSON-LD."""
+    for m in re.finditer(
+        r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>',
+        html, re.DOTALL,
+    ):
         try:
-            data = json.loads(script.text)
+            data = json.loads(m.group(1))
             if isinstance(data, dict):
-                name = data.get("name", "")
-                if name:
-                    profile.display_name = name
-                desc = data.get("description", "")
-                if desc:
-                    profile.bio = desc
-            break
-        except (json.JSONDecodeError, AttributeError, TypeError):
+                if not profile.display_name:
+                    profile.display_name = data.get("name") or None
+                if not profile.bio:
+                    profile.bio = data.get("description") or None
+        except (json.JSONDecodeError, AttributeError):
             continue
-    return profile
-
-
-def _extract_css(response, profile: Profile, page_text: str) -> Profile:
-    """Extract channel data from CSS selectors on the About page."""
-    # Display name
-    name = first_text(response, [
-        "meta[property=\"og:title\"]",
-        "meta[name=\"title\"]",
-        "yt-formatted-string[class*=\"title\"]",
-        "#channel-name",
-    ])
-    if name:
-        profile.display_name = name
-
-    # Description
-    desc = first_text(response, [
-        "meta[property=\"og:description\"]",
-        "meta[name=\"description\"]",
-        "#description",
-    ])
-    if desc:
-        profile.bio = desc
-
-    # Subscriber count — look for "subscribers" text patterns
-    sub_sel = first_text(response, [
-        "yt-formatted-string#subscriber-count",
-        "#subscriber-count",
-        "[class*=\"subscriber\"]",
-    ])
-    if sub_sel:
-        parsed = parse_count(sub_sel)
-        if parsed is not None:
-            profile.follower_count = parsed
-
-    # Join date — often in the about section
-    join_sel = first_text(response, [
-        "#details-container yt-formatted-string",
-        "[class*=\"joined-date\"]",
-        "[class*=\"about-metadata\"]",
-    ])
-    if join_sel:
-        profile.joined_date = join_sel
-
-    # Avatar
-    for sel in ["img[class*=\"channel\"]", "img[class*=\"avatar\"]",
-                 "img[id*=\"avatar\"]", "img[alt*=\"avatar\"]"]:
-        imgs = response.css(sel)
-        if imgs:
-            src = imgs[0].attrib.get("src", "")
-            if src and not src.startswith("data:"):
-                profile.avatar_url = src
-                break
-
-    return profile

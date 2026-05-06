@@ -43,4 +43,4 @@ class TestExtractionPipeline:
 
     def test_extractor_not_found_for_unknown_site(self):
         extractors = discover_extractors()
-        assert "twitter" not in extractors
+        assert "hupu" not in extractors
