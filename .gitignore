@@ -8,4 +8,7 @@ venv/
 dist/
 build/
 uv.lock
+# Generated report files
+*_report.html
+*_report.json
 karpathy_en.html
