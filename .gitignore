@@ -11,4 +11,5 @@ uv.lock
 # Generated report files
 *_report.html
 *_report.json
+*_data.json
 karpathy_en.html
