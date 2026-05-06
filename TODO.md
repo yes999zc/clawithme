@@ -1,8 +1,8 @@
 # clawithme — Work Scope & TODO
 
 > 2026-05-06 | 243 tests ✅ | Ruff 0 (5 pre-existing by-policy) ✅
-> Phase 9a-e 已完成：置信度系统 + wrong-person 检测 + 11 个新 extractor + StackOverflow 探针修复 + 报告 UX。
-> Phase 10 规划中：更多 extractor + 跨人聚类增强 + 服务器部署。
+> Phase 9 全部完成：置信度系统 + wrong-person 检测 + 17 个新 extractor + YouTube 修复。
+> Phase 10 规划中：服务器部署。
 
 ---
 
@@ -303,6 +303,21 @@
 
 ---
 
+## Phase 9f: P2 Extractor 扩展 ✅ 100%
+
+> 6 新 extractor，API/meta 优先。
+> **243 tests** all passing。
+
+- [x] **LeetCode** — og:meta + JSON-LD
+- [x] **Goodreads** — og:meta
+- [x] **Chess.com** — 公开 REST API (api.chess.com)
+- [x] **Discogs** — 公开 REST API (api.discogs.com)
+- [x] **CodePen** — og:meta
+- [x] **虎扑 (hupu)** — 静态 HTML + CSS 选择器
+- [x] **YouTube 修复** — 改动态 Playwright (原静态空壳)
+
+---
+
 ## KILLED / DEFERRED
 
 | # | 项 | 状态 | 原因 |
@@ -339,5 +354,5 @@
 | 测试 (243 tests) | **all passing** ✅ |
 | Lint (Ruff, Phase 8 files) | **0** ✅ |
 | CI 部署 | **已部署** ✅ |
-| Profile extractors | **43** （up from 32） |
+| Profile extractors | **49** (up from 32) |
 | Phase 10 | **🔜 更多 extractor + 跨人聚类增强 + 服务器部署** |

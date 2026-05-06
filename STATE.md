@@ -6,14 +6,14 @@ Last updated: 2026-05-06
 
 | Metric | Value |
 |--------|-------|
-| HEAD | `9f75014` (main, aligned with GitHub) |
+| HEAD | `0b06346` (main, aligned with GitHub) |
 | Python lines | ~8,400 |
 | Tests | **243 passed**, 5 skipped (WeasyPrint system deps) |
 | Ruff | 0 on Phase 8 files; 9 pre-existing in extractors/engine |
 | Curated sites | 44 |
 | Migrated sites | 2,487 |
 | Detection engines | 9 |
-| Profile extractors | **43** (was 34) |
+| Profile extractors | **49** (was 34) |
 | Async pipeline | 10-concurrent, cold ~14s (was 180s) |
 | Hit confidence scoring | ✅ (0.0-1.0 with name/field/Script checks) |
 | Wrong-person detection | ✅ (Levenshtein + CJK script filter) |
@@ -37,7 +37,8 @@ Last updated: 2026-05-06
 | 9c | Hit confidence scoring + wrong-person detection | ✅ |
 | 9d | Stack Overflow probe fix (hardcoded UID removed) | ✅ |
 | 9e | Report UX — confidence badges, identity assessment card | ✅ |
-| 10 | TBD — further extractors, server deployment | 🔜 next |
+| 9f | P2 extractors — LeetCode/Goodreads/Chess/CodePen/Discogs/Hupu | ✅ |
+| 10 | TBD — server deployment | 🔜 next |
 
 ## Architecture
 
