@@ -3,6 +3,7 @@
 from clawithme.crawler.extractors.baidu_zhidao import BaiduZhidaoExtractor
 from clawithme.crawler.extractors.behance import BehanceExtractor
 from clawithme.crawler.extractors.bilibili import BilibiliExtractor
+from clawithme.crawler.extractors.blogger import BloggerExtractor
 from clawithme.crawler.extractors.cnblogs import CnblogsExtractor
 from clawithme.crawler.extractors.coolapk import CoolapkExtractor
 from clawithme.crawler.extractors.csdn import CsdnExtractor
@@ -10,6 +11,7 @@ from clawithme.crawler.extractors.devto import DevtoExtractor
 from clawithme.crawler.extractors.douban import DoubanExtractor
 from clawithme.crawler.extractors.dribbble import DribbbleExtractor
 from clawithme.crawler.extractors.flickr import FlickrExtractor
+from clawithme.crawler.extractors.gitee import GiteeExtractor
 from clawithme.crawler.extractors.github import GithubExtractor
 from clawithme.crawler.extractors.gitlab import GitlabExtractor
 from clawithme.crawler.extractors.hackernews import HackernewsExtractor
@@ -32,17 +34,21 @@ from clawithme.crawler.extractors.sspai import SspaiExtractor
 from clawithme.crawler.extractors.stackoverflow import StackoverflowExtractor
 from clawithme.crawler.extractors.steam import SteamExtractor
 from clawithme.crawler.extractors.telegram import TelegramExtractor
+from clawithme.crawler.extractors.tieba import TiebaExtractor
 from clawithme.crawler.extractors.twitter import TwitterExtractor
 from clawithme.crawler.extractors.twitch import TwitchExtractor
 from clawithme.crawler.extractors.v2ex import V2exExtractor
 from clawithme.crawler.extractors.weibo import WeiboExtractor
+from clawithme.crawler.extractors.wordpress import WordpressExtractor
 from clawithme.crawler.extractors.youtube import YoutubeExtractor
+from clawithme.crawler.extractors.zhihu import ZhihuExtractor
 from clawithme.crawler.extractors.zcool import ZcoolExtractor
 
 __all__ = [
     "BaiduZhidaoExtractor",
     "BehanceExtractor",
     "BilibiliExtractor",
+    "BloggerExtractor",
     "CnblogsExtractor",
     "CoolapkExtractor",
     "CsdnExtractor",
@@ -50,6 +56,7 @@ __all__ = [
     "DoubanExtractor",
     "DribbbleExtractor",
     "FlickrExtractor",
+    "GiteeExtractor",
     "GithubExtractor",
     "GitlabExtractor",
     "HackernewsExtractor",
@@ -69,13 +76,16 @@ __all__ = [
     "SegmentfaultExtractor",
     "SlideshareExtractor",
     "SspaiExtractor",
-    "SteamExtractor",
     "StackoverflowExtractor",
+    "SteamExtractor",
     "TelegramExtractor",
+    "TiebaExtractor",
     "TwitterExtractor",
     "TwitchExtractor",
     "V2exExtractor",
     "WeiboExtractor",
+    "WordpressExtractor",
     "YoutubeExtractor",
+    "ZhihuExtractor",
     "ZcoolExtractor",
 ]
