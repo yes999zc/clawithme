@@ -45,6 +45,12 @@ _STRINGS = {
         "no_sites": "未发现站点。",
         "no_profiles": "未提取到资料。",
         "no_clusters": "未发现身份关联。",
+        "cluster_assessment_title": "身份评估",
+        "cluster_assessment_dispersed": "低关联度 — 所有资料各自独立，无跨站匹配信号。说明此人在各站使用了不同的邮箱/手机/头像，身份隔离度高。",
+        "cluster_assessment_partial": "中关联度 — 发现 {n} 组跨站关联。部分平台存在共享凭证，身份部分重叠。",
+        "cluster_assessment_unified": "高关联度 — 大部分资料存在跨站匹配信号。此人在各平台身份高度一致。",
+        "cluster_assessment_singleton": "仅 {n} 条资料，无法做跨站关联分析。",
+        "cluster_assessment_note": "评估基于匹配信号强度。关联度越高，越能证明这些资料属于同一人。",
         "no_analytics": "无分析数据。",
         "fp_hits_summary": "+ {n} 未验证命中 — 这是什么？",
         "field_username": "用户名",
@@ -107,6 +113,12 @@ _STRINGS = {
         "no_sites": "No sites found.",
         "no_profiles": "No profiles extracted.",
         "no_clusters": "No identity clusters found.",
+        "cluster_assessment_title": "Identity Assessment",
+        "cluster_assessment_dispersed": "Low cohesion — all profiles are independent, no cross-platform matching signals. The user uses different emails/phones/avatars across platforms, indicating deliberate identity separation.",
+        "cluster_assessment_partial": "Medium cohesion — {n} cross-platform links found. Some platforms share credentials, partial identity overlap.",
+        "cluster_assessment_unified": "High cohesion — most profiles share cross-platform matching signals. The user maintains a consistent identity across platforms.",
+        "cluster_assessment_singleton": "Only {n} profile(s), insufficient for cross-platform correlation analysis.",
+        "cluster_assessment_note": "Assessment based on matching signal strength. Higher cohesion means stronger evidence that these profiles belong to the same person.",
         "no_analytics": "No analytics data.",
         "fp_hits_summary": "+ {n} unverified hits — what are these?",
         "field_username": "Username",
@@ -738,6 +750,22 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
   border-radius: 4px; font-size: 13px; color: #2e7d32;
 }}
 
+/* ── Cluster Assessment ────────────────────── */
+.cluster-assessment {{
+  background: #fafafa; border: 1px solid #e5e5e5;
+  border-radius: 6px; padding: 14px 16px; margin-bottom: 20px;
+}}
+.cluster-assessment-title {{
+  font: 600 13px/1.4 'Inter', sans-serif; color: #171717;
+  margin-bottom: 6px;
+}}
+.cluster-assessment-body {{
+  font-size: 13px; line-height: 1.5; color: #4d4d4d;
+}}
+.cluster-assessment-note {{
+  font-size: 11px; color: #b0b0b0; margin-top: 6px;
+}}
+
 /* ── Footer ──────────────────────────────────── */
 .footer {{ margin-top: 56px; padding-top: 16px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #b0b0b0; }}
 
@@ -1146,11 +1174,37 @@ def _render_profiles(lang: str, profiles: list[dict], hits: list[dict]) -> str:
     return '<div class="card-grid">' + "".join(cards) + "</div>"
 
 
+def _render_cluster_assessment(clusters: list, total_profiles: int, lang: str) -> str:
+    """Produce a human-readable assessment of identity cohesion."""
+    LANG = _STRINGS.get(lang, _STRINGS["en"])
+    multi = [c for c in clusters if len(c.profiles) >= 2]
+    has_signals = any(c.signals for c in clusters)
+
+    if total_profiles <= 1:
+        text = LANG["cluster_assessment_singleton"].format(n=total_profiles)
+    elif not multi and not has_signals:
+        text = LANG["cluster_assessment_dispersed"]
+    elif has_signals and total_profiles >= 3:
+        text = LANG["cluster_assessment_partial"].format(n=len(multi))
+    else:
+        text = LANG["cluster_assessment_dispersed"]
+
+    return (
+        '<div class="cluster-assessment">'
+        f'<div class="cluster-assessment-title">{_esc(LANG["cluster_assessment_title"])}</div>'
+        f'<div class="cluster-assessment-body">{_esc(text)}</div>'
+        f'<div class="cluster-assessment-note">{_esc(LANG["cluster_assessment_note"])}</div>'
+        '</div>'
+    )
+
+
 def _render_clusters(lang: str, clusters: list, consensus_name: str | None = None,
                       hits: list[dict] | None = None) -> str:
     LANG = _STRINGS.get(lang, _STRINGS["en"])
     if not clusters:
         return f'<p style="color:#808080;margin-top:20px">{LANG["no_clusters"]}</p>'
+    total_profiles = sum(len(c.profiles) for c in clusters)
+    assessment_html = _render_cluster_assessment(clusters, total_profiles, lang)
     # Build site_id -> favicon mapping
     favicon_map: dict[str, str] = {}
     if hits:
@@ -1234,7 +1288,7 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
             f'{identity_html}'
             f'</div>'
         )
-    return '<div style="margin-top:20px">' + "".join(blocks) + "</div>"
+    return '<div style="margin-top:20px">' + assessment_html + "".join(blocks) + "</div>"
 
 
 def _esc(s: str) -> str:

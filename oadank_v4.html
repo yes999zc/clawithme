@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLAWITHME 身份报告：oadank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Design Tokens ─────────────────────────── */
+:root {
+  --accent: #1e293b;
+  --accent-subtle: #475569;
+  --accent-bg: rgba(30, 41, 59, 0.04);
+  --bg-warm: #fafaf8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #171717; background: var(--bg-warm); line-height: 1.6;
+}
+.container { max-width: 780px; margin: 0 auto; padding: 48px 24px 56px; }
+
+/* ── Brand header ───────────────────────────── */
+.brand-header {
+  display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px;
+}
+.brand-wordmark {
+  font: 700 14px/1 'Inter', sans-serif; color: #171717;
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+.brand-wordmark-me {
+  color: #16a34a;
+}
+.brand-slogan {
+  font: 400 13px/1 'JetBrains Mono', ui-monospace, monospace; color: #b0b0b0;
+}
+
+h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.8px; margin: 0 0 4px; }
+h2 { font-size: 20px; font-weight: 600; color: #171717; letter-spacing: -0.3px; margin: 0; }
+h3 { font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em; margin: 0; }
+.meta { color: #808080; font-size: 12px; }
+.section { margin-top: 48px; }
+.section + .section { margin-top: 56px; }
+.summary-hero + .section { margin-top: 36px; }
+.divider { border: 0; border-top: 1px solid #e5e5e5; margin: 20px 0 24px; }
+
+/* ── Section header ────────────────────────── */
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; margin: -28px -28px 0 -28px;
+  border-bottom: 1px solid #e5e5e5; background: #fafafa;
+}
+.section-header .badge {
+  font: 500 11px/1 'JetBrains Mono', ui-monospace, monospace;
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--accent); color: white; flex-shrink: 0;
+}
+.section-header h2 { font: 600 15px/1.3 'Inter', sans-serif; color: #171717; }
+.section-explain {
+  font-size: 13px; color: #808080; line-height: 1.6; margin: 20px 0 0; max-width: 600px;
+}
+.section-container {
+  padding: 28px; border-radius: 8px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
+  overflow: hidden; margin-bottom: 8px;
+}
+
+/* ── Summary hero ───────────────────────────── */
+.summary-hero {
+  background: #fff; border-radius: 10px; border-left: 4px solid var(--accent);
+  padding: 36px 36px 28px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
+}
+.summary-hero h1 { color: var(--accent); }
+.hero-summary {
+  font-size: 15px; color: #4d4d4d; line-height: 1.7; margin-top: 12px; max-width: 640px;
+}
+.hero-identity {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.hero-identity-name { font-size: 18px; font-weight: 600; color: #171717; }
+.hero-identity-badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 4px;
+  background: #e8f5e9; color: #2e7d32;
+}
+.hero-stats {
+  display: flex; gap: 28px; flex-wrap: wrap; margin-top: 20px;
+}
+.hero-stat {
+  display: flex; align-items: baseline; gap: 6px;
+}
+.hero-stat-value {
+  font-size: 28px; font-weight: 600; color: #171717;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 12px; color: #808080; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.fp-note {
+  font-size: 12px; color: #b0b0b0; cursor: help;
+  border-bottom: 1px dotted #b0b0b0;
+  text-transform: none; letter-spacing: normal;
+}
+
+/* ── Uncertain sites details ──────────────────── */
+.uncertain-summary {
+  cursor: pointer; font-size: 13px; color: #808080;
+  padding: 8px 12px; border-radius: 6px;
+  background: #fafafa; border: 1px solid #e5e5e5;
+}
+
+/* ── Status badges ────────────────────────────── */
+.status-ok { color: #2e7d32; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.status-warn { color: #b8860b; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+/* ── Site icons ─────────────────────────────── */
+.site-icon {
+  width: 16px; height: 16px; border-radius: 3px;
+  vertical-align: middle; margin-right: 8px; flex-shrink: 0;
+}
+.site-icon-lg {
+  width: 24px; height: 24px; border-radius: 4px;
+  vertical-align: middle; margin-right: 8px; flex-shrink: 0;
+}
+.site-favicon {
+  width: 44px; height: 44px; border-radius: 8px; background: #f8f8f8;
+  flex-shrink: 0; object-fit: contain; padding: 4px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.06);
+}
+.site-name-cell {
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Cluster site pills ─────────────────────── */
+.cluster-site-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; padding: 3px 10px 3px 5px;
+  background: #f5f5f5; border-radius: 6px;
+  color: #4d4d4d; margin: 2px 2px;
+}
+.cluster-site-pill img {
+  width: 14px; height: 14px; border-radius: 2px;
+}
+.cluster-list-pills {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;
+}
+
+/* ── Table site cell ────────────────────────── */
+.site-table td:first-child {
+  display: flex; align-items: center; gap: 8px;
+}
+.site-table td.url {
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #808080; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.site-table td.url a {
+  color: #475569; text-decoration: none;
+}
+.site-table td.url a:hover {
+  color: #1e293b; text-decoration: underline;
+}
+.site-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.site-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid #e5e5e5; color: #4d4d4d; font-weight: 500; }
+.site-table td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }
+.cat-label {
+  font-size: 13px; font-weight: 500; color: #808080;
+  margin-top: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ── Cluster cards ──────────────────────────── */
+.cluster-hd {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.cluster-hd strong {
+  font-size: 14px; font-weight: 600; color: #171717;
+}
+.cluster-conf-bar {
+  height: 6px; background: #f0f0f0; border-radius: 3px;
+  overflow: hidden; margin: 0 0 8px; flex: 1;
+}
+.cluster-conf-fill {
+  height: 100%; border-radius: 3px; transition: width 0.3s;
+}
+.cluster-conf-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  font-weight: 600; margin-left: 8px;
+}
+
+/* ── Profile cards ──────────────────────────── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 4px; }
+.card {
+  background: #fff; border-radius: 8px; padding: 20px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s;
+}
+.card:hover { box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.12), 0px 4px 8px rgba(0,0,0,0.06); }
+.card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.card-avatar {
+  width: 44px; height: 44px; border-radius: 50%; background: #f0f0f0;
+  flex-shrink: 0; object-fit: cover;
+}
+.card-site { font-size: 11px; color: #808080; text-transform: uppercase; letter-spacing: 0.5px; }
+.card-name { font-size: 15px; font-weight: 600; color: #171717; }
+.card-bio { font-size: 13px; color: #4d4d4d; margin-top: 8px; line-height: 1.5; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; font-size: 12px; color: #808080; }
+.card-extras { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.card-extra-tag {
+  font-size: 11px; padding: 2px 8px; background: #f5f5f5;
+  border-radius: 4px; color: #4d4d4d; font-family: 'JetBrains Mono', monospace;
+}
+.card-completeness { display: flex; align-items: center; gap: 0; margin-top: 12px; }
+
+/* ── Donut ring ─────────────────────────────── */
+.cc-donut {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: conic-gradient(
+    var(--donut-color, #171717) 0deg calc(var(--pct) * 3.6deg),
+    #f0f0f0 calc(var(--pct) * 3.6deg) 360deg
+  );
+  position: relative;
+}
+.cc-donut::after {
+  content: attr(data-pct);
+  position: absolute; inset: 4px; border-radius: 50%;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: #171717;
+}
+.completeness-label {
+  font-size: 9px; color: #b0b0b0; cursor: help;
+  font-family: 'JetBrains Mono', monospace; text-align: center;
+  border-bottom: 1px dotted transparent;
+}
+.completeness-label:hover { border-bottom-color: #b0b0b0; }
+
+/* ── Profile detail table ───────────────────── */
+.field-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.field-table td { padding: 4px 8px; border-bottom: 1px solid #f5f5f5; vertical-align: top; }
+.field-table td:first-child { border-bottom: none; }
+.field-label {
+  font-family: 'JetBrains Mono', monospace; color: #808080; width: 100px;
+  font-size: 11px; padding-top: 6px !important; white-space: nowrap;
+}
+.field-value {
+  color: #4d4d4d; line-height: 1.5; word-break: break-word;
+  padding: 6px 8px !important;
+}
+
+/* ── Clusters ────────────────────────────────── */
+.cluster {
+  background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
+}
+.cluster-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cluster-hd strong { font-size: 15px; }
+/* ── Cluster explanation ─────────────────────── */
+.cluster-signals { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.signal-tag {
+  font-size: 11px; padding: 2px 8px; background: #f5f5f5;
+  border-radius: 4px; color: #4d4d4d; font-family: 'JetBrains Mono', monospace;
+}
+.cluster-list { font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.cluster-site { font-size: 12px; padding: 2px 8px; background: #f5f5f5; border-radius: 4px; }
+.cluster-evidence { font-size: 12px; color: #4d4d4d; margin-top: 4px; padding: 2px 0; }
+.cluster-identity {
+  margin-top: 12px; padding: 8px 12px; background: #e8f5e9;
+  border-radius: 4px; font-size: 13px; color: #2e7d32;
+}
+
+/* ── Cluster Assessment ────────────────────── */
+.cluster-assessment {
+  background: #fafafa; border: 1px solid #e5e5e5;
+  border-radius: 6px; padding: 14px 16px; margin-bottom: 20px;
+}
+.cluster-assessment-title {
+  font: 600 13px/1.4 'Inter', sans-serif; color: #171717;
+  margin-bottom: 6px;
+}
+.cluster-assessment-body {
+  font-size: 13px; line-height: 1.5; color: #4d4d4d;
+}
+.cluster-assessment-note {
+  font-size: 11px; color: #b0b0b0; margin-top: 6px;
+}
+
+/* ── Footer ──────────────────────────────────── */
+.footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #b0b0b0; }
+
+/* ── Timeline ───────────────────────────────── */
+.timeline { overflow-x: auto; padding: 16px 0; }
+.timeline-track { display: flex; align-items: flex-end; gap: 0; min-height: 80px; position: relative; }
+.timeline-track::before {
+  content: ''; position: absolute; bottom: 28px; left: 0; right: 0;
+  height: 2px; background: #e5e5e5;
+}
+.timeline-dot { text-align: center; min-width: 100px; flex-shrink: 0; position: relative; }
+.timeline-dot::before {
+  content: ''; display: block; width: 8px; height: 8px;
+  background: #171717; border-radius: 50%;
+  margin: 0 auto 8px; position: relative; z-index: 1;
+}
+.timeline-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #808080; display: block; }
+
+/* ── Charts ──────────────────────────────────── */
+.chart-row { display: flex; gap: 32px; flex-wrap: wrap; }
+.chart-col { flex: 1; min-width: 280px; }
+.chart-title { font-size: 14px; font-weight: 600; color: #171717; margin-bottom: 2px; letter-spacing: -0.2px; }
+.chart-subtitle { font-size: 12px; color: #808080; margin: 0 0 16px; line-height: 1.4; }
+.chart-summary {
+  display: flex; align-items: baseline; gap: 6px;
+  font-size: 12px; color: #808080; margin-bottom: 14px; padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.chart-summary-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 600; color: var(--accent);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.chart-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.chart-bar-label { font-size: 12px; color: #4d4d4d; min-width: 80px; text-align: right; flex-shrink: 0; }
+.chart-bar-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.chart-bar-fill { height: 100%; border-radius: 4px; background: var(--accent); opacity: var(--bar-opacity, 1); }
+.chart-bar-count {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #808080; min-width: 24px;
+}
+
+/* ── Radar chart ─────────────────────────────── */
+.chart-col-radar {
+  min-width: 300px; max-width: 360px;
+}
+.radar-chart {
+  display: flex; justify-content: center; margin-top: 8px;
+}
+.radar-svg {
+  width: 100%; max-width: 270px; height: auto;
+}
+.radar-label {
+  font-family: 'Inter', sans-serif; font-size: 11px; fill: #4d4d4d; font-weight: 500;
+}
+.radar-score {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; fill: var(--accent); font-weight: 600;
+}
+
+/* ── Mobile ─────────────────────────────────── */
+@media (max-width: 480px) {
+  .container { padding: 24px 16px 32px; }
+  .card-grid { grid-template-columns: 1fr; }
+  h1 { font-size: 24px; }
+  .summary-hero { padding: 24px; }
+  .hero-stat-value { font-size: 22px; }
+  .hero-stats { gap: 20px; }
+  .section-container { padding: 20px 16px; }
+  .section-header { margin: -20px -16px 0 -16px; padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="summary-hero"><div class="brand-header"><span class="brand-wordmark">CLAWITH<span class="brand-wordmark-me">ME</span></span><span class="brand-slogan">OSINT Identity Panorama</span></div><h1>Oadank</h1><p class="hero-summary">丹 陈 丹 陈. 活跃于： csdn, github, coolapk, steam, flickr. 公开资料中未发现邮箱或电话。</p><div class="hero-stats"><div class="hero-stat"><span class="hero-stat-value">13</span><span class="hero-stat-label">站点</span></div><div class="hero-stat"><span class="hero-stat-value">5</span><span class="hero-stat-label">资料</span></div><div class="hero-stat"><span class="hero-stat-value">10</span><span class="hero-stat-label">群集</span></div></div><div class="meta"><span class="fp-note" title=" — 这些是单页应用 (SPA) 站点，对所有用户名返回 HTTP 200，自动检测不可靠。默认隐藏，点击链接手动验证。"> + 6 未验证命中 — 这是什么？</span></div></div>
+
+<div class="section"><div class="section-container">
+<div class="section-header"><span class="badge">01</span><h2>发现站点</h2></div>
+<div class="cluster-signals" style="margin:20px 0 0"><span class="signal-tag">开发工具 3</span><span class="signal-tag">论坛 1</span><span class="signal-tag">游戏 1</span><span class="signal-tag">媒体 2</span><span class="signal-tag">音乐 1</span><span class="signal-tag">社交 1</span></div><div class="cat-label">开发工具</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=blog.csdn.net&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>CSDN</span></td><td class="url"><a href="https://blog.csdn.net/oadank" target="_blank" rel="noopener">https://blog.csdn.net/oadank</a></td><td class="status-ok">200</td></tr><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=github.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>GitHub</span></td><td class="url"><a href="https://github.com/oadank" target="_blank" rel="noopener">https://github.com/oadank</a></td><td class="status-ok">200</td></tr><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=stackoverflow.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Stack Overflow</span></td><td class="url"><a href="https://stackoverflow.com/users/22656/oadank" target="_blank" rel="noopener">https://stackoverflow.com/users/22656/oadank</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">论坛</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.coolapk.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>酷安</span></td><td class="url"><a href="https://www.coolapk.com/u/oadank" target="_blank" rel="noopener">https://www.coolapk.com/u/oadank</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">游戏</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=steamcommunity.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Steam</span></td><td class="url"><a href="https://steamcommunity.com/id/oadank" target="_blank" rel="noopener">https://steamcommunity.com/id/oadank</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">媒体</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.flickr.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Flickr</span></td><td class="url"><a href="https://www.flickr.com/people/oadank/" target="_blank" rel="noopener">https://www.flickr.com/people/oadank/</a></td><td class="status-ok">200</td></tr><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.pinterest.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Pinterest</span></td><td class="url"><a href="https://www.pinterest.com/oadank/" target="_blank" rel="noopener">https://www.pinterest.com/oadank/</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">音乐</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=open.spotify.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Spotify</span></td><td class="url"><a href="https://open.spotify.com/user/oadank" target="_blank" rel="noopener">https://open.spotify.com/user/oadank</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">社交</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.douban.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>豆瓣</span></td><td class="url"><a href="https://www.douban.com/people/oadank/" target="_blank" rel="noopener">https://www.douban.com/people/oadank/</a></td><td class="status-ok">200</td></tr></tbody></table>
+<details style="margin-top:16px"><summary class="uncertain-summary">+ 8 未验证命中 — 这是什么？</summary><div class="cluster-signals" style="margin:20px 0 0"><span class="signal-tag">博客 1</span><span class="signal-tag">开发工具 1</span><span class="signal-tag">媒体 2</span><span class="signal-tag">音乐 1</span><span class="signal-tag">社交 3</span></div><div class="cat-label">博客</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=sspai.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>少数派</span></td><td class="url"><a href="https://sspai.com/u/oadank/" target="_blank" rel="noopener">https://sspai.com/u/oadank/</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">开发工具</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=juejin.cn&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>掘金</span></td><td class="url"><a href="https://juejin.cn/user/oadank" target="_blank" rel="noopener">https://juejin.cn/user/oadank</a></td><td class="status-warn">404</td></tr></tbody></table><div class="cat-label">媒体</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.slideshare.net&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>SlideShare</span></td><td class="url"><a href="https://www.slideshare.net/oadank" target="_blank" rel="noopener">https://www.slideshare.net/oadank</a></td><td class="status-ok">200</td></tr><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.twitch.tv&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Twitch</span></td><td class="url"><a href="https://www.twitch.tv/oadank" target="_blank" rel="noopener">https://www.twitch.tv/oadank</a></td><td class="status-ok">200</td></tr></tbody></table><div class="cat-label">音乐</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=music.163.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>网易云音乐</span></td><td class="url"><a href="https://music.163.com/api/v1/user/detail?uid=oadank" target="_blank" rel="noopener">https://music.163.com/api/v1/user/detail?uid=oadank</a></td><td class="status-warn">404</td></tr></tbody></table><div class="cat-label">社交</div><table class="site-table"><thead><tr><th>站点</th><th>URL</th><th>状态</th></tr></thead><tbody><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=www.instagram.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Instagram</span></td><td class="url"><a href="https://www.instagram.com/oadank/" target="_blank" rel="noopener">https://www.instagram.com/oadank/</a></td><td class="status-ok">200</td></tr><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=twitter.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>Twitter/X</span></td><td class="url"><a href="https://twitter.com/oadank" target="_blank" rel="noopener">https://twitter.com/oadank</a></td><td class="status-ok">200</td></tr><tr><td><img class="site-icon" src="https://www.google.com/s2/favicons?domain=weibo.com&amp;sz=16" alt="" loading="lazy" onerror="this.style.display='none'"><span>微博</span></td><td class="url"><a href="https://weibo.com/u/oadank" target="_blank" rel="noopener">https://weibo.com/u/oadank</a></td><td class="status-ok">200</td></tr></tbody></table></details>
+<p style="margin-top:12px;font-size:12px;color:#b0b0b0">另有 2 个站点因服务器错误或反爬机制未能完成检测。</p>
+</div></div>
+
+<div class="section"><div class="section-container">
+<div class="section-header"><span class="badge">02</span><h2>提取资料</h2></div>
+<div class="card-grid"><div class="card"><div class="card-header"><img class="card-avatar" src="https://profile-avatar.csdnimg.cn/default.jpg!1" alt="" loading="lazy"><div style="flex:1"><div class="card-name">oadank</div><div class="card-site">csdn</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="cc-donut" style="--pct:20;--donut-color:#171717" data-pct="20%"></div><span class="completeness-label" title="资料完整度 — 填充的关键身份字段 (名称, 简介, 位置, 头像, 粉丝) 百分比">20% 完整度</span></div></div><details class="profile-details" style="margin-top:16px"><summary style="cursor:pointer;font-size:12px;color:#808080">完整资料</summary><table class="field-table" style="margin-top:8px"><tr><td class="field-label">用户名</td><td class="field-value">oadank</td></tr><tr><td class="field-label">头像链接</td><td class="field-value">https://profile-avatar.csdnimg.cn/default.jpg!1</td></tr></table></details></div><div class="card"><div class="card-header"><img class="card-avatar" src="https://avatars.githubusercontent.com/u/236710909?s=64&amp;v=4" alt="" loading="lazy"><div style="flex:1"><div class="card-name">阿丹</div><div class="card-site">github</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="cc-donut" style="--pct:60;--donut-color:var(--accent)" data-pct="60%"></div><span class="completeness-label" title="资料完整度 — 填充的关键身份字段 (名称, 简介, 位置, 头像, 粉丝) 百分比">60% 完整度</span></div></div><div class="card-meta">👥 5 · ↗ 4</div><details class="profile-details" style="margin-top:16px"><summary style="cursor:pointer;font-size:12px;color:#808080">完整资料</summary><table class="field-table" style="margin-top:8px"><tr><td class="field-label">用户名</td><td class="field-value">oadank</td></tr><tr><td class="field-label">显示名称</td><td class="field-value">阿丹</td></tr><tr><td class="field-label">粉丝</td><td class="field-value">5</td></tr><tr><td class="field-label">关注</td><td class="field-value">4</td></tr><tr><td class="field-label">头像链接</td><td class="field-value">https://avatars.githubusercontent.com/u/236710909?s=64&am...</td></tr></table></details></div><div class="card"><div class="card-header"><img class="site-favicon" src="https://www.google.com/s2/favicons?domain=www.coolapk.com&amp;sz=64" alt="" loading="lazy" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=card-avatar></div>')"><div style="flex:1"><div class="card-name">oadank</div><div class="card-site">coolapk</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="cc-donut" style="--pct:20;--donut-color:#171717" data-pct="20%"></div><span class="completeness-label" title="资料完整度 — 填充的关键身份字段 (名称, 简介, 位置, 头像, 粉丝) 百分比">20% 完整度</span></div></div><details class="profile-details" style="margin-top:16px"><summary style="cursor:pointer;font-size:12px;color:#808080">完整资料</summary><table class="field-table" style="margin-top:8px"><tr><td class="field-label">用户名</td><td class="field-value">oadank</td></tr><tr><td class="field-label">显示名称</td><td class="field-value">用户分享</td></tr></table></details></div><div class="card"><div class="card-header"><img class="site-favicon" src="https://www.google.com/s2/favicons?domain=steamcommunity.com&amp;sz=64" alt="" loading="lazy" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=card-avatar></div>')"><div style="flex:1"><div class="card-name">oadank</div><div class="card-site">steam</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="cc-donut" style="--pct:20;--donut-color:#171717" data-pct="20%"></div><span class="completeness-label" title="资料完整度 — 填充的关键身份字段 (名称, 简介, 位置, 头像, 粉丝) 百分比">20% 完整度</span></div></div><details class="profile-details" style="margin-top:16px"><summary style="cursor:pointer;font-size:12px;color:#808080">完整资料</summary><table class="field-table" style="margin-top:8px"><tr><td class="field-label">用户名</td><td class="field-value">oadank</td></tr><tr><td class="field-label">显示名称</td><td class="field-value">Level</td></tr></table></details></div><div class="card"><div class="card-header"><img class="site-favicon" src="https://www.google.com/s2/favicons?domain=www.flickr.com&amp;sz=64" alt="" loading="lazy" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div class=card-avatar></div>')"><div style="flex:1"><div class="card-name">丹 陈 丹 陈</div><div class="card-site">flickr</div></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><div class="cc-donut" style="--pct:20;--donut-color:#171717" data-pct="20%"></div><span class="completeness-label" title="资料完整度 — 填充的关键身份字段 (名称, 简介, 位置, 头像, 粉丝) 百分比">20% 完整度</span></div></div><div class="card-meta">📅 Joined 2010 Joined 2010</div><details class="profile-details" style="margin-top:16px"><summary style="cursor:pointer;font-size:12px;color:#808080">完整资料</summary><table class="field-table" style="margin-top:8px"><tr><td class="field-label">用户名</td><td class="field-value">oadank</td></tr><tr><td class="field-label">显示名称</td><td class="field-value">丹 陈 丹 陈</td></tr><tr><td class="field-label">加入时间</td><td class="field-value">Joined 2010 Joined 2010</td></tr></table></details></div></div>
+</div></div>
+
+<div class="section"><div class="section-container">
+<div class="section-header"><span class="badge">03</span><h2>身份关联</h2></div>
+<p class="section-explain">通过用户名相似度、共享邮箱、电话或头像哈希等匹配信号，将可能属于同一人的资料分组。置信度越高，单一身份的证据越强。</p>
+<div style="margin-top:20px"><div class="cluster-assessment"><div class="cluster-assessment-title">身份评估</div><div class="cluster-assessment-body">低关联度 — 所有资料各自独立，无跨站匹配信号。说明此人在各站使用了不同的邮箱/手机/头像，身份隔离度高。</div><div class="cluster-assessment-note">评估基于匹配信号强度。关联度越高，越能证明这些资料属于同一人。</div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 1</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=blog.csdn.net&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">csdn</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 2</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=github.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">github</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 3</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=juejin.cn&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">juejin</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 4</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=stackoverflow.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">stackoverflow</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 5</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=www.coolapk.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">coolapk</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 6</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=news.ycombinator.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">hackernews</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 7</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=steamcommunity.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">steam</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 8</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=www.flickr.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">flickr</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 9</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=music.163.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">netease_music</span></div><div class="cluster-signals"></div></div><div class="cluster"><div class="cluster-hd"><strong>Profile set 10</strong></div><div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:100%;background:#2e7d32"></div></div><span class="cluster-conf-label" style="color:#2e7d32">100%</span><div class="cluster-list-pills"><span class="cluster-site-pill"><img src="https://www.google.com/s2/favicons?domain=www.douban.com&amp;sz=32" alt="" loading="lazy" onerror="this.style.display='none'">douban</span></div><div class="cluster-signals"></div></div></div>
+</div></div>
+
+
+
+<div class="section"><div class="section-container">
+<div class="section-header"><span class="badge">04</span><h2>分析</h2></div>
+<div class="chart-row" style="margin-top:20px"><div class="chart-col chart-col-radar"><div class="chart-title">分类覆盖雷达</div><p class="chart-subtitle">按站点分类评估身份数字足迹分布</p><div class="radar-chart"><svg viewBox="0 0 260 260" class="radar-svg"><polygon points="130.0,110.0 149.0,123.8 141.8,146.2 118.2,146.2 111.0,123.8" fill="none" stroke="#e8e8e8" stroke-width="1"/><polygon points="130.0,90.0 168.0,117.6 153.5,162.4 106.5,162.4 92.0,117.6" fill="none" stroke="#e8e8e8" stroke-width="1"/><polygon points="130.0,70.0 187.1,111.5 165.3,178.5 94.7,178.5 72.9,111.5" fill="none" stroke="#e8e8e8" stroke-width="1"/><polygon points="130.0,50.0 206.1,105.3 177.0,194.7 83.0,194.7 53.9,105.3" fill="none" stroke="#e8e8e8" stroke-width="1"/><polygon points="130.0,30.0 225.1,99.1 188.8,210.9 71.2,210.9 34.9,99.1" fill="none" stroke="#e8e8e8" stroke-width="1"/><line x1="130.0" y1="130.0" x2="130.0" y2="30.0" stroke="#e8e8e8" stroke-width="1"/><line x1="130.0" y1="130.0" x2="225.1" y2="99.1" stroke="#e8e8e8" stroke-width="1"/><line x1="130.0" y1="130.0" x2="188.8" y2="210.9" stroke="#e8e8e8" stroke-width="1"/><line x1="130.0" y1="130.0" x2="71.2" y2="210.9" stroke="#e8e8e8" stroke-width="1"/><line x1="130.0" y1="130.0" x2="34.9" y2="99.1" stroke="#e8e8e8" stroke-width="1"/><polygon points="130.0,30.0 201.3,106.8 159.4,170.5 100.6,170.5 106.2,122.3" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><circle cx="130.0" cy="30.0" r="3" fill="var(--accent)"/><circle cx="201.3" cy="106.8" r="3" fill="var(--accent)"/><circle cx="159.4" cy="170.5" r="3" fill="var(--accent)"/><circle cx="100.6" cy="170.5" r="3" fill="var(--accent)"/><circle cx="106.2" cy="122.3" r="3" fill="var(--accent)"/><text x="130.0" y="12.0" text-anchor="middle" class="radar-label">开发工具</text><text x="130.0" y="23.0" text-anchor="middle" class="radar-score">4</text><text x="242.2" y="93.5" text-anchor="middle" class="radar-label">媒体</text><text x="231.8" y="96.9" text-anchor="middle" class="radar-score">3</text><text x="199.4" y="225.5" text-anchor="middle" class="radar-label">论坛</text><text x="192.9" y="216.6" text-anchor="middle" class="radar-score">2</text><text x="60.6" y="225.5" text-anchor="middle" class="radar-label">音乐</text><text x="67.1" y="216.6" text-anchor="middle" class="radar-score">2</text><text x="17.8" y="93.5" text-anchor="middle" class="radar-label">游戏</text><text x="28.2" y="96.9" text-anchor="middle" class="radar-score">1</text></svg></div></div><div class="chart-col"><div class="chart-title">平台分布</div><p class="chart-subtitle">按类别分布的发现站点</p><div class="chart-summary"><span class="chart-summary-num">13</span> 13 站点，分布在 6 个类别</div><div class="chart-bar-row"><span class="chart-bar-label">开发工具</span><span class="chart-bar-track"><span class="chart-bar-fill" style="width:100%;--bar-opacity:1.00"></span></span><span class="chart-bar-count">4</span></div><div class="chart-bar-row"><span class="chart-bar-label">媒体</span><span class="chart-bar-track"><span class="chart-bar-fill" style="width:75%;--bar-opacity:0.82"></span></span><span class="chart-bar-count">3</span></div><div class="chart-bar-row"><span class="chart-bar-label">论坛</span><span class="chart-bar-track"><span class="chart-bar-fill" style="width:50%;--bar-opacity:0.65"></span></span><span class="chart-bar-count">2</span></div><div class="chart-bar-row"><span class="chart-bar-label">音乐</span><span class="chart-bar-track"><span class="chart-bar-fill" style="width:50%;--bar-opacity:0.65"></span></span><span class="chart-bar-count">2</span></div><div class="chart-bar-row"><span class="chart-bar-label">游戏</span><span class="chart-bar-track"><span class="chart-bar-fill" style="width:25%;--bar-opacity:0.47"></span></span><span class="chart-bar-count">1</span></div><div class="chart-bar-row"><span class="chart-bar-label">社交</span><span class="chart-bar-track"><span class="chart-bar-fill" style="width:25%;--bar-opacity:0.47"></span></span><span class="chart-bar-count">1</span></div></div></div>
+</div></div>
+
+<div class="footer">
+  <p><strong>CLAWITHME</strong> &mdash; CLAWITHME — OSINT 身份全景</p>
+  <p>报告生成时间 2026-05-06 08:01 UTC &middot; trace: 954f0e19-217e-458a-b32c-fa1209fc57b1</p>
+  <p style="margin-top:12px;font-size:11px">
+    <span class="fp-note" style="font-size:11px">悬停虚线下划线查看说明。</span>
+    &middot; SPA = 单页应用，需浏览器渲染。
+    &middot; 资料完整度 = 关键身份字段填充百分比。
+    &middot; 身份关联 = 通过共享信号分组的资料。
+  </p>
+</div>
+
+</div>
+</body>
+</html>
