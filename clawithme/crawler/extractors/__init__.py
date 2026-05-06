@@ -29,7 +29,6 @@ from clawithme.crawler.extractors.segmentfault import SegmentfaultExtractor
 from clawithme.crawler.extractors.stackoverflow import StackoverflowExtractor
 from clawithme.crawler.extractors.steam import SteamExtractor
 from clawithme.crawler.extractors.telegram import TelegramExtractor
-from clawithme.crawler.extractors.tianyancha import TianyanchaExtractor
 from clawithme.crawler.extractors.v2ex import V2exExtractor
 from clawithme.crawler.extractors.youtube import YoutubeExtractor
 from clawithme.crawler.extractors.zcool import ZcoolExtractor
@@ -64,7 +63,6 @@ __all__ = [
     "SteamExtractor",
     "StackoverflowExtractor",
     "TelegramExtractor",
-    "TianyanchaExtractor",
     "V2exExtractor",
     "YoutubeExtractor",
     "ZcoolExtractor",

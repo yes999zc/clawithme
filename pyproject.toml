@@ -44,6 +44,7 @@ web = [
 
 [project.scripts]
 clawithme = "clawithme.cli:main"
+clawithme-web = "clawithme.web.app:main"
 
 [project.entry-points."clawithme.extractors"]
 github = "clawithme.crawler.extractors.github:GithubExtractor"
@@ -53,7 +54,6 @@ gitlab = "clawithme.crawler.extractors.gitlab:GitlabExtractor"
 devto = "clawithme.crawler.extractors.devto:DevtoExtractor"
 douban = "clawithme.crawler.extractors.douban:DoubanExtractor"
 stackoverflow = "clawithme.crawler.extractors.stackoverflow:StackoverflowExtractor"
-tianyancha = "clawithme.crawler.extractors.tianyancha:TianyanchaExtractor"
 keybase = "clawithme.crawler.extractors.keybase:KeybaseExtractor"
 segmentfault = "clawithme.crawler.extractors.segmentfault:SegmentfaultExtractor"
 behance = "clawithme.crawler.extractors.behance:BehanceExtractor"

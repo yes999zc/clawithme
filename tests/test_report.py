@@ -137,7 +137,7 @@ class TestExportPdf:
         """Skip all PDF tests if WeasyPrint system deps are unavailable."""
         try:
             from weasyprint import HTML  # noqa: F401
-        except OSError:
+        except (OSError, ImportError):
             pytest.skip("WeasyPrint system dependencies (Pango, GObject) not available")
 
     def test_returns_bytes(self):

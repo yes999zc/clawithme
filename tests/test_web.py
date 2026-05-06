@@ -82,7 +82,7 @@ class TestSearchEndpoint:
             async with AsyncClient(
                 transport=transport, base_url="http://test",
             ) as client:
-                resp = await client.get("/api/search/testuser")
+                resp = await client.get("/api/search/testuser?ethics=true")
                 assert resp.status_code == 200
 
                 events = _parse_sse(resp.text)
@@ -116,14 +116,14 @@ class TestSearchEndpoint:
             async with AsyncClient(
                 transport=transport, base_url="http://test",
             ) as client:
-                resp = await client.get("/api/search/testuser")
+                resp = await client.get("/api/search/testuser?ethics=true")
                 assert resp.status_code == 200
 
                 events = _parse_sse(resp.text)
 
         error_events = [e for e in events if e["event"] == "error"]
         assert len(error_events) == 1
-        assert "Network unreachable" in error_events[0]["data"]
+        assert "Pipeline failed: I/O error" in error_events[0]["data"]
 
     @pytest.mark.anyio
     async def test_generic_exception_caught(self):
@@ -143,7 +143,7 @@ class TestSearchEndpoint:
             async with AsyncClient(
                 transport=transport, base_url="http://test",
             ) as client:
-                resp = await client.get("/api/search/testuser")
+                resp = await client.get("/api/search/testuser?ethics=true")
                 assert resp.status_code == 200
 
                 events = _parse_sse(resp.text)
@@ -162,14 +162,14 @@ class TestSearchEndpoint:
             async with AsyncClient(
                 transport=transport, base_url="http://test",
             ) as client:
-                resp = await client.get("/api/search/testuser")
+                resp = await client.get("/api/search/testuser?ethics=true")
                 assert resp.status_code == 200
 
                 events = _parse_sse(resp.text)
 
         error_events = [e for e in events if e["event"] == "error"]
         assert len(error_events) == 1
-        assert "No such directory" in error_events[0]["data"]
+        assert "Failed to load site data" in error_events[0]["data"]
 
     @pytest.mark.anyio
     async def test_single_profile_cluster_omitted(self, mock_pipeline):
@@ -192,7 +192,7 @@ class TestSearchEndpoint:
             async with AsyncClient(
                 transport=transport, base_url="http://test",
             ) as client:
-                resp = await client.get("/api/search/testuser")
+                resp = await client.get("/api/search/testuser?ethics=true")
                 assert resp.status_code == 200
 
                 events = _parse_sse(resp.text)

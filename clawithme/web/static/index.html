@@ -121,6 +121,7 @@
 <div id="clustersContainer"></div>
 
 <script>
+let retryCount = 0;
 const evtSource = { current: null };
 const ethics = document.getElementById('ethics');
 const btn = document.getElementById('searchBtn');
@@ -150,85 +151,114 @@ async function search() {
 
   if (evtSource.current) evtSource.current.close();
 
-  const sse = new EventSource(`/api/search/${encodeURIComponent(username)}`);
+  const sse = new EventSource(`/api/search/${encodeURIComponent(username)}?ethics=true`);
   evtSource.current = sse;
   let hitCount = 0, profileCount = 0;
 
   sse.addEventListener('phase', e => {
-    const d = JSON.parse(e.data);
-    document.getElementById('phase').textContent = d.message;
-    document.getElementById('spinner').style.display = 'block';
+    try {
+      const d = JSON.parse(e.data);
+      document.getElementById('phase').textContent = d.message;
+      document.getElementById('spinner').style.display = 'block';
+    } catch (err) {
+      console.error('phase parse error:', err);
+    }
   });
 
   sse.addEventListener('hit', e => {
-    const d = JSON.parse(e.data);
-    document.getElementById('hitsTitle').style.display = 'block';
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `<div class="card-body">
-      <div class="card-name">${esc(d.site_name)}</div>
-      <div class="card-url">${esc(d.url)}</div>
-    </div>`;
-    document.getElementById('hitsContainer').appendChild(card);
-    hitCount++;
-    document.getElementById('statHits').textContent = hitCount;
-    document.getElementById('stats').style.display = 'flex';
+    try {
+      const d = JSON.parse(e.data);
+      document.getElementById('hitsTitle').style.display = 'block';
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<div class="card-body">
+        <div class="card-name">${esc(d.site_name)}</div>
+        <div class="card-url">${esc(d.url)}</div>
+      </div>`;
+      document.getElementById('hitsContainer').appendChild(card);
+      hitCount++;
+      document.getElementById('statHits').textContent = hitCount;
+      document.getElementById('stats').style.display = 'flex';
+    } catch (err) {
+      console.error('hit parse error:', err);
+    }
   });
 
   sse.addEventListener('profile', e => {
-    const d = JSON.parse(e.data);
-    document.getElementById('profilesTitle').style.display = 'block';
-    const avatar = d.avatar_url ? `<img src="${esc(d.avatar_url)}" onerror="this.style.display='none'">` : '';
-    const meta = [d.location, d.follower_count ? `${d.follower_count} followers` : null].filter(Boolean).join(' · ');
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-avatar">${avatar}</div>
-      <div class="card-body">
-        <div class="card-name">${esc(d.display_name || d.site_id)}</div>
-        <div class="card-meta">${esc(meta)}</div>
-        ${d.bio ? `<div class="card-meta">${esc(d.bio)}</div>` : ''}
-      </div>`;
-    document.getElementById('profilesContainer').appendChild(card);
-    profileCount++;
-    document.getElementById('statProfiles').textContent = profileCount;
-    document.getElementById('stats').style.display = 'flex';
+    try {
+      const d = JSON.parse(e.data);
+      document.getElementById('profilesTitle').style.display = 'block';
+      const avatar = d.avatar_url ? `<img src="${esc(d.avatar_url)}" onerror="this.style.display='none'">` : '';
+      const meta = [d.location, d.follower_count ? `${d.follower_count} followers` : null].filter(Boolean).join(' · ');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-avatar">${avatar}</div>
+        <div class="card-body">
+          <div class="card-name">${esc(d.display_name || d.site_id)}</div>
+          <div class="card-meta">${esc(meta)}</div>
+          ${d.bio ? `<div class="card-meta">${esc(d.bio)}</div>` : ''}
+        </div>`;
+      document.getElementById('profilesContainer').appendChild(card);
+      profileCount++;
+      document.getElementById('statProfiles').textContent = profileCount;
+      document.getElementById('stats').style.display = 'flex';
+    } catch (err) {
+      console.error('profile parse error:', err);
+    }
   });
 
   sse.addEventListener('cluster', e => {
-    const d = JSON.parse(e.data);
-    document.getElementById('clustersTitle').style.display = 'block';
-    const div = document.createElement('div');
-    div.className = 'cluster';
-    div.innerHTML = `
-      <div class="cluster-header">
-        <div class="cluster-confidence">${Math.round(d.confidence * 100)}% confidence</div>
-        <div class="cluster-signals">${d.signals.join(', ')}</div>
-      </div>
-      <div class="cluster-sites">${d.sites.map(s => `<span class="site-tag">${esc(s)}</span>`).join('')}</div>
-    `;
-    document.getElementById('clustersContainer').appendChild(div);
-    document.getElementById('statClusters').textContent = parseInt(document.getElementById('statClusters').textContent) + 1;
-    document.getElementById('stats').style.display = 'flex';
+    try {
+      const d = JSON.parse(e.data);
+      document.getElementById('clustersTitle').style.display = 'block';
+      const div = document.createElement('div');
+      div.className = 'cluster';
+      div.innerHTML = `
+        <div class="cluster-header">
+          <div class="cluster-confidence">${Math.round(d.confidence * 100)}% confidence</div>
+          <div class="cluster-signals">${d.signals.join(', ')}</div>
+        </div>
+        <div class="cluster-sites">${d.sites.map(s => `<span class="site-tag">${esc(s)}</span>`).join('')}</div>
+      `;
+      document.getElementById('clustersContainer').appendChild(div);
+      document.getElementById('statClusters').textContent = (parseInt(document.getElementById('statClusters').textContent) || 0) + 1;
+      document.getElementById('stats').style.display = 'flex';
+    } catch (err) {
+      console.error('cluster parse error:', err);
+    }
   });
 
   sse.addEventListener('done', e => {
-    const d = JSON.parse(e.data);
-    document.getElementById('statTime').textContent = d.elapsed_s + 's';
-    document.getElementById('phase').style.display = 'none';
-    document.getElementById('spinner').style.display = 'none';
-    btn.disabled = false;
-    sse.close();
+    try {
+      const d = JSON.parse(e.data);
+      document.getElementById('statTime').textContent = d.elapsed_s + 's';
+      document.getElementById('phase').style.display = 'none';
+      document.getElementById('spinner').style.display = 'none';
+      btn.disabled = false;
+      sse.close();
+      retryCount = 0;
+    } catch (err) {
+      console.error('done parse error:', err);
+    }
   });
 
   sse.addEventListener('error', e => {
-    const msg = e.data ? JSON.parse(e.data) : null;
+    let msg = null;
+    if (e.data) {
+      try {
+        msg = JSON.parse(e.data);
+      } catch (err) {
+        console.error('error event parse error:', err);
+      }
+    }
     const errText = msg || (sse.readyState === EventSource.CLOSED ? 'Connection lost. Retrying...' : 'Connection error');
     document.getElementById('error').textContent = 'Error: ' + errText;
     document.getElementById('error').style.display = 'block';
     document.getElementById('spinner').style.display = 'none';
     btn.disabled = false;
-    if (sse.readyState === EventSource.CLOSED) {
+    if (sse.readyState === EventSource.CLOSED && retryCount === 0) {
+      retryCount++;
       sse.close();
       // Auto-retry once with a short delay
       setTimeout(() => {
@@ -244,7 +274,7 @@ function esc(s) {
   if (!s) return '';
   const d = document.createElement('div');
   d.textContent = s;
-  return d.innerHTML;
+  return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 </script>
 </body>

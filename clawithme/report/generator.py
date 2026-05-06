@@ -848,7 +848,7 @@ def _render_clusters(clusters: list, consensus_name: str | None = None) -> str:
 
 
 def _esc(s: str) -> str:
-    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
 def _fmt_esc(s: str) -> str:
