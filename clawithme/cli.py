@@ -217,7 +217,7 @@ def _write_report(output: str | bytes, path_str: str, fmt: str,
 
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
            include_migrated: bool = False, acknowledged: bool = False,
-           no_cache: bool = False, async_mode: bool = True):
+           no_cache: bool = False, async_mode: bool = True, lang: str = "zh"):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.
@@ -255,7 +255,7 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
         try:
             return _search_async(
                 username, report_path=report_path, report_format=report_format,
-                include_migrated=include_migrated, no_cache=no_cache,
+                include_migrated=include_migrated, no_cache=no_cache, lang=lang,
             )
         except RuntimeError:
             # Nested event loop (e.g., pytest-asyncio) — fall back to sync
@@ -271,7 +271,7 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
 
 def _search_async(username: str, *, report_path: str | None = None,
                   report_format: str = "html", include_migrated: bool = False,
-                  no_cache: bool = False):
+                  no_cache: bool = False, lang: str = "zh"):
     """Async pipeline: parallel probes + extraction (6-38x faster)."""
     import asyncio
 
@@ -406,7 +406,7 @@ def _search_async(username: str, *, report_path: str | None = None,
             from clawithme.report.generator import generate_report
             output = generate_report(result.hits, result.profiles, clusters,
                                      username, trace_id=trace_id,
-                                     breach_dates=breach_dates)
+                                     breach_dates=breach_dates, lang=lang)
             _write_report(output, report_path, report_format, log, mode="text")
 
 
@@ -697,7 +697,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: clawithme search <username> [--report <path>] "
               "[--format html|json] [--include-migrated] [--no-cache] "
-              "[--sync] [--acknowledge-ethical-use]")
+              "[--sync] [--lang zh|en] [--acknowledge-ethical-use]")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)
@@ -708,11 +708,12 @@ def main():
         if len(sys.argv) < 3:
             print("Usage: clawithme search <username> [--report <path>] "
                   "[--format html|json] [--include-migrated] [--no-cache] "
-                  "[--sync] [--acknowledge-ethical-use]")
+                  "[--sync] [--lang zh|en] [--acknowledge-ethical-use]")
             sys.exit(1)
         username = sys.argv[2]
         report_path = None
         report_format = "html"
+        report_lang = "zh"
         include_migrated = "--include-migrated" in sys.argv
         no_cache = "--no-cache" in sys.argv
         acknowledged = "--acknowledge-ethical-use" in sys.argv
@@ -725,12 +726,19 @@ def main():
             idx = sys.argv.index("--format")
             if idx + 1 < len(sys.argv):
                 report_format = sys.argv[idx + 1]
+        if "--lang" in sys.argv:
+            idx = sys.argv.index("--lang")
+            if idx + 1 < len(sys.argv):
+                report_lang = sys.argv[idx + 1]
+        if report_lang not in ("zh", "en"):
+            print(f"❌ Unknown lang: {report_lang!r}. Use 'zh' or 'en'.")
+            sys.exit(1)
         if report_format not in ("html", "json", "pdf"):
             print(f"❌ Unknown format: {report_format!r}. Use 'html', 'json', or 'pdf'.")
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
                include_migrated=include_migrated, acknowledged=acknowledged,
-               no_cache=no_cache, async_mode=async_mode)
+               no_cache=no_cache, async_mode=async_mode, lang=report_lang)
 
     elif command == "verify":
         # Delegate to verify_site.py

@@ -192,7 +192,7 @@ def generate_report(  # noqa: PLR0913
     consensus_name = next(iter(disp_names)) if name_consensus else None
 
     # Auto-summary paragraph
-    auto_summary = _compose_summary(profiles)
+    auto_summary = _compose_summary(profiles, lang=lang)
 
     # Pick best display name for title
     display_title = _pick_display_name(profiles, safe_username)
