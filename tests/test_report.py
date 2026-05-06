@@ -67,7 +67,7 @@ class TestGenerateReport:
 
     def test_includes_clusters(self):
         html = generate_report([], [], _sample_clusters(), "alice")
-        assert "Cluster 1" in html
+        assert "Profile set" in html
         assert "avatar_phash" in html
 
     def test_empty_report(self):

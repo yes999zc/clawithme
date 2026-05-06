@@ -159,10 +159,29 @@ def L(lang, key):
 
 # ── Known false-positive sites ──
 _SPA_SITES = frozenset({"sspai", "twitch", "twitter", "weibo", "instagram", "slideshare"})
+_DROPPED_STATUSES = frozenset({403, 500, 502, 503})
 
 
 def _is_false_positive(site_id: str) -> bool:
     return site_id in _SPA_SITES
+
+
+def _classify_hit(hit: dict) -> str:
+    """Classify a hit into 'confirmed', 'uncertain', or 'dropped'.
+
+    - confirmed: HTTP 200, non-SPA site — reliable hit
+    - uncertain: SPA site (always 200) or engine-detected (non-200 but body match)
+    - dropped: 403/502/500 — anti-bot or server error, not meaningful
+    """
+    site_id = _hit_site_id(hit)
+    status = hit.get("status", 0)
+    if status in _DROPPED_STATUSES:
+        return "dropped"
+    if site_id in _SPA_SITES:
+        return "uncertain"
+    if status == 200:
+        return "confirmed"
+    return "uncertain"
 
 
 def generate_report(  # noqa: PLR0913
@@ -197,7 +216,19 @@ def generate_report(  # noqa: PLR0913
     # Pick best display name for title
     display_title = _pick_display_name(profiles, safe_username)
 
+    # Three-tier classification for site display
+    confirmed_hits = [h for h in hits if _classify_hit(h) == "confirmed"]
+    uncertain_hits = [h for h in hits if _classify_hit(h) == "uncertain"]
+    dropped_count = sum(1 for h in hits if _classify_hit(h) == "dropped")
+
+    confirmed_table = _render_sites(lang, confirmed_hits, "confirmed")
+    uncertain_section = _render_sites(lang, uncertain_hits, "uncertain")
+    dropped_note = _render_dropped_note(lang, dropped_count)
+
+    # Fallback for empty results
     LANG = _STRINGS.get(lang, _STRINGS["en"])
+    if not confirmed_table and not uncertain_section:
+        confirmed_table = f'<p style="color:#808080">{LANG["no_sites"]}</p>'
     return _HTML.format(
         title=LANG["title"].format(username=safe_username),
         html_lang="zh" if lang == "zh" else "en",
@@ -219,7 +250,9 @@ def generate_report(  # noqa: PLR0913
             profile_count, cluster_count, leak_count,
             consensus_name, auto_summary,
         ),
-        sites_table=_render_sites(lang, true_hits, fp_hits),
+        confirmed_table=confirmed_table,
+        uncertain_section=uncertain_section,
+        dropped_note=dropped_note,
         profile_cards=_render_profiles(lang, profiles, true_hits),
         cluster_section=_render_clusters(lang, clusters, consensus_name, true_hits),
         timeline_section=_render_timeline(lang, breach_dates or []),
@@ -541,6 +574,17 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
   text-transform: none; letter-spacing: normal;
 }}
 
+/* ── Uncertain sites details ──────────────────── */
+.uncertain-summary {{
+  cursor: pointer; font-size: 13px; color: #808080;
+  padding: 8px 12px; border-radius: 6px;
+  background: #fafafa; border: 1px solid #e5e5e5;
+}}
+
+/* ── Status badges ────────────────────────────── */
+.status-ok {{ color: #2e7d32; font-family: 'JetBrains Mono', monospace; font-size: 12px; }}
+.status-warn {{ color: #b8860b; font-family: 'JetBrains Mono', monospace; font-size: 12px; }}
+
 /* ── Site icons ─────────────────────────────── */
 .site-icon {{
   width: 16px; height: 16px; border-radius: 3px;
@@ -577,18 +621,40 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 .site-table td:first-child {{
   display: flex; align-items: center; gap: 8px;
 }}
-.site-table td:first-child .site-icon {{
-  margin-right: 0;
+.site-table td.url {{
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #808080; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}}
+.site-table td.url a {{
+  color: #475569; text-decoration: none;
+}}
+.site-table td.url a:hover {{
+  color: #1e293b; text-decoration: underline;
 }}
 .site-table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
 .site-table th {{ text-align: left; padding: 10px 12px; border-bottom: 2px solid #e5e5e5; color: #4d4d4d; font-weight: 500; }}
 .site-table td {{ padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }}
-.site-table .url {{ color: #808080; font-size: 13px; word-break: break-all; }}
-.status-ok {{ color: var(--accent-subtle); font-weight: 500; font-family: 'JetBrains Mono', monospace; font-size: 13px; }}
-.status-fp {{ color: #b0b0b0; font-style: italic; }}
 .cat-label {{
   font-size: 13px; font-weight: 500; color: #808080;
   margin-top: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+}}
+
+/* ── Cluster cards ──────────────────────────── */
+.cluster-hd {{
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}}
+.cluster-hd strong {{
+  font-size: 14px; font-weight: 600; color: #171717;
+}}
+.cluster-conf-bar {{
+  height: 6px; background: #f0f0f0; border-radius: 3px;
+  overflow: hidden; margin: 0 0 8px; flex: 1;
+}}
+.cluster-conf-fill {{
+  height: 100%; border-radius: 3px; transition: width 0.3s;
+}}
+.cluster-conf-label {{
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  font-weight: 600; margin-left: 8px;
 }}
 
 /* ── Profile cards ──────────────────────────── */
@@ -658,10 +724,7 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 }}
 .cluster-hd {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }}
 .cluster-hd strong {{ font-size: 15px; }}
-.cluster-badge {{ font-size: 12px; padding: 2px 8px; border-radius: 4px; }}
-.badge-high {{ background: #e8f5e9; color: #2e7d32; }}
-.badge-mid {{ background: #fff3e0; color: #e65100; }}
-.badge-low {{ background: #fce4ec; color: #c62828; }}
+/* ── Cluster explanation ─────────────────────── */
 .cluster-signals {{ display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }}
 .signal-tag {{
   font-size: 11px; padding: 2px 8px; background: #f5f5f5;
@@ -752,7 +815,9 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 
 <div class="section"><div class="section-container">
 <div class="section-header"><span class="badge">01</span><h2>{sec_sites}</h2></div>
-{sites_table}
+{confirmed_table}
+{uncertain_section}
+{dropped_note}
 </div></div>
 
 <div class="section"><div class="section-container">
@@ -791,72 +856,88 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 
 # ── Render helpers ──────────────────────────────────────────────
 
-def _render_sites(lang: str, true_hits: list[dict], fp_hits: list[dict]) -> str:
+def _render_sites(lang: str, hits_list: list[dict], tier: str) -> str:
+    """Render a list of hits as categorized site tables.
+
+    tier='confirmed': expanded table with category grouping.
+    tier='uncertain': collapsed details, same table format.
+    """
     LANG = _STRINGS.get(lang, _STRINGS["en"])
     CATS = LANG["categories"]
-    if not true_hits and not fp_hits:
-        return f'<p style="color:#808080">{LANG["no_sites"]}</p>'
+    if not hits_list:
+        return ""
 
     parts = []
 
-    if true_hits:
-        groups: dict[str, list[dict]] = {}
-        for h in true_hits:
-            cat = _hit_category(h)
-            groups.setdefault(cat, []).append(h)
+    # Category summary tags
+    groups: dict[str, list[dict]] = {}
+    for h in hits_list:
+        cat = _hit_category(h)
+        groups.setdefault(cat, []).append(h)
 
-        cat_names = CATS
-        summary_parts = []
-        for cat in sorted(groups.keys()):
-            name = cat_names.get(cat, cat.title())
-            count = len(groups[cat])
-            summary_parts.append(f'<span class="signal-tag">{name} {count}</span>')
+    cat_names = CATS
+    summary_parts = []
+    for cat in sorted(groups.keys()):
+        name = cat_names.get(cat, cat.title())
+        count = len(groups[cat])
+        summary_parts.append(f'<span class="signal-tag">{name} {count}</span>')
+    parts.append(
+        '<div class="cluster-signals" style="margin:20px 0 0">'
+        + "".join(summary_parts) + '</div>'
+    )
+
+    for cat in sorted(groups.keys()):
+        cat_hits = groups[cat]
+        name = cat_names.get(cat, cat.title())
+        rows = []
+        for h in cat_hits:
+            url = h.get("url", "")
+            favicon = _site_favicon_url(h)
+            favicon_html = (
+                '<img class="site-icon" src="' + _esc(favicon) + '" alt=""'
+                ' loading="lazy" onerror="this.style.display=\'none\'">'
+            ) if favicon else ""
+            site_name = _site_name_from_hit(h)
+            status = h.get("status", "")
+            status_cls = "status-ok" if status == 200 else "status-warn"
+            url_html = (
+                f'<a href="{_esc(url)}" target="_blank" rel="noopener">{_esc(url)}</a>'
+                if url else ""
+            )
+            rows.append(
+                f'<tr>'
+                f'<td>{favicon_html}<span>{_esc(site_name)}</span></td>'
+                f'<td class="url">{url_html}</td>'
+                f'<td class="{status_cls}">{status}</td>'
+                f'</tr>'
+            )
         parts.append(
-            '<div class="cluster-signals" style="margin:20px 0 0">'
-            + "".join(summary_parts) + '</div>'
+            f'<div class="cat-label">{name}</div>'
+            f'<table class="site-table">'
+            f'<thead><tr><th>{LANG["th_site"]}</th><th>{LANG["th_url"]}</th><th>{LANG["th_status"]}</th></tr></thead>'
+            f'<tbody>' + "".join(rows) + "</tbody></table>"
         )
 
-        for cat in sorted(groups.keys()):
-            cat_hits = groups[cat]
-            name = cat_names.get(cat, cat.title())
-            rows = []
-            for h in cat_hits:
-                url = h.get("url", "")
-                favicon = _site_favicon_url(h)
-                favicon_html = (
-                    '<img class="site-icon" src="' + _esc(favicon) + '" alt=""'
-                    ' loading="lazy" onerror="this.style.display=\'none\'">'
-                ) if favicon else ""
-                site_name = _site_name_from_hit(h)
-                rows.append(
-                    f'<tr>'
-                    f'<td>{favicon_html}<span>{_esc(site_name)}</span></td>'
-                    f'<td class="url">{_esc(url)}</td>'
-                    f'<td class="status-ok">{h.get("status", "")}</td>'
-                    f'</tr>'
-                )
-            parts.append(
-                f'<div class="cat-label">{name}</div>'
-                f'<table class="site-table">'
-                f'<thead><tr><th>{LANG["th_site"]}</th><th>{LANG["th_url"]}</th><th>{LANG["th_status"]}</th></tr></thead>'
-                f'<tbody>' + "".join(rows) + "</tbody></table>"
-            )
+    content = "".join(parts)
 
-    if fp_hits:
-        fp_names = ", ".join(_esc(h.get("site_name", "?")) for h in fp_hits)
-        parts.append(
-            '<details style="margin-top:16px;font-size:12px;color:#b0b0b0">'
-            '<summary style="cursor:pointer">'
-            + LANG['fp_hits_summary'].format(n=len(fp_hits)) + '</summary>'
-            + '<p style="margin-top:4px;line-height:1.6">'
-            + LANG['spa_explanation'].format(sites=fp_names) + '</p>'
+    if tier == "uncertain":
+        return (
+            '<details style="margin-top:16px">'
+            '<summary class="uncertain-summary">'
+            + LANG['fp_hits_summary'].format(n=len(hits_list)) + '</summary>'
+            + content
             + '</details>'
         )
 
-    return "".join(parts)
+    return content
 
 
-# _CAT_NAMES replaced by _STRINGS[lang]["categories"]
+def _render_dropped_note(lang: str, count: int) -> str:
+    """Render a note about dropped sites (anti-bot, server errors)."""
+    if not count:
+        return ""
+    note = f"另有 {count} 个站点因服务器错误或反爬机制未能完成检测。" if lang == "zh" else f"{count} site(s) skipped due to server errors or anti-bot protection."
+    return f'<p style="margin-top:12px;font-size:12px;color:#b0b0b0">{note}</p>'
 
 
 def _hit_category(hit: dict) -> str:
@@ -904,7 +985,11 @@ def _render_profiles(lang: str, profiles: list[dict], hits: list[dict]) -> str:
     cards = []
     for p in profiles:
         site_id = p.get("site_id", "?")
-        name = p.get("display_name") or site_id
+        display_name = p.get("display_name") or ""
+        _GENERIC_NAMES = frozenset({"用户分享", "用户", "user", "anonymous", "unknown", "Level", "None"})
+        name = p.get("username") or site_id
+        if display_name and display_name not in _GENERIC_NAMES:
+            name = display_name
         bio = p.get("bio", "") or ""
         location = p.get("location", "") or ""
 
@@ -1097,18 +1182,22 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
             '<div class="cluster-list-pills">' + "".join(site_pills) + '</div>'
         ) if site_pills else ""
 
+        # Confidence bar
         conf = c.confidence
-        if conf >= 0.9:
-            badge_cls = "badge-high"
-        elif conf >= 0.7:
-            badge_cls = "badge-mid"
-        else:
-            badge_cls = "badge-low"
+        pct = int(conf * 100)
+        bar_color = "#2e7d32" if conf >= 0.9 else "#b8860b" if conf >= 0.7 else "#b0b0b0"
+        conf_html = (
+            f'<div class="cluster-conf-bar">'
+            f'<div class="cluster-conf-fill" style="width:{pct}%;background:{bar_color}"></div>'
+            f'</div>'
+            f'<span class="cluster-conf-label" style="color:{bar_color}">{pct}%</span>'
+        )
 
         sig_tags = "".join(
             f'<span class="signal-tag">{_esc(s)}</span>' for s in c.signals
         )
 
+        # Identity confirmation
         identity_html = ""
         if consensus_name and len(c.profiles) >= 2:
             identity_html = (
@@ -1117,24 +1206,28 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
                 + '</div>'
             )
 
+        # Deduplicate evidence lines
         evidence_lines = []
+        seen_evidence: set[str] = set()
         if c.evidence:
             for sig, details in c.evidence.items():
-                for d in details[:3]:
-                    evidence_lines.append(
-                        f'<div class="cluster-evidence">'
-                        f'<span class="signal-tag">{_esc(sig)}</span> '
-                        f'{_esc(_redact_evidence(sig, d))}'
-                        f'</div>'
-                    )
+                for d in details:
+                    if d not in seen_evidence:
+                        seen_evidence.add(d)
+                        evidence_lines.append(
+                            f'<div class="cluster-evidence">'
+                            f'<span class="signal-tag">{_esc(sig)}</span> '
+                            f'{_esc(_redact_evidence(sig, d))}'
+                            f'</div>'
+                        )
 
         evidence_html = "".join(evidence_lines) if evidence_lines else ""
         blocks.append(
             f'<div class="cluster">'
             f'<div class="cluster-hd">'
-            f'<strong>Cluster {i}</strong>'
-            f'<span class="cluster-badge {badge_cls}">{conf:.0%}</span>'
+            f'<strong>Profile set {i}</strong>'
             f'</div>'
+            f'{conf_html}'
             f'{sites_pills_html}'
             f'<div class="cluster-signals">{sig_tags}</div>'
             f'{evidence_html}'
