@@ -1,8 +1,8 @@
 # clawithme — Work Scope & TODO
 
 > 2026-05-06 | 243 tests ✅ | Ruff 0 (5 pre-existing by-policy) ✅
-> Phase 1-8 交付完毕。报告国际化（zh/en）已完成，所有 60+ 字符串通过 `_STRINGS` 字典管理。
-> Phase 9 规划中：16-24 extractor expansion + 服务器部署。
+> Phase 9a-e 已完成：置信度系统 + wrong-person 检测 + 11 个新 extractor + StackOverflow 探针修复 + 报告 UX。
+> Phase 10 规划中：更多 extractor + 跨人聚类增强 + 服务器部署。
 
 ---
 
@@ -70,7 +70,7 @@
 
 ## Phase 3：深度爬虫 ✅ 100%
 
-> **交付物**：19 extractors（7 P0 + 11 P1 + 天眼查 stub），CrawlerClient 完整。
+> **交付物**：43 extractors（32 original + 11 Phase 9），CrawlerClient 完整。
 
 ### 3.1 爬虫核心
 
@@ -100,7 +100,7 @@
 ### 3.5 DynamicFetcher
 
 - [x] **3.5.1** Playwright DynamicFetcher 集成
-- [x] **3.5.2** 已知局限：5 个 SPA 站不可探测
+- [x] **3.5.2** 已知局限：5 个 SPA 站不可探测 → Phase 9 已修复（新增 Twitter/Twitch/Sspai 动态提取）
 
 ---
 
@@ -242,12 +242,64 @@
 - [x] **8.4.1** `_STRINGS` 字典 — 60+ 中英文 key，覆盖 section headers / field labels / charts / footer / summary
 - [x] **8.4.2** `L(lang, key)` 查找函数 — fallback 到 `en`
 - [x] **8.4.3** `generate_report(lang="zh")` → 默认输出中文报告
-- [x] **8.4.4** 所有 render 函数 (`_render_sites` / `_render_profiles` / `_render_clusters` / `_render_charts` / `_render_summary` / `_render_timeline`) 已接 `lang` 参数
-- [x] **8.4.5** CSDN extractor 修复 — 删 `.desc` 选择器（误匹配博文摘要冒充 bio）
+- [x] **8.4.4** 所有 render 函数已接 `lang` 参数
+- [x] **8.4.5** CSDN extractor 修复 — 删 `.desc` 选择器
 
 ### ❌ 天眼查
 
 - [x] ~~天眼查 API~~ — **已取消**。9 哥决定。
+
+---
+
+## Phase 9：置信度系统 + Extractor 扩展 ✅ 100%
+
+> **交付物**：hit 置信度打分 + wrong-person 检测 + 11 新 extractor + Stack Overflow 探针修复 + 报告 UX boost。
+> **243 tests** all passing。43 extractors 全部注册上线。
+
+### 9.1 置信度系统
+
+- [x] **9.1.1** `_compute_hit_confidence()` — 连续打分 0.0-1.0（HTTP 状态 + SPA + extractor 数据 + display_name + 字段完整性）
+- [x] **9.1.2** `_is_wrong_person()` — Levenshtein 相似度 + CJK 脚本检测，避免中文名误报
+- [x] **9.1.3** `_username_similarity()` — 辅助函数
+- [x] **9.1.4** 移除旧 `_classify_hit()` / `_is_false_positive()`
+
+### 9.2 Stack Overflow 探针修复
+
+- [x] **9.2.1** `data/sites/devtools/stackoverflow.json` — 删硬编码 `/users/22656/`（Jon Skeet），改用搜索 API
+
+### 9.3 P0 Extractor（6 站，SPA 优先）
+
+- [x] **9.3.1** Instagram — og:meta 静态提取
+- [x] **9.3.2** Twitter/X — Playwright 动态 + `__INITIAL_STATE__` JSON
+- [x] **9.3.3** 微博 — 静态 HTML + 双URL格式
+- [x] **9.3.4** 少数派 (sspai) — Playwright 动态
+- [x] **9.3.5** Twitch — og:meta + JSON-LD
+- [x] **9.3.6** SlideShare — 静态 HTML + 正则
+
+### 9.4 P1 Extractor（5 站）
+
+- [x] **9.4.1** 知乎 — REST API
+- [x] **9.4.2** Gitee — REST API
+- [x] **9.4.3** 贴吧 — 静态 HTML
+- [x] **9.4.4** WordPress.com — og:meta
+- [x] **9.4.5** Blogger — og:meta
+
+### 9.5 报告 UX
+
+- [x] **9.5.1** 站点表格新增「确认」/「待验证」badge
+- [x] **9.5.2** ⚠ wrong-person 红色警告
+- [x] **9.5.3** identity assessment 卡片（低中高关联度）
+- [x] **9.5.4** CSS：badge-ok/badge-warn/badge-low + wp-warn 色值
+
+### 9.6 基础设施
+
+- [x] **9.6.1** pyproject.toml 注册全部新 extractor entry_points
+- [x] **9.6.2** docs: STATE.md / TODO.md 对齐
+
+### ❌ 跳过
+
+- [ ] 抖音 — 无 curated site config
+- [ ] 小红书 — 无 curated site config
 
 ---
 
@@ -283,10 +335,9 @@
 | 维度 | 状态 |
 |------|:---:|
 | Phase 1-8 代码 | **100%** ✅ |
+| Phase 9 （置信度 + 扩展） | **100%** ✅ |
 | 测试 (243 tests) | **all passing** ✅ |
 | Lint (Ruff, Phase 8 files) | **0** ✅ |
 | CI 部署 | **已部署** ✅ |
-| Phase 9 (expansion) | **🔜 16-24 extractors + 服务器部署** |
-| Phase 10+ (backlog) | **TBD** |
-| **V2 已完成** | **~181h** |
-| v3 scope | Louvain, 人脸识别, 天眼查对接(已取消), SaaS 上线 |
+| Profile extractors | **43** （up from 32） |
+| Phase 10 | **🔜 更多 extractor + 跨人聚类增强 + 服务器部署** |

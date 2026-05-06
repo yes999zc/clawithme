@@ -6,22 +6,24 @@ Last updated: 2026-05-06
 
 | Metric | Value |
 |--------|-------|
-| HEAD | `0fce64f` (main, aligned with GitHub) |
-| Python lines | 7,926 |
+| HEAD | `9f75014` (main, aligned with GitHub) |
+| Python lines | ~8,400 |
 | Tests | **243 passed**, 5 skipped (WeasyPrint system deps) |
 | Ruff | 0 on Phase 8 files; 9 pre-existing in extractors/engine |
 | Curated sites | 44 |
 | Migrated sites | 2,487 |
 | Detection engines | 9 |
-| Profile extractors | 34 |
+| Profile extractors | **43** (was 34) |
 | Async pipeline | 10-concurrent, cold ~14s (was 180s) |
+| Hit confidence scoring | ✅ (0.0-1.0 with name/field/Script checks) |
+| Wrong-person detection | ✅ (Levenshtein + CJK script filter) |
 
 ## Phase Status
 
 | Phase | Deliverable | Status |
 |:---:|------|:---:|
 | 1 | Site probing (9 engines, SearXNG fallback) | ✅ |
-| 2 | Profile extraction (34 extractors) | ✅ |
+| 2 | Profile extraction (43 extractors) | ✅ |
 | 3 | Leak database (Cavalier + HIBP) | ✅ |
 | 4 | Multi-signal correlation (Union-Find + anti-merge) | ✅ |
 | 5 | HTML/JSON report (Geist design) | ✅ |
@@ -30,7 +32,12 @@ Last updated: 2026-05-06
 | 8 | Web UI (FastAPI + SSE) + PDF (WeasyPrint) | ✅ |
 | — | 天眼查 API | ❌ cancelled |
 | — | Vercel deployment | ❌ cancelled (user purchasing server) |
-| 9 | TBD — 16-24 international/CN extractor expansion | 🔜 next |
+| 9a | P0 extractors — Instagram/Twitter/Weibo/Sspai/Twitch/SlideShare | ✅ |
+| 9b | P1 extractors — Zhihu/Gitee/Tieba/WordPress/Blogger | ✅ |
+| 9c | Hit confidence scoring + wrong-person detection | ✅ |
+| 9d | Stack Overflow probe fix (hardcoded UID removed) | ✅ |
+| 9e | Report UX — confidence badges, identity assessment card | ✅ |
+| 10 | TBD — further extractors, server deployment | 🔜 next |
 
 ## Architecture
 
@@ -49,7 +56,7 @@ clawithme/
 │   ├── base.py         # Profile, ProfileExtractor
 │   ├── client.py       # CrawlerClient
 │   ├── registry.py     # discover_extractors()
-│   └── extractors/     # 34 profile extractors
+│   └── extractors/     # 43 profile extractors
 ├── signals/
 │   ├── correlation.py  # CorrelationEngine + Cluster
 │   ├── avatar.py       # pHash + default avatar filter
@@ -78,8 +85,27 @@ clawithme/
 - **SQLite WAL + check_same_thread=False** — safe for async reads
 - **Anti-merge gate** — username-only match requires additional signal
 - **Provider-agnostic LLM** — `LLMProvider` dataclass, auto-discover
-- **Playwright disabled by default** — only 4/34 extractors need it
+- **Playwright disabled by default** — only 4/43 extractors need it
 - **Path traversal protection** — `_write_report()` validates cwd containment
+- **Confidence scoring over binary classification** — hits get 0.0-1.0 based on HTTP status, SPA flag, extractor data, display_name match, field completeness
+- **Wrong-person detection** — Levenshtein similarity + CJK script detection to avoid false flags on Chinese names
+
+## New in Phase 9
+
+### Confidence Scoring System
+- Replaced old 3-tier (confirmed/uncertain/dropped) with continuous 0.0-1.0 scoring
+- `_compute_hit_confidence()`: SPA+extractor_data=0.80, non-SPA 200=0.85, no extractor=0.40
+- `_is_wrong_person()`: catches cases like "Jon Skeet" returned for search "oadank"
+- Report shows "确认" (green), "待验证" (amber), "低置信" (red) badges per hit
+
+### New Extractors (43 total, up from 32)
+- **P0 (SPA sites)**: Instagram (og:meta), Twitter/X (dynamic Playwright), Weibo (static HTML), 少数派 (dynamic Playwright), Twitch (meta tags), SlideShare (static HTML)
+- **P1**: 知乎 (REST API), Gitee (REST API), 贴吧 (static HTML), WordPress.com (og:meta), Blogger (og:meta)
+
+### Bug Fixes
+- Stack Overflow probe no longer hardcodes user ID 22656 (Jon Skeet)
+- Instagram og:title regex correctly extracts Chinese display names
+- Twitter extractor fixed to use dynamic fetch + `__INITIAL_STATE__` JSON parsing
 
 ## APIs Configured
 
