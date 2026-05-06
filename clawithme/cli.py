@@ -654,12 +654,12 @@ def _query_all_leaks(
 
 _BANNER = """╭────────────────────────────────── clawithme v0.1 · OSINT Identity Panorama ──────────────────────────────────╮
 │                                                                                                                    │
-│       █▀▀ █░░ ▄▀█ █░▄░█ ▀█▀ ▀█▀ █░█ █▄░▄█ █▀▀                         44 curated sites                        │
+│       █▀▀ █░░ ▄▀█ █░▄░█ ▀█▀ ▀█▀ █░█ █▄░▄█ █▀▀                         3000+ sites                           │
 │       █▄▄ █▄▄ █▀█ █▀░▀█ ▄█▄ ░█░ █▀█ █░▀░█ ██▄                         49 profile extractors                  │
 │                                                                           9 detection engines                    │
 │     🔍 Username → Identity Panorama                                      4 report formats (html/json/pdf/md)    │
 │                                                                                                                    │
-│                                     44 sites · 49 extractors · 9 engines · 4 report types                          │
+│                                   3000+ sites · 49 extractors · 9 engines · 4 report types                          │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯"""
 
 
