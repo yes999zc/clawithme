@@ -49,16 +49,18 @@ Phase 1-8 code COMPLETE. Web UI + PDF + jury audit DONE.
 | `clawithme/crawler/registry.py` | — | Plugin discovery via `importlib.metadata` entry_points |
 | `clawithme/crawler/utils.py` | — | Shared: `first_text()`, `parse_count()` |
 | `clawithme/pipeline.py` | 380 | Async pipeline orchestrator (Phase 7): semaphore-bounded parallel probes + extraction |
-| `clawithme/crawler/extractors/` | 19 files | See extractor table below |
+| `clawithme/crawler/extractors/` | 32 files | See extractor table below |
 | `clawithme/signals/avatar.py` | — | pHash + Hamming distance + AvatarMatch |
 | `clawithme/signals/correlation.py` | 169 | Union-Find, 4-signal weighted matching |
 | `clawithme/signals/extraction.py` | — | Phone regex (E.164) + email extraction + disposable filter |
 | `clawithme/signals/username.py` | — | Levenshtein + compare_usernames (affix/digit patterns) |
 | `clawithme/signals/llm_verifier.py` | 186 | LLM-based cluster verification (provider-agnostic, OpenAI-compatible API) |
 | `clawithme/cache.py` | 92 | SQLite ResultCache with TTL, async-safe |
-| `clawithme/report/generator.py` | 492 | Geist HTML + JSON export, CSS-only charts, PII redaction |
+| `clawithme/report/generator.py` | **1369** | **Geist HTML + JSON export, CSS-only charts, PII redaction, i18n (zh/en)** |
 | `data/default_avatars.json` | 5 | Default avatar pHash library (GitHub identicon, forum defaults) |
 | `scripts/extractor_health.py` | 132 | Weekly extractor smoke tests, breakage detection |
+
+**New in this update**: Report i18n — `_STRINGS` dict with 60+ zh/en keys, `lang` parameter on `generate_report()`, all render functions localized. Default `lang="zh"`.
 
 ### Extractors (34 total)
 
@@ -255,7 +257,7 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 
 ## Quality Gates
 
-1. **Ruff 0 (by policy)** — 2 intentional exceptions: `PLC0415` for lazy Fetcher import, `UP037` quoted type annotation
+1. **Ruff 0 (by policy)** — 5 pre-existing exceptions: `PLC0415` lazy imports (scrapling Fetcher, urllib) and `E501` line length (keybase)
 2. **Schema validation** — `python scripts/validate.py` before merge
 3. **Site verification** — `python scripts/verify_site.py --all` daily
 4. **243 tests passing** — `python -m pytest tests/ -v`

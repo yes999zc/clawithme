@@ -51,7 +51,7 @@ class TestGenerateReport:
         html = generate_report([], [], [], "alice")
         assert isinstance(html, str)
         assert "<!DOCTYPE html>" in html
-        assert "<title>clawithme: alice</title>" in html
+        assert "<title>CLAWITHME 身份报告：alice</title>" in html
 
     def test_includes_sites(self):
         html = generate_report(_sample_hits(), [], [], "alice")
@@ -72,9 +72,9 @@ class TestGenerateReport:
 
     def test_empty_report(self):
         html = generate_report([], [], [], "alice")
-        assert "No sites found" in html
-        assert "No profiles extracted" in html
-        assert "No identity clusters" in html
+        assert "未发现站点" in html
+        assert "未提取到资料" in html
+        assert "未发现身份关联" in html
 
     def test_html_escapes_special_chars(self):
         profiles = [{

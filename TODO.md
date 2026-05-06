@@ -1,6 +1,7 @@
 # clawithme — Work Scope & TODO
 
-> 2026-05-06 V2 全面完成。Phase 1-8 全部交付，243 tests，34 extractors，async + Web UI + PDF。
+> 2026-05-06 | 243 tests ✅ | Ruff 0 (5 pre-existing by-policy) ✅
+> Phase 1-8 交付完毕。报告国际化（zh/en）已完成，所有 60+ 字符串通过 `_STRINGS` 字典管理。
 > Phase 9 规划中：16-24 extractor expansion + 服务器部署。
 
 ---
@@ -235,6 +236,14 @@
   - 🔴 C1-C7：XSS quot 转义 / 服务端认证 / slowapi 限流 / SSE 断连检测 / 超时 / 天眼查删除 / startup 预加载
   - 🟠 H1-H5：clawithme-web CLI / SSE retry 计数器 / 路径泄露脱敏 / setup_class ImportError / JSON.parse try/catch
   - 🟡 M1,M2,M3,M5,M6：/health 端点 / username 校验 / CSP header / NaN 计数器 / 优雅关闭
+
+### 8.4 报告国际化（i18n）
+
+- [x] **8.4.1** `_STRINGS` 字典 — 60+ 中英文 key，覆盖 section headers / field labels / charts / footer / summary
+- [x] **8.4.2** `L(lang, key)` 查找函数 — fallback 到 `en`
+- [x] **8.4.3** `generate_report(lang="zh")` → 默认输出中文报告
+- [x] **8.4.4** 所有 render 函数 (`_render_sites` / `_render_profiles` / `_render_clusters` / `_render_charts` / `_render_summary` / `_render_timeline`) 已接 `lang` 参数
+- [x] **8.4.5** CSDN extractor 修复 — 删 `.desc` 选择器（误匹配博文摘要冒充 bio）
 
 ### ❌ 天眼查
 

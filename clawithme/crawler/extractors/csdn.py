@@ -44,11 +44,11 @@ class CsdnExtractor(ProfileExtractor):
             if name:
                 profile.display_name = name
 
-            # Bio / personal description
+            # Bio / personal description — CSDN profile pages have no bio field.
+            # ".desc" matches blog article excerpts, NOT user bio. Removed.
             bio = first_text(response, [
                 ".user-profile-bio",
                 ".profile-bio",
-                ".desc",
             ])
             if bio:
                 profile.bio = bio
