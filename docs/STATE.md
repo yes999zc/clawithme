@@ -291,12 +291,14 @@ Local ↔ GitHub aligned. Phase 6 complete + V2 Phase 1 done. 209 tests.
 | 11 | LLM 推理正式化 | 🟡 Phase 7 |
 | 12 | 国际站扩展 (LinkedIn/Reddit/Medium 等 10+ 站) | 🟡 Phase 7 |
 | 13 | CN 站扩展至 30 (国际精华 + 中国金矿) | 🟡 Phase 7 |
-| 14 | Web UI | 🟡 Phase 8 |
-| 15 | PDF/Markdown 报告 | 🟡 Phase 8 |
-| 16 | 天眼查 API (条件触发，需先拿实名) | 🟡 Phase 8 |
+| 14 | Web UI | ✅ Phase 8 |
+| 15 | PDF/Markdown 报告 | ✅ Phase 8 |
+| 16 | 天眼查 API | ❌ DELETED |
 | — | 自建泄露库 | ❌ KILLED |
 | — | 微信弱信号实验 | ❌ KILLED |
 | — | Profile 提取 P1 | ✅ DONE (v1) |
 | — | Louvain 图聚类 | ⏸️ v3 |
 
-> Phase 1-7 全部完成。V2 Phase 1-7 DONE。34 extractors。235 tests。Async + LLM 正式化。CI + auto release。
+| Phase 9 (expansion) | **🔜 16-24 extractors + HK 服务器部署** |
+
+> Phase 1-8 全部完成。243 tests。33 extractors。Web UI + PDF + jury audit DONE。Phase 9: extractor 扩展 + 部署。
