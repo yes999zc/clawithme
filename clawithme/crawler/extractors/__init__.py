@@ -14,6 +14,7 @@ from clawithme.crawler.extractors.github import GithubExtractor
 from clawithme.crawler.extractors.gitlab import GitlabExtractor
 from clawithme.crawler.extractors.hackernews import HackernewsExtractor
 from clawithme.crawler.extractors.huaban import HuabanExtractor
+from clawithme.crawler.extractors.instagram import InstagramExtractor
 from clawithme.crawler.extractors.jianshu import JianshuExtractor
 from clawithme.crawler.extractors.juejin import JuejinExtractor
 from clawithme.crawler.extractors.keybase import KeybaseExtractor
@@ -48,6 +49,7 @@ __all__ = [
     "GitlabExtractor",
     "HackernewsExtractor",
     "HuabanExtractor",
+    "InstagramExtractor",
     "JianshuExtractor",
     "JuejinExtractor",
     "KeybaseExtractor",
