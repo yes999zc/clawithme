@@ -21,7 +21,8 @@ services:
     ports:
       - "8888:8080"
     volumes:
-      - ./searxng:/etc/searxng:rw
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+      - ./searxng/templates/simple:/usr/local/searxng/searx/templates/simple:ro
     environment:
       - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
     restart: unless-stopped
