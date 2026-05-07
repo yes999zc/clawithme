@@ -107,10 +107,10 @@ h3{font-size:14px;font-weight:500;color:#4d4d4d;letter-spacing:.02em}
 .uncertain-summary{font-size:13px;color:var(--amber);cursor:pointer;margin-top:16px}
 
 /* ── Install Cards ────────────────────────── */
-.install-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.install-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .install-card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
 .install-card h3{font-size:15px;font-weight:600;color:var(--accent);margin-bottom:8px}
-.install-card code{display:block;font:400 13px/1.8 'JetBrains Mono',monospace;color:var(--accent-subtle);background:#f5f5f5;padding:10px 14px;border-radius:6px;margin-top:8px}
+.install-card code{display:block;font:400 12px/1.7 'JetBrains Mono',monospace;color:var(--accent-subtle);background:#f5f5f5;padding:10px 14px;border-radius:6px;margin-top:8px;overflow-x:auto;white-space:pre;word-break:break-all}
 
 /* ── Benchmark Table ──────────────────────── */
 .bench-table{width:100%;border-collapse:collapse;font-size:14px}
@@ -502,23 +502,19 @@ footer a{color:#808080}
   <div class="install-card">
     <h3>Docker</h3>
     <p style="font-size:13px;color:#808080">一键启动 Web UI</p>
-    <code>docker pull ghcr.io/yes999zc/clawithme<br>
-docker run -p 8000:8000 ghcr.io/yes999zc/clawithme</code>
+    <code>docker run -d -p 8000:8000 \<br>&nbsp;&nbsp;ghcr.io/yes999zc/clawithme</code>
   </div>
   <div class="install-card">
     <h3>PyPI</h3>
     <p style="font-size:13px;color:#808080">pip 安装</p>
     <code>pip install clawithme[web]<br>
-clawithme-web<br>
-<span style="color:#b0b0b0"># → http://localhost:8000</span></code>
+clawithme-web</code>
   </div>
   <div class="install-card">
     <h3>CLI</h3>
     <p style="font-size:13px;color:#808080">命令行搜索</p>
-    <code>clawithme search alice_dev \<br>
-&nbsp;&nbsp;--acknowledge-ethical-use<br>
-clawithme search alice_dev \<br>
-&nbsp;&nbsp;--report report.html</code>
+    <code>clawithme search <i>username</i> \<br>
+&nbsp;&nbsp;--acknowledge-ethical-use</code>
   </div>
 </div>
 </div>
