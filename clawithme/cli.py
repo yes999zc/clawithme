@@ -682,6 +682,9 @@ def main():
         print("Usage: clawithme search <username> [--report <path>] "
               "[--format html|json|pdf|md] [--include-migrated] [--no-cache] "
               "[--sync] [--lang zh|en] [--acknowledge-ethical-use]")
+        print("       clawithme watch <username> [--interval 6h|12h|24h] "
+              "[--include-migrated] [--webhook <url>] [--acknowledge-ethical-use]")
+        print("       clawithme tui")
         print("       clawithme verify")
         print("       clawithme validate")
         sys.exit(1)
@@ -739,6 +742,55 @@ def main():
             args = [sys.executable, str(script), sys.argv[2]]
         subprocess.run(args, check=False)  # verify script exits non-zero on failures
 
+    elif command == "watch":
+        """Periodic monitoring with change detection."""
+        import asyncio as _asyncio
+        from clawithme.watch import Watcher
+
+        if len(sys.argv) < 3:
+            print("Usage: clawithme watch <username> [--interval 6h|12h|24h] "
+                  "[--include-migrated] [--webhook <url>] [--acknowledge-ethical-use]")
+            sys.exit(1)
+
+        username = sys.argv[2]
+        if not acknowledged:
+            acknowledged = "--acknowledge-ethical-use" in sys.argv
+        if not acknowledged:
+            print("🛡️  ETHICAL USE REQUIRED")
+            print()
+            print("   This tool queries public profiles and breach databases.")
+            print("   Use only on accounts you own or have explicit authorization.")
+            print()
+            print("   Re-run with: clawithme watch <username> --acknowledge-ethical-use")
+            return
+
+        interval_hours = 24
+        if "--interval" in sys.argv:
+            idx = sys.argv.index("--interval")
+            if idx + 1 < len(sys.argv):
+                raw = sys.argv[idx + 1].rstrip("h")
+                try:
+                    interval_hours = int(raw)
+                except ValueError:
+                    print(f"❌ Invalid interval: {sys.argv[idx + 1]!r}. Use e.g. 6h, 12h, 24h")
+                    sys.exit(1)
+
+        include_migrated = "--include-migrated" in sys.argv
+
+        webhook_url = None
+        if "--webhook" in sys.argv:
+            idx = sys.argv.index("--webhook")
+            if idx + 1 < len(sys.argv):
+                webhook_url = sys.argv[idx + 1]
+
+        watcher = Watcher(
+            username,
+            interval_hours=interval_hours,
+            include_migrated=include_migrated,
+            webhook_url=webhook_url,
+        )
+        _asyncio.run(watcher.run())
+
     elif command == "validate":
         print("Validating site definitions against schema...")
         sites = load_all_sites(validate=True)
@@ -747,6 +799,7 @@ def main():
     else:
         print(f"Unknown command: {command}")
         print("Usage: clawithme search <username>")
+        print("       clawithme watch <username> [--interval 6h|12h|24h]")
         print("       clawithme tui")
         print("       clawithme verify")
         print("       clawithme validate")
