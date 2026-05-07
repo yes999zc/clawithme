@@ -79,6 +79,7 @@ class ResultsScreen(Screen):
                 yield Button("📄 HTML", id="btn-html", variant="primary")
                 yield Button("📋 JSON", id="btn-json")
                 yield Button("📝 MD", id="btn-md")
+                yield Button("📕 PDF", id="btn-pdf")
                 yield Button("⏹ Cancel", id="btn-cancel", variant="error")
                 yield Button("🔍 New Search", id="btn-new", variant="default")
 
@@ -111,6 +112,7 @@ class ResultsScreen(Screen):
         include_migrated: bool = False,
         no_cache: bool = False,
         sync_mode: bool = False,
+        incremental: bool = False,
         lang: str = "zh",
     ) -> None:
         """Start a search in a background worker."""
@@ -132,10 +134,10 @@ class ResultsScreen(Screen):
 
         self.query_one("#loading", LoadingIndicator).display = True
         self.query_one("#btn-cancel", Button).display = True
-        self.status_text = f"🔍 Searching {username}..."
+        self.status_text = f"🔍 Searching {username}..." + (" [incremental]" if incremental else "")
 
         self.run_worker(
-            self._do_search(username, include_migrated, no_cache, sync_mode, lang),
+            self._do_search(username, include_migrated, no_cache, sync_mode, incremental, lang),
             exclusive=True,
         )
 
@@ -145,6 +147,7 @@ class ResultsScreen(Screen):
         include_migrated: bool,
         no_cache: bool,
         sync_mode: bool = False,
+        incremental: bool = False,
         lang: str = "zh",
     ) -> None:
         """Run the pipeline and display results."""
@@ -155,15 +158,19 @@ class ResultsScreen(Screen):
             engines = load_engines(proxy_manager=ProxyManager(config))
             extractors = discover_extractors()
 
-            cache = None if no_cache else ResultCache()
+            # Incremental always needs cache
+            cache = None
+            if not no_cache or incremental:
+                cache = ResultCache()
 
-            self.status_text = f"🔍 Probing {len(sites)} sites..."
+            self.status_text = f"🔍 Probing {len(sites)} sites..." + (" [incremental]" if incremental else "")
             pipeline = AsyncPipeline(
                 sites=sites,
                 engines=engines,
                 extractors=extractors,
                 config=config,
                 cache=cache,
+                incremental=incremental,
             )
 
             result = await pipeline.run(username)
@@ -261,6 +268,8 @@ class ResultsScreen(Screen):
             self.status_text = "❌ No results to export"
             return
 
+        leak_records = self._last_result.leak_records
+        breach_dates = [getattr(r, "breach_date", "") for r in leak_records if getattr(r, "breach_date", "")]
         path = Path(f"clawithme_report_{self.username}.{fmt}")
         try:
             from clawithme.report.generator import generate_report  # noqa: PLC0415
@@ -270,7 +279,8 @@ class ResultsScreen(Screen):
                 profiles=self._last_result.profiles,
                 clusters=self._last_result.clusters,
                 username=self.username,
-                breach_dates=self._last_result.leak_records,
+                breach_dates=breach_dates,
+                leak_records=leak_records,
                 lang=self._search_lang,
             )
 
@@ -315,9 +325,21 @@ class ResultsScreen(Screen):
                     profiles=self._last_result.profiles,
                     clusters=self._last_result.clusters,
                     username=self.username,
-                    breach_dates=self._last_result.leak_records,
+                    breach_dates=breach_dates,
+                    lang=self._search_lang,
                 )
                 path.write_text(md, encoding="utf-8")
+            elif fmt == "pdf":
+                from clawithme.report.generator import export_pdf  # noqa: PLC0415
+
+                pdf_bytes = export_pdf(
+                    hits=self._last_result.hits,
+                    profiles=self._last_result.profiles,
+                    clusters=self._last_result.clusters,
+                    username=self.username,
+                    breach_dates=breach_dates,
+                )
+                path.write_bytes(pdf_bytes)
 
             self.status_text = f"📄 Saved {path.name}"
         except Exception as e:
@@ -339,3 +361,5 @@ class ResultsScreen(Screen):
             self._export_report("json")
         elif btn == "btn-md":
             self._export_report("md")
+        elif btn == "btn-pdf":
+            self._export_report("pdf")

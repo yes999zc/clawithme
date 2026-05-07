@@ -53,6 +53,7 @@ class SearchScreen(Screen):
             yield Checkbox("Include migrated (3119 sites)", id="opt-migrated")
             yield Checkbox("Disable cache", id="opt-nocache")
             yield Checkbox("Sync mode", id="opt-sync")
+            yield Checkbox("Incremental (skip cached)", id="opt-incremental")
         with Horizontal(id="lang-row"):
             yield Static("Language:")
             yield Select(
@@ -64,6 +65,10 @@ class SearchScreen(Screen):
         yield Button("Search", id="search-btn", variant="primary")
         yield Static(
             "3000+ sites · 49 extractors · 9 engines · 4 report formats",
+            classes="stats-line",
+        )
+        yield Static(
+            "Ctrl+C Quit · Enter Search",
             classes="stats-line",
         )
 
@@ -90,6 +95,7 @@ class SearchScreen(Screen):
         migrated = self.query_one("#opt-migrated", Checkbox).value
         no_cache = self.query_one("#opt-nocache", Checkbox).value
         sync_mode = self.query_one("#opt-sync", Checkbox).value
+        incremental = self.query_one("#opt-incremental", Checkbox).value
         lang_val = self.query_one("#lang-select", Select).value
         lang = lang_val if lang_val else "zh"
 
@@ -100,5 +106,6 @@ class SearchScreen(Screen):
             include_migrated=migrated,
             no_cache=no_cache,
             sync_mode=sync_mode,
+            incremental=incremental,
             lang=lang,
         )
