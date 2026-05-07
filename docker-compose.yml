@@ -16,27 +16,7 @@ services:
       - KIMI_API_KEY=${KIMI_API_KEY:-}
       - HIBP_API_KEY=${HIBP_API_KEY:-}
     restart: unless-stopped
-    depends_on:
-      - searxng
-
-  searxng:
-    image: searxng/searxng:latest
-    container_name: clawithme-searxng
-    ports:
-      - "8888:8080"
-    volumes:
-      - searxng_data:/etc/searxng
-    environment:
-      - SEARXNG_BASE_URL=http://localhost:8888/
-    restart: unless-stopped
-    cap_drop:
-      - ALL
-    cap_add:
-      - CHOWN
-      - SETGID
-      - SETUID
 
 volumes:
   clawithme_cache:
   clawithme_config:
-  searxng_data:

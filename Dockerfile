@@ -19,7 +19,7 @@ RUN pip install --upgrade pip
 
 # Install Python deps (all have pre-built ARM64 wheels)
 RUN pip install --prefer-binary \
-    scrapling fastapi uvicorn weasyprint slowapi \
+    scrapling curl_cffi fastapi uvicorn weasyprint slowapi \
     pydantic structlog Pillow jsonschema imagehash
 
 # Install clawithme itself (pure Python, no compilation)
