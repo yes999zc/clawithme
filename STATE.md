@@ -1,6 +1,6 @@
 # STATE.md — clawithme
 
-Last updated: 2026-05-07 (night — all fixes verified, uv cache cleared)
+Last updated: 2026-05-08 — VPS deployed, domain live, WebUI redesigned
 
 ## Quick Stats
 
@@ -242,6 +242,19 @@ clawithme/                          # Monorepo — all 49 extractors unified
 | 站点健康自愈 | `verify_site.py --auto-fix`，Admin 面板展示 |
 | 报告可操作建议 | 5 类自动建议（泄露/头像/空白账号/曝光/用户名） |
 | 差异化 Landing | 安全研究员 / 隐私个人 / HR 背调 3 条路径 |
+
+## Hosting (live)
+
+| 服务 | 地址 |
+|------|------|
+| clawithme WebUI | https://clawith.me |
+| SearXNG 搜索 | https://search.clawith.me |
+| Admin 后台 | https://clawith.me/admin |
+| Demo 页面 | https://yes999zc.github.io/clawithme/ |
+
+- **VPS**: 香港 8GB, Ubuntu 22.04, Docker + nginx + certbot
+- **域名**: clawith.me + search.clawith.me (阿里云)
+- **SSL**: Let's Encrypt, 2026-08-05 到期, 自动续期
 
 ## Hosting (planned)
 
