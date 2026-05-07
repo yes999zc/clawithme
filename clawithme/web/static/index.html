@@ -526,6 +526,13 @@ function applyI18n() {
   });
 }
 
+// Generic/placeholder display names to filter out
+const _GENERIC_NAMES = new Set(['用户分享', '用户', 'user', 'anonymous', 'unknown', 'Level', 'None', '']);
+function pickDisplayName(name, siteId) {
+  if (name && typeof name === 'string' && !_GENERIC_NAMES.has(name.trim())) return name.trim();
+  return siteId;
+}
+
 function catLabel(cat) {
   const en = { social:'Social', devtools:'Dev Tools', forum:'Forum', media:'Media',
     blog:'Blog', gaming:'Gaming', music:'Music', ecommerce:'E-Commerce' };
@@ -740,7 +747,7 @@ async function doSearch() {
       card.className = 'card';
       card.innerHTML = '<div class="card-hd">' +
         '<div class="card-av">' + avatarHtml + '</div>' +
-        '<div style="flex:1"><div class="card-name">' + esc(d.display_name || d.site_id) + '</div>' +
+        '<div style="flex:1"><div class="card-name">' + esc(pickDisplayName(d.display_name, d.site_id)) + '</div>' +
         '<div class="card-site">' + esc(d.site_id) + '</div></div>' +
         donutHtml + '</div>' +
         (d.bio ? '<div class="card-bio">' + esc(d.bio.slice(0, 200)) + '</div>' : '') +
