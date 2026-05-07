@@ -393,7 +393,7 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
         import urllib.parse
         import urllib.request
         hit_ids = {h["site_id"] for h in hits}
-        searxng_base = "http://localhost:8888/search"
+        searxng_base = cfg.scanning.searxng_url
         for site in sites[:50]:  # cap: only top 50 un-hit sites
             sid = site["id"]
             if sid in hit_ids:

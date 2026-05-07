@@ -33,6 +33,7 @@ class ScanningConfig:
     default_timeout_ms: int = 5000
     max_concurrency: int = 10
     min_interval_ms: int = 500
+    searxng_url: str = "http://localhost:8888/search"
 
 
 @dataclass
@@ -104,6 +105,7 @@ def load_config(path: str | Path | None = None) -> Config:
         default_timeout_ms=scan_raw.get("default_timeout_ms", 5000),
         max_concurrency=scan_raw.get("max_concurrency", 10),
         min_interval_ms=scan_raw.get("min_interval_ms", 500),
+        searxng_url=scan_raw.get("searxng_url", "http://localhost:8888/search"),
     )
 
     # Logging

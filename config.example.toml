@@ -43,6 +43,9 @@ max_concurrency = 10
 # Minimum interval between requests to same site (ms)
 min_interval_ms = 500
 
+# SearXNG fallback search URL (Docker: http://searxng:8080/search)
+searxng_url = "http://localhost:8888/search"
+
 [logging]
 level = "INFO"
 # Set to DEBUG for trace-level output

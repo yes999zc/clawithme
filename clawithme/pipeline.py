@@ -234,9 +234,9 @@ class AsyncPipeline:
     async def _searxng_fallback(
         self, username: str, engine_hits: list[dict]
     ) -> int:
-        """Query local SearXNG for un-hit sites. Returns count of new hits."""
+        """Query SearXNG for un-hit sites. Returns count of new hits."""
         hit_ids = {h["site_id"] for h in engine_hits}
-        searxng_base = "http://localhost:8888/search"
+        searxng_base = self._config.scanning.searxng_url
         total = 0
 
         for site in self._sites[:50]:  # cap: first 50 un-hit sites
