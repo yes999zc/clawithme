@@ -77,37 +77,66 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
   overflow: hidden; margin-bottom: 8px;
 }}
 
-/* ── Summary hero ───────────────────────────── */
+/* ── Summary hero (namecard) ───────────────── */
 .summary-hero {{
-  background: #fff; border-radius: 10px; border-left: 4px solid var(--accent);
+  background: #fff; border-radius: 10px;
   padding: 36px 36px 28px;
   box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 2px 2px rgba(0,0,0,0.04);
 }}
-.summary-hero h1 {{ color: var(--accent); }}
-.hero-summary {{
-  font-size: 15px; color: #4d4d4d; line-height: 1.7; margin-top: 12px; max-width: 640px;
+.hero-card {{
+  display: flex; align-items: flex-start; gap: 24px;
+}}
+.hero-avatar-wrap {{
+  width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+  overflow: hidden; background: #f0f0f0;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.06);
+}}
+.hero-avatar-wrap img {{
+  width: 100%; height: 100%; object-fit: cover;
+}}
+.hero-avatar-fallback {{
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 30px; font-weight: 600; color: #fff;
+}}
+.hero-info {{ flex: 1; min-width: 0; }}
+.hero-info h1 {{
+  font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+  color: #171717; margin: 0 0 2px;
+}}
+.hero-username {{
+  font-size: 15px; color: #808080; margin-bottom: 14px;
 }}
 .hero-identity {{
-  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
 }}
-.hero-identity-name {{ font-size: 18px; font-weight: 600; color: #171717; }}
 .hero-identity-badge {{
   font-size: 11px; padding: 2px 8px; border-radius: 4px;
-  background: #e8f5e9; color: #2e7d32;
+  background: #e8f5e9; color: #2e7d32; font-weight: 500;
+}}
+.hero-summary {{
+  font-size: 14px; color: #4d4d4d; line-height: 1.7; margin-bottom: 16px; max-width: 600px;
 }}
 .hero-stats {{
-  display: flex; gap: 28px; flex-wrap: wrap; margin-top: 20px;
+  display: flex; gap: 24px; flex-wrap: wrap;
 }}
 .hero-stat {{
-  display: flex; align-items: baseline; gap: 6px;
+  display: flex; align-items: baseline; gap: 5px;
 }}
 .hero-stat-value {{
-  font-size: 28px; font-weight: 600; color: #171717;
+  font-size: 24px; font-weight: 600; color: #171717;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-variant-numeric: tabular-nums; line-height: 1;
 }}
 .hero-stat-label {{
   font-size: 12px; color: #808080; text-transform: uppercase; letter-spacing: 0.5px;
+}}
+.hero-meta {{
+  margin-top: 16px; font-size: 12px; color: #b0b0b0;
+}}
+.hero-divider {{
+  height: 1px; background: #e5e5e5; margin: 20px 0 24px;
 }}
 .fp-note {{
   font-size: 12px; color: #b0b0b0; cursor: help;

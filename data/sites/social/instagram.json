@@ -3,7 +3,7 @@
   "name": "Instagram",
   "primary": "social",
   "canonical_url": "https://www.instagram.com/{username}/",
-  "engine_ref": "base_http_message",
+  "engine_ref": "base_http_status",
   "classification": {
     "primary": "social",
     "identity_type": "public_social",

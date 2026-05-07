@@ -253,13 +253,32 @@ def _render_summary(
     true_hits: int, fp_count: int,
     profiles: int, clusters: int, leaks: int,
     consensus_name: str | None, auto_summary: str,
+    avatar_url: str = "", avatar_fallback: str = "", avatar_color: str = "",
 ) -> str:
     LANG = _STRINGS.get(lang, _STRINGS["en"])
+
+    # ── Avatar ──
+    if avatar_url:
+        avatar_html = (
+            f'<div class="hero-avatar-wrap">'
+            f'<img src="{_esc(avatar_url)}" alt="" '
+            f'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+            f'<div class="hero-avatar-fallback" style="display:none;background:{avatar_color}">'
+            f'{_esc(avatar_fallback)}</div>'
+            f'</div>'
+        )
+    else:
+        avatar_html = (
+            f'<div class="hero-avatar-wrap">'
+            f'<div class="hero-avatar-fallback" style="background:{avatar_color}">'
+            f'{_esc(avatar_fallback)}</div>'
+            f'</div>'
+        )
+
     identity_line = ""
     if consensus_name:
         identity_line = (
             f'<div class="hero-identity">'
-            f'<span class="hero-identity-name">{_esc(consensus_name)}</span>'
             f'<span class="hero-identity-badge">{LANG["identity_confirmed_across"].format(n=profiles)}</span>'
             f'</div>'
         )
@@ -290,11 +309,18 @@ def _render_summary(
         f'</span>'
         f'<span class="brand-slogan">OSINT Identity Panorama</span>'
         f'</div>'
+        f'<hr class="hero-divider">'
+        f'<div class="hero-card">'
+        f'{avatar_html}'
+        f'<div class="hero-info">'
         f'<h1>{_esc(display_title)}</h1>'
+        f'<div class="hero-username">@{_esc(username)}</div>'
         f'{identity_line}'
         f'<p class="hero-summary">{auto_summary}</p>'
         f'{stats_html}'
-        f'<div class="meta">{fp_note}</div>'
+        f'<div class="hero-meta">{fp_note}</div>'
+        f'</div>'
+        f'</div>'
         f'</div>'
     )
 

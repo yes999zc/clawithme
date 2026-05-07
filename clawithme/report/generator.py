@@ -33,6 +33,14 @@ from clawithme.report.renderers import (
 )
 from clawithme.signals.correlation import Cluster
 
+# Avatar fallback color palette (Vercel-friendly, muted)
+_AVATAR_COLORS = [
+    "#1e293b", "#334155", "#475569", "#64748b",
+    "#0f172a", "#3b82f6", "#6366f1", "#059669",
+    "#0891b2", "#2563eb", "#7c3aed", "#db2777",
+    "#ea580c", "#65a30d", "#0d9488", "#9333ea",
+]
+
 
 def generate_report(  # noqa: PLR0913
     hits: list[dict],
@@ -79,6 +87,16 @@ def generate_report(  # noqa: PLR0913
     auto_summary = _compose_summary(profiles, lang=lang)
     display_title = _pick_display_name(profiles, safe_username)
 
+    # ── Avatar: use first profile's avatar_url, fallback to initials ──
+    avatar_url = ""
+    for p in profiles:
+        if p.get("avatar_url"):
+            avatar_url = p["avatar_url"]
+            break
+    fallback_text = display_title[0].upper() if display_title else safe_username[0].upper()
+    color_idx = sum(ord(c) for c in username) % len(_AVATAR_COLORS)
+    avatar_color = _AVATAR_COLORS[color_idx]
+
     confirmed_table = _render_sites(lang, confirmed_hits, "confirmed",
                                     wrong_person_ids=wrong_person_ids,
                                     profile_by_site=profile_by_site,
@@ -113,6 +131,9 @@ def generate_report(  # noqa: PLR0913
             display_title, safe_username, true_hit_count, fp_count,
             profile_count, cluster_count, leak_count,
             consensus_name, auto_summary,
+            avatar_url=avatar_url,
+            avatar_fallback=fallback_text,
+            avatar_color=avatar_color,
         ),
         confirmed_table=confirmed_table,
         uncertain_section=uncertain_section,
