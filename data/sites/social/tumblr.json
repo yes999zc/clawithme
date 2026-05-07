@@ -1,0 +1,25 @@
+{
+  "id": "tumblr",
+  "name": "Tumblr",
+  "primary": "social",
+  "canonical_url": "https://{username}.tumblr.com",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 300000000,
+    "tags": ["blog", "social"]
+  },
+  "check": {
+    "probe_url": "https://{username}.tumblr.com",
+    "expected": 200,
+    "known_accounts": ["cyberpunk", "staff"],
+    "known_unclaimed": ["nonexistentxyz9999999"],
+    "timeout_ms": 8000
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-08T00:00:00Z"
+}

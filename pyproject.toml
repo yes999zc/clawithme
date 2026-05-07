@@ -103,6 +103,9 @@ codepen = "clawithme.crawler.extractors.codepen:CodepenExtractor"
 hupu = "clawithme.crawler.extractors.hupu:HupuExtractor"
 tiktok = "clawithme.crawler.extractors.tiktok:TiktokExtractor"
 pinterest = "clawithme.crawler.extractors.pinterest:PinterestExtractor"
+tumblr = "clawithme.crawler.extractors.tumblr:TumblrExtractor"
+soundcloud = "clawithme.crawler.extractors.soundcloud:SoundcloudExtractor"
+fiverr = "clawithme.crawler.extractors.fiverr:FiverrExtractor"
 
 [project.urls]
 Homepage = "https://github.com/yes999zc/clawithme"
