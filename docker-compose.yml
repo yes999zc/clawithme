@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   clawithme:
     build: .
@@ -16,6 +14,23 @@ services:
       - KIMI_API_KEY=${KIMI_API_KEY:-}
       - HIBP_API_KEY=${HIBP_API_KEY:-}
     restart: unless-stopped
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: clawithme-searxng
+    ports:
+      - "8888:8080"
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    environment:
+      - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
 
 volumes:
   clawithme_cache:
