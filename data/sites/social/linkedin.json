@@ -24,7 +24,11 @@
       "thispersondoesnotexist999999"
     ]
   },
-  "_cookie_note": "LinkedIn requires a logged-in cookie for full profile data. Set cookies.linkedin_file in config.toml to a JSON cookie export from your browser.",
+  "auth": {
+    "type": "cookie",
+    "cookie_file": "~/.config/clawithme/linkedin_cookies.json"
+  },
+  "_cookie_note": "LinkedIn requires a logged-in cookie. Run clawithme linkedin-login to set up.",
   "nsfw": false,
   "deprecated": false,
   "source": "manual",

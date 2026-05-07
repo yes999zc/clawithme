@@ -6,11 +6,15 @@ Key design decisions:
   {e_headers}, {probe_url}, {url_subpath} are allowed.
 - Detection type (status_code / message / headers) is determined by
   engine.classifier — sites never declare their own type.
+- Cookie auth: sites with ``auth.type == "cookie"`` use cookie-based
+  Playwright fetch for the probe phase (e.g. LinkedIn).
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 
 from clawithme.engine.http_client import HttpClient, HttpResponse
@@ -31,6 +35,30 @@ def _check_dynamic() -> bool:
         except ImportError:
             _DYNAMIC_AVAILABLE = False
     return _DYNAMIC_AVAILABLE
+
+def _load_cookie_file(filepath: str) -> list[dict] | None:
+    """Load cookies from a JSON file. Returns None on failure."""
+    try:
+        raw = json.loads(Path(filepath).expanduser().read_text())
+        cookies = []
+        for c in raw:
+            cookie = {}
+            for src, dst in [
+                ("name", "name"), ("value", "value"),
+                ("domain", "domain"), ("path", "path"),
+                ("httpOnly", "httpOnly"), ("secure", "secure"),
+                ("sameSite", "sameSite"),
+            ]:
+                if src in c:
+                    cookie[dst] = c[src]
+            if "expirationDate" in c and c["expirationDate"]:
+                cookie["expires"] = c["expirationDate"]
+            if "name" in cookie:
+                cookies.append(cookie)
+        return cookies if cookies else None
+    except (OSError, json.JSONDecodeError, ValueError):
+        return None
+
 
 # Allowed template variables (whitelist) — enforced in _substitute()
 _ALLOWED_VARS = {
@@ -98,42 +126,93 @@ class Engine:
             self._dynamic = DynamicFetcher()
         return self._dynamic
 
-    def _fetch_dynamic(self, url: str) -> HttpResponse | None:
+    def _fetch_dynamic(
+        self, url: str, cookies: list[dict] | None = None
+    ) -> HttpResponse | None:
         """Fetch a page using Playwright-based DynamicFetcher.
 
-        Returns HttpResponse (same interface as HttpClient.get()) so
-        _classify() works unchanged. Returns None on failure.
+        If *cookies* is provided, they are injected before navigation.
+        Falls back to direct Playwright if Scrapling's DynamicFetcher
+        is unavailable (common on some installations).
+
+        Returns HttpResponse or None on failure.
         """
+        # Prefer Scrapling's DynamicFetcher if available
         df = self.dynamic
-        if df is None:
-            self._log.warning("dynamic_fetcher_unavailable", url=url)
+        if df is not None and not cookies:
+            try:
+                page = df.fetch(
+                    url, timeout=15000, headless=True,
+                    disable_resources=True, block_ads=True,
+                )
+                body = page.body if page.body else b""
+                text = str(page.html_content) if page.html_content else ""
+                if not text and body:
+                    text = body.decode("utf-8", errors="replace")
+                return HttpResponse(
+                    status_code=page.status, url=str(page.url),
+                    text=text, headers=dict(page.headers) if page.headers else {},
+                    body=body,
+                )
+            except (OSError, TimeoutError) as e:
+                self._log.warning("dynamic_fetch_failed", url=url, error=str(e))
+                return None
+
+        # Cookie-based or DynamicFetcher unavailable — use Playwright directly
+        if cookies or df is None:
+            return self._fetch_playwright(url, cookies)
+
+        return None
+
+    def _fetch_playwright(
+        self, url: str, cookies: list[dict] | None = None
+    ) -> HttpResponse | None:
+        """Fetch via Playwright directly (bypasses Scrapling)."""
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            self._log.warning("playwright_unavailable", url=url)
             return None
 
         try:
-            page = df.fetch(
-                url,
-                timeout=15000,
-                headless=True,
-                disable_resources=True,
-                block_ads=True,
-            )
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(
+                    headless=True,
+                    args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
+                )
+                context = browser.new_context(
+                    viewport={"width": 1280, "height": 800},
+                    user_agent=(
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/131.0.0.0 Safari/537.36"
+                    ),
+                )
+                page = context.new_page()
+                page.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                """)
+                if cookies:
+                    try:
+                        context.add_cookies(cookies)
+                    except Exception:
+                        pass
+
+                resp = page.goto(url, wait_until="domcontentloaded", timeout=15000)
+                status = resp.status if resp else 0
+                text = page.content()
+                headers = {}
+                if resp:
+                    headers = dict(resp.headers) if resp.headers else {}
+
+                browser.close()
+                return HttpResponse(
+                    status_code=status, url=page.url,
+                    text=text, headers=headers,
+                )
         except (OSError, TimeoutError) as e:
-            self._log.warning("dynamic_fetch_failed", url=url, error=str(e))
+            self._log.warning("playwright_fetch_failed", url=url, error=str(e))
             return None
-
-        # DynamicFetcher Response → HttpResponse
-        body = page.body if page.body else b""
-        text = str(page.html_content) if page.html_content else ""
-        if not text and body:
-            text = body.decode("utf-8", errors="replace")
-
-        return HttpResponse(
-            status_code=page.status,
-            url=str(page.url),
-            text=text,
-            headers=dict(page.headers) if page.headers else {},
-            body=body,
-        )
 
     def probe(self, site: dict, username: str) -> EngineResult:
         """Probe a site for a given username.
@@ -152,9 +231,19 @@ class Engine:
         # Resolve timeout: site → engine → HttpClient default
         timeout_ms = check.get("timeout_ms") or self.params.get("timeout_ms")
 
+        # Cookie-based auth (e.g. LinkedIn) — force Playwright with cookies
+        cookie_auth = site.get("auth", {})
+        use_cookies = cookie_auth.get("type") == "cookie"
+        cookies: list[dict] | None = None
+        if use_cookies:
+            cookie_file = cookie_auth.get("cookie_file", "")
+            if cookie_file:
+                cookies = _load_cookie_file(cookie_file)
+                use_dynamic = True  # cookie auth requires a browser
+
         try:
             if use_dynamic:
-                resp = self._fetch_dynamic(url)
+                resp = self._fetch_dynamic(url, cookies=cookies)
                 if resp is None:
                     return EngineResult(
                         site_id=site["id"],

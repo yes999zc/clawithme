@@ -17,6 +17,7 @@ from urllib.parse import quote
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
 from clawithme.crawler.utils import first_text
+from clawithme.engine.http_client import HttpResponse
 from clawithme.logging import get_logger
 
 logger = get_logger()
@@ -53,6 +54,57 @@ def _load_cookies(filepath: str) -> list[dict]:
         if "name" in cookie:
             cookies.append(cookie)
     return cookies
+
+
+def _fetch_playwright_page(url: str, cookies: list[dict]) -> "HttpResponse | None":
+    """Fetch a LinkedIn page via Playwright with cookie auth.
+
+    Returns engine's HttpResponse so both probe and extractor can use it.
+    """
+    from clawithme.engine.http_client import HttpResponse
+
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        logger.warning("playwright_unavailable")
+        return None
+
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(
+                headless=True,
+                args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
+            )
+            context = browser.new_context(
+                viewport={"width": 1280, "height": 800},
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/131.0.0.0 Safari/537.36"
+                ),
+            )
+            page = context.new_page()
+            page.add_init_script("""
+                Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+            """)
+            try:
+                context.add_cookies(cookies)
+            except Exception:
+                pass
+
+            resp = page.goto(url, wait_until="domcontentloaded", timeout=20000)
+            status = resp.status if resp else 0
+            text = page.content()
+            headers = dict(resp.headers) if resp and resp.headers else {}
+
+            browser.close()
+            return HttpResponse(
+                status_code=status, url=page.url,
+                text=text, headers=headers,
+            )
+    except (OSError, TimeoutError) as e:
+        logger.warning("playwright_fetch_failed", url=url, error=str(e))
+        return None
 
 
 # ── Extraction helpers ────────────────────────────────────────
@@ -111,9 +163,12 @@ class LinkedinExtractor(ProfileExtractor):
 
         # ── Load cookies if configured ──
         cookies: list[dict] | None = None
-        cookie_file = site.get("cookie_file", "")
+        cookie_file = (
+            site.get("cookie_file")
+            or site.get("auth", {}).get("cookie_file", "")
+            or ""
+        )
         if not cookie_file:
-            # Try config default
             try:
                 from clawithme.config import load_config
                 cookie_file = load_config().apis.linkedin_cookie_file
@@ -126,136 +181,135 @@ class LinkedinExtractor(ProfileExtractor):
             except (OSError, json.JSONDecodeError, ValueError) as e:
                 logger.warning("linkedin_cookies_load_failed", error=str(e))
 
-        client = CrawlerClient(timeout_ms=20000, proxy=site.get("proxy"))
         try:
             if cookies:
-                response = client.fetch_dynamic(
-                    url,
-                    cookies=cookies,
-                    wait_selector="h1",
-                    disable_resources=False,  # LinkedIn needs images/CSS to look human
-                )
-                if response is not None and response.status == 200:
+                response = _fetch_playwright_page(url, cookies)
+                if response is not None and response.status_code == 200:
                     profile = self._extract_authenticated(response, profile, username)
                 else:
                     logger.warning("linkedin_dynamic_failed",
-                                  status=getattr(response, "status", None))
+                                  status=response.status_code if response else None)
             else:
                 # Fallback: static fetch without cookies (public page)
                 logger.info("linkedin_no_cookies", username=username)
-                response = client.fetch_static(url)
-                if response is not None and response.status == 200:
-                    profile = self._extract_public(response, profile)
-        finally:
-            client.close()
+                client = CrawlerClient(timeout_ms=20000, proxy=site.get("proxy"))
+                try:
+                    response = client.fetch_static(url)
+                    if response is not None and response.status == 200:
+                        profile = self._extract_public(response, profile)
+                finally:
+                    client.close()
+        except (OSError, TimeoutError) as e:
+            logger.warning("linkedin_fetch_failed", error=str(e))
 
         return profile
 
-    def _extract_authenticated(self, response, profile: Profile, username: str) -> Profile:
+    def _extract_authenticated(self, response: HttpResponse, profile: Profile, username: str) -> Profile:
         """Full profile extraction with logged-in page."""
-        page_text = getattr(response, "text", "") or ""
-        if not page_text and hasattr(response, "html_content"):
-            page_text = str(response.html_content) or ""
-        if not page_text and hasattr(response, "body"):
-            body = response.body
-            if body:
-                try:
-                    page_text = body.decode("utf-8", errors="replace")
-                except Exception:
-                    page_text = str(body)
+        page_text = response.text or ""
+        if not page_text and response.body:
+            try:
+                page_text = response.body.decode("utf-8", errors="replace")
+            except Exception:
+                page_text = str(response.body)
 
         if not page_text:
             return profile
 
-        # Remove excessive whitespace for regex matching
         clean = re.sub(r"\s+", " ", page_text)
 
-        # ── Name ──
-        name_m = re.search(r'<h1[^>]*>([^<]+)</h1>', clean)
-        if name_m:
-            profile.display_name = name_m.group(1).strip()
+        # ── Name (try multiple sources) ──
+        # <title> tag
+        title_m = re.search(r"<title>([^|]+)\s*\|", clean)
+        if title_m:
+            title_name = title_m.group(1).strip()
+            if title_name and "LinkedIn" not in title_name:
+                profile.display_name = title_name
 
-        # ── Headline ──
-        headline_m = re.search(
-            r'(?:text-body-medium break-words[^>]*>)([^<]+)<',
-            clean,
-        )
-        if not headline_m:
-            # LinkedIn sometimes puts headline right after h1
-            headline_m = re.search(
-                r'</h1>\s*<[^>]*>\s*<[^>]*>\s*([^<]{5,200})<',
-                clean,
+        # OG title
+        if not profile.display_name:
+            og_m = re.search(r'<meta[^>]+property="og:title"[^>]+content="([^"]+)"', clean)
+            if og_m:
+                profile.display_name = og_m.group(1).strip()
+
+        # JSON-LD
+        if not profile.display_name:
+            jsonld_m = re.search(
+                r'<script type="application/ld\+json">(.*?)</script>', clean, re.DOTALL
             )
-        if headline_m:
-            headline = headline_m.group(1).strip()
-            if headline and headline != profile.display_name:
-                profile.bio = headline
+            if jsonld_m:
+                try:
+                    ld = json.loads(jsonld_m.group(1))
+                    if isinstance(ld, dict):
+                        profile.display_name = ld.get("name", "")
+                        if ld.get("description") and not profile.bio:
+                            profile.bio = ld["description"][:500]
+                except (json.JSONDecodeError, TypeError):
+                    pass
 
-        # ── Location ──
-        loc_m = re.search(
-            r'(?:text-body-small inline t-black--light[^>]*>)\s*([^<]+)<',
-            clean,
-        )
-        if loc_m:
-            profile.location = loc_m.group(1).strip()
+        # h1 fallback
+        if not profile.display_name:
+            name_m = re.search(r"<h1[^>]*>([^<]+)</h1>", clean)
+            if name_m:
+                profile.display_name = name_m.group(1).strip()
 
-        # ── Connection / follower count ──
-        conn_m = re.search(r"([\d,]+)\s*(?:followers|connections)", clean, re.IGNORECASE)
-        if conn_m:
-            count = _parse_count(conn_m.group(0))
-            if conn_m.group(0).lower().endswith("followers"):
-                profile.follower_count = count
-            else:
-                profile.following_count = count
+        # ── Visible text extraction ──
+        # Strip all HTML tags to get plain text, then parse sections
+        plain = re.sub(r"<script[^>]*>.*?</script>", " ", page_text, flags=re.DOTALL)
+        plain = re.sub(r"<style[^>]*>.*?</style>", " ", plain, flags=re.DOTALL)
+        plain = re.sub(r"<[^>]+>", " ", plain)
+        plain = re.sub(r"&nbsp;", " ", plain)
+        plain = re.sub(r"\s+", " ", plain).strip()
 
-        # ── About section ──
-        about_m = re.search(r'id="about"[^>]*>.*?</section>', clean, re.DOTALL)
-        if about_m:
-            about_text = re.sub(r"<[^>]+>", " ", about_m.group(0))
-            about_text = re.sub(r"\s+", " ", about_text).strip()
-            if len(about_text) > 20:
-                profile.bio = (profile.bio or "") + "\n\n" + about_text
+        lines = [l.strip() for l in plain.splitlines() if l.strip()]
+        meaningful = [l for l in lines if len(l) > 3 and not l.startswith("{") and not l.startswith("/*")]
 
-        # ── Structured extra data ──
+        # ── Connection count ──
+        for line in meaningful:
+            if "followers" in line.lower() or "connections" in line.lower():
+                count = _parse_count(line)
+                if count:
+                    if "follower" in line.lower():
+                        profile.follower_count = profile.follower_count or count
+                    else:
+                        profile.following_count = profile.following_count or count
+                    break
+
+        # ── Structured extra ──
         extra: dict = {}
 
-        # Experience — look for section with company names
-        exp_section = re.search(
-            r'(?:experience|position).*?</section>', clean, re.DOTALL | re.IGNORECASE
-        )
-        if exp_section:
-            # Extract company names
-            companies = re.findall(
-                r'(?:t-14 t-normal[^>]*>\s*<span[^>]*>\s*([^<]+)<)',
-                exp_section.group(0),
-            )
-            if companies:
-                extra["experience_companies"] = companies[:10]
+        # Scan meaningful text for recognizable sections
+        section_keywords = {
+            "experience": ["experience", "经历", "工作经历"],
+            "education": ["education", "教育经历", "教育"],
+            "skills": ["skills", "技能", "endorsements"],
+            "about": ["about", "关于"],
+        }
 
-        # Education
-        edu_section = re.search(
-            r'(?:education).*?</section>', clean, re.DOTALL | re.IGNORECASE
-        )
-        if edu_section:
-            schools = re.findall(
-                r'(?:t-16 t-bold[^>]*>\s*<span[^>]*>\s*([^<]+)<)',
-                edu_section.group(0),
-            )
-            if schools:
-                extra["education_schools"] = schools[:5]
-
-        # Skills
-        skills = re.findall(
-            r'(?:t-16 t-black t-bold[^>]*>\s*<span[^>]*>\s*([^<]{2,40})<)',
-            clean,
-        )
-        if skills:
-            extra["skills"] = skills[:20]
-
-        # About text
-        about_match = re.search(r'"about":"([^"]+)"', clean)
-        if about_match:
-            extra["about"] = about_match.group(1)[:500]
+        for i, line in enumerate(meaningful):
+            line_lower = line.lower()
+            for section, keywords in section_keywords.items():
+                if any(kw in line_lower for kw in keywords):
+                    # Collect subsequent lines until next section or empty
+                    items = []
+                    for j in range(i + 1, min(i + 50, len(meaningful))):
+                        next_line = meaningful[j].strip()
+                        if len(next_line) < 3:
+                            break
+                        if any(
+                            any(kw in next_line.lower() for kw in sec_kws)
+                            for sec_kws in section_keywords.values()
+                        ):
+                            break
+                        items.append(next_line)
+                    if items:
+                        key_map = {
+                            "experience": "experience_items",
+                            "education": "education_items",
+                            "skills": "skills",
+                            "about": "about_text",
+                        }
+                        extra[key_map[section]] = items[:30]
 
         if extra:
             profile.extra = extra
