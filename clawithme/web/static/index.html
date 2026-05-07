@@ -366,7 +366,6 @@
       <input type="checkbox" id="ethics">
       <span data-i18n="ethicsLabel">I own this account or have authorization to search it</span>
     </label>
-    <a id="linkedinStatus" href="/admin" style="display:none;font-size:12px;text-decoration:none;margin-top:8px" title="管理 LinkedIn 连接"></a>
   </div>
 
   <div class="scroll-hint" id="scrollHint">↓ Scroll for results</div>
@@ -460,8 +459,6 @@ const _STRINGS = {
     cancelled: '已取消',
     error: '错误',
     fullProfileData: '完整资料',
-    linkedinOk: '✅ LinkedIn 已连接',
-    linkedinNo: '⚠️ 未连接 LinkedIn',
     phaseSetup: '正在加载...',
     phaseProbe: '正在探测 {n} 个站点...',
     phaseScanning: '正在扫描站点并查询泄露库...',
@@ -497,8 +494,6 @@ const _STRINGS = {
     cancelled: 'Cancelled',
     error: 'Error',
     fullProfileData: 'Full profile data',
-    linkedinOk: '✅ LinkedIn connected',
-    linkedinNo: '⚠️ LinkedIn not connected',
     phaseSetup: 'Loading...',
     phaseProbe: 'Probing {n} sites...',
     phaseScanning: 'Scanning sites and querying leak databases...',
@@ -1001,29 +996,8 @@ function renderClustersAndSingletons() {
   document.getElementById('statClusters').textContent = multiClusters.length;
 }
 
-// ── LinkedIn status ─────────────────────────────────────────────
-async function checkLinkedinStatus() {
-  try {
-    const res = await fetch('/api/admin/linkedin/cookies');
-    const data = await res.json();
-    const el = document.getElementById('linkedinStatus');
-    if (data.configured && data.exists && data.fresh) {
-      el.textContent = L('linkedinOk');
-      el.style.color = '#166534';
-      el.title = '管理 LinkedIn 连接';
-    } else {
-      el.textContent = L('linkedinNo') + ' → 点此登录';
-      el.style.color = '#808080';
-      el.style.cursor = 'pointer';
-      el.title = '前往管理后台登录 LinkedIn';
-    }
-    el.style.display = 'inline-block';
-  } catch(_) {}
-}
-
 // ── Init ──────────────────────────────────────────────────────
 applyI18n();
-checkLinkedinStatus();
 // ── IME-aware Enter: don't search when Enter confirms IME input ──
 document.getElementById('usernameInput').addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.isComposing) doSearch();
