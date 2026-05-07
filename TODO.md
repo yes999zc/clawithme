@@ -209,21 +209,21 @@
 > 基于全面代码审查提出的 10 项建议。优先级分三级。
 
 ### P0 — 立即（零/低代码成本，直接提升转化）
-- [ ] **交互式 Demo 页面** — GitHub Pages 部署预计算报告 HTML，10 秒体验产品价值
-- [ ] **量化对比数据** — vs maigret/sherlock 的 Benchmark 表格（站点数、速度、中国覆盖、字段数）
-- [ ] **README 定位优化** — 中国互联网覆盖作为核心卖点，不再埋在对比表里
+- [x] **交互式 Demo 页面** — GitHub Pages 部署，Geist 风格完整报告 Demo ✅
+- [x] **量化对比数据** — vs maigret/sherlock 的 Benchmark 表格 ✅
+- [x] **README 定位优化** — 中国互联网覆盖作为核心卖点 ✅
 
 ### P1 — 本月（功能壁垒，竞品没有）
-- [ ] **变更监控模式** — `clawithme watch <username> --interval 24h`，增量检测 + 推送
+- [x] **变更监控模式** — `clawithme watch <username> --interval 24h`，增量检测 + 推送 ✅
 - [x] **按站点分级代理** — `proxy_tier` 字段 + ProxyManager + Admin 管理后台 ✅
 - [ ] **代理池轮换/故障转移** — ProxyPool 多节点 + 健康检查 + 自动切换（分级代理基础已就位）
-- [ ] **增量搜索** — `--incremental` 模式，只探测缓存未命中/已过期的站点
-- [x] **LinkedIn 突破** — Playwright + Cookie 登录态，深度提取（姓名/职位/公司/技能/教育） ✅
+- [x] **增量搜索** — `--incremental` 模式，只探测缓存未命中/已过期的站点 ✅
+- [x] **LinkedIn 突破** — Playwright + Cookie 登录态 + `clawithme linkedin-login` ✅
 
 ### P2 — 下季度（战略层）
-- [ ] **站点健康自愈** — CI 验证结果自动标记 `deprecated`/`health` 状态
-- [ ] **报告可操作建议** — Action Items 区块（注销建议、密码修改提醒、头像差异化建议）
-- [ ] **差异化 Landing Page** — 安全研究员 / 隐私个人 / HR 背调 三条用户路径
+- [x] **站点健康自愈** — `verify_site.py --auto-fix` 自动标记 `health`，Admin 面板展示 ✅
+- [x] **报告可操作建议** — Action Items 区块（密码修改、头像差异化、账号注销提醒）✅
+- [x] **差异化 Landing Page** — 安全研究员 / 隐私个人 / HR 背调 三条用户路径 ✅
 - [ ] **开放核心模式评估** — 引擎 MIT 开源 + 站点数据库延迟开源 / 商业版
 
 ---

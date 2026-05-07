@@ -1,6 +1,6 @@
 # STATE.md — clawithme
 
-Last updated: 2026-05-07 (evening — cache/proxy/timeout fixes)
+Last updated: 2026-05-07 (late evening — P0/P1 complete, P2 3/4 done)
 
 ## Quick Stats
 
@@ -15,6 +15,13 @@ Last updated: 2026-05-07 (evening — cache/proxy/timeout fixes)
 | Detection engines | 9 |
 | Profile extractors | **49** |
 | Async pipeline | 10-concurrent, cold ~14s (was 180s) |
+| Incremental search | ✅ (stale cache reuse, 14s → 2s for repeats) |
+| Watch/monitoring | ✅ (periodic re-scan + change detection + webhook) |
+| LinkedIn auth | ✅ (cookie-based Playwright login + deep extraction) |
+| Tiered proxy | ✅ (direct/datacenter/residential + Admin UI) |
+| Site health | ✅ (verify --auto-fix + Admin health dashboard) |
+| Actionable reports | ✅ (5 recommendation types in report footer) |
+| Demo page | ✅ (GitHub Pages, 3 persona tabs, Geist design) |
 | Report formats | HTML + JSON + PDF + **Markdown** |
 | WebUI i18n | zh + **en** |
 | Hit confidence scoring | ✅ (0.0-1.0 with name/field/Script checks) |
@@ -39,7 +46,11 @@ Last updated: 2026-05-07 (evening — cache/proxy/timeout fixes)
 | **10d** | **Evidence UX — site-pair info, dedup, plain language** | ✅ |
 | **10e** | **WebUI i18n — zh/en language switch** | ✅ |
 | — | 天眼查 API | ❌ cancelled |
+| **11** | **Infrastructure fixes — cache, timeout, proxy, LinkedIn, watch, incremental** | ✅ |
+| **12** | **Site health, actionable reports, persona landing page** | ✅ |
 | — | Vercel deployment | ❌ cancelled (user purchasing server) |
+| — | Proxy pool rotation | ⏸️ deferred (tiered proxy foundation ready) |
+| — | Open-core model evaluation | ⏸️ deferred |
 
 ## Architecture
 
@@ -210,6 +221,27 @@ clawithme/                          # Monorepo — all 49 extractors unified
 
 基础设施已就位：`ProxyConfig`（config.py）、`HttpClient(proxy=)`（http_client.py）、
 `Engine(http_client=)`（engines.py）三层早已支持，此前只是没有接通。
+
+## 2026-05-07 — Phase 11+12 交付物
+
+### Phase 11：基础设施修复 + 品质功能
+| 功能 | 说明 |
+|------|------|
+| 缓存假阴性修复 | 探测失败不再缓存为「不存在」，阴性 TTL 24h→1h |
+| 超时贯通 | 站点/引擎 timeout 配置真正生效 |
+| 分级代理 | `proxy_tier` + ProxyManager + Admin 管理后台 |
+| `linkedin-login` | 交互式浏览器登录，Cookie 自动保存 |
+| LinkedIn 深度提取 | Cookie + Playwright，探测+提取双阶段 |
+| `clawithme watch` | 定时监控 + 基准对比 + 变更检测 + webhook |
+| `--incremental` | 增量搜索，重用过期缓存，14s→2s |
+| Demo 页面 | GitHub Pages，Geist 风格，3 用户画像 |
+
+### Phase 12：品质路线图（P0+P1+P2）
+| 功能 | 说明 |
+|------|------|
+| 站点健康自愈 | `verify_site.py --auto-fix`，Admin 面板展示 |
+| 报告可操作建议 | 5 类自动建议（泄露/头像/空白账号/曝光/用户名） |
+| 差异化 Landing | 安全研究员 / 隐私个人 / HR 背调 3 条路径 |
 
 ## Hosting (planned)
 
