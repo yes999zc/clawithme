@@ -241,3 +241,44 @@ async def get_linkedin_cookie_status(request: Request):
             "error": str(e),
             "note": "Cookie 文件读取失败",
         }
+
+
+class CookieUpload(BaseModel):
+    cookies: list[dict]
+
+
+@router.post("/linkedin/cookies")
+async def save_linkedin_cookies(body: CookieUpload, request: Request):
+    """Save LinkedIn cookies from browser export (JSON format)."""
+    from pathlib import Path as _Path
+
+    cfg = load_config()
+    cookie_file = cfg.apis.linkedin_cookie_file
+
+    if not cookie_file:
+        # Default path if not configured
+        cookie_file = str(_Path.home() / ".config" / "clawithme" / "linkedin_cookies.json")
+
+    try:
+        filepath = _Path(cookie_file).expanduser()
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        filepath.write_text(json.dumps(body.cookies, indent=2, ensure_ascii=False))
+        # Also update config.toml if this is a new path
+        if not cfg.apis.linkedin_cookie_file:
+            from pathlib import Path as _P
+            config_path = _P(__file__).resolve().parent.parent.parent.parent / "config.toml"
+            if config_path.exists():
+                content = config_path.read_text()
+                if "[cookies]" not in content:
+                    content += f'\n[cookies]\nlinkedin_file = "{cookie_file}"\n'
+                elif "linkedin_file" not in content:
+                    content = content.replace("[cookies]", f"[cookies]\nlinkedin_file = \"{cookie_file}\"")
+                config_path.write_text(content)
+        return {
+            "status": "ok",
+            "count": len(body.cookies),
+            "file": str(filepath),
+        }
+    except OSError as e:
+        logger.error("cookie_save_failed", error=str(e))
+        raise HTTPException(status_code=500, detail=f"Failed to save cookies: {e}")

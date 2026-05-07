@@ -81,10 +81,25 @@
 
 <!-- LinkedIn Cookies -->
 <div class="card">
-  <h2>🔐 LinkedIn Cookie 状态</h2>
-  <p>用于深度提取 LinkedIn 资料（工作经历、教育、技能等）。<br>
-     运行 <code>clawithme linkedin-login</code> 进行交互式登录。</p>
+  <h2>🔐 LinkedIn Cookie 管理</h2>
+  <p>用于深度提取 LinkedIn 资料（工作经历、教育、技能等）。</p>
   <div id="linkedin-status" style="font-size:14px;margin-top:8px">Loading...</div>
+
+  <details style="margin-top:12px">
+    <summary style="cursor:pointer;font-size:13px;color:var(--muted)">📋 上传 Cookie（服务器已部署时使用）</summary>
+    <div style="margin-top:8px">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">
+        1. 浏览器打开 <a href="https://www.linkedin.com" target="_blank">linkedin.com</a> 并登录<br>
+        2. F12 → Application → Cookies → linkedin.com<br>
+        3. 全选所有 Cookie → 右键 Copy All as JSON<br>
+        4. 粘贴到下方并保存
+      </p>
+      <textarea id="cookie-input" placeholder='粘贴 Cookie JSON 到此处...&#10;格式：[{"name":"li_at","value":"...","domain":".linkedin.com"}, ...]'
+        style="width:100%;height:80px;font:12px monospace;padding:8px;border:1px solid var(--border);border-radius:6px;resize:vertical"></textarea>
+      <button onclick="saveCookies()" class="btn-primary" style="margin-top:8px">💾 保存 Cookie</button>
+      <span id="cookie-save-status" class="status"></span>
+    </div>
+  </details>
 </div>
 
 </div>
@@ -242,6 +257,37 @@ async function loadHealth() {
     }
   } catch (e) {
     el.textContent = '加载失败: ' + e.message;
+  }
+}
+
+async function saveCookies() {
+  const statusEl = document.getElementById('cookie-save-status');
+  const raw = document.getElementById('cookie-input').value.trim();
+  if (!raw) { statusEl.className = 'status error'; statusEl.textContent = '❌ 请粘贴 Cookie JSON'; return; }
+  try {
+    const cookies = JSON.parse(raw);
+    const res = await fetch('/api/admin/linkedin/cookies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cookies }),
+    });
+    if (res.ok) {
+      statusEl.className = 'status ok';
+      statusEl.textContent = '✅ Cookie 已保存';
+      loadLinkedinStatus();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      statusEl.className = 'status error';
+      statusEl.textContent = '❌ 保存失败: ' + (data.detail || res.status);
+    }
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      statusEl.className = 'status error';
+      statusEl.textContent = '❌ JSON 格式错误，请检查';
+    } else {
+      statusEl.className = 'status error';
+      statusEl.textContent = '❌ ' + e.message;
+    }
   }
 }
 
