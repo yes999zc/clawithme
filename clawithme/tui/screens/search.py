@@ -99,9 +99,8 @@ class SearchScreen(Screen):
         lang_val = self.query_one("#lang-select", Select).value
         lang = lang_val if lang_val else "zh"
 
-        self.app.push_screen("results")
-        results_screen = self.app.get_screen("results")
-        results_screen.run_search(
+        # Store params on app for the results screen to pick up on mount
+        self.app._search_params = dict(
             username=username,
             include_migrated=migrated,
             no_cache=no_cache,
@@ -109,3 +108,4 @@ class SearchScreen(Screen):
             incremental=incremental,
             lang=lang,
         )
+        self.app.push_screen("results")

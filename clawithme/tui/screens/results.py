@@ -84,7 +84,11 @@ class ResultsScreen(Screen):
                 yield Button("🔍 New Search", id="btn-new", variant="default")
 
     def on_mount(self) -> None:
-        """Initialize results screen."""
+        """Start search with params passed from search screen."""
+        params = getattr(self.app, "_search_params", None)
+        if params:
+            self.run_search(**params)
+            del self.app._search_params
 
     def watch_status_text(self, value: str) -> None:
         self.query_one("#status-bar", Static).update(f"  {value}")
