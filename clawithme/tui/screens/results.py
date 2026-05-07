@@ -190,7 +190,8 @@ class ResultsScreen(Screen):
                 f"✅ Done in {elapsed:.1f}s — "
                 f"{len(result.hits)} hits · "
                 f"{len(result.profiles)} profiles · "
-                f"{len(result.clusters)} clusters"
+                f"{sum(1 for c in result.clusters if len(c.profiles) > 1)} matched · "
+                f"{sum(1 for c in result.clusters if len(c.profiles) == 1)} standalone"
             )
         except Exception as e:
             self.status_text = f"❌ Error: {e}"
@@ -206,7 +207,8 @@ class ResultsScreen(Screen):
         """Render search results into the panels."""
         self.hits_total = len(result.hits)
         self.profiles_total = len(result.profiles)
-        self.clusters_total = len(result.clusters)
+        # Only count multi-profile clusters as "clusters"
+        self.clusters_total = sum(1 for c in result.clusters if len(c.profiles) > 1)
         self.leaks_total = len(result.leak_records)
 
         hits_log = self.query_one("#hits-log", RichLog)
@@ -236,18 +238,37 @@ class ResultsScreen(Screen):
             profiles_log.write("[dim]No profiles extracted[/dim]")
 
         clusters_log = self.query_one("#clusters-log", RichLog)
-        for i, c in enumerate(result.clusters):
-            sites_in = getattr(c, "site_ids", [])
-            conf_val = getattr(c, "confidence", 0.0)
+        # Split: multi-profile clusters vs standalone profiles
+        multi = [c for c in result.clusters if len(c.profiles) > 1]
+        singles = [c for c in result.clusters if len(c.profiles) == 1]
+
+        if multi:
+            clusters_log.write("[bold]🔗 跨平台关联[/bold]")
+            for i, c in enumerate(multi):
+                site_ids = [p.site_id for p in c.profiles]
+                conf_val = getattr(c, "confidence", 0.0)
+                conf_pct = f"{conf_val * 100:.0f}%"
+                color = "green" if conf_val >= 0.75 else ("yellow" if conf_val >= 0.5 else "red")
+                clusters_log.write(
+                    f"\n  关联组 {i+1}: "
+                    f"[bold]{', '.join(site_ids)}[/bold]"
+                    f"  [{color}]置信度 {conf_pct}[/{color}]"
+                )
+                for signal in getattr(c, "signals", [])[:5]:
+                    clusters_log.write(f"    └ 信号: {signal}")
+                evidence = getattr(c, "evidence", {})
+                for ev_list in list(evidence.values())[:3]:
+                    for ev in (ev_list if isinstance(ev_list, list) else [ev_list])[:2]:
+                        clusters_log.write(f"    └ {ev}")
+
+        if singles:
+            if multi:
+                clusters_log.write("\n")
+            site_list = [p.site_id for c in singles for p in c.profiles]
             clusters_log.write(
-                f"\n  Cluster {i+1}: "
-                f"[bold]{', '.join(sites_in[:5])}[/bold]"
-                f"{'…' if len(sites_in) > 5 else ''}"
-                f" [dim]confidence={conf_val}[/dim]"
+                f"[dim]👤 独立账号（未发现跨站关联）: {', '.join(site_list)}[/dim]"
             )
-            evidence = getattr(c, "evidence", [])
-            for ev in evidence[:3]:
-                clusters_log.write(f"    └ {ev}")
+
         if not result.clusters:
             clusters_log.write("[dim]No identity clusters formed[/dim]")
 
