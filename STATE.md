@@ -1,6 +1,6 @@
 # STATE.md — clawithme
 
-Last updated: 2026-05-07 (night — P0/P1 complete, WebUI/TUI polished)
+Last updated: 2026-05-07 (night — all fixes verified, uv cache cleared)
 
 ## Quick Stats
 
