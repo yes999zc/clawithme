@@ -1021,8 +1021,9 @@ async function checkLinkedinStatus() {
 // ── Init ──────────────────────────────────────────────────────
 applyI18n();
 checkLinkedinStatus();
+// ── IME-aware Enter: don't search when Enter confirms IME input ──
 document.getElementById('usernameInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doSearch();
+  if (e.key === 'Enter' && !e.isComposing) doSearch();
 });
 </script>
 </body>
