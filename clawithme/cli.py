@@ -669,15 +669,24 @@ def _query_all_leaks(
         return []
 
 
-_BANNER = """╭────────────────────────────────── clawithme v0.1 · OSINT Identity Panorama ──────────────────────────────────╮
-│                                                                                                                    │
-│       █▀▀ █░░ ▄▀█ █░▄░█ ▀█▀ ▀█▀ █░█ █▄░▄█ █▀▀                         3000+ sites                           │
-│       █▄▄ █▄▄ █▀█ █▀░▀█ ▄█▄ ░█░ █▀█ █░▀░█ ██▄                         49 profile extractors                  │
-│                                                                           9 detection engines                    │
-│     🔍 Username → Identity Panorama                                      4 report formats (html/json/pdf/md)    │
-│                                                                                                                    │
-│                                   3000+ sites · 49 extractors · 9 engines · 4 report types                          │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯"""
+def _load_banner() -> str:
+    """Read the unified banner from web/app.py."""
+    from pathlib import Path as _Path
+    try:
+        text = (_Path(__file__).resolve().parent / "web" / "app.py").read_text()
+        for prefix in ('_BANNER = r"""', '_BANNER = """'):
+            start = text.find(prefix)
+            if start != -1:
+                start += len(prefix)
+                end = text.find('"""', start)
+                if end != -1:
+                    return text[start:end]
+    except Exception:
+        pass
+    return "clawithme v0.1 · OSINT Identity Panorama"
+
+
+_BANNER = _load_banner()
 
 
 def main():

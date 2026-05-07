@@ -18,15 +18,15 @@ def _load_banner() -> str:
         return _load_banner._cache
     try:
         text = _BANNER_PATH.read_text()
-        start = text.find('_BANNER = """')
-        if start == -1:
-            return ""
-        start += len('_BANNER = """')
-        end = text.find('"""', start)
-        if end == -1:
-            return ""
-        _load_banner._cache = text[start:end]
-        return _load_banner._cache
+        for prefix in ('_BANNER = r"""', '_BANNER = """'):
+            start = text.find(prefix)
+            if start != -1:
+                start += len(prefix)
+                end = text.find('"""', start)
+                if end != -1:
+                    _load_banner._cache = text[start:end]
+                    return _load_banner._cache
+        return ""
     except Exception:
         return ""
 
