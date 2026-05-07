@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>clawithme — OSINT Identity Panorama</title>
+<meta name="description" content="OSINT 身份全景扫描工具 — 3119 站点探测，AI 跨平台聚类，泄露记录查询。开源免费。">
+<meta property="og:title" content="clawithme — OSINT Identity Panorama">
+<meta property="og:description" content="3119 站点探测 · AI 跨平台聚类 · 泄露记录查询">
+<meta property="og:image" content="/og-image.svg">
+<meta property="og:url" content="https://clawith.me">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://clawith.me">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="mask-icon" href="/favicon.svg" color="#16a34a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -164,6 +173,8 @@
   }
   .btn-ghost:hover { box-shadow:0 0 0 1px rgba(0,0,0,0.15); }
   .btn-ghost:disabled { opacity:0.35; cursor:not-allowed; }
+  .btn-opt { padding:12px 12px; min-width:auto; flex-shrink:0; }
+  .btn-opt svg { display:block; }
 
   .search-type-tag {
     display:inline-flex; align-items:center; gap:5px;
@@ -360,19 +371,103 @@
   .skip-link { position:absolute; top:-40px; left:0; background:var(--accent); color:#fff; padding:8px 16px; z-index:100; font-size:13px; text-decoration:none; border-radius:0 0 var(--radius) 0; transition:top 0.15s; }
   .skip-link:focus { top:0; }
 
+  /* ── Canvas BG ──────────────────────────────────────────── */
+  .hero-canvas {
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%;
+    pointer-events:none;
+  }
+
+  /* ── Features ────────────────────────────────────────────── */
+  .features {
+    padding:80px 20px 100px;
+    max-width:960px; margin:0 auto;
+  }
+  .features-inner {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .feature-card {
+    padding:32px 24px;
+    border-radius:var(--radius-card);
+    box-shadow:var(--shadow-card);
+    transition:box-shadow 0.15s;
+  }
+  .feature-card:hover { box-shadow:var(--shadow-card-hover); }
+  .feature-icon {
+    width:40px; height:40px; border-radius:var(--radius);
+    background:#f5f5f5; display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+  }
+  .feature-icon svg { width:20px; height:20px; stroke:var(--text); stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .feature-title {
+    font-size:15px; font-weight:600; letter-spacing:-0.2px;
+    margin-bottom:8px; color:var(--text);
+  }
+  .feature-desc {
+    font-size:14px; line-height:1.6; color:var(--text-secondary);
+  }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  .footer {
+    border-top:1px solid var(--border);
+    padding:32px 20px;
+  }
+  .footer-inner {
+    max-width:960px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:14px;
+  }
+  .footer-brand {
+    font-weight:600; color:var(--text);
+  }
+  .footer-links {
+    display:flex; align-items:center; gap:8px;
+    color:var(--text-tertiary);
+  }
+  .footer-links a {
+    color:var(--text-tertiary); text-decoration:none;
+    transition:color 0.15s;
+  }
+  .footer-links a:hover { color:var(--text); }
+  .footer-dot { color:var(--border); }
+
   /* ── Responsive ──────────────────────────────────────────── */
+  @media (max-width:768px) {
+    .hero { padding:100px 16px 50px; }
+    .hero-brand { font-size:96px; letter-spacing:-4px; margin-top:-100px; }
+    .features { padding:60px 16px 80px; }
+    .feature-card { padding:24px 20px; }
+  }
   @media (max-width:640px) {
-    .header { padding:0 20px; height:52px; }
-    .hero-brand { font-size:72px; letter-spacing:-3px; margin-top:-72px; }
-    .hero-subtitle { font-size:16px; margin-bottom:32px; }
-    .search-row { flex-direction:column; }
-    .btn, .btn-ghost { width:100%; }
-    .stats-row { gap:16px; }
-    .stat-num { font-size:24px; }
+    .header { padding:0 16px; height:48px; }
+    .hero-brand { font-size:52px; letter-spacing:-2px; margin-top:-60px; margin-bottom:12px; }
+    .hero-subtitle { font-size:14px; margin-bottom:24px; }
+    .hero { padding:80px 12px 40px; }
+    .search-row { flex-direction:column; gap:6px; }
+    .search-input { padding:10px 14px; font-size:14px; }
+    .btn, .btn-ghost { width:100%; padding:10px 20px; }
+    .btn-opt { padding:12px 10px; width:auto; }
+    .params-panel.is-open { padding:12px; }
+    .features { padding:40px 12px 60px; }
+    .features-inner { grid-template-columns:1fr; gap:16px; }
+    .feature-card { padding:20px 16px; }
+    .feature-title { font-size:14px; }
+    .feature-desc { font-size:13px; }
+    .stats-row { gap:12px; }
+    .stat-num { font-size:20px; letter-spacing:-0.8px; }
+    .stat-label { font-size:10px; }
     .card-grid { grid-template-columns:1fr; }
-    .hit-name { flex-basis:100px; }
+    .hit-name { flex-basis:80px; font-size:13px; }
     .download-row { flex-direction:column; }
-    .dl-btn { text-align:center; }
+    .dl-btn { text-align:center; font-size:12px; padding:10px; }
+    .hero-content { max-width:100%; }
+    .footer { padding:24px 16px; }
+    .footer-inner { flex-direction:column; gap:6px; font-size:13px; }
+    .header-actions { gap:8px; }
+    .header-lang { font-size:12px; }
+    .header-lang button { padding:2px 6px; font-size:12px; }
   }
   @media (prefers-reduced-motion:reduce) {
     *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
@@ -403,7 +498,7 @@
 
 <!-- ── Hero ────────────────────────────────────────────────── -->
 <section class="hero" id="heroSection" aria-label="Search">
-  <canvas id="titleCanvas" aria-hidden="true"></canvas>
+  <canvas id="titleCanvas" class="hero-canvas" aria-hidden="true"></canvas>
 
   <div class="hero-content">
     <h1 class="hero-brand" id="heroBrand">
@@ -423,11 +518,13 @@
         aria-describedby="searchTypeBadge"
       >
       <button type="button" id="searchBtn" class="btn btn-primary" onclick="app.doSearch()" data-i18n="searchBtn">Search</button>
+      <button type="button" class="btn btn-ghost btn-opt" id="optBtn" onclick="app.toggleOptions()" title="Search options" aria-label="Search options" aria-expanded="false" aria-controls="paramsPanel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
       <button type="button" id="cancelBtn" class="btn btn-ghost" onclick="app.cancelSearch()" data-i18n="cancelBtn" style="display:none">Cancel</button>
     </div>
 
     <div class="search-type-tag" id="searchTypeBadge" aria-live="polite" aria-atomic="true"></div>
-    <button type="button" class="options-trigger" onclick="app.toggleOptions()" data-i18n="searchOpts" aria-expanded="false" aria-controls="paramsPanel">Search Options</button>
     <div class="params-panel" id="paramsPanel" role="group" aria-label="Search options">
       <label><input type="checkbox" id="chkMigrated"> <span data-i18n="optFullScan">Full scan (3119 sites, slower)</span></label>
       <label><input type="checkbox" id="chkNoCache"> <span data-i18n="optNoCache">No cache</span></label>
@@ -442,6 +539,33 @@
   </div>
 
   <div class="scroll-hint" id="scrollHint" aria-hidden="true">&#8595; Scroll for results</div>
+</section>
+
+<!-- ── Features ────────────────────────────────────────────── -->
+<section class="features" id="featuresSection">
+  <div class="features-inner">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <h3 class="feature-title" data-i18n="featProbe">3119 站点全量探测</h3>
+      <p class="feature-desc" data-i18n="featProbeDesc">覆盖全球主流社交、开发、电商、论坛平台。用户名、邮箱、手机号多维度扫描，14 秒冷启动完成。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3 class="feature-title" data-i18n="featCluster">AI 跨平台身份聚类</h3>
+      <p class="feature-desc" data-i18n="featClusterDesc">基于同名、同邮箱、头像相似度、注册时间等多信号智能关联，自动归并同一人的多平台账号。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3 class="feature-title" data-i18n="featLeak">泄露记录实时追溯</h3>
+      <p class="feature-desc" data-i18n="featLeakDesc">HIBP + Cavalier 双数据源，邮件/密码泄露记录实时查询，快速定位数据暴露面。</p>
+    </div>
+  </div>
 </section>
 
 <hr class="section-divider" id="resultDivider" hidden>
@@ -493,6 +617,18 @@
 
   <div class="error-msg" id="errorDisplay" role="alert" aria-live="assertive"></div>
 </main>
+
+<!-- ── Footer ──────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">clawithme</div>
+    <div class="footer-links">
+      <a href="https://github.com/bakeyz/clawithme" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span class="footer-dot">·</span>
+      <span>MIT License</span>
+    </div>
+  </div>
+</footer>
 
 <script>
 (function() {
@@ -559,6 +695,12 @@ const _STRINGS = {
     cancelled: '已取消',
     error: '错误',
     fullProfileData: '完整资料',
+    featProbe: '3119 站点全量探测',
+    featProbeDesc: '覆盖全球主流社交、开发、电商、论坛平台。用户名、邮箱、手机号多维度扫描，14 秒冷启动完成。',
+    featCluster: 'AI 跨平台身份聚类',
+    featClusterDesc: '基于同名、同邮箱、头像相似度、注册时间等多信号智能关联，自动归并同一人的多平台账号。',
+    featLeak: '泄露记录实时追溯',
+    featLeakDesc: 'HIBP + Cavalier 双数据源，邮件/密码泄露记录实时查询，快速定位数据暴露面。',
     phaseSetup: '正在初始化...',
     phaseProbe: '正在探测 {n} 个站点...',
     phaseScanning: '正在扫描站点并查询泄露库...',
@@ -596,6 +738,12 @@ const _STRINGS = {
     cancelled: 'Cancelled',
     error: 'Error',
     fullProfileData: 'Full profile data',
+    featProbe: '3,119 Sites, Full Scan',
+    featProbeDesc: 'Covers social, dev, e-commerce, and forum platforms. Username, email, and phone multi-dimension scanning. 14s cold start.',
+    featCluster: 'AI Cross-Platform Clustering',
+    featClusterDesc: 'Smart identity linking using name, email, avatar similarity, and join dates. Automatically merges the same person across platforms.',
+    featLeak: 'Real-Time Leak Detection',
+    featLeakDesc: 'HIBP + Cavalier dual data sources. Instant email and password breach lookups to identify your data exposure footprint.',
     phaseSetup: 'Initializing...',
     phaseProbe: 'Probing {n} sites...',
     phaseScanning: 'Scanning sites and querying leak databases...',
@@ -800,10 +948,16 @@ async function doSearch() {
   $('cancelBtn').style.display = 'inline-block';
   $('searchBtn').disabled = true;
   $('scrollHint').classList.add('is-visible');
+  $('featuresSection').style.display = 'none';
 
   $('resultsSection').removeAttribute('hidden');
   $('resultDivider').removeAttribute('hidden');
   $('emptyState').setAttribute('hidden', '');
+
+  // Scroll to results after a short delay so the layout settles
+  setTimeout(function() {
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
 
   $('statHits').textContent = '0';
   $('statProfiles').textContent = '0';
@@ -1212,6 +1366,117 @@ $('usernameInput').addEventListener('keydown', e => {
 });
 
 $('emptyState').removeAttribute('hidden');
+
+// ── Hero Canvas Animation ──────────────────────────────────
+(function initCanvas() {
+  const canvas = $('titleCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let animId = null;
+  const dots = [];
+  const DOT_COUNT = 40;
+  const CONNECTION_DIST = 180;
+
+  function resize() {
+    const hero = document.getElementById('heroSection');
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    canvas.width = rect.width * devicePixelRatio;
+    canvas.height = rect.height * devicePixelRatio;
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+  }
+
+  function initDots(w, h) {
+    dots.length = 0;
+    for (let i = 0; i < DOT_COUNT; i++) {
+      dots.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 1.5 + 0.5,
+      });
+    }
+  }
+
+  function draw(w, h) {
+    ctx.clearRect(0, 0, w, h);
+
+    // Update positions
+    for (const d of dots) {
+      d.x += d.vx;
+      d.y += d.vy;
+      if (d.x < 0 || d.x > w) d.vx *= -1;
+      if (d.y < 0 || d.y > h) d.vy *= -1;
+    }
+
+    // Draw connections
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < dots.length; i++) {
+      for (let j = i + 1; j < dots.length; j++) {
+        const dx = dots[i].x - dots[j].x;
+        const dy = dots[i].y - dots[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECTION_DIST) {
+          const alpha = (1 - dist / CONNECTION_DIST) * 0.12;
+          ctx.strokeStyle = 'rgba(0,0,0,' + alpha + ')';
+          ctx.beginPath();
+          ctx.moveTo(dots[i].x, dots[i].y);
+          ctx.lineTo(dots[j].x, dots[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw dots
+    for (const d of dots) {
+      ctx.fillStyle = 'rgba(0,0,0,' + (d.r / 2 * 0.15) + ')';
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    animId = requestAnimationFrame(() => draw(w, h));
+  }
+
+  function start() {
+    const hero = document.getElementById('heroSection');
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    resize();
+    initDots(rect.width, rect.height);
+    draw(rect.width, rect.height);
+  }
+
+  function stop() {
+    if (animId) { cancelAnimationFrame(animId); animId = null; }
+  }
+
+  // Respect reduced motion
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!mq.matches) {
+    start();
+  }
+  mq.addEventListener('change', function(e) {
+    if (e.matches) stop();
+    else start();
+  });
+
+  // Re-initialize on resize
+  let resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      stop();
+      start();
+    }, 200);
+  });
+})();
 
 })();
 </script>

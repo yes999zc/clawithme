@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <!-- subtle dot grid -->
+  <g opacity="0.04">
+    <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#171717"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#dots)"/>
+  </g>
+  <!-- brand -->
+  <text x="100" y="340" font-family="Geist, system-ui, sans-serif" font-size="96" font-weight="700" fill="#171717" letter-spacing="-4">CLAWITH</text>
+  <text x="610" y="340" font-family="Geist, system-ui, sans-serif" font-size="96" font-weight="700" fill="#16a34a" letter-spacing="-4">me.</text>
+  <!-- tagline -->
+  <text x="100" y="410" font-family="Geist, system-ui, sans-serif" font-size="24" font-weight="400" fill="#4d4d4d" letter-spacing="0.5">OSINT Identity Panorama</text>
+  <!-- features -->
+  <rect x="100" y="450" width="12" height="12" rx="3" fill="#171717"/>
+  <text x="124" y="462" font-family="Geist, system-ui, sans-serif" font-size="18" fill="#808080">3,119 Sites</text>
+  <rect x="290" y="450" width="12" height="12" rx="3" fill="#171717"/>
+  <text x="314" y="462" font-family="Geist, system-ui, sans-serif" font-size="18" fill="#808080">AI Clustering</text>
+  <rect x="510" y="450" width="12" height="12" rx="3" fill="#171717"/>
+  <text x="534" y="462" font-family="Geist, system-ui, sans-serif" font-size="18" fill="#808080">Leak Detection</text>
+</svg>

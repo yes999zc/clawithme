@@ -4,108 +4,337 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>clawithme — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <style>
-  :root {
-    --bg: #f5f5f5;
-    --card: #fff;
-    --text: #333;
-    --muted: #888;
-    --border: #e0e0e0;
-    --accent: #1a73e8;
-    --danger: #d93025;
-    --success: #188038;
-    --radius: 8px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
-  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-  header h1 { font-size: 20px; font-weight: 600; }
-  header nav a { color: var(--accent); text-decoration: none; font-size: 14px; margin-left: 16px; }
-  .card { background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
-  .card p {font-size: 14px; color: var(--muted); margin-bottom: 12px; }
-  .tier-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-  .tier-row label { width: 110px; font-size: 14px; font-weight: 500; text-align: right; flex-shrink: 0; }
-  .tier-row input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: monospace; }
-  .tier-row button { padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px; white-space: nowrap; }
-  .tier-row button:hover { background: #f0f0f0; }
-  .btn-primary { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
-  .btn-primary:hover { opacity: 0.9; }
-  .actions { display: flex; gap: 10px; margin-top: 16px; }
-  .actions button { padding: 10px 24px; border-radius: 6px; font-size: 14px; border: 1px solid var(--border); cursor: pointer; }
-  .status { padding: 6px 12px; border-radius: 4px; font-size: 13px; margin-top: 8px; display: none; }
-  .status.ok { background: #e6f4ea; color: var(--success); display: block; }
-  .status.error { background: #fce8e6; color: var(--danger); display: block; }
-  .test-result { font-size: 12px; font-family: monospace; margin-left: 122px; color: var(--muted); min-height: 18px; }
-  .site-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-  .site-tag { font-size: 12px; padding: 2px 8px; background: #e8f0fe; color: var(--accent); border-radius: 12px; }
-  .site-tag.none { background: #f0f0f0; color: var(--muted); }
-  .back-link { font-size: 14px; color: var(--accent); }
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --text: #171717;
+  --text-secondary: #4d4d4d;
+  --text-tertiary: #808080;
+  --border: #ebebeb;
+  --accent: #171717;
+  --green: #166534; --green-bg: #f0fdf4;
+  --amber: #92400e; --amber-bg: #fefce8;
+  --red: #991b1b; --red-bg: #fef2f2;
+  --radius: 6px;
+  --radius-card: 8px;
+  --shadow-card: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 2px rgba(0,0,0,0.04), #fafafa 0 0 0 1px;
+  --focus-ring: 0 0 0 2px hsla(212,100%,48%,1), 0 0 0 4px hsla(212,100%,48%,0.15);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Geist', 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+  position:fixed; inset:0 0 auto; z-index:10;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 40px; height:60px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.header-brand { font-size:16px; font-weight:600; letter-spacing:-0.32px; }
+.header-nav { display:flex; align-items:center; gap:12px; }
+.header-nav a {
+  text-decoration:none; font-size:14px; font-weight:500;
+  color:var(--text-tertiary); transition:color 0.15s;
+  display:inline-flex; align-items:center; gap:4px;
+}
+.header-nav a:hover { color:var(--text); }
+
+/* ── Login Overlay ───────────────────────────────────────── */
+.login-overlay {
+  position:fixed; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--bg);
+}
+.login-overlay.is-hidden { display:none; }
+.login-box {
+  width:100%; max-width:360px; padding:40px 32px;
+  text-align:center;
+}
+.login-brand { font-size:32px; font-weight:700; letter-spacing:-1px; margin-bottom:8px; }
+.login-brand .me { color:#16a34a; }
+.login-sub { font-size:14px; color:var(--text-secondary); margin-bottom:32px; }
+.login-input {
+  width:100%; padding:12px 16px; margin-bottom:16px;
+  font-family:'Geist','Noto Sans SC',system-ui,sans-serif; font-size:15px;
+  color:var(--text); background:var(--surface);
+  border:none; border-radius:var(--radius);
+  box-shadow:0 0 0 1px rgba(0,0,0,0.08);
+  outline:none; transition:box-shadow 0.15s;
+  text-align:center;
+}
+.login-input:focus { box-shadow:0 0 0 1px rgba(0,0,0,0.15), var(--focus-ring); }
+.login-input::placeholder { color:var(--text-tertiary); }
+.login-btn {
+  width:100%; padding:12px; border:none; border-radius:var(--radius);
+  font-family:'Geist',system-ui,sans-serif; font-size:14px; font-weight:500;
+  color:#fff; background:var(--accent); cursor:pointer;
+  transition:background 0.15s;
+}
+.login-btn:hover { background:#2a2a2a; }
+.login-error { font-size:13px; color:var(--red); margin-top:12px; display:none; }
+.login-error.is-visible { display:block; }
+
+/* ── Admin Content ───────────────────────────────────────── */
+.admin-content { display:none; padding-top:60px; }
+.admin-content.is-logged-in { display:block; }
+
+.container { max-width:780px; margin:0 auto; padding:24px 20px 80px; }
+
+/* ── Cards ────────────────────────────────────────────────── */
+.card {
+  background:var(--surface); border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card); padding:24px; margin-bottom:16px;
+}
+.card h2 {
+  font-size:16px; font-weight:600; letter-spacing:-0.32px;
+  margin-bottom:8px;
+}
+.card p, .card-desc {
+  font-size:14px; color:var(--text-secondary); line-height:1.6; margin-bottom:12px;
+}
+.card code {
+  font-family:'Geist Mono',monospace; font-size:13px;
+  background:#f5f5f5; padding:1px 6px; border-radius:3px;
+}
+
+/* ── Tier rows ────────────────────────────────────────────── */
+.tier-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.tier-row label {
+  width:110px; font-size:14px; font-weight:500; text-align:right; flex-shrink:0;
+  color:var(--text);
+}
+.tier-row input {
+  flex:1; padding:8px 12px;
+  font-family:'Geist Mono',monospace; font-size:13px;
+  color:var(--text); background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--radius);
+  outline:none; transition:border-color 0.15s;
+}
+.tier-row input:focus { border-color:var(--text); }
+.tier-row button {
+  padding:8px 14px; border:1px solid var(--border); border-radius:var(--radius);
+  background:var(--surface); cursor:pointer;
+  font-family:'Geist',system-ui,sans-serif; font-size:13px; font-weight:500;
+  color:var(--text-secondary); white-space:nowrap;
+  transition:box-shadow 0.15s;
+}
+.tier-row button:hover { box-shadow:0 0 0 1px rgba(0,0,0,0.10); }
+
+.test-result { font-size:12px; font-family:'Geist Mono',monospace; margin-left:120px; color:var(--text-tertiary); min-height:18px; }
+
+/* ── Actions ──────────────────────────────────────────────── */
+.actions { display:flex; gap:10px; margin-top:16px; }
+.btn {
+  padding:10px 24px; font-family:'Geist',system-ui,sans-serif;
+  font-size:14px; font-weight:500; border:none; border-radius:var(--radius);
+  cursor:pointer; transition:opacity 0.15s;
+}
+.btn-primary { color:#fff; background:var(--accent); }
+.btn-primary:hover { opacity:0.85; }
+.btn-ghost {
+  color:var(--text-secondary); background:var(--surface);
+  box-shadow:0 0 0 1px rgba(0,0,0,0.08);
+}
+.btn-ghost:hover { box-shadow:0 0 0 1px rgba(0,0,0,0.15); }
+
+/* ── Status / badges ─────────────────────────────────────── */
+.status { padding:8px 14px; border-radius:var(--radius); font-size:13px; margin-top:12px; display:none; }
+.status.ok { display:block; background:var(--green-bg); color:var(--green); }
+.status.error { display:block; background:var(--red-bg); color:var(--red); }
+
+.site-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+.site-tag {
+  font-size:12px; font-weight:500; padding:2px 10px; border-radius:999px;
+  background:#e8f0fe; color:#1a73e8;
+}
+.site-tag.none { background:#f5f5f5; color:var(--text-tertiary); }
+
+/* ── Linkedin section ────────────────────────────────────── */
+.linkedin-status { font-size:14px; margin-top:8px; }
+.cookie-textarea {
+  width:100%; height:80px; padding:10px; margin-top:8px;
+  font-family:'Geist Mono',monospace; font-size:12px;
+  color:var(--text); background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--radius);
+  outline:none; resize:vertical;
+  transition:border-color 0.15s;
+}
+.cookie-textarea:focus { border-color:var(--text); }
+.cookie-help {
+  font-size:12px; color:var(--text-tertiary); line-height:1.8; margin-bottom:8px;
+}
+.cookie-help a { color:var(--text); }
+
+/* ── Logout ──────────────────────────────────────────────── */
+.logout-btn {
+  font-size:13px; color:var(--text-tertiary);
+  background:none; border:none; cursor:pointer;
+  font-family:inherit; transition:color 0.15s;
+}
+.logout-btn:hover { color:var(--text); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width:640px) {
+  .header { padding:0 16px; height:48px; }
+  .container { padding:16px 12px 60px; }
+  .card { padding:16px; }
+  .tier-row { flex-wrap:wrap; gap:6px; }
+  .tier-row label { width:80px; font-size:13px; }
+  .tier-row input { min-width:120px; }
+  .test-result { margin-left:86px; }
+  .actions { flex-direction:column; }
+  .btn { width:100%; text-align:center; }
+}
 </style>
 </head>
 <body>
-<div class="container">
 
-<header>
-  <h1>⚙️ clawithme Admin</h1>
-  <nav>
+<!-- ── Header ──────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-brand">CLAWITHme</div>
+  <div class="header-nav">
     <a href="/">← Search</a>
-  </nav>
+    <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display:none">Logout</button>
+  </div>
 </header>
+
+<!-- ── Login Overlay ───────────────────────────────────────── -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="login-brand">CLAWITH<span class="me">me.</span></div>
+    <div class="login-sub">Admin Panel</div>
+    <input type="password" class="login-input" id="loginPass" placeholder="Enter password" autofocus
+      onkeydown="if(event.key==='Enter') login()">
+    <button class="login-btn" onclick="login()">Unlock</button>
+    <div class="login-error" id="loginError">Incorrect password</div>
+  </div>
+</div>
+
+<!-- ── Admin Content ───────────────────────────────────────── -->
+<div class="admin-content" id="adminContent">
+
+<div class="container">
 
 <!-- Proxy Tiers -->
 <div class="card">
-  <h2>代理分级配置</h2>
-  <p>站点探测时根据站点定义中的 <code>proxy_tier</code> 字段选择对应代理。修改后立即生效，无需重启。</p>
+  <h2>▸ Proxy Tiers</h2>
+  <p class="card-desc">Sites select proxy based on their <code>proxy_tier</code> field. Changes apply immediately.</p>
   <div id="tiers-form"></div>
   <div class="actions">
-    <button class="btn-primary" onclick="saveTiers()">💾 保存配置</button>
+    <button class="btn btn-primary" onclick="saveTiers()">Save</button>
   </div>
   <div id="save-status" class="status"></div>
 </div>
 
 <!-- Site Health -->
 <div class="card">
-  <h2>🏥 站点健康</h2>
-  <p>探测规则自检状态。运行 <code>python scripts/verify_site.py --all --auto-fix</code> 自动更新。</p>
+  <h2>▸ Site Health</h2>
+  <p class="card-desc">Probe rule status. Run <code>python scripts/verify_site.py --all --auto-fix</code> to update.</p>
   <div id="health-status" style="font-size:14px;margin-top:8px">Loading...</div>
 </div>
 
 <!-- Sites by Tier -->
 <div class="card">
-  <h2>站点分级分布</h2>
-  <p>以下为各 tier 对应的站点（未设置 <code>proxy_tier</code> 的站点使用 direct）</p>
+  <h2>▸ Sites by Tier</h2>
+  <p class="card-desc">Sites without a <code>proxy_tier</code> default to <strong>direct</strong>.</p>
   <div id="sites-by-tier">Loading...</div>
 </div>
 
 <!-- LinkedIn Cookies -->
 <div class="card">
-  <h2>🔐 LinkedIn Cookie 管理</h2>
-  <p>用于深度提取 LinkedIn 资料（工作经历、教育、技能等）。</p>
-  <div id="linkedin-status" style="font-size:14px;margin-top:8px">Loading...</div>
-
+  <h2>▸ LinkedIn Cookies</h2>
+  <p class="card-desc">Used for deep profile extraction (work history, education, skills).</p>
+  <div id="linkedin-status" class="linkedin-status">Loading...</div>
   <details style="margin-top:12px">
-    <summary style="cursor:pointer;font-size:13px;color:var(--muted)">📋 上传 Cookie（服务器已部署时使用）</summary>
+    <summary style="cursor:pointer;font-size:13px;color:var(--text-tertiary)">▸ Upload cookies (server deployment)</summary>
     <div style="margin-top:8px">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">
-        1. 浏览器打开 <a href="https://www.linkedin.com" target="_blank">linkedin.com</a> 并登录<br>
+      <div class="cookie-help">
+        1. Open <a href="https://www.linkedin.com" target="_blank">linkedin.com</a> and log in<br>
         2. F12 → Application → Cookies → linkedin.com<br>
-        3. 全选所有 Cookie → 右键 Copy All as JSON<br>
-        4. 粘贴到下方并保存
-      </p>
-      <textarea id="cookie-input" placeholder='粘贴 Cookie JSON 到此处...&#10;格式：[{"name":"li_at","value":"...","domain":".linkedin.com"}, ...]'
-        style="width:100%;height:80px;font:12px monospace;padding:8px;border:1px solid var(--border);border-radius:6px;resize:vertical"></textarea>
-      <button onclick="saveCookies()" class="btn-primary" style="margin-top:8px">💾 保存 Cookie</button>
+        3. Select all → Copy All as JSON<br>
+        4. Paste below and save
+      </div>
+      <textarea class="cookie-textarea" id="cookie-input"
+        placeholder='Paste Cookie JSON here...&#10;Format: [{"name":"li_at","value":"...","domain":".linkedin.com"}, ...]'></textarea>
+      <button class="btn btn-primary" onclick="saveCookies()" style="margin-top:8px">Save Cookies</button>
       <span id="cookie-save-status" class="status"></span>
     </div>
   </details>
 </div>
 
 </div>
+</div>
 
 <script>
-// ── Load proxy config ──
+// ══════════════════════════════════════════════════════════════
+// Auth
+// ══════════════════════════════════════════════════════════════
+const AUTH_KEY = 'clawithme_admin_auth';
+
+function login() {
+  const pass = document.getElementById('loginPass').value;
+  if (pass === '1234') {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('loginOverlay').classList.add('is-hidden');
+    document.getElementById('adminContent').classList.add('is-logged-in');
+    document.getElementById('logoutBtn').style.display = '';
+    document.getElementById('loginError').classList.remove('is-visible');
+    loadAll();
+  } else {
+    document.getElementById('loginError').classList.add('is-visible');
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  document.getElementById('loginOverlay').classList.remove('is-hidden');
+  document.getElementById('adminContent').classList.remove('is-logged-in');
+  document.getElementById('logoutBtn').style.display = 'none';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').classList.remove('is-visible');
+}
+
+// Check auth on load
+(function checkAuth() {
+  if (sessionStorage.getItem(AUTH_KEY) === '1') {
+    document.getElementById('loginOverlay').classList.add('is-hidden');
+    document.getElementById('adminContent').classList.add('is-logged-in');
+    document.getElementById('logoutBtn').style.display = '';
+    loadAll();
+  }
+})();
+
+// ══════════════════════════════════════════════════════════════
+// Load all
+// ══════════════════════════════════════════════════════════════
+function loadAll() {
+  loadConfig();
+  loadSites();
+  loadLinkedinStatus();
+  loadHealth();
+}
+
+// ══════════════════════════════════════════════════════════════
+// Proxy config
+// ══════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 async function loadConfig() {
   const res = await fetch('/api/admin/proxy');
   const data = await res.json();
@@ -119,34 +348,24 @@ function renderTiers(tiers) {
     ['datacenter', tiers.datacenter ?? ''],
     ['residential', tiers.residential ?? ''],
   ];
-  // Add any extra tiers not in the default list
   for (const [k, v] of Object.entries(tiers)) {
-    if (!entries.find(([key]) => key === k)) {
-      entries.push([k, v]);
-    }
+    if (!entries.find(([key]) => key === k)) entries.push([k, v]);
   }
-
-  container.innerHTML = entries.map(([key, value]) => `
-    <div class="tier-row">
+  container.innerHTML = entries.map(([key, value]) =>
+    `<div class="tier-row">
       <label>${key}</label>
-      <input id="tier-${key}" type="text" value="${escapeHtml(value)}" placeholder="(直连)">
-      <button onclick="testProxy('${key}')">🔍 测试</button>
+      <input id="tier-${key}" type="text" value="${escapeHtml(value)}" placeholder="(direct)">
+      <button onclick="testProxy('${key}')"> " onclick="testProxy
       <span id="test-${key}" class="test-result"></span>
-    </div>
-  `).join('');
+    </div>`
+  ).join('');
 }
 
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// ── Test a proxy ──
 async function testProxy(tier) {
   const input = document.getElementById('tier-' + tier);
   const resultEl = document.getElementById('test-' + tier);
   const url = input.value.trim();
-  resultEl.textContent = '⏳ testing...';
-
+  resultEl.textContent = 'testing...';
   try {
     const res = await fetch('/api/admin/proxy/test', {
       method: 'POST',
@@ -155,19 +374,18 @@ async function testProxy(tier) {
     });
     const data = await res.json();
     if (data.status === 'ok') {
-      resultEl.textContent = '✅ ' + (data.note || 'OK');
-      resultEl.style.color = '#188038';
+      resultEl.textContent = '✓ ' + (data.note || 'OK');
+      resultEl.style.color = '#166534';
     } else {
-      resultEl.textContent = '❌ ' + (data.note || 'Failed');
-      resultEl.style.color = '#d93025';
+      resultEl.textContent = '✗ ' + (data.note || 'Failed');
+      resultEl.style.color = '#991b1b';
     }
   } catch (e) {
-    resultEl.textContent = '❌ ' + e.message;
-    resultEl.style.color = '#d93025';
+    resultEl.textContent = '✗ ' + e.message;
+    resultEl.style.color = '#991b1b';
   }
 }
 
-// ── Save proxy config ──
 async function saveTiers() {
   const statusEl = document.getElementById('save-status');
   const tiers = {};
@@ -175,7 +393,6 @@ async function saveTiers() {
     const tier = input.id.replace('tier-', '');
     tiers[tier] = input.value.trim();
   });
-
   try {
     const res = await fetch('/api/admin/proxy', {
       method: 'PUT',
@@ -185,18 +402,20 @@ async function saveTiers() {
     const data = await res.json();
     if (res.ok) {
       statusEl.className = 'status ok';
-      statusEl.textContent = '✅ 配置已保存至 config.toml';
+      statusEl.textContent = '✓ Saved to config.toml';
     } else {
       statusEl.className = 'status error';
-      statusEl.textContent = '❌ 保存失败: ' + (data.detail || 'Unknown error');
+      statusEl.textContent = '✗ Failed: ' + (data.detail || 'Unknown error');
     }
   } catch (e) {
     statusEl.className = 'status error';
-    statusEl.textContent = '❌ 保存失败: ' + e.message;
+    statusEl.textContent = '✗ Failed: ' + e.message;
   }
 }
 
-// ── Load sites by tier ──
+// ══════════════════════════════════════════════════════════════
+// Sites by tier
+// ══════════════════════════════════════════════════════════════
 async function loadSites() {
   const container = document.getElementById('sites-by-tier');
   try {
@@ -211,7 +430,7 @@ async function loadSites() {
       const tags = ids.map(id => `<span class="site-tag${tier === '(not set)' ? ' none' : ''}">${id}</span>`).join('');
       return `<div style="margin-bottom:12px">
         <strong style="font-size:14px">${tier}</strong>
-        <div class="site-tags" style="margin-top:4px">${tags || '<span class="site-tag none">(none)</span>'}</div>
+        <div class="site-tags">${tags || '<span class="site-tag none">(none)</span>'}</div>
       </div>`;
     }).join('');
   } catch (e) {
@@ -219,51 +438,55 @@ async function loadSites() {
   }
 }
 
-async function loadLinkedinStatus() {
-  const el = document.getElementById('linkedin-status');
-  try {
-    const res = await fetch('/api/admin/linkedin/cookies');
-    const data = await res.json();
-    if (!data.configured) {
-      el.innerHTML = '<span style="color:var(--muted)">⚠️ 未配置 — 运行 <code>clawithme linkedin-login</code></span>';
-    } else if (!data.exists) {
-      el.innerHTML = '<span style="color:#d93025">❌ Cookie 文件不存在 — 运行 <code>clawithme linkedin-login</code></span>';
-    } else if (data.error) {
-      el.innerHTML = `<span style="color:#d93025">❌ ${data.error}</span>`;
-    } else {
-      const color = data.fresh ? '#188038' : '#d2991d';
-      const icon = data.fresh ? '✅' : '⚠️';
-      el.innerHTML = `<span style="color:${color}">${icon} ${data.note}</span>`;
-    }
-  } catch (e) {
-    el.textContent = '加载失败: ' + e.message;
-  }
-}
-
+// ══════════════════════════════════════════════════════════════
+// Health
+// ══════════════════════════════════════════════════════════════
 async function loadHealth() {
   const el = document.getElementById('health-status');
   try {
     const res = await fetch('/api/admin/sites/health');
     const data = await res.json();
     const parts = [
-      `<span style="color:#188038">✅ ${data.healthy} healthy</span>`,
-      `<span style="color:#d93025">❌ ${data.broken} broken</span>`,
-      `<span style="color:var(--muted)">❓ ${data.unknown} unknown</span>`,
+      `<span style="color:#166534">✓ ${data.healthy} healthy</span>`,
+      `<span style="color:#991b1b">✗ ${data.broken} broken</span>`,
+      `<span style="color:#808080">? ${data.unknown} unknown</span>`,
     ];
     el.innerHTML = parts.join(' &nbsp;·&nbsp; ');
     if (data.broken_sites.length > 0) {
       const list = data.broken_sites.map(s => `<span class="site-tag none">${s.id}</span>`).join(' ');
-      el.innerHTML += `<div style="margin-top:8px"><strong>待修复:</strong> ${list}</div>`;
+      el.innerHTML += `<div style="margin-top:8px"><strong>To fix:</strong> ${list}</div>`;
     }
   } catch (e) {
-    el.textContent = '加载失败: ' + e.message;
+    el.textContent = 'Failed: ' + e.message;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// LinkedIn
+// ══════════════════════════════════════════════════════════════
+async function loadLinkedinStatus() {
+  const el = document.getElementById('linkedin-status');
+  try {
+    const res = await fetch('/api/admin/linkedin/cookies');
+    const data = await res.json();
+    if (!data.configured) {
+      el.innerHTML = '<span style="color:#808080">! Not configured — run <code>clawithme linkedin-login</code></span>';
+    } else if (!data.exists) {
+      el.innerHTML = '<span style="color:#991b1b">- Cookie file not found</span>';
+    } else if (data.error) {
+      el.innerHTML = `<span style="color:#991b1b">- ${data.error}</span>`;
+    } else {
+      el.innerHTML = `<span style="color:${data.fresh ? '#166534' : '#92400e'}">${data.fresh ? '✓ ' : '! '}${data.note}</span>`;
+    }
+  } catch (e) {
+    el.textContent = 'Failed: ' + e.message;
   }
 }
 
 async function saveCookies() {
   const statusEl = document.getElementById('cookie-save-status');
   const raw = document.getElementById('cookie-input').value.trim();
-  if (!raw) { statusEl.className = 'status error'; statusEl.textContent = '❌ 请粘贴 Cookie JSON'; return; }
+  if (!raw) { statusEl.className = 'status error'; statusEl.textContent = '✗ Paste cookie JSON first'; return; }
   try {
     const cookies = JSON.parse(raw);
     const res = await fetch('/api/admin/linkedin/cookies', {
@@ -273,28 +496,18 @@ async function saveCookies() {
     });
     if (res.ok) {
       statusEl.className = 'status ok';
-      statusEl.textContent = '✅ Cookie 已保存';
+      statusEl.textContent = '✓ Cookies saved';
       loadLinkedinStatus();
     } else {
       const data = await res.json().catch(() => ({}));
       statusEl.className = 'status error';
-      statusEl.textContent = '❌ 保存失败: ' + (data.detail || res.status);
+      statusEl.textContent = '✗ Failed: ' + (data.detail || res.status);
     }
   } catch (e) {
-    if (e instanceof SyntaxError) {
-      statusEl.className = 'status error';
-      statusEl.textContent = '❌ JSON 格式错误，请检查';
-    } else {
-      statusEl.className = 'status error';
-      statusEl.textContent = '❌ ' + e.message;
-    }
+    statusEl.className = 'status error';
+    statusEl.textContent = e instanceof SyntaxError ? '- Invalid JSON' : '- ' + e.message;
   }
 }
-
-loadConfig();
-loadSites();
-loadLinkedinStatus();
-loadHealth();
 </script>
 </body>
 </html>

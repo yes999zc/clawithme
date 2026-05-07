@@ -1,6 +1,6 @@
 # STATE.md — clawithme
 
-Last updated: 2026-05-08 — VPS deployed, domain live, WebUI redesigned
+Last updated: 2026-05-08 — Landing page + Admin redesigned
 
 ## Quick Stats
 
@@ -20,7 +20,8 @@ Last updated: 2026-05-08 — VPS deployed, domain live, WebUI redesigned
 | LinkedIn auth | ✅ (cookie-based Playwright login + deep extraction) |
 | Tiered proxy | ✅ (direct/datacenter/residential + Admin UI) |
 | Site health | ✅ (verify --auto-fix + Admin health dashboard) |
-| Actionable reports | ✅ (5 recommendation types in report footer) |
+|| Actionable reports | ✅ (5 recommendation types in report footer) |
+| Landing page redesign | ✅ (Hero + Features + Footer, dual-mode, responsive) |
 | Demo page | ✅ (GitHub Pages, 3 persona tabs, Geist design) |
 | Report formats | HTML + JSON + PDF + **Markdown** |
 | WebUI i18n | zh + **en** |
@@ -48,6 +49,7 @@ Last updated: 2026-05-08 — VPS deployed, domain live, WebUI redesigned
 | — | 天眼查 API | ❌ cancelled |
 | **11** | **Infrastructure fixes — cache, timeout, proxy, LinkedIn, watch, incremental** | ✅ |
 | **12** | **Site health, actionable reports, persona landing page** | ✅ |
+| **13** | **Landing page redesign — Hero + Features + Footer, dual-mode, responsive** | ✅ |
 | — | Vercel deployment | ❌ cancelled (user purchasing server) |
 | — | Proxy pool rotation | ⏸️ deferred (tiered proxy foundation ready) |
 | — | Open-core model evaluation | ⏸️ deferred |
@@ -90,8 +92,10 @@ clawithme/                          # Monorepo — all 49 extractors unified
 │   │   ├── report.py               # Report download API endpoint
 │   │   └── admin.py                # Proxy config management API
 │   └── static/
-│       ├── index.html              # Geist frontend (i18n, search params, clusters)
-│       └── admin.html              # Proxy tier management page
+│       ├── index.html              # Geist frontend (i18n, search, Features, Footer, canvas)
+│       ├── admin.html              # Proxy tier management page (redesigned, pass: 1234)
+│       ├── favicon.svg             # SVG favicon
+│       └── og-image.svg            # Social preview card (1200×630)
 ├── data/
 │   ├── sites/                      # 44 curated site JSONs
 │   ├── sites/migrated/             # 2,487 migrated site JSONs
@@ -161,6 +165,40 @@ clawithme/                          # Monorepo — all 49 extractors unified
 - `GET /api/report/{trace_id}?format=html|json|pdf|md&username=xxx&lang=zh|en`
 - In-memory result cache (5 min TTL)
 - Markdown report: export_markdown() with site table, profile details, clusters, leaks
+
+## 2026-05-08 — Landing Page Redesign
+
+### Changes
+
+| Area | Before | After |
+|------|--------|-------|
+| Layout | Hero → Divider → Results (search-only) | Hero → Features → Divider → Results + Footer |
+| Features | None | 3-card grid: 3119 sites / AI clustering / Leak detection (zh+en i18n) |
+| Footer | None | GitHub link + MIT License |
+| Search options | "搜索选项" text link below search bar | Gear icon in search row (between Search and Cancel) |
+| SEO | None | og:title, og:description, og:image, twitter:card, canonical |
+| Favicon | None | SVG favicon (dark bg + green "c") |
+| OG image | None | /og-image.svg (1200x630 social preview) |
+| Hero animation | None (empty canvas) | Canvas particle network (40 dots + connections, hiDPI) |
+
+### Dual-Mode UX
+
+**Landing mode (before search):** Full hero + Features visible + Footer
+**Results mode (after search):** Features hidden, Results shown + auto-scroll into view
+
+### Responsive
+
+| Breakpoint | Hero brand | Features |
+|-----------|------------|----------|
+| Desktop (>768px) | 128px | 3-column grid, 32px padding |
+| Tablet (640-768px) | 96px | Tighter padding |
+| Mobile (<640px) | 52px | 1-column, 16px cards |
+
+### Files
+- `clawithme/web/static/index.html` +236 lines (1,480 total) — SEO meta, Features, Footer, canvas, responsive
+- `clawithme/web/static/admin.html` — redesigned: same design tokens, Geist font, card shadows; +login overlay (pass: 1234); no emoji, ▸ prefix for headings, ✓/✗/! status symbols
+- `clawithme/web/static/favicon.svg` — NEW
+- `clawithme/web/static/og-image.svg` — NEW
 
 ### CLI Dedup
 - `_print_search_results()` — shared output for 3 callers
