@@ -898,18 +898,26 @@ function renderClustersAndSingletons() {
   const container = document.getElementById('clustersContainer');
   container.innerHTML = '';
 
-  const clusteredSites = new Set();
-  _clusterData.forEach(c => { (c.sites || []).forEach(s => clusteredSites.add(s)); });
-  const singletonSites = _allProfileSites.filter(s => !clusteredSites.has(s));
+  // Split: single-profile clusters are standalone, not real matches
+  const multiClusters = _clusterData.filter(c => (c.profile_count || (c.sites || []).length) > 1);
+  const singleClusters = _clusterData.filter(c => (c.profile_count || (c.sites || []).length) <= 1);
 
-  if (_clusterData.length === 0 && singletonSites.length > 0) {
+  const clusteredSites = new Set();
+  multiClusters.forEach(c => { (c.sites || []).forEach(s => clusteredSites.add(s)); });
+  // Single-cluster sites are also "clustered" in the data but shouldn't count
+  singleClusters.forEach(c => { (c.sites || []).forEach(s => clusteredSites.add(s)); });
+  const singletonSites = _allProfileSites.filter(s => !clusteredSites.has(s));
+  // Also add single-cluster sites as singletons
+  singleClusters.forEach(c => { (c.sites || []).forEach(s => { if (singletonSites.indexOf(s) < 0) singletonSites.push(s); }); });
+
+  if (multiClusters.length === 0 && singletonSites.length > 0) {
     const note = document.createElement('div');
     note.className = 'cluster';
     note.innerHTML = '<div style="font-size:14px;color:var(--text-secondary);padding:4px 0">' + esc(L('noMatch')) + '</div>';
     container.appendChild(note);
   }
 
-  _clusterData.forEach(d => {
+  multiClusters.forEach(d => {
     const pct = Math.round(d.confidence * 100);
     const cl = _confLabel(d.confidence);
     const siteCount = (d.sites || []).length;
@@ -986,9 +994,11 @@ function renderClustersAndSingletons() {
     });
   }
 
-  if (_clusterData.length > 0 || singletonSites.length > 0) {
+  if (multiClusters.length > 0 || singletonSites.length > 0) {
     document.getElementById('clustersTitle').style.display = 'block';
   }
+  // Update cluster stat to show only real cross-platform matches
+  document.getElementById('statClusters').textContent = multiClusters.length;
 }
 
 // ── LinkedIn status ─────────────────────────────────────────────
