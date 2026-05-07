@@ -67,14 +67,14 @@ class TestGenerateReport:
 
     def test_includes_clusters(self):
         html = generate_report([], [], _sample_clusters(), "alice")
-        assert "Profile set" in html
+        assert "关联组" in html
         assert "avatar_phash" in html
 
     def test_empty_report(self):
         html = generate_report([], [], [], "alice")
         assert "未发现站点" in html
         assert "未提取到资料" in html
-        assert "未发现身份关联" in html
+        assert "未发现跨平台身份关联" in html
 
     def test_html_escapes_special_chars(self):
         profiles = [{

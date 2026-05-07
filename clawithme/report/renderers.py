@@ -638,8 +638,11 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
     LANG = _STRINGS.get(lang, _STRINGS["en"])
     if not clusters:
         return f'<p style="color:#808080;margin-top:20px">{LANG["no_clusters"]}</p>'
+    # Split: real cross-platform matches vs standalone profiles
+    multi = [c for c in clusters if len(c.profiles) >= 2]
+    singles = [c for c in clusters if len(c.profiles) == 1]
     total_profiles = sum(len(c.profiles) for c in clusters)
-    assessment_html = _render_cluster_assessment(clusters, total_profiles, lang)
+    assessment_html = _render_cluster_assessment(multi, total_profiles, lang)
     favicon_map: dict[str, str] = {}
     if hits:
         for h in hits:
@@ -649,7 +652,9 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
                 if fav:
                     favicon_map[sid] = fav
     blocks = []
-    for i, c in enumerate(clusters, 1):
+
+    # ── Multi-profile clusters (genuine cross-platform matches) ──
+    for i, c in enumerate(multi, 1):
         site_pills = []
         for p in c.profiles:
             sid = p.site_id
@@ -772,7 +777,7 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
         blocks.append(
             f'<div class="cluster">'
             f'<div class="cluster-hd">'
-            f'<strong>Profile set {i}</strong>'
+            f'<strong>{LANG["cluster_label"]} {i}</strong>'
             f'</div>'
             f'{conf_html}'
             f'{sites_pills_html}'
@@ -781,6 +786,35 @@ def _render_clusters(lang: str, clusters: list, consensus_name: str | None = Non
             f'{identity_html}'
             f'</div>'
         )
+
+    # ── Standalone profiles (no cross-platform match found) ──
+    if singles:
+        single_sites = []
+        for c in singles:
+            for p in c.profiles:
+                sid = p.site_id
+                fav = favicon_map.get(sid, "")
+                if fav:
+                    single_sites.append(
+                        '<span class="cluster-site-pill">'
+                        '<img src="' + _esc(fav) + '" alt="" loading="lazy"'
+                        ' onerror="this.style.display=\'none\'">'
+                        + _esc(sid) + '</span>'
+                    )
+                else:
+                    single_sites.append(
+                        '<span class="cluster-site-pill">' + _esc(sid) + '</span>'
+                    )
+        blocks.append(
+            '<div style="margin-top:28px">'
+            f'<h3 style="font-size:14px;margin-bottom:8px">{LANG["standalone_heading"]}</h3>'
+            f'<p style="font-size:13px;color:#808080;margin-bottom:12px">{LANG["standalone_desc"]}</p>'
+            f'<div class="cluster-list-pills">{"".join(single_sites)}</div>'
+            '</div>'
+        )
+
+    if not multi and not singles:
+        return f'<p style="color:#808080;margin-top:20px">{LANG["no_clusters"]}</p>'
     return '<div style="margin-top:20px">' + assessment_html + "".join(blocks) + "</div>"
 
 

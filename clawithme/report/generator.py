@@ -78,7 +78,8 @@ def generate_report(  # noqa: PLR0913
     true_hit_count = len(true_hits)
     fp_count = sum(1 for h, c, wp in hit_data if c == 0)
     profile_count = len(profiles)
-    cluster_count = len(clusters)
+    # Only count multi-profile clusters (real cross-platform matches)
+    cluster_count = sum(1 for c in clusters if hasattr(c, 'profiles') and len(c.profiles) >= 2)
     leak_count = len(breach_dates or [])
 
     wrong_person_ids: set[str] = {_hit_site_id(h) for h, c, wp in hit_data if wp}
@@ -165,7 +166,7 @@ def export_json(
         "summary": {
             "sites_found": len(hits),
             "profiles_extracted": len(profiles),
-            "clusters": len(clusters),
+            "clusters": sum(1 for c in clusters if len(getattr(c, 'profiles', [])) >= 2),
         },
         "hits": hits,
         "profiles": profiles,
@@ -224,7 +225,7 @@ def export_markdown(
     _sep()
     lines.append(f"- **Sites found:** {len(hits)}")
     lines.append(f"- **Profiles extracted:** {len(profiles)}")
-    lines.append(f"- **Identity clusters:** {len(clusters)}")
+    lines.append(f"- **Cross-platform matches:** {sum(1 for c in clusters if len(getattr(c, 'profiles', [])) >= 2)}")
     lines.append(f"- **Leak records:** {leak_count}")
     _sep()
     lines.append("---")
