@@ -218,7 +218,7 @@
 - [x] **按站点分级代理** — `proxy_tier` 字段 + ProxyManager + Admin 管理后台 ✅
 - [ ] **代理池轮换/故障转移** — ProxyPool 多节点 + 健康检查 + 自动切换（分级代理基础已就位）
 - [ ] **增量搜索** — `--incremental` 模式，只探测缓存未命中/已过期的站点
-- [ ] **LinkedIn 等强反爬站点突破** — Playwright + Cookie 登录态 + 住宅代理
+- [x] **LinkedIn 突破** — Playwright + Cookie 登录态，深度提取（姓名/职位/公司/技能/教育） ✅
 
 ### P2 — 下季度（战略层）
 - [ ] **站点健康自愈** — CI 验证结果自动标记 `deprecated`/`health` 状态

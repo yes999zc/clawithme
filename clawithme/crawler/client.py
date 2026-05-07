@@ -26,6 +26,21 @@ def _stealth_page_setup(page):
         Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
     """)
 
+
+def _make_page_setup(cookies: list[dict] | None = None):
+    """Return a page_setup callback that injects cookies before navigation."""
+
+    def setup(page):
+        _stealth_page_setup(page)
+        if cookies:
+            try:
+                page.context.add_cookies(cookies)
+            except Exception:
+                # Some cookies may fail (wrong domain); non-fatal
+                pass
+
+    return setup
+
 # Common User-Agent strings for rotation
 _USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
@@ -246,9 +261,14 @@ class CrawlerClient:
         disable_resources: bool = True,
         block_ads: bool = True,
         headless: bool = True,
+        cookies: list[dict] | None = None,
         **kwargs,
     ) -> Response | None:
         """Fetch using DynamicFetcher, with rate limiting + backoff.
+
+        If *cookies* is provided, each cookie dict should have
+        ``name``, ``value``, and ``domain`` keys (Playwright format).
+        Cookies are injected before page navigation.
 
         Returns None if DynamicFetcher is unavailable or all retries are exhausted.
         """
@@ -259,13 +279,15 @@ class CrawlerClient:
             logger.error("dynamic_fetcher_unavailable_for_url", url=url)
             return None
 
+        page_setup = _make_page_setup(cookies)
+
         for attempt in range(self._max_retries + 1):
             try:
                 fetch_kwargs = dict(
                     timeout=self._timeout_ms,
                     useragent=random_user_agent(),
                     headless=headless,
-                    page_setup=_stealth_page_setup,
+                    page_setup=page_setup,
                     disable_resources=disable_resources,
                     block_ads=block_ads,
                     wait_selector=wait_selector,

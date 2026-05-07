@@ -25,6 +25,7 @@ class ProxyConfig:
 @dataclass
 class ApiConfig:
     hibp_api_key: str = ""
+    linkedin_cookie_file: str = ""  # path to JSON cookies for LinkedIn login
 
 
 @dataclass
@@ -91,8 +92,10 @@ def load_config(path: str | Path | None = None) -> Config:
 
     # APIs
     apis_raw = raw.get("apis", {})
+    cookies_raw = raw.get("cookies", {})
     config.apis = ApiConfig(
         hibp_api_key=apis_raw.get("hibp_api_key", ""),
+        linkedin_cookie_file=cookies_raw.get("linkedin_file", ""),
     )
 
     # Scanning

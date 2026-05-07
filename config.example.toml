@@ -27,6 +27,12 @@ hibp_api_key = ""
 dehashed_api_key = ""
 dehashed_email = ""
 
+[cookies]
+# LinkedIn cookie file (JSON format, exported from browser DevTools).
+# Go to linkedin.com → F12 → Application → Cookies → select all → Copy as JSON.
+# Save to a file and set the path here.
+linkedin_file = ""
+
 [scanning]
 # Default timeout per site probe (ms)
 default_timeout_ms = 5000
