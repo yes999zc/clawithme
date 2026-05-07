@@ -304,9 +304,9 @@ class Watcher:
             if bp is None:
                 continue
             diffs = []
-            for field, label in tracked_fields:
-                old_val = bp.get(field)
-                new_val = cp.get(field)
+            for fname, label in tracked_fields:
+                old_val = bp.get(fname)
+                new_val = cp.get(fname)
                 if old_val != new_val and (old_val or new_val):
                     diffs.append(f"{label}: {_fmt(old_val)} → {_fmt(new_val)}")
             if diffs:

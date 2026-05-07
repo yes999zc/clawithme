@@ -7,7 +7,6 @@ Extracts: display_name, bio, avatar_url, follower_count.
 from __future__ import annotations
 
 import json
-import re
 
 from clawithme.crawler.base import Profile, ProfileExtractor
 from clawithme.crawler.client import CrawlerClient
