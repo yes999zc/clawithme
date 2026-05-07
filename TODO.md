@@ -1,7 +1,7 @@
 # clawithme — Work Scope & TODO
 
-> 2026-05-07 (evening) | 243 tests ✅ | Ruff 0 (6 pre-existing by-policy) ✅
-> Phase 10 全部完成。基础设施修复：缓存假阴性修复、超时贯通、代理贯通。
+> 2026-05-07 (night) | 243 tests ✅ | 10 项建议 9 项完成
+> 基础设施修复 + WebUI/TUI 打磨 + 报告优化 + Demo 页面。
 
 ---
 
@@ -200,7 +200,11 @@
 - [x] `ProxyManager` — 按 tier 管理多个 HttpClient 实例
 - [x] `Engine.probe()` — 读取 `site.proxy_tier`，从 ProxyManager 选择对应 HttpClient
 - [x] Admin API — `GET/PUT /api/admin/proxy` + `POST /api/admin/proxy/test`
-- [x] Admin 页面 — `/admin` 可视化编辑代理配置，不可改代码
+- [x] Admin 页面 — `/admin` 可视化编辑代理配置，Cookie 上传，站点健康
+- [x] WebUI 打磨 — IME 输入法回车修复、display_name 占位名过滤、集群分离展示
+- [x] TUI 打磨 — 增量模式、PDF 导出、集群分离展示、breach_dates bug 修复
+- [x] 报告集群修复 — 多 profile「关联组」vs 独苗「独立账号」分离
+- [x] Banner 统一 — CLI/TUI/Web 三入口共享同一 banner 源
 
 ---
 
