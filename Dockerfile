@@ -19,7 +19,7 @@ RUN pip install --upgrade pip
 
 # Install Python deps (all have pre-built ARM64 wheels)
 RUN pip install --prefer-binary \
-    scrapling curl_cffi playwright fastapi uvicorn weasyprint slowapi \
+    scrapling curl_cffi browserforge playwright fastapi uvicorn weasyprint slowapi \
     pydantic structlog Pillow jsonschema imagehash
 RUN playwright install --with-deps chromium 2>&1 | tail -3
 
