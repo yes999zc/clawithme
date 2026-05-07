@@ -164,3 +164,56 @@ async def get_sites_by_tier(request: Request):
         tier = site.get("proxy_tier") or "(not set)"
         by_tier.setdefault(tier, []).append(site["id"])
     return {tier: sorted(ids) for tier, ids in by_tier.items()}
+
+
+@router.get("/linkedin/cookies")
+async def get_linkedin_cookie_status(request: Request):
+    """Return LinkedIn cookie status (configured, file exists, count, age)."""
+    import os
+    import time
+    from pathlib import Path
+
+    cfg = load_config()
+    cookie_file = cfg.apis.linkedin_cookie_file
+
+    if not cookie_file:
+        return {
+            "configured": False,
+            "note": "未配置 Cookie，运行 clawithme linkedin-login 进行登录",
+        }
+
+    path = Path(cookie_file).expanduser()
+    if not path.exists():
+        return {
+            "configured": True,
+            "file": str(path),
+            "exists": False,
+            "note": "Cookie 文件不存在，运行 clawithme linkedin-login 重新登录",
+        }
+
+    try:
+        data = json.loads(path.read_text())
+        count = len(data) if isinstance(data, list) else 0
+        mtime = path.stat().st_mtime
+        age_days = (time.time() - mtime) / 86400
+        return {
+            "configured": True,
+            "file": str(path),
+            "exists": True,
+            "cookie_count": count,
+            "age_days": round(age_days, 1),
+            "fresh": age_days < 14,
+            "note": (
+                f"{count} 个 Cookie · {age_days:.0f} 天前"
+                if age_days < 14
+                else f"{count} 个 Cookie · {age_days:.0f} 天前（可能已过期，建议重新登录）"
+            ),
+        }
+    except (OSError, json.JSONDecodeError) as e:
+        return {
+            "configured": True,
+            "file": str(path),
+            "exists": True,
+            "error": str(e),
+            "note": "Cookie 文件读取失败",
+        }

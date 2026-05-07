@@ -692,6 +692,7 @@ def main():
               "[--incremental] [--sync] [--lang zh|en] [--acknowledge-ethical-use]")
         print("       clawithme watch <username> [--interval 6h|12h|24h] "
               "[--include-migrated] [--webhook <url>] [--acknowledge-ethical-use]")
+        print("       clawithme linkedin-login")
         print("       clawithme tui")
         print("       clawithme verify")
         print("       clawithme validate")
@@ -736,6 +737,12 @@ def main():
                include_migrated=include_migrated, acknowledged=acknowledged,
                no_cache=no_cache, incremental=incremental,
                async_mode=async_mode, lang=report_lang)
+
+    elif command == "linkedin-login":
+        """Interactive LinkedIn login — capture cookies via browser."""
+        from clawithme.linkedin_auth import run_linkedin_login
+
+        sys.exit(run_linkedin_login())
 
     elif command == "tui":
         """Launch the interactive Terminal UI."""

@@ -72,6 +72,14 @@
   <div id="sites-by-tier">Loading...</div>
 </div>
 
+<!-- LinkedIn Cookies -->
+<div class="card">
+  <h2>🔐 LinkedIn Cookie 状态</h2>
+  <p>用于深度提取 LinkedIn 资料（工作经历、教育、技能等）。<br>
+     运行 <code>clawithme linkedin-login</code> 进行交互式登录。</p>
+  <div id="linkedin-status" style="font-size:14px;margin-top:8px">Loading...</div>
+</div>
+
 </div>
 
 <script>
@@ -189,8 +197,30 @@ async function loadSites() {
   }
 }
 
+async function loadLinkedinStatus() {
+  const el = document.getElementById('linkedin-status');
+  try {
+    const res = await fetch('/api/admin/linkedin/cookies');
+    const data = await res.json();
+    if (!data.configured) {
+      el.innerHTML = '<span style="color:var(--muted)">⚠️ 未配置 — 运行 <code>clawithme linkedin-login</code></span>';
+    } else if (!data.exists) {
+      el.innerHTML = '<span style="color:#d93025">❌ Cookie 文件不存在 — 运行 <code>clawithme linkedin-login</code></span>';
+    } else if (data.error) {
+      el.innerHTML = `<span style="color:#d93025">❌ ${data.error}</span>`;
+    } else {
+      const color = data.fresh ? '#188038' : '#d2991d';
+      const icon = data.fresh ? '✅' : '⚠️';
+      el.innerHTML = `<span style="color:${color}">${icon} ${data.note}</span>`;
+    }
+  } catch (e) {
+    el.textContent = '加载失败: ' + e.message;
+  }
+}
+
 loadConfig();
 loadSites();
+loadLinkedinStatus();
 </script>
 </body>
 </html>

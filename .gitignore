@@ -8,6 +8,8 @@ venv/
 dist/
 build/
 uv.lock
+# Config with secrets (API keys, cookie paths)
+config.toml
 # Generated report files
 *_report.html
 *_report.json
