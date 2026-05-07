@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="1200" height="1600" style="background:#ffffff; font-family: 'Geist', 'Noto Sans SC', system-ui, sans-serif;">
+  <defs>
+    <filter id="border">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.04"/>
+    </filter>
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.04"/>
+    </filter>
+  </defs>
+
+  <!-- ─── Header ─── -->
+  <rect x="0" y="0" width="1200" height="60" fill="rgba(255,255,255,0.92)"/>
+  <line x1="0" y1="60" x2="1200" y2="60" stroke="#ebebeb" stroke-width="1"/>
+  <text x="40" y="40" font-size="16" font-weight="600" fill="#171717" letter-spacing="-0.32">clawithme</text>
+
+  <!-- Header icons -->
+  <circle cx="1110" cy="32" r="7" fill="none" stroke="#808080" stroke-width="1.5"/>
+  <line x1="1115" y1="36" x2="1119" y2="40" stroke="#808080" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="1140" cy="32" r="7" fill="none" stroke="#808080" stroke-width="1.5"/>
+  <path d="M1137 30 a3 3 0 0 1 6 0 v1 h-6z" fill="none" stroke="#808080" stroke-width="1.2"/>
+  <rect x="1143" y="29" width="3" height="3" rx="1.5" fill="none" stroke="#808080" stroke-width="1"/>
+  <line x1="1137" y1="34" x2="1143" y2="34" stroke="#808080" stroke-width="1"/>
+
+  <!-- Lang toggle -->
+  <rect x="1175" y="22" width="30" height="20" rx="3" fill="#f0f0f0"/>
+  <text x="1179" y="37" font-size="10" font-weight="500" fill="#808080">中</text>
+  <text x="1191" y="37" font-size="10" font-weight="500" fill="#171717" font-weight="600">EN</text>
+
+  <!-- ─── Hero ─── -->
+  <rect x="0" y="60" width="1200" height="640" fill="#ffffff"/>
+  
+  <!-- Dot grid bg -->
+  <g opacity="0.04">
+    <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#171717"/>
+    </pattern>
+    <rect x="0" y="60" width="1200" height="640" fill="url(#grid)"/>
+  </g>
+
+  <!-- Canvas dots (static representation) -->
+  <g opacity="0.12">
+    <circle cx="200" cy="200" r="2" fill="#171717"/>
+    <circle cx="450" cy="150" r="1.5" fill="#171717"/>
+    <circle cx="700" cy="250" r="2" fill="#171717"/>
+    <circle cx="350" cy="400" r="1.5" fill="#171717"/>
+    <circle cx="900" cy="180" r="1" fill="#171717"/>
+    <circle cx="150" cy="500" r="1.5" fill="#171717"/>
+    <circle cx="800" cy="500" r="2" fill="#171717"/>
+    <circle cx="1050" cy="400" r="1" fill="#171717"/>
+    <circle cx="600" cy="100" r="1.5" fill="#171717"/>
+    <circle cx="100" cy="300" r="1" fill="#171717"/>
+    <line x1="200" y1="200" x2="350" y2="400" stroke="#171717" stroke-width="0.5" opacity="0.3"/>
+    <line x1="450" y1="150" x2="600" y2="100" stroke="#171717" stroke-width="0.5" opacity="0.3"/>
+    <line x1="700" y1="250" x2="800" y2="500" stroke="#171717" stroke-width="0.5" opacity="0.3"/>
+    <line x1="350" y1="400" x2="150" y2="500" stroke="#171717" stroke-width="0.5" opacity="0.3"/>
+  </g>
+
+  <!-- Brand -->
+  <text x="362" y="360" font-size="128" font-weight="700" fill="#171717" letter-spacing="-6">CLAWITH</text>
+  <text x="755" y="360" font-size="128" font-weight="700" fill="#16a34a" letter-spacing="-6">me.</text>
+  <text x="600" y="420" font-size="18" fill="#4d4d4d" dominant-anchor="middle" letter-spacing="0.5">查询你在互联网轨迹的最佳方案</text>
+
+  <!-- Search bar -->
+  <rect x="240" y="458" width="570" height="44" rx="6" fill="#ffffff" stroke="#ebebeb" stroke-width="1"/>
+  <text x="256" y="486" font-size="15" fill="#808080">用&#12501;名、&#37197;箱或手机号...</text>
+  <rect x="810" y="458" width="100" height="44" rx="6" fill="#171717"/>
+  <text x="860" y="486" font-size="14" font-weight="500" fill="#ffffff" dominant-anchor="middle">搜索</text>
+
+  <!-- Search type tag -->
+  <rect x="510" y="510" width="140" height="22" rx="999" fill="#f5f5f5"/>
+  <circle cx="520" cy="521" r="2.5" fill="#16a34a"/>
+  <text x="528" y="525" font-size="11" fill="#4d4d4d">用户名搜索（全量站点探测）</text>
+
+  <!-- Options -->
+  <text x="570" y="560" font-size="13" fill="#808080" dominant-anchor="middle" text-decoration="underline" style="cursor:pointer">搜索选项</text>
+
+  <!-- Ethics checkbox -->
+  <rect x="436" y="575" width="12" height="12" rx="2" fill="#fff" stroke="#ebebeb" stroke-width="1"/>
+  <text x="454" y="585" font-size="13" fill="#808080">我拥有此账号或已获得授权搜索</text>
+
+  <!-- Scroll hint -->
+  <text x="600" y="670" font-size="12" fill="#808080" dominant-anchor="middle">&#8595; Scroll for results</text>
+
+  <!-- ─── Features Section ─── -->
+  <rect x="0" y="700" width="1200" height="360" fill="#ffffff"/>
+
+  <!-- Feature cards -->
+  <g transform="translate(120, 740)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="296" height="240" rx="8" fill="#fff" filter="url(#cardShadow)" stroke="#ebebeb" stroke-width="0.5"/>
+    <rect x="20" y="24" width="40" height="40" rx="6" fill="#f5f5f5"/>
+    <circle cx="40" cy="44" r="14" fill="none" stroke="#171717" stroke-width="1.5"/>
+    <line x1="32" y1="44" x2="48" y2="44" stroke="#171717" stroke-width="1.2"/>
+    <path d="M40 26 a12 12 0 0 1 0 36" fill="none" stroke="#171717" stroke-width="1.2"/>
+    <text x="20" y="90" font-size="15" font-weight="600" fill="#171717">3119 站点全量探测</text>
+    <text x="20" y="118" font-size="14" fill="#4d4d4d" line-height="1.6">
+      <tspan x="20" dy="0">覆盖全球主流社交、开发、电商、论坛平台。</tspan>
+      <tspan x="20" dy="22">用户名、邮箱、手机号多维度扫描，14 秒</tspan>
+      <tspan x="20" dy="22">冷启动完成。</tspan>
+    </text>
+
+    <!-- Card 2 -->
+    <rect x="324" y="0" width="296" height="240" rx="8" fill="#fff" filter="url(#cardShadow)" stroke="#ebebeb" stroke-width="0.5"/>
+    <rect x="20" y="24" width="40" height="40" rx="6" fill="#f5f5f5"/>
+    <path d="M36 32 v-4h16v4" fill="none" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="36" cy="40" r="5" fill="none" stroke="#171717" stroke-width="1.5"/>
+    <circle cx="52" cy="40" r="5" fill="none" stroke="#171717" stroke-width="1.5"/>
+    <path d="M28 46 v4h24v-4" fill="none" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="20" y="90" font-size="15" font-weight="600" fill="#171717">AI 跨平台身份聚类</text>
+    <text x="20" y="118" font-size="14" fill="#4d4d4d">
+      <tspan x="20" dy="0">基于同名、同邮箱、头像相似度、注册时间等</tspan>
+      <tspan x="20" dy="22">多信号智能关联，自动归并同一人的多平台</tspan>
+      <tspan x="20" dy="22">账号。</tspan>
+    </text>
+
+    <!-- Card 3 -->
+    <rect x="648" y="0" width="296" height="240" rx="8" fill="#fff" filter="url(#cardShadow)" stroke="#ebebeb" stroke-width="0.5"/>
+    <rect x="20" y="24" width="40" height="40" rx="6" fill="#f5f5f5"/>
+    <path d="M40 20 l40 14 v28 l-40 14-40-14 v-28z" fill="none" stroke="#171717" stroke-width="1.5"/>
+    <text x="20" y="90" font-size="15" font-weight="600" fill="#171717">泄露记录实时追溯</text>
+    <text x="20" y="118" font-size="14" fill="#4d4d4d">
+      <tspan x="20" dy="0">HIBP + Cavalier 双数据源，邮件/密码泄露</tspan>
+      <tspan x="20" dy="22">记录实时查询，快速定位数据暴露面。</tspan>
+    </text>
+  </g>
+
+  <!-- ─── Divider ─── -->
+  <line x1="120" y1="1060" x2="1080" y2="1060" stroke="#ebebeb" stroke-width="1"/>
+
+  <!-- ─── Results Hint ─── -->
+  <rect x="0" y="1062" width="1200" height="200" fill="#ffffff"/>
+  <text x="600" y="1130" font-size="16" font-weight="600" fill="#808080" dominant-anchor="middle">搜索后将在此显示结果</text>
+  <text x="600" y="1160" font-size="14" fill="#a0a0a0" dominant-anchor="middle">Site Hits · Profiles · Clusters · Leak Records</text>
+
+  <!-- Stat placeholders -->
+  <g transform="translate(340, 1190)">
+    <rect x="0" y="0" width="50" height="40" rx="4" fill="#f5f5f5"/>
+    <rect x="80" y="0" width="50" height="40" rx="4" fill="#f5f5f5"/>
+    <rect x="160" y="0" width="50" height="40" rx="4" fill="#f5f5f5"/>
+    <rect x="240" y="0" width="50" height="40" rx="4" fill="#f5f5f5"/>
+    <rect x="320" y="0" width="50" height="40" rx="4" fill="#f5f5f5"/>
+    <rect x="400" y="0" width="50" height="40" rx="4" fill="#f5f5f5"/>
+  </g>
+
+  <!-- ─── Footer ─── -->
+  <rect x="0" y="1300" width="1200" height="73" fill="#ffffff"/>
+  <line x1="0" y1="1300" x2="1200" y2="1300" stroke="#ebebeb" stroke-width="1"/>
+  <text x="120" y="1345" font-size="14" font-weight="600" fill="#171717">clawithme</text>
+  <text x="900" y="1345" font-size="14" fill="#808080">GitHub</text>
+  <circle cx="954" cy="1341" r="2" fill="#ebebeb"/>
+  <text x="965" y="1345" font-size="14" fill="#808080">MIT License</text>
+</svg>

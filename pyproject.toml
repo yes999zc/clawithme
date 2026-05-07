@@ -101,6 +101,8 @@ chess = "clawithme.crawler.extractors.chess:ChessExtractor"
 discogs = "clawithme.crawler.extractors.discogs:DiscogsExtractor"
 codepen = "clawithme.crawler.extractors.codepen:CodepenExtractor"
 hupu = "clawithme.crawler.extractors.hupu:HupuExtractor"
+tiktok = "clawithme.crawler.extractors.tiktok:TiktokExtractor"
+pinterest = "clawithme.crawler.extractors.pinterest:PinterestExtractor"
 
 [project.urls]
 Homepage = "https://github.com/yes999zc/clawithme"

@@ -1,0 +1,28 @@
+{
+  "id": "pinterest",
+  "name": "Pinterest",
+  "primary": "social",
+  "canonical_url": "https://www.pinterest.com/{username}/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 500000000,
+    "tags": ["art", "photo", "social"]
+  },
+  "rankings": {
+    "similarweb_global": 18
+  },
+  "check": {
+    "probe_url": "https://www.pinterest.com/{username}/",
+    "expected": 200,
+    "known_accounts": ["blue"],
+    "known_unclaimed": ["noonewouldeverusethis7"],
+    "timeout_ms": 10000
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-08T00:00:00Z"
+}
