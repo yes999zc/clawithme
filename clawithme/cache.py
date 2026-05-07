@@ -56,8 +56,12 @@ class ResultCache:
     def __del__(self) -> None:
         self.close()
 
-    def get(self, key: str) -> dict | None:
-        """Return cached dict or None if expired or missing."""
+    def get(self, key: str, ignore_expiry: bool = False) -> dict | None:
+        """Return cached dict or None if expired or missing.
+
+        If *ignore_expiry* is True, returns the cached value even if
+        its TTL has elapsed (used by incremental search mode).
+        """
         with self._connect() as conn:
             row = conn.execute(
                 "SELECT value, expires_at FROM cache WHERE key = ?",
@@ -66,7 +70,7 @@ class ResultCache:
         if row is None:
             return None
         value_json, expires_at = row
-        if time.time() > expires_at:
+        if not ignore_expiry and time.time() > expires_at:
             self.invalidate(key)
             return None
         return json.loads(value_json)

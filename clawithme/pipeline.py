@@ -67,6 +67,7 @@ class AsyncPipeline:
         config,
         cache: ResultCache | None = None,
         llm_verifier: "LLMVerifier | None" = None,
+        incremental: bool = False,
     ) -> None:
         self._sites = sites
         self._engines = engines
@@ -74,6 +75,7 @@ class AsyncPipeline:
         self._config = config
         self._cache = cache
         self._llm = llm_verifier
+        self._incremental = incremental
 
     # ── Public API ────────────────────────────────────────────
 
@@ -133,11 +135,14 @@ class AsyncPipeline:
 
             # Cache hit — fast path, no async overhead
             if self._cache is not None:
-                cached = self._cache.get(cache_key)
+                cached = self._cache.get(cache_key, ignore_expiry=self._incremental)
                 if cached is not None:
                     if cached.get("exists"):
                         hits.append(cached["hit"])
-                        logger.info("hit_cache", site=cached["hit"]["site_name"])
+                        logger.info(
+                            "hit_cache" if not self._incremental else "hit_incremental",
+                            site=cached["hit"]["site_name"],
+                        )
                     continue  # skip probe
 
             # Cache miss — schedule async probe

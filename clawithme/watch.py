@@ -162,10 +162,15 @@ class Watcher:
         llm_verifier = llm if llm.is_configured() else None
 
         # Run pipeline
+        # First tick is full search, subsequent ticks use incremental
+        # (stale cache → instant for known sites, probe only newcomers)
+        is_first_tick = self._load_baseline() is None
+
         from clawithme.pipeline import AsyncPipeline
         pipeline = AsyncPipeline(
             sites, engines, extractors, cfg,
             cache=self._cache, llm_verifier=llm_verifier,
+            incremental=not is_first_tick,
         )
         result = await pipeline.run(self._username)
 

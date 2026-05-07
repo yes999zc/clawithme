@@ -153,7 +153,8 @@ def _write_report(output: str | bytes, path_str: str, fmt: str,
 
 def search(username: str, *, report_path: str | None = None, report_format: str = "html",
            include_migrated: bool = False, acknowledged: bool = False,
-           no_cache: bool = False, async_mode: bool = True, lang: str = "zh"):
+           no_cache: bool = False, incremental: bool = False,
+           async_mode: bool = True, lang: str = "zh"):
     """Run a full search: site probes → profile extraction → leak database.
 
     If report_path is given, write an HTML panorama report to that path.
@@ -191,7 +192,8 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
         try:
             return _search_async(
                 username, report_path=report_path, report_format=report_format,
-                include_migrated=include_migrated, no_cache=no_cache, lang=lang,
+                include_migrated=include_migrated, no_cache=no_cache,
+                incremental=incremental, lang=lang,
             )
         except RuntimeError:
             # Nested event loop (e.g., pytest-asyncio) — fall back to sync
@@ -201,14 +203,19 @@ def search(username: str, *, report_path: str | None = None, report_format: str 
     return _search_sync(
         username, search_type=search_type, report_path=report_path,
         report_format=report_format, include_migrated=include_migrated,
-        no_cache=no_cache, acknowledged=acknowledged,
+        no_cache=no_cache, incremental=incremental, acknowledged=acknowledged,
     )
 
 
 def _search_async(username: str, *, report_path: str | None = None,
                   report_format: str = "html", include_migrated: bool = False,
-                  no_cache: bool = False, lang: str = "zh"):
-    """Async pipeline: parallel probes + extraction (6-38x faster)."""
+                  no_cache: bool = False, incremental: bool = False,
+                  lang: str = "zh"):
+    """Async pipeline: parallel probes + extraction (6-38x faster).
+
+    If *incremental* is True, stale cache entries are reused regardless
+    of TTL, and only sites with no cache entry are probed.
+    """
     import asyncio
 
     trace_id = new_trace_id()
@@ -217,7 +224,7 @@ def _search_async(username: str, *, report_path: str | None = None,
 
     # Init cache
     cache: ResultCache | None = None
-    if not no_cache:
+    if not no_cache or incremental:
         try:
             cache = ResultCache()
         except (OSError, sqlite3.OperationalError) as e:
@@ -252,6 +259,7 @@ def _search_async(username: str, *, report_path: str | None = None,
     pipeline = AsyncPipeline(
         sites, engines, extractors, cfg,
         cache=cache, llm_verifier=llm_verifier,
+        incremental=incremental,
     )
 
     try:
@@ -287,7 +295,7 @@ def _search_async(username: str, *, report_path: str | None = None,
 
 def _search_sync(username: str, *, search_type: str, report_path: str | None,
                  report_format: str, include_migrated: bool,
-                 no_cache: bool, acknowledged: bool):
+                 no_cache: bool, incremental: bool, acknowledged: bool):
     """Legacy serial pipeline (backward compatible, debug-friendly)."""
 
     trace_id = new_trace_id()
@@ -296,9 +304,9 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
     # ── Load config ──
     cfg = load_config()
 
-    # ── Init cache (skip if --no-cache) ──
+    # ── Init cache (skip if --no-cache, but always init for --incremental) ──
     cache: ResultCache | None = None
-    if not no_cache:
+    if not no_cache or incremental:
         try:
             cache = ResultCache()
         except (OSError, sqlite3.OperationalError) as e:
@@ -345,7 +353,7 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
         # Check cache first
         cached = None
         if cache is not None:
-            cached = cache.get(cache_key)
+            cached = cache.get(cache_key, ignore_expiry=incremental)
 
         if cached is not None:
             if cached.get("exists"):
@@ -681,7 +689,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: clawithme search <username> [--report <path>] "
               "[--format html|json|pdf|md] [--include-migrated] [--no-cache] "
-              "[--sync] [--lang zh|en] [--acknowledge-ethical-use]")
+              "[--incremental] [--sync] [--lang zh|en] [--acknowledge-ethical-use]")
         print("       clawithme watch <username> [--interval 6h|12h|24h] "
               "[--include-migrated] [--webhook <url>] [--acknowledge-ethical-use]")
         print("       clawithme tui")
@@ -703,6 +711,7 @@ def main():
         report_lang = "zh"
         include_migrated = "--include-migrated" in sys.argv
         no_cache = "--no-cache" in sys.argv
+        incremental = "--incremental" in sys.argv
         acknowledged = "--acknowledge-ethical-use" in sys.argv
         async_mode = "--sync" not in sys.argv
         if "--report" in sys.argv:
@@ -725,7 +734,8 @@ def main():
             sys.exit(1)
         search(username, report_path=report_path, report_format=report_format,
                include_migrated=include_migrated, acknowledged=acknowledged,
-               no_cache=no_cache, async_mode=async_mode, lang=report_lang)
+               no_cache=no_cache, incremental=incremental,
+               async_mode=async_mode, lang=report_lang)
 
     elif command == "tui":
         """Launch the interactive Terminal UI."""
