@@ -5,7 +5,7 @@ services:
     build: .
     container_name: clawithme
     ports:
-      - "8000:8000"
+      - "8080:8000"
     volumes:
       - clawithme_cache:/root/.cache/clawithme
       - clawithme_config:/root/.config/clawithme
