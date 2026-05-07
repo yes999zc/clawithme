@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>clawithme — Admin</title>
+<style>
+  :root {
+    --bg: #f5f5f5;
+    --card: #fff;
+    --text: #333;
+    --muted: #888;
+    --border: #e0e0e0;
+    --accent: #1a73e8;
+    --danger: #d93025;
+    --success: #188038;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  header h1 { font-size: 20px; font-weight: 600; }
+  header nav a { color: var(--accent); text-decoration: none; font-size: 14px; margin-left: 16px; }
+  .card { background: var(--card); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .card p {font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+  .tier-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .tier-row label { width: 110px; font-size: 14px; font-weight: 500; text-align: right; flex-shrink: 0; }
+  .tier-row input { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: monospace; }
+  .tier-row button { padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px; white-space: nowrap; }
+  .tier-row button:hover { background: #f0f0f0; }
+  .btn-primary { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
+  .btn-primary:hover { opacity: 0.9; }
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .actions button { padding: 10px 24px; border-radius: 6px; font-size: 14px; border: 1px solid var(--border); cursor: pointer; }
+  .status { padding: 6px 12px; border-radius: 4px; font-size: 13px; margin-top: 8px; display: none; }
+  .status.ok { background: #e6f4ea; color: var(--success); display: block; }
+  .status.error { background: #fce8e6; color: var(--danger); display: block; }
+  .test-result { font-size: 12px; font-family: monospace; margin-left: 122px; color: var(--muted); min-height: 18px; }
+  .site-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .site-tag { font-size: 12px; padding: 2px 8px; background: #e8f0fe; color: var(--accent); border-radius: 12px; }
+  .site-tag.none { background: #f0f0f0; color: var(--muted); }
+  .back-link { font-size: 14px; color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>⚙️ clawithme Admin</h1>
+  <nav>
+    <a href="/">← Search</a>
+  </nav>
+</header>
+
+<!-- Proxy Tiers -->
+<div class="card">
+  <h2>代理分级配置</h2>
+  <p>站点探测时根据站点定义中的 <code>proxy_tier</code> 字段选择对应代理。修改后立即生效，无需重启。</p>
+  <div id="tiers-form"></div>
+  <div class="actions">
+    <button class="btn-primary" onclick="saveTiers()">💾 保存配置</button>
+  </div>
+  <div id="save-status" class="status"></div>
+</div>
+
+<!-- Sites by Tier -->
+<div class="card">
+  <h2>站点分级分布</h2>
+  <p>以下为各 tier 对应的站点（未设置 <code>proxy_tier</code> 的站点使用 direct）</p>
+  <div id="sites-by-tier">Loading...</div>
+</div>
+
+</div>
+
+<script>
+// ── Load proxy config ──
+async function loadConfig() {
+  const res = await fetch('/api/admin/proxy');
+  const data = await res.json();
+  renderTiers(data.tiers);
+}
+
+function renderTiers(tiers) {
+  const container = document.getElementById('tiers-form');
+  const entries = [
+    ['direct', tiers.direct ?? ''],
+    ['datacenter', tiers.datacenter ?? ''],
+    ['residential', tiers.residential ?? ''],
+  ];
+  // Add any extra tiers not in the default list
+  for (const [k, v] of Object.entries(tiers)) {
+    if (!entries.find(([key]) => key === k)) {
+      entries.push([k, v]);
+    }
+  }
+
+  container.innerHTML = entries.map(([key, value]) => `
+    <div class="tier-row">
+      <label>${key}</label>
+      <input id="tier-${key}" type="text" value="${escapeHtml(value)}" placeholder="(直连)">
+      <button onclick="testProxy('${key}')">🔍 测试</button>
+      <span id="test-${key}" class="test-result"></span>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ── Test a proxy ──
+async function testProxy(tier) {
+  const input = document.getElementById('tier-' + tier);
+  const resultEl = document.getElementById('test-' + tier);
+  const url = input.value.trim();
+  resultEl.textContent = '⏳ testing...';
+
+  try {
+    const res = await fetch('/api/admin/proxy/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+    const data = await res.json();
+    if (data.status === 'ok') {
+      resultEl.textContent = '✅ ' + (data.note || 'OK');
+      resultEl.style.color = '#188038';
+    } else {
+      resultEl.textContent = '❌ ' + (data.note || 'Failed');
+      resultEl.style.color = '#d93025';
+    }
+  } catch (e) {
+    resultEl.textContent = '❌ ' + e.message;
+    resultEl.style.color = '#d93025';
+  }
+}
+
+// ── Save proxy config ──
+async function saveTiers() {
+  const statusEl = document.getElementById('save-status');
+  const tiers = {};
+  document.querySelectorAll('#tiers-form input').forEach(input => {
+    const tier = input.id.replace('tier-', '');
+    tiers[tier] = input.value.trim();
+  });
+
+  try {
+    const res = await fetch('/api/admin/proxy', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tiers }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      statusEl.className = 'status ok';
+      statusEl.textContent = '✅ 配置已保存至 config.toml';
+    } else {
+      statusEl.className = 'status error';
+      statusEl.textContent = '❌ 保存失败: ' + (data.detail || 'Unknown error');
+    }
+  } catch (e) {
+    statusEl.className = 'status error';
+    statusEl.textContent = '❌ 保存失败: ' + e.message;
+  }
+}
+
+// ── Load sites by tier ──
+async function loadSites() {
+  const container = document.getElementById('sites-by-tier');
+  try {
+    const res = await fetch('/api/admin/proxy/sites');
+    const data = await res.json();
+    const entries = Object.entries(data).sort(([a], [b]) => {
+      if (a === '(not set)') return 1;
+      if (b === '(not set)') return -1;
+      return a.localeCompare(b);
+    });
+    container.innerHTML = entries.map(([tier, ids]) => {
+      const tags = ids.map(id => `<span class="site-tag${tier === '(not set)' ? ' none' : ''}">${id}</span>`).join('');
+      return `<div style="margin-bottom:12px">
+        <strong style="font-size:14px">${tier}</strong>
+        <div class="site-tags" style="margin-top:4px">${tags || '<span class="site-tag none">(none)</span>'}</div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    container.textContent = 'Failed to load: ' + e.message;
+  }
+}
+
+loadConfig();
+loadSites();
+</script>
+</body>
+</html>

@@ -17,6 +17,9 @@ import structlog
 class ProxyConfig:
     http: str = ""
     https: str = ""
+    # Tiered proxy: key = tier name ("direct", "datacenter", "residential"),
+    # value = proxy URL (empty string for direct connection).
+    tiers: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -77,9 +80,13 @@ def load_config(path: str | Path | None = None) -> Config:
 
     # Proxy
     proxy_raw = raw.get("proxy", {})
+    proxy_tiers_raw = proxy_raw.get("tiers", {})
     config.proxy = ProxyConfig(
         http=proxy_raw.get("http", ""),
         https=proxy_raw.get("https", ""),
+        tiers={
+            str(k): str(v) for k, v in proxy_tiers_raw.items()
+        } if isinstance(proxy_tiers_raw, dict) else {},
     )
 
     # APIs

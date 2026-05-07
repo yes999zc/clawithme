@@ -1,7 +1,7 @@
 # clawithme — Work Scope & TODO
 
-> 2026-05-07 | 243 tests ✅ | Ruff 0 (6 pre-existing by-policy) ✅
-> Phase 10 全部完成：SSE 数据补全、前端重写、报告下载 API、evidence UX、WebUI i18n。
+> 2026-05-07 (evening) | 243 tests ✅ | Ruff 0 (6 pre-existing by-policy) ✅
+> Phase 10 全部完成。基础设施修复：缓存假阴性修复、超时贯通、代理贯通。
 
 ---
 
@@ -170,6 +170,61 @@
 - [x] webui.sh 启动脚本
 - [x] TUI Banner（Hermes 风格全宽头部）
 - [x] `clawithme search <username> --format md` 支持
+
+---
+
+---
+
+## Phase 11：基础设施修复 ✅ 100%
+
+> 2026-05-07 | 缓存假阴性、超时贯通、代理贯通。
+
+### 11.1 缓存假阴性修复
+- [x] `Engine.probe()` 内部 catch 的异常返回 `error` 字段，管道不再缓存
+- [x] 阴性结果 TTL：24h → 1h（防止 403/429 反爬拦截被误判为「用户不存在」）
+- [x] `_probe_one()` (pipeline.py) + `_search_sync()` (cli.py) 双路径修复
+
+### 11.2 超时配置贯通
+- [x] `HttpClient.get()` 支持 `timeout_ms` 参数
+- [x] `Engine.probe()` 解析超时优先级：站点 `check.timeout_ms` > 引擎 `params.timeout_ms` > HttpClient 默认
+- [x] 此前站点/引擎配置的 8000ms 完全不生效（HttpClient 硬编码 5000ms）
+
+### 11.3 代理配置贯通
+- [x] `load_engines()` 接受可选 `HttpClient` 参数
+- [x] CLI / WebUI / TUI 三入口从 config 创建带 proxy 的 HttpClient
+- [x] `config.example.toml` 增加 proxy 格式说明和示例
+- [x] 基础设施已就位：`ProxyConfig` → `HttpClient(proxy=)` → `Engine(http_client=)` 三层贯通
+
+### 11.4 分级代理 + 管理后台
+- [x] `ProxyConfig.tiers` — 按 tier（direct/datacenter/residential）配置代理
+- [x] `ProxyManager` — 按 tier 管理多个 HttpClient 实例
+- [x] `Engine.probe()` — 读取 `site.proxy_tier`，从 ProxyManager 选择对应 HttpClient
+- [x] Admin API — `GET/PUT /api/admin/proxy` + `POST /api/admin/proxy/test`
+- [x] Admin 页面 — `/admin` 可视化编辑代理配置，不可改代码
+
+---
+
+## Phase 12（规划）：品质路线图
+
+> 基于全面代码审查提出的 10 项建议。优先级分三级。
+
+### P0 — 立即（零/低代码成本，直接提升转化）
+- [ ] **交互式 Demo 页面** — GitHub Pages 部署预计算报告 HTML，10 秒体验产品价值
+- [ ] **量化对比数据** — vs maigret/sherlock 的 Benchmark 表格（站点数、速度、中国覆盖、字段数）
+- [ ] **README 定位优化** — 中国互联网覆盖作为核心卖点，不再埋在对比表里
+
+### P1 — 本月（功能壁垒，竞品没有）
+- [ ] **变更监控模式** — `clawithme watch <username> --interval 24h`，增量检测 + 推送
+- [x] **按站点分级代理** — `proxy_tier` 字段 + ProxyManager + Admin 管理后台 ✅
+- [ ] **代理池轮换/故障转移** — ProxyPool 多节点 + 健康检查 + 自动切换（分级代理基础已就位）
+- [ ] **增量搜索** — `--incremental` 模式，只探测缓存未命中/已过期的站点
+- [ ] **LinkedIn 等强反爬站点突破** — Playwright + Cookie 登录态 + 住宅代理
+
+### P2 — 下季度（战略层）
+- [ ] **站点健康自愈** — CI 验证结果自动标记 `deprecated`/`health` 状态
+- [ ] **报告可操作建议** — Action Items 区块（注销建议、密码修改提醒、头像差异化建议）
+- [ ] **差异化 Landing Page** — 安全研究员 / 隐私个人 / HR 背调 三条用户路径
+- [ ] **开放核心模式评估** — 引擎 MIT 开源 + 站点数据库延迟开源 / 商业版
 
 ---
 

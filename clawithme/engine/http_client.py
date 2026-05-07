@@ -63,10 +63,15 @@ class HttpClient:
         """Underlying Scrapling Fetcher instance (for raw Response access)."""
         return self._fetcher
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> HttpResponse:
-        """HTTP GET with anti-bot fingerprinting."""
+    def get(self, url: str, headers: dict[str, str] | None = None,
+            timeout_ms: int | None = None) -> HttpResponse:
+        """HTTP GET with anti-bot fingerprinting.
+
+        *timeout_ms* overrides the instance-level default when provided.
+        """
         self._log.debug("http.get", url=url)
-        timeout = max(1, self._timeout_ms // 1000)
+        effective_ms = timeout_ms if timeout_ms is not None else self._timeout_ms
+        timeout = max(1, effective_ms // 1000)
         kwargs: dict[str, Any] = {"timeout": timeout}
         if headers:
             kwargs["headers"] = headers

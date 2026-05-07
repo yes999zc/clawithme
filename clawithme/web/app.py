@@ -30,10 +30,12 @@ from clawithme.cli import load_all_sites
 from clawithme.config import load_config
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import load_engines
+from clawithme.engine.proxy_manager import ProxyManager
 from clawithme.logging import get_logger, new_trace_id
 from clawithme.pipeline import AsyncPipeline
 from clawithme.report.generator import _compute_hit_confidence, _is_wrong_person
 from clawithme.signals.llm_verifier import LLMVerifier
+from clawithme.web.routes.admin import router as admin_router
 from clawithme.web.routes.report import router as report_router, store_result
 
 logger = get_logger()
@@ -45,7 +47,7 @@ async def lifespan(app: FastAPI):
     # ── Startup ──
     app.state.config = load_config()
     app.state.sites = load_all_sites(include_migrated=False)
-    app.state.engines = load_engines()
+    app.state.engines = load_engines(proxy_manager=ProxyManager(app.state.config))
     app.state.extractors = discover_extractors()
     app.state.cache = ResultCache()
     # Print banner after startup succeeds
@@ -75,6 +77,7 @@ app.add_middleware(
 
 # Register sub-routers
 app.include_router(report_router)
+app.include_router(admin_router)
 
 
 @app.middleware("http")
@@ -99,6 +102,21 @@ async def health():
 @app.get("/")
 async def index():
     html = (_STATIC_DIR / "index.html").read_text()
+    return HTMLResponse(
+        content=html,
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+    )
+
+
+@app.get("/admin")
+async def admin_panel():
+    """Proxy & site management panel."""
+    admin_html = _STATIC_DIR / "admin.html"
+    if not admin_html.exists():
+        return HTMLResponse(
+            content="<h1>Admin panel not found</h1>", status_code=404
+        )
+    html = admin_html.read_text()
     return HTMLResponse(
         content=html,
         headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
@@ -130,7 +148,7 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
         except (OSError, json.JSONDecodeError):
             yield _sse("error", "Failed to load site data")
             return
-        engines = load_engines()
+        engines = load_engines(proxy_manager=ProxyManager(cfg))
         extractors = discover_extractors()
         cache = ResultCache()
     else:

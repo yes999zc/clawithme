@@ -2,9 +2,19 @@
 # Copy to config.toml and fill in your values
 
 [proxy]
-# HTTP proxy for accessing overseas APIs from China
+# ── Deprecated (kept for backward compatibility) ──
+# Single proxy for all sites. Use [proxy.tiers] instead.
 http = ""
 https = ""
+
+# ── Tiered proxy (recommended) ──
+# Each tier maps to a proxy URL. Sites declare their tier via "proxy_tier" field.
+# Empty string = direct connection (no proxy).
+# Format: http://user:pass@host:port  or  socks5://host:port
+[proxy.tiers]
+direct = ""                                      # no proxy (default for most sites)
+datacenter = ""                                  # e.g. "http://127.0.0.1:7890" (Clash)
+residential = ""                                 # e.g. "http://user:pass@provider.com:8080"
 
 [apis]
 # Hudson Rock Cavalier — free, no key required

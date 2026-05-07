@@ -55,11 +55,23 @@ class EngineResult:
 
 
 class Engine:
-    """Detection engine — knows 'how to check', receives 'what to check'."""
+    """Detection engine — knows 'how to check', receives 'what to check'.
 
-    def __init__(self, engine_def: dict, http_client: HttpClient | None = None):
+    Accepts an optional *proxy_manager* for per-tier proxy selection.
+    Falls back to *http_client* (or a plain HttpClient) if no proxy_manager.
+    """
+
+    def __init__(
+        self,
+        engine_def: dict,
+        http_client: HttpClient | None = None,
+        proxy_manager: "ProxyManager | None" = None,
+    ):
+        from clawithme.engine.proxy_manager import ProxyManager
+
         self._def = engine_def
         self._http = http_client or HttpClient()
+        self._proxy_manager: ProxyManager | None = proxy_manager
         self._dynamic = None  # DynamicFetcher, lazy
         self._log = get_logger(engine=engine_def.get("name", "?"))
 
@@ -128,11 +140,17 @@ class Engine:
 
         Uses DynamicFetcher (Playwright) for sites with dynamic_fetch: true.
         Falls back to static HttpClient otherwise.
+
+        Timeout priority: site check.timeout_ms > engine params.timeout_ms
+        (previously both were ignored — HttpClient always used 5000ms).
         """
         check = site.get("check", {})
         probe_template = check.get("probe_url", site.get("canonical_url", ""))
         url = self._substitute(probe_template, check, username)
         use_dynamic = check.get("dynamic_fetch", False)
+
+        # Resolve timeout: site → engine → HttpClient default
+        timeout_ms = check.get("timeout_ms") or self.params.get("timeout_ms")
 
         try:
             if use_dynamic:
@@ -149,7 +167,14 @@ class Engine:
                         error="dynamic_fetch_failed",
                     )
             else:
-                resp = self._http.get(url, headers=check.get("headers"))
+                # Select client by site's proxy_tier (falls back to self._http)
+                client = self._http
+                if self._proxy_manager is not None:
+                    client = self._proxy_manager.get_client(
+                        site.get("proxy_tier")
+                    )
+                resp = client.get(url, headers=check.get("headers"),
+                                  timeout_ms=timeout_ms)
 
             exists = self._classify(resp, check)
             return EngineResult(
@@ -164,7 +189,7 @@ class Engine:
                          "dynamic": use_dynamic},
             )
         except (OSError, ValueError, TimeoutError) as e:
-            self._log.error("probe_failed", site_id=site["id"], error=str(e))
+            self._log.warning("probe_failed", site_id=site["id"], error=str(e))
             return EngineResult(
                 site_id=site["id"],
                 site_name=site["name"],

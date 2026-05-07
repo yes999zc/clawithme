@@ -210,8 +210,18 @@ class AsyncPipeline:
             logger.info("hit", site=result.site_name, status=result.status_code)
             return hit
 
+        # Don't cache probe failures (errors) — a transient network issue
+        # should not block re-probing for 24 hours.
+        if result.error:
+            logger.debug("probe_error_not_cached", site=result.site_name, error=result.error)
+            return None
+
+        # Legitimate negative (user genuinely doesn't exist on this site).
+        # Use shorter TTL (1h) for negatives — positive hits are stable, but a
+        # negative could be caused by site changes, anti-bot blocks (403), or
+        # rate limits (429) that the classifier can't distinguish from true 404s.
         if self._cache is not None and cache_key is not None:
-            self._cache.set(cache_key, {"exists": False})
+            self._cache.set(cache_key, {"exists": False}, ttl_seconds=3600)
         return None
 
     # ── Phase 1.5: SearXNG Fallback ────────────────────────────

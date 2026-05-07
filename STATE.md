@@ -1,6 +1,6 @@
 # STATE.md — clawithme
 
-Last updated: 2026-05-07
+Last updated: 2026-05-07 (evening — cache/proxy/timeout fixes)
 
 ## Quick Stats
 
@@ -53,7 +53,8 @@ clawithme/                          # Monorepo — all 49 extractors unified
 ├── engine/
 │   ├── engines.py                  # 9 detection engines
 │   ├── loader.py                   # load from engines.json
-│   └── http_client.py              # Scrapling DynamicFetcher
+│   ├── http_client.py              # Scrapling DynamicFetcher
+│   └── proxy_manager.py            # Per-tier HttpClient pool
 ├── crawler/
 │   ├── base.py                     # Profile, ProfileExtractor ABC
 │   ├── client.py                   # CrawlerClient
@@ -75,9 +76,11 @@ clawithme/                          # Monorepo — all 49 extractors unified
 ├── web/
 │   ├── app.py                      # FastAPI + SSE streaming (lifespan)
 │   ├── routes/
-│   │   └── report.py               # Report download API endpoint
+│   │   ├── report.py               # Report download API endpoint
+│   │   └── admin.py                # Proxy config management API
 │   └── static/
-│       └── index.html              # Geist frontend (i18n, search params, clusters)
+│       ├── index.html              # Geist frontend (i18n, search params, clusters)
+│       └── admin.html              # Proxy tier management page
 ├── data/
 │   ├── sites/                      # 44 curated site JSONs
 │   ├── sites/migrated/             # 2,487 migrated site JSONs
@@ -101,6 +104,10 @@ clawithme/                          # Monorepo — all 49 extractors unified
 - **WebUI i18n via data-i18n** — HTML attribute-driven, runtime switchable
 - **DYLD_LIBRARY_PATH auto-fix** — macOS/Homebrew WeasyPrint path handled in main()
 - **All extractors in main repo** — `clawithme-cn` plugin repo [archived](https://github.com/yes999zc/clawithme-cn); all 49 extractors live in monorepo
+- **Error-aware caching** — probe failures (network errors, timeouts) are never cached; only genuine classification results are cached
+- **Tiered cache TTL** — positive hits 24h, negatives 1h (to recover quickly from anti-bot false negatives like 403/429)
+- **Per-request timeout** — `HttpClient.get()` accepts optional `timeout_ms`; engine resolves site → engine → config priority chain
+- **Tiered proxy** — sites declare `proxy_tier` (direct/datacenter/residential); `ProxyManager` selects HttpClient per site; admin page for runtime config
 
 ## New in Phase 10
 
@@ -166,6 +173,43 @@ clawithme/                          # Monorepo — all 49 extractors unified
 | DashScope (Coding Plan) | `DASHSCOPE_API_KEY` | `https://coding.dashscope.aliyuncs.com/v1` |
 | Kimi | `KIMI_API_KEY` | `https://api.moonshot.cn/v1` |
 | HIBP | `HIBP_API_KEY` | `https://haveibeenpwned.com/api/v3` |
+
+## 2026-05-07 — 基础设施修复（cache / timeout / proxy 贯通）
+
+### 根因：假阴性被缓存 24 小时
+
+`Engine.probe()` 内部 catch 网络异常后返回 `EngineResult(exists=False, error="...")`，
+但 `AsyncPipeline._probe_one()` 和 `_search_sync()` 不检查 `result.error` 字段，
+将所有 `exists=False` 一律缓存为「用户不存在」，TTL 24h。
+一次瞬态网络故障 → 该站点 24h 内不再探测。
+
+### 修复清单
+
+| 文件 | 改动 |
+|------|------|
+| `engine/engines.py` | 探测超时从硬编码 5000ms → 优先站点 `check.timeout_ms` / 引擎 `params.timeout_ms`；异常日志 error→warning |
+| `engine/http_client.py` | `get()` 支持 `timeout_ms` 参数按请求覆盖 |
+| `engine/loader.py` | `load_engines()` 接受可选 `HttpClient` 参数（为 proxy 贯通做准备） |
+| `pipeline.py` | `_probe_one()`：`result.error` 不为 None 时不缓存；阴性结果 TTL 从 24h → 1h |
+| `cli.py` | 同步路径同样修复：不缓存异常结果 + 阴性 TTL 1h；贯通 proxy → HttpClient |
+| `web/app.py` | 两处 `load_engines()`：从 config 创建带 proxy 的 HttpClient |
+| `tui/screens/results.py` | 同样贯通 proxy 配置 |
+| `config.example.toml` | Proxy 配置格式说明和示例 |
+
+### 防护层级
+
+| 场景 | 之前 | 现在 |
+|------|------|------|
+| 网络超时/DNS失败/连接拒绝 | 缓存为「不存在」24h | **不缓存**，下次重新探测 |
+| 引擎判定「用户不存在」 | 缓存 24h | 缓存 **1h**（403/429 误判可快速恢复） |
+| 引擎判定「用户存在」 | 缓存 24h | 缓存 24h（不变） |
+
+### Proxy 贯通
+
+`config.toml` → `Config.proxy` → `HttpClient(proxy=...)` → `load_engines(http_client=...)` → 所有 Engine 共享同一 HttpClient → 所有站点探测走代理。
+
+基础设施已就位：`ProxyConfig`（config.py）、`HttpClient(proxy=)`（http_client.py）、
+`Engine(http_client=)`（engines.py）三层早已支持，此前只是没有接通。
 
 ## Hosting (planned)
 

@@ -20,6 +20,7 @@ from clawithme.config import load_config
 from clawithme.crawler.base import Profile
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import get_engine_for_site, load_engines
+from clawithme.engine.proxy_manager import ProxyManager
 from clawithme.leak_sources import CavalierSource
 from clawithme.leak_sources.hibp import HIBPSource
 from clawithme.leak_sources.manager import query_breaches
@@ -236,7 +237,7 @@ def _search_async(username: str, *, report_path: str | None = None,
         print(f"❌ Failed to load site definitions: {e}")
         return
     try:
-        engines = load_engines()
+        engines = load_engines(proxy_manager=ProxyManager(cfg))
     except (OSError, json.JSONDecodeError) as e:
         log.error("engine_load_failed", error=str(e))
         print(f"❌ Failed to load engine definitions: {e}")
@@ -321,7 +322,7 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
         print(f"❌ Failed to load site definitions: {e}")
         return
     try:
-        engines = load_engines()
+        engines = load_engines(proxy_manager=ProxyManager(cfg))
     except (OSError, json.JSONDecodeError) as e:
         log.error("engine_load_failed", error=str(e))
         print(f"❌ Failed to load engine definitions: {e}")
@@ -370,8 +371,12 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
             log.info("hit", site=result.site_name, status=result.status_code)
             if cache is not None:
                 cache.set(cache_key, {"exists": True, "hit": hit})
-        elif cache is not None:
-            cache.set(cache_key, {"exists": False})
+        elif not result.error and cache is not None:
+            # Only cache legitimate negatives (user doesn't exist) with 1h TTL.
+            # Probe failures (error != None) are skipped entirely.
+            # Short TTL for negatives because anti-bot blocks (403) or rate
+            # limits (429) are indistinguishable from true 404s at classifier level.
+            cache.set(cache_key, {"exists": False}, ttl_seconds=3600)
 
     # ── Phase 1.5: SearXNG fallback for un-hit sites ──
     searxng_total = 0

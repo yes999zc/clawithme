@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="clawithme — Username to Identity Panorama. 3000+ sites, 49 extractors, deep Chinese internet coverage.">
+<title>clawithme — Username to Identity Panorama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Geist Design Tokens ──────────────────── */
+:root {
+  --accent: #1e293b; --accent-subtle: #475569;
+  --accent-bg: rgba(30,41,59,0.04); --bg-warm: #fafaf8;
+  --green: #2e7d32; --amber: #b8860b; --red: #c62828;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;color:#171717;background:var(--bg-warm);line-height:1.6}
+.container{max-width:780px;margin:0 auto;padding:48px 24px 56px}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+
+/* ── Brand Header ─────────────────────────── */
+.brand{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.brand mark{font:700 14px/1 'Inter',sans-serif;color:#171717;letter-spacing:1.5px;text-transform:uppercase;background:none}
+.brand mark span{color:#16a34a}
+.brand .slogan{font:400 13px/1 'JetBrains Mono',monospace;color:#b0b0b0}
+
+h1{font-size:36px;font-weight:700;letter-spacing:-0.8px;margin:0 0 4px}
+h2{font-size:20px;font-weight:600;letter-spacing:-0.3px}
+h3{font-size:14px;font-weight:500;color:#4d4d4d;letter-spacing:.02em}
+.meta{color:#808080;font-size:12px}
+.section{margin-top:48px}.section+.section{margin-top:56px}
+.divider{border:0;border-top:1px solid #e5e5e5;margin:20px 0 24px}
+
+/* ── Hero ─────────────────────────────────── */
+.hero-card{background:#fff;border-radius:10px;border-left:4px solid var(--accent);padding:36px 36px 28px;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 2px 2px rgba(0,0,0,.04)}
+.hero-card h1{color:var(--accent)}
+.hero-summary{font-size:15px;color:#4d4d4d;line-height:1.7;margin-top:12px;max-width:640px}
+.hero-identity{display:flex;align-items:center;gap:10px;margin-top:12px}
+.hero-identity-name{font-size:18px;font-weight:600;color:#171717}
+.hero-identity-badge{font-size:11px;padding:2px 8px;border-radius:4px;background:#e8f5e9;color:var(--green)}
+.hero-stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:20px}
+.hero-stat{display:flex;align-items:baseline;gap:6px}
+.hero-stat-value{font-size:28px;font-weight:600;color:#171717;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;line-height:1}
+.hero-stat-label{font-size:13px;color:#808080}
+
+/* ── Search Demo ──────────────────────────── */
+.search-row{display:flex;gap:8px;margin-top:24px}
+.search-row input{flex:1;padding:14px 20px;border-radius:10px;border:2px solid #e5e5e5;font:15px 'Inter',sans-serif;outline:none;transition:border-color .2s}
+.search-row input:focus{border-color:var(--accent)}
+.search-row button{padding:14px 28px;border-radius:10px;border:none;background:var(--accent);color:#fff;font:600 15px 'Inter',sans-serif;cursor:pointer;transition:opacity .2s}
+.search-row button:hover{opacity:.85}
+.demo-notice{background:rgba(184,134,11,.06);border:1px solid rgba(184,134,11,.2);border-radius:8px;padding:10px 16px;font-size:13px;color:var(--amber);margin-top:12px;text-align:center;display:none}
+
+/* ── Section Card ─────────────────────────── */
+.section-card{padding:28px;border-radius:8px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 2px 2px rgba(0,0,0,.04);margin-bottom:8px}
+.section-header{display:flex;align-items:center;gap:12px;padding:14px 20px;margin:-28px -28px 0;border-bottom:1px solid #e5e5e5;background:#fafafa}
+.section-header .badge{font:500 11px/1 'JetBrains Mono',monospace;padding:2px 8px;border-radius:999px;background:var(--accent);color:#fff}
+.section-header h2{font:600 15px/1.3 'Inter',sans-serif}
+
+/* ── Site Table ───────────────────────────── */
+.cat-label{font:600 12px/1 'JetBrains Mono',monospace;color:#808080;text-transform:uppercase;letter-spacing:.5px;margin:20px 0 6px}
+.site-table{width:100%;border-collapse:collapse;font-size:14px}
+.site-table th{font:500 11px/1 'JetBrains Mono',monospace;color:#808080;text-align:left;padding:6px 12px;border-bottom:1px solid #e5e5e5;text-transform:uppercase;letter-spacing:.5px}
+.site-table td{padding:10px 12px;border-bottom:1px solid #f5f5f5;vertical-align:middle}
+.site-table .url{font:400 13px 'JetBrains Mono',monospace;color:var(--accent-subtle)}
+.site-table .url a{color:var(--accent-subtle)}
+.site-icon{width:16px;height:16px;margin-right:8px;vertical-align:middle;border-radius:2px}
+.status-ok{font:500 12px 'JetBrains Mono',monospace;color:var(--green)}
+
+.conf-badge{font:500 11px/1 'JetBrains Mono',monospace;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.conf-badge.badge-ok{background:#e8f5e9;color:var(--green)}
+.conf-badge.badge-warn{background:rgba(184,134,11,.1);color:var(--amber)}
+
+/* ── Profile Cards ────────────────────────── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:8px}
+.card{background:#fff;border-radius:8px;padding:16px;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.card-header{display:flex;align-items:center;gap:10px}
+.card-avatar{width:40px;height:40px;border-radius:50%;background:#e5e5e5;display:flex;align-items:center;justify-content:center;font-size:16px;color:#808080;flex-shrink:0}
+.card-name{font-size:14px;font-weight:600}
+.card-site{font-size:12px;color:#808080;font-family:'JetBrains Mono',monospace}
+.card-meta{font-size:12px;color:#808080;margin-top:8px}
+
+/* ── Cluster ──────────────────────────────── */
+.cluster{margin-bottom:20px}
+.cluster-hd{font-size:14px;font-weight:600;margin-bottom:6px}
+.cluster-conf-bar{height:6px;border-radius:3px;background:#e5e5e5;overflow:hidden;display:inline-block;width:120px;vertical-align:middle;margin-right:8px}
+.cluster-conf-fill{height:100%;border-radius:3px}
+.cluster-conf-label{font:500 12px 'JetBrains Mono',monospace;vertical-align:middle}
+.cluster-list-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.site-pill{display:inline-flex;align-items:center;gap:4px;font:500 12px 'JetBrains Mono',monospace;padding:2px 10px;border-radius:999px;background:#f5f5f5;color:var(--accent-subtle)}
+.signal-tag{display:inline-block;font:400 11px/1 'JetBrains Mono',monospace;padding:2px 8px;border-radius:999px;background:var(--accent-bg);color:var(--accent-subtle);margin-right:4px;margin-bottom:4px}
+.cluster-evidence{font-size:12px;color:#808080;margin-top:8px;line-height:1.8}
+
+/* ── Uncertainty ──────────────────────────── */
+.uncertain-summary{font-size:13px;color:var(--amber);cursor:pointer;margin-top:16px}
+
+/* ── Install Cards ────────────────────────── */
+.install-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.install-card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.install-card h3{font-size:15px;font-weight:600;color:var(--accent);margin-bottom:8px}
+.install-card code{display:block;font:400 13px/1.8 'JetBrains Mono',monospace;color:var(--accent-subtle);background:#f5f5f5;padding:10px 14px;border-radius:6px;margin-top:8px}
+
+/* ── Benchmark Table ──────────────────────── */
+.bench-table{width:100%;border-collapse:collapse;font-size:14px}
+.bench-table th{font:600 12px 'JetBrains Mono',monospace;color:#808080;text-align:left;padding:10px 16px;border-bottom:2px solid #e5e5e5}
+.bench-table td{padding:10px 16px;border-bottom:1px solid #f5f5f5}
+.bench-table .win{color:var(--green);font-weight:600}
+.bench-table .lose{color:#b0b0b0}
+
+/* ── Footer ───────────────────────────────── */
+footer{text-align:center;padding:40px 0;color:#b0b0b0;font-size:13px;margin-top:40px}
+footer a{color:#808080}
+
+@media(max-width:640px){
+  .hero-stats{gap:16px}.hero-stat-value{font-size:22px}.card-grid{grid-template-columns:1fr}
+  .search-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ═══════════ BRAND ═══════════ -->
+<div class="brand">
+  <mark>CL<span>A</span>WITHME</mark>
+  <span class="slogan">identity panorama</span>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero-card">
+  <h1>身份全景报告</h1>
+  <div class="hero-identity">
+    <span class="hero-identity-name">alice_dev</span>
+    <span class="hero-identity-badge">演示数据</span>
+  </div>
+  <p class="hero-summary">
+    在 <strong>14 个站点</strong> 发现该用户名，其中 10 个已确认，
+    4 个待验证。跨 5 个分类（开发工具、论坛、媒体、音乐、社交）。
+    该身份在 <strong>5 个平台</strong> 存在跨站关联。
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-value">14</span><span class="hero-stat-label">站点发现</span></div>
+    <div class="hero-stat"><span class="hero-stat-value">10</span><span class="hero-stat-label">确认命中</span></div>
+    <div class="hero-stat"><span class="hero-stat-value">5</span><span class="hero-stat-label">跨站关联</span></div>
+    <div class="hero-stat"><span class="hero-stat-value">2</span><span class="hero-stat-label">泄露记录</span></div>
+  </div>
+
+  <div class="search-row">
+    <input id="demo-input" type="text" placeholder="输入用户名试试..." value="alice_dev" onkeydown="if(event.key==='Enter')runDemo()">
+    <button onclick="runDemo()">搜索</button>
+  </div>
+  <div id="demo-notice" class="demo-notice">
+    ⚠️ 这是演示页面，展示的是虚构示例数据。<a href="https://github.com/yes999zc/clawithme">安装完整版</a> 体验实时搜索 3000+ 站点。
+  </div>
+</div>
+
+<!-- ═══════════ SITE HITS ═══════════ -->
+<div class="section">
+<div class="section-card">
+<div class="section-header">
+  <span class="badge">确认命中</span>
+  <h2>站点命中 · 10 个站点</h2>
+</div>
+
+<div class="cat-label">开发工具</div>
+<table class="site-table">
+  <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span>GitHub</span></td>
+      <td class="url"><a href="#">https://github.com/alice_dev</a></td>
+      <td class="status-ok">200</td>
+      <td><span class="conf-badge badge-ok">确认</span></td>
+    </tr>
+    <tr>
+      <td><span>CSDN</span></td>
+      <td class="url"><a href="#">https://blog.csdn.net/alice_dev</a></td>
+      <td class="status-ok">200</td>
+      <td><span class="conf-badge badge-ok">确认</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="cat-label">论坛</div>
+<table class="site-table">
+  <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+  <tbody>
+    <tr><td><span>V2EX</span></td><td class="url"><a href="#">https://www.v2ex.com/member/alice_dev</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+  </tbody>
+</table>
+
+<div class="cat-label">媒体</div>
+<table class="site-table">
+  <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+  <tbody>
+    <tr><td><span>Bilibili</span></td><td class="url"><a href="#">https://space.bilibili.com/123456</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+    <tr><td><span>Pinterest</span></td><td class="url"><a href="#">https://www.pinterest.com/alice_dev/</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+  </tbody>
+</table>
+
+<div class="cat-label">音乐</div>
+<table class="site-table">
+  <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+  <tbody>
+    <tr><td><span>网易云音乐</span></td><td class="url"><a href="#">https://music.163.com/#/user/home?id=123456</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+  </tbody>
+</table>
+
+<div class="cat-label">社交</div>
+<table class="site-table">
+  <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+  <tbody>
+    <tr><td><span>知乎</span></td><td class="url"><a href="#">https://www.zhihu.com/people/alice_dev</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+    <tr><td><span>豆瓣</span></td><td class="url"><a href="#">https://www.douban.com/people/alice_dev/</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+    <tr><td><span>Instagram</span></td><td class="url"><a href="#">https://www.instagram.com/alice_dev/</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+    <tr><td><span>Twitter / X</span></td><td class="url"><a href="#">https://twitter.com/alice_dev</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-ok">确认</span></td></tr>
+  </tbody>
+</table>
+
+<details style="margin-top:16px">
+  <summary class="uncertain-summary">+ 4 未验证命中 — 需要进一步确认</summary>
+  <div style="margin-top:8px">
+  <div class="cat-label">博客</div>
+  <table class="site-table">
+    <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><span>少数派</span></td><td class="url"><a href="#">https://sspai.com/u/alice_dev/</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-warn">待验证</span></td></tr>
+    </tbody>
+  </table>
+  <div class="cat-label">媒体</div>
+  <table class="site-table">
+    <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><span>SlideShare</span></td><td class="url"><a href="#">https://www.slideshare.net/alice_dev</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-warn">待验证</span></td></tr>
+      <tr><td><span>Twitch</span></td><td class="url"><a href="#">https://www.twitch.tv/alice_dev</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-warn">待验证</span></td></tr>
+    </tbody>
+  </table>
+  <div class="cat-label">社交</div>
+  <table class="site-table">
+    <thead><tr><th>站点</th><th>URL</th><th>状态</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><span>微博</span></td><td class="url"><a href="#">https://weibo.com/u/alice_dev</a></td><td class="status-ok">200</td><td><span class="conf-badge badge-warn">待验证</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</details>
+</div>
+</div>
+
+<!-- ═══════════ PROFILES ═══════════ -->
+<div class="section">
+<div class="section-card">
+<div class="section-header">
+  <span class="badge">资料</span>
+  <h2>资料提取 · 已提取的公开资料</h2>
+</div>
+<div class="card-grid" style="margin-top:20px">
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-avatar">G</div>
+      <div><div class="card-name">Alice Zhang</div><div class="card-site">github</div></div>
+    </div>
+    <div class="card-meta">👥 23 · ↗ 12</div>
+    <div style="font-size:12px;color:#808080;margin-top:8px">
+      📍 Beijing, China<br>
+      📅 Joined 2019<br>
+      简介: Full-stack developer
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-avatar">知</div>
+      <div><div class="card-name">Alice</div><div class="card-site">zhihu</div></div>
+    </div>
+    <div class="card-meta">👥 156 · 📝 42</div>
+    <div style="font-size:12px;color:#808080;margin-top:8px">
+      📍 北京<br>
+      简介: 程序员 / 偶尔写文章
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-avatar">I</div>
+      <div><div class="card-name">Alice Z.</div><div class="card-site">instagram</div></div>
+    </div>
+    <div class="card-meta">👥 320 · 📝 85</div>
+    <div style="font-size:12px;color:#808080;margin-top:8px">
+      简介: Developer & photographer
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-avatar">𝕏</div>
+      <div><div class="card-name">Alice</div><div class="card-site">twitter</div></div>
+    </div>
+    <div class="card-meta">👥 89 · 📝 234</div>
+    <div style="font-size:12px;color:#808080;margin-top:8px">
+      📍 China<br>
+      简介: building things
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-avatar">B</div>
+      <div><div class="card-name">Alice_dev</div><div class="card-site">bilibili</div></div>
+    </div>
+    <div style="font-size:12px;color:#808080;margin-top:8px">
+      简介: 技术 / 动漫 / 游戏
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-avatar">豆</div>
+      <div><div class="card-name">Alice</div><div class="card-site">douban</div></div>
+    </div>
+    <div style="font-size:12px;color:#808080;margin-top:8px">
+      📍 北京<br>
+      📅 Joined 2018
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+
+<!-- ═══════════ CLUSTERS ═══════════ -->
+<div class="section">
+<div class="section-card">
+<div class="section-header">
+  <span class="badge">关联</span>
+  <h2>身份关联 · 5 组跨站集群</h2>
+</div>
+
+<div style="margin-top:20px">
+<div style="font-size:14px;font-weight:600;color:var(--accent-subtle);margin-bottom:12px">身份评估：<span style="color:var(--amber)">中关联度</span> — 发现 3 组跨站关联，身份部分重叠</div>
+
+<div class="cluster">
+  <div class="cluster-hd">集群 1 — GitHub ↔ 知乎 ↔ V2EX</div>
+  <div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:92%;background:var(--green)"></div></div>
+  <span class="cluster-conf-label" style="color:var(--green)">92%</span>
+  <div class="cluster-list-pills">
+    <span class="site-pill">github</span>
+    <span class="site-pill">zhihu</span>
+    <span class="site-pill">v2ex</span>
+  </div>
+  <div class="cluster-evidence">
+    <span class="signal-tag">email</span> 邮箱一致 — github ↔ zhihu<br>
+    <span class="signal-tag">avatar_phash</span> 头像相似 — github ↔ v2ex (Hamming 距离 4)<br>
+    <span class="signal-tag">location</span> 位置一致 — github ↔ zhihu: Beijing<br>
+    <span class="signal-tag">username</span> 用户名相似 — alice_dev ↔ alice_dev (sim=1.00)
+  </div>
+</div>
+
+<div class="cluster">
+  <div class="cluster-hd">集群 2 — Twitter ↔ Instagram</div>
+  <div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:85%;background:var(--green)"></div></div>
+  <span class="cluster-conf-label" style="color:var(--green)">85%</span>
+  <div class="cluster-list-pills">
+    <span class="site-pill">twitter</span>
+    <span class="site-pill">instagram</span>
+  </div>
+  <div class="cluster-evidence">
+    <span class="signal-tag">avatar_phash</span> 头像高度相似 — twitter ↔ instagram (Hamming 距离 3)<br>
+    <span class="signal-tag">username</span> 用户名相似 — alice_dev ↔ alice_dev (sim=1.00)<br>
+    <span class="signal-tag">display_name</span> 昵称相似 — Alice ↔ Alice Z. (sim=0.82)
+  </div>
+</div>
+
+<div class="cluster">
+  <div class="cluster-hd">集群 3 — Bilibili ↔ 豆瓣</div>
+  <div class="cluster-conf-bar"><div class="cluster-conf-fill" style="width:70%;background:var(--amber)"></div></div>
+  <span class="cluster-conf-label" style="color:var(--amber)">70%</span>
+  <div class="cluster-list-pills">
+    <span class="site-pill">bilibili</span>
+    <span class="site-pill">douban</span>
+  </div>
+  <div class="cluster-evidence">
+    <span class="signal-tag">username</span> 用户名完全一致 — alice_dev ↔ alice_dev (sim=1.00)<br>
+    <span class="signal-tag">location</span> 位置一致 — bilibili ↔ douban: 北京
+  </div>
+</div>
+
+<div class="cluster">
+  <div class="cluster-hd">独立资料 — 未发现跨站关联</div>
+  <div style="margin-top:6px">
+    <span class="site-pill">csdn</span>
+    <span class="site-pill">netease_music</span>
+    <span class="site-pill">pinterest</span>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════ LEAKS ═══════════ -->
+<div class="section">
+<div class="section-card">
+<div class="section-header">
+  <span class="badge">泄露</span>
+  <h2>泄露记录 · 2 条</h2>
+</div>
+<table class="site-table" style="margin-top:16px">
+  <thead><tr><th>来源</th><th>邮箱</th><th>密码</th><th>泄露日期</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Cavalier</td>
+      <td class="url">a***e@example.com</td>
+      <td style="color:#808080">••••••••</td>
+      <td class="url">2023-08-15</td>
+    </tr>
+    <tr>
+      <td>HIBP</td>
+      <td class="url">a***e@example.com</td>
+      <td style="color:#808080">••••••••</td>
+      <td class="url">2022-03-02</td>
+    </tr>
+  </tbody>
+</table>
+<div style="font-size:13px;color:#808080;margin-top:12px">
+  查询源: Cavalier + HIBP · 数据已脱敏
+</div>
+</div>
+</div>
+
+<!-- ═══════════ BENCHMARKS ═══════════ -->
+<div class="section">
+<div class="section-card">
+<div class="section-header">
+  <span class="badge">对比</span>
+  <h2>为什么选 clawithme</h2>
+</div>
+<div style="overflow-x:auto;margin-top:16px">
+<table class="bench-table">
+  <thead><tr><th>指标</th><th style="color:var(--accent)">clawithme</th><th>maigret</th><th>sherlock</th></tr></thead>
+  <tbody>
+    <tr><td>站点总数</td><td class="win">3,031</td><td>2,500+</td><td>300+</td></tr>
+    <tr><td>中国平台</td><td class="win">16 + Discuz! 引擎</td><td>3</td><td class="lose">0</td></tr>
+    <tr><td>冷启动耗时</td><td class="win">~14s</td><td>~180s</td><td>~120s</td></tr>
+    <tr><td>资料深度提取</td><td class="win">13 字段 × 49 站点</td><td class="lose">无</td><td class="lose">无</td></tr>
+    <tr><td>身份关联</td><td class="win">Union-Find 7 信号</td><td class="lose">无</td><td class="lose">无</td></tr>
+    <tr><td>泄露库查询</td><td class="win">Cavalier + HIBP</td><td class="lose">无</td><td class="lose">无</td></tr>
+    <tr><td>LLM 身份验证</td><td class="win">DeepSeek / Kimi / 百炼</td><td class="lose">无</td><td class="lose">无</td></tr>
+    <tr><td>报告格式</td><td class="win">HTML / JSON / PDF / MD</td><td>HTML / TXT</td><td>TXT</td></tr>
+    <tr><td>Web UI</td><td class="win">FastAPI + SSE 流式</td><td class="lose">无</td><td class="lose">无</td></tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- ═══════════ INSTALL ═══════════ -->
+<div class="section">
+<div class="section-card">
+<div class="section-header">
+  <span class="badge">安装</span>
+  <h2>30 秒开始使用</h2>
+</div>
+<div class="install-grid" style="margin-top:16px">
+  <div class="install-card">
+    <h3>Docker</h3>
+    <p style="font-size:13px;color:#808080">一键启动 Web UI</p>
+    <code>docker pull ghcr.io/yes999zc/clawithme<br>
+docker run -p 8000:8000 ghcr.io/yes999zc/clawithme</code>
+  </div>
+  <div class="install-card">
+    <h3>PyPI</h3>
+    <p style="font-size:13px;color:#808080">pip 安装</p>
+    <code>pip install clawithme[web]<br>
+clawithme-web<br>
+<span style="color:#b0b0b0"># → http://localhost:8000</span></code>
+  </div>
+  <div class="install-card">
+    <h3>CLI</h3>
+    <p style="font-size:13px;color:#808080">命令行搜索</p>
+    <code>clawithme search alice_dev \<br>
+&nbsp;&nbsp;--acknowledge-ethical-use<br>
+clawithme search alice_dev \<br>
+&nbsp;&nbsp;--report report.html</code>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <a href="https://github.com/yes999zc/clawithme">GitHub</a> ·
+  <a href="https://pypi.org/project/clawithme/">PyPI</a> ·
+  <a href="https://github.com/yes999zc/clawithme/pkgs/container/clawithme">Docker</a>
+  <br><br>
+  MIT License · 仅限对自己拥有或授权的账户使用
+</footer>
+
+</div>
+
+<script>
+function runDemo(){
+  document.getElementById('demo-notice').style.display='block';
+}
+</script>
+</body>
+</html>

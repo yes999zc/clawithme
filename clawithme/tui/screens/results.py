@@ -18,6 +18,7 @@ from clawithme.cli import load_all_sites
 from clawithme.config import load_config
 from clawithme.crawler.registry import discover_extractors
 from clawithme.engine.loader import load_engines
+from clawithme.engine.proxy_manager import ProxyManager
 from clawithme.pipeline import AsyncPipeline
 
 
@@ -151,7 +152,7 @@ class ResultsScreen(Screen):
         try:
             config = load_config()
             sites = load_all_sites(include_migrated=include_migrated)
-            engines = load_engines()
+            engines = load_engines(proxy_manager=ProxyManager(config))
             extractors = discover_extractors()
 
             cache = None if no_cache else ResultCache()
