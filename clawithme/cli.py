@@ -119,7 +119,7 @@ def _search_leaks(search_term: str, search_type: str,
         _write_search_report(
             report_path, report_format, hits=[], profiles=[], clusters=clusters,
             username=search_term, trace_id=trace_id, breach_dates=breach_dates,
-            log=log, lang="zh",
+            log=log, lang="zh", leak_records=leak_records,
         )
 
 
@@ -290,6 +290,7 @@ def _search_async(username: str, *, report_path: str | None = None,
             report_path, report_format, hits=result.hits, profiles=result.profiles,
             clusters=result.clusters, username=username, trace_id=trace_id,
             breach_dates=breach_dates, log=log, lang=lang,
+            leak_records=result.leak_records,
         )
 
 
@@ -496,6 +497,7 @@ def _search_sync(username: str, *, search_type: str, report_path: str | None,
             report_path, report_format, hits=hits, profiles=profiles,
             clusters=clusters, username=username, trace_id=trace_id,
             breach_dates=breach_dates, log=log, lang="zh",
+            leak_records=leak_records,
         )
 
 
@@ -592,6 +594,7 @@ def _write_search_report(
     breach_dates: list[str],
     log,
     lang: str = "zh",
+    leak_records: list | None = None,
 ) -> None:
     """Write HTML/JSON/PDF report with path traversal protection.
 
@@ -614,7 +617,8 @@ def _write_search_report(
     else:
         from clawithme.report.generator import generate_report
         output = generate_report(hits, profiles, clusters, username,
-                                 trace_id=trace_id, breach_dates=breach_dates, lang=lang)
+                                 trace_id=trace_id, breach_dates=breach_dates,
+                                 leak_records=leak_records, lang=lang)
         _write_report(output, report_path, report_format, log, mode="text")
 
 

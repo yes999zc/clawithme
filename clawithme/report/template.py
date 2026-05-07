@@ -341,6 +341,17 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 /* ── Footer ──────────────────────────────────── */
 .footer {{ margin-top: 56px; padding-top: 16px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #b0b0b0; }}
 
+.action-items {{ margin-top: 40px; }}
+.action-items h2 {{ font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--accent); }}
+.action-item {{ display: flex; gap: 10px; padding: 12px 16px; margin-bottom: 8px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.06); font-size: 14px; }}
+.action-icon {{ font-size: 18px; flex-shrink: 0; }}
+.action-item .action-body {{ flex: 1; }}
+.action-item .action-title {{ font-weight: 600; margin-bottom: 2px; }}
+.action-item .action-detail {{ font-size: 12px; color: #808080; }}
+.action-item.warn {{ border-left: 3px solid var(--amber); }}
+.action-item.info {{ border-left: 3px solid var(--accent); }}
+.action-item.danger {{ border-left: 3px solid var(--red); }}
+
 /* ── Timeline ───────────────────────────────── */
 .timeline {{ overflow-x: auto; padding: 16px 0; }}
 .timeline-track {{ display: flex; align-items: flex-end; gap: 0; min-height: 80px; position: relative; }}
@@ -437,6 +448,8 @@ h3 {{ font-size: 14px; font-weight: 500; color: #4d4d4d; letter-spacing: 0.02em;
 <div class="section-header"><span class="badge">04</span><h2>{sec_analytics}</h2></div>
 {chart_section}
 </div></div>
+
+{actions_section}
 
 <div class="footer">
   <p><strong>CLAWITHME</strong> &mdash; {footer_brand_line}</p>

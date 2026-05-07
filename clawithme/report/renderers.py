@@ -977,3 +977,125 @@ def _render_radar(lang: str, true_hits: list[dict], clusters: list,
         + svg +
         '</div>'
     )
+
+
+# ── Action Items ───────────────────────────────────────────────
+
+
+def _compute_actions(
+    profiles: list[dict],
+    leak_records: list,
+    clusters: list,
+    true_hits: list[dict],
+    lang: str = "zh",
+) -> list[dict]:
+    """Compute actionable recommendations based on search results.
+
+    Returns a list of action dicts with keys: icon, type (warn/info/danger),
+    title, detail.
+    """
+    LANG = _STRINGS.get(lang, _STRINGS["zh"])
+    actions: list[dict] = []
+
+    # 1. Leaked credentials → suggest password changes
+    leak_emails = set()
+    for r in leak_records:
+        email = getattr(r, "email", "")
+        if email:
+            leak_emails.add(email[:3] + "***@" + email.split("@")[-1] if "@" in email else email[:3] + "***")
+    if leak_emails:
+        actions.append({
+            "icon": "🔓",
+            "type": "danger",
+            "title": LANG.get("action_leak_title", "数据泄露预警"),
+            "detail": LANG.get("action_leak_detail",
+                               "你的邮箱出现在 {n} 次数据泄露中。建议立即修改相关平台密码，"
+                               "并开启双因素认证（2FA）。")
+                     .format(n=len(leak_emails))
+                     + " " + ", ".join(leak_emails),
+        })
+
+    # 2. Avatar reuse across platforms → privacy risk
+    avatar_sites = [p for p in profiles if p.get("avatar_url")]
+    if len(avatar_sites) >= 3:
+        sites = [p.get("site_id", "") for p in avatar_sites][:5]
+        actions.append({
+            "icon": "🖼️",
+            "type": "warn",
+            "title": LANG.get("action_avatar_title", "头像跨平台复用"),
+            "detail": LANG.get("action_avatar_detail",
+                               "你的头像在 {n} 个平台相同或高度相似，"
+                               "容易被跨平台关联追踪。建议为不同平台使用不同头像。")
+                     .format(n=len(avatar_sites))
+                     + " (" + ", ".join(sites) + ")",
+        })
+
+    # 3. Many sites found → high digital exposure
+    if len(true_hits) >= 8:
+        actions.append({
+            "icon": "📡",
+            "type": "warn",
+            "title": LANG.get("action_exposure_title", "数字足迹较广"),
+            "detail": LANG.get("action_exposure_detail",
+                               "你在 {n} 个平台有公开账号。建议定期审查，"
+                               "注销不再使用的账号以降低信息泄露面。")
+                     .format(n=len(true_hits)),
+        })
+
+    # 4. Empty profiles → delete or update
+    empty_profiles = [p for p in profiles if not p.get("display_name") and not p.get("bio")]
+    if empty_profiles:
+        e_sites = [p.get("site_id", "") for p in empty_profiles]
+        actions.append({
+            "icon": "👻",
+            "type": "info",
+            "title": LANG.get("action_empty_title", "空白/僵尸账号"),
+            "detail": LANG.get("action_empty_detail",
+                               "以下平台存在您的账号但无公开资料：{sites}。"
+                               "建议注销或补充隐私设置。")
+                     .format(sites=", ".join(e_sites)),
+        })
+
+    # 5. Same username everywhere → easy to track
+    if len(true_hits) >= 5:
+        actions.append({
+            "icon": "🎯",
+            "type": "info",
+            "title": LANG.get("action_username_title", "用户名一致暴露关联"),
+            "detail": LANG.get("action_username_detail",
+                               "你在 {n} 个平台使用相同或相似用户名，"
+                               "陌生人可以通过用户名搜索到你的全部网络身份。"
+                               "考虑在不同平台使用不同用户名以增强隐私。")
+                     .format(n=len(true_hits)),
+        })
+
+    return actions
+
+
+def _render_actions(actions: list[dict], lang: str = "zh") -> str:
+    """Render action items section."""
+    if not actions:
+        return ""
+
+    LANG = _STRINGS.get(lang, _STRINGS["zh"])
+    items_html = ""
+    for a in actions:
+        items_html += (
+            f'<div class="action-item {a["type"]}">'
+            f'<div class="action-icon">{a["icon"]}</div>'
+            f'<div class="action-body">'
+            f'<div class="action-title">{_esc(a["title"])}</div>'
+            f'<div class="action-detail">{_esc(a["detail"])}</div>'
+            f'</div></div>'
+        )
+
+    return (
+        '<div class="section"><div class="section-card">'
+        '<div class="section-header">'
+        '<span class="badge">建议</span>'
+        f'<h2>{LANG.get("actions_heading", "可操作建议")}</h2>'
+        '</div>'
+        f'<p class="section-explain">{LANG.get("actions_explain", "基于搜索结果自动生成的安全和隐私建议。")}</p>'
+        f'<div class="action-items">{items_html}</div>'
+        '</div></div>'
+    )

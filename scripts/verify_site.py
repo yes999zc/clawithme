@@ -234,6 +234,8 @@ def main():
     parser = argparse.ArgumentParser(description="Verify site detection rules")
     parser.add_argument("site_id", nargs="?", help="Site ID to verify")
     parser.add_argument("--all", action="store_true", help="Verify all sites")
+    parser.add_argument("--auto-fix", action="store_true",
+                        help="Auto-set health field in site JSONs based on verification results")
     args = parser.parse_args()
 
     setup_logging()
@@ -249,6 +251,17 @@ def main():
             result = verify_site(site, engines)
             print(format_result(result))
             print()
+
+            # Auto-fix: write back health status to site JSON
+            if args.auto_fix and not result["deprecated"] and not result.get("auth_gated"):
+                old_health = site.get("health", "ok")
+                new_health = "ok" if result["summary"]["healthy"] else "broken"
+                if old_health != new_health:
+                    site["health"] = new_health
+                    site["last_health_check"] = __import__("datetime").datetime.utcnow().isoformat() + "Z"  # noqa
+                    json_file.write_text(json.dumps(site, indent=2, ensure_ascii=False) + "\n")
+                    print(f"   🔧 health: {old_health} → {new_health}")
+
             all_results.append(result)
 
         # Summary (deprecated/auth-gated sites counted separately)

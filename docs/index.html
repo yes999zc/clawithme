@@ -31,6 +31,16 @@ h2{font-size:20px;font-weight:600;letter-spacing:-0.3px}
 h3{font-size:14px;font-weight:500;color:#4d4d4d;letter-spacing:.02em}
 .meta{color:#808080;font-size:12px}
 .section{margin-top:48px}.section+.section{margin-top:56px}
+
+/* Persona Tabs */
+.persona-tabs{display:flex;gap:8px;margin-top:32px;justify-content:center;flex-wrap:wrap}
+.persona-tab{padding:10px 20px;border-radius:10px;border:2px solid #e5e5e5;background:#fff;font:600 14px 'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.persona-tab:hover{border-color:var(--accent-subtle)}
+.persona-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.persona-tab .emoji{font-size:18px}
+.persona-features{display:none;margin-top:20px;padding:16px 20px;background:#fafafa;border-radius:10px;font-size:14px;color:var(--accent-subtle);line-height:1.8}
+.persona-features.active{display:block}
+.persona-features strong{color:#171717}
 .divider{border:0;border-top:1px solid #e5e5e5;margin:20px 0 24px}
 
 /* ── Hero ─────────────────────────────────── */
@@ -154,6 +164,30 @@ footer a{color:#808080}
   </div>
   <div id="demo-notice" class="demo-notice">
     ⚠️ 这是演示页面，展示的是虚构示例数据。<a href="https://github.com/yes999zc/clawithme">安装完整版</a> 体验实时搜索 3000+ 站点。
+  </div>
+
+  <div class="persona-tabs">
+    <button class="persona-tab active" onclick="switchPersona('osint')"><span class="emoji">🔍</span> 安全研究员</button>
+    <button class="persona-tab" onclick="switchPersona('privacy')"><span class="emoji">🔒</span> 注重隐私的个人</button>
+    <button class="persona-tab" onclick="switchPersona('hr')"><span class="emoji">💼</span> HR / 背调</button>
+  </div>
+  <div id="persona-osint" class="persona-features active">
+    <strong>一站式 OSINT 调查</strong> — 输入一个用户名，同时在 3,000+ 平台上探测目标的存在。<br>
+    独有的中国互联网覆盖（16 个中文平台 + Discuz! 引擎），maigret/sherlock 无法企及。<br>
+    <strong>7 信号身份关联</strong>：邮箱、电话、头像哈希、用户名相似度 → 自动聚类跨平台身份。<br>
+    <strong>泄露库集成</strong>：Cavalier + HIBP 并行查询，发现关联的泄露记录。
+  </div>
+  <div id="persona-privacy" class="persona-features">
+    <strong>了解你的数字足迹</strong> — 一键扫描你的用户名出现在哪些平台上。<br>
+    发现被遗忘的旧账号 → <strong>可操作建议</strong>告诉你该注销哪些、该修改什么隐私设置。<br>
+    检测你的邮箱/手机是否出现在数据泄露中 → 提醒修改密码。<br>
+    <strong>头像复用检测</strong>：发现跨平台使用相同头像 → 建议差异化以降低追踪风险。
+  </div>
+  <div id="persona-hr" class="persona-features">
+    <strong>候选人网络足迹审计</strong> — 输入候选人的常用用户名，快速了解其公开形象。<br>
+    <strong>LinkedIn 深度提取</strong>（需候选人授权或公开信息）：工作经历、教育背景、技能标签。<br>
+    <strong>平台分布报告</strong>：开发社区、社交媒体、论坛等分类统计。<br>
+    导出 <strong>HTML / JSON / PDF / Markdown</strong> 报告，可直接附在背调材料中。
   </div>
 </div>
 
@@ -504,6 +538,12 @@ clawithme search alice_dev \<br>
 <script>
 function runDemo(){
   document.getElementById('demo-notice').style.display='block';
+}
+function switchPersona(name) {
+  document.querySelectorAll('.persona-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.persona-features').forEach(f => f.classList.remove('active'));
+  document.querySelector(`.persona-tab[onclick*="${name}"]`).classList.add('active');
+  document.getElementById('persona-' + name).classList.add('active');
 }
 </script>
 </body>

@@ -18,11 +18,13 @@ from datetime import UTC, datetime
 from clawithme.report.i18n import _STRINGS, _CONFIDENCE_THRESHOLDS
 from clawithme.report.template import _HTML, _fmt_esc
 from clawithme.report.renderers import (
+    _compute_actions,
     _compute_hit_confidence,
     _compose_summary,
     _hit_site_id,
     _is_wrong_person,
     _pick_display_name,
+    _render_actions,
     _render_charts,
     _render_clusters,
     _render_dropped_note,
@@ -50,6 +52,7 @@ def generate_report(  # noqa: PLR0913
     *,
     trace_id: str = "",
     breach_dates: list[str] | None = None,
+    leak_records: list | None = None,
     lang: str = "zh",
 ) -> str:
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M UTC")
@@ -142,6 +145,10 @@ def generate_report(  # noqa: PLR0913
         cluster_section=_render_clusters(lang, clusters, consensus_name, true_hits),
         timeline_section=_render_timeline(lang, breach_dates or []),
         chart_section=_render_charts(lang, true_hits, clusters, profiles),
+        actions_section=_render_actions(
+            _compute_actions(profiles, leak_records or [], clusters, true_hits, lang=lang),
+            lang=lang,
+        ),
         trace_id=_fmt_esc(trace_id),
     )
 

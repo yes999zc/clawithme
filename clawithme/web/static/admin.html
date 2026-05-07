@@ -65,6 +65,13 @@
   <div id="save-status" class="status"></div>
 </div>
 
+<!-- Site Health -->
+<div class="card">
+  <h2>🏥 站点健康</h2>
+  <p>探测规则自检状态。运行 <code>python scripts/verify_site.py --all --auto-fix</code> 自动更新。</p>
+  <div id="health-status" style="font-size:14px;margin-top:8px">Loading...</div>
+</div>
+
 <!-- Sites by Tier -->
 <div class="card">
   <h2>站点分级分布</h2>
@@ -218,9 +225,30 @@ async function loadLinkedinStatus() {
   }
 }
 
+async function loadHealth() {
+  const el = document.getElementById('health-status');
+  try {
+    const res = await fetch('/api/admin/sites/health');
+    const data = await res.json();
+    const parts = [
+      `<span style="color:#188038">✅ ${data.healthy} healthy</span>`,
+      `<span style="color:#d93025">❌ ${data.broken} broken</span>`,
+      `<span style="color:var(--muted)">❓ ${data.unknown} unknown</span>`,
+    ];
+    el.innerHTML = parts.join(' &nbsp;·&nbsp; ');
+    if (data.broken_sites.length > 0) {
+      const list = data.broken_sites.map(s => `<span class="site-tag none">${s.id}</span>`).join(' ');
+      el.innerHTML += `<div style="margin-top:8px"><strong>待修复:</strong> ${list}</div>`;
+    }
+  } catch (e) {
+    el.textContent = '加载失败: ' + e.message;
+  }
+}
+
 loadConfig();
 loadSites();
 loadLinkedinStatus();
+loadHealth();
 </script>
 </body>
 </html>

@@ -166,6 +166,30 @@ async def get_sites_by_tier(request: Request):
     return {tier: sorted(ids) for tier, ids in by_tier.items()}
 
 
+@router.get("/sites/health")
+async def get_sites_health(request: Request):
+    """Return site health summary: healthy, broken, unknown counts + broken list."""
+    sites = load_all_sites(include_migrated=False)
+    healthy = []
+    broken = []
+    unknown = []
+    for site in sites:
+        h = site.get("health", "unknown")
+        if h == "ok":
+            healthy.append(site["id"])
+        elif h == "broken":
+            broken.append({"id": site["id"], "name": site["name"], "last_check": site.get("last_health_check", "")})
+        else:
+            unknown.append(site["id"])
+    return {
+        "total": len(sites),
+        "healthy": len(healthy),
+        "broken": len(broken),
+        "unknown": len(unknown),
+        "broken_sites": broken,
+    }
+
+
 @router.get("/linkedin/cookies")
 async def get_linkedin_cookie_status(request: Request):
     """Return LinkedIn cookie status (configured, file exists, count, age)."""
