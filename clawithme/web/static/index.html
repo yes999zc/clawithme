@@ -332,6 +332,7 @@
 <header class="header">
   <div class="header-brand">clawithme</div>
   <div class="header-lang">
+    <a href="/admin" title="Admin" style="text-decoration:none;color:inherit;margin-right:12px;font-size:16px">⚙️</a>
     <span id="langToggleZh" class="active" onclick="setLang('zh')">中文</span>
     <span class="sep">|</span>
     <span id="langToggleEn" onclick="setLang('en')">EN</span>
@@ -358,12 +359,14 @@
       <label><input type="checkbox" id="chkMigrated"> <span data-i18n="optFullScan">Full scan (3119 sites, slower)</span></label>
       <label><input type="checkbox" id="chkNoCache"> <span data-i18n="optNoCache">No cache</span></label>
       <label><input type="checkbox" id="chkSync"> <span data-i18n="optSync">Sync mode</span></label>
+      <label><input type="checkbox" id="chkIncremental"> <span data-i18n="optIncremental">Incremental (skip cached)</span></label>
     </div>
 
     <label class="ethics-row">
       <input type="checkbox" id="ethics">
       <span data-i18n="ethicsLabel">I own this account or have authorization to search it</span>
     </label>
+    <div id="linkedinStatus" style="font-size:12px;color:var(--text-tertiary);margin-top:8px;display:none"></div>
   </div>
 
   <div class="scroll-hint" id="scrollHint">↓ Scroll for results</div>
@@ -452,10 +455,17 @@ const _STRINGS = {
     searchTypeEmail: '邮箱泄露搜索（仅查询泄露库）',
     searchTypePhone: '手机泄露搜索（仅查询泄露库）',
     searchTypeUsername: '用户名搜索（全量站点探测）',
+    optIncremental: '增量搜索（复用缓存，仅探测新站点）',
     done: '搜索完成', llmActive: 'LLM 验证器已启用', sources: '数据源',
     cancelled: '已取消',
     error: '错误',
     fullProfileData: '完整资料',
+    linkedinOk: '✅ LinkedIn 已连接',
+    linkedinNo: '⚠️ 未连接 LinkedIn',
+    phaseSetup: '正在加载...',
+    phaseProbe: '正在探测 {n} 个站点...',
+    phaseScanning: '正在扫描站点并查询泄露库...',
+    phaseExtract: '正在提取资料...',
   },
   en: {
     heroSub: 'Open-source OSINT identity search',
@@ -482,10 +492,17 @@ const _STRINGS = {
     searchTypeEmail: 'Email leak search (no site probing)',
     searchTypePhone: 'Phone leak search (no site probing)',
     searchTypeUsername: 'Username search (full site probing)',
+    optIncremental: 'Incremental (skip cached, probe new only)',
     done: 'Search complete', llmActive: 'LLM verifier active', sources: 'Sources',
     cancelled: 'Cancelled',
     error: 'Error',
     fullProfileData: 'Full profile data',
+    linkedinOk: '✅ LinkedIn connected',
+    linkedinNo: '⚠️ LinkedIn not connected',
+    phaseSetup: 'Loading...',
+    phaseProbe: 'Probing {n} sites...',
+    phaseScanning: 'Scanning sites and querying leak databases...',
+    phaseExtract: 'Extracting profiles...',
   },
 };
 
@@ -612,9 +629,10 @@ async function doSearch() {
   const migrated = document.getElementById('chkMigrated').checked ? 'true' : 'false';
   const noCache  = document.getElementById('chkNoCache').checked ? 'true' : 'false';
   const sync     = document.getElementById('chkSync').checked ? 'true' : 'false';
+  const incremental = document.getElementById('chkIncremental').checked ? 'true' : 'false';
 
   const qp = new URLSearchParams({
-    ethics: 'true', migrated, no_cache: noCache, sync, lang: _currentLang,
+    ethics: 'true', migrated, no_cache: noCache, sync, incremental, lang: _currentLang,
   });
   const url = `/api/search/${encodeURIComponent(username)}?${qp.toString()}`;
 
@@ -625,7 +643,14 @@ async function doSearch() {
     if (_cancelFlag) return;
     try {
       const d = JSON.parse(e.data);
-      document.getElementById('phaseIndicator').textContent = d.message;
+      // Use localized phase messages
+      const phaseMap = {
+        setup: L('phaseSetup'),
+        probe: L('phaseProbe').replace('{n}', d.total || ''),
+        scanning: L('phaseScanning'),
+        extract: L('phaseExtract'),
+      };
+      document.getElementById('phaseIndicator').textContent = phaseMap[d.phase] || d.message;
       if (d.total) setProgress(20 + Math.min(60, (d.total / 50) * 60));
       else setProgress(30);
     } catch(_) {}
@@ -966,8 +991,26 @@ function renderClustersAndSingletons() {
   }
 }
 
+// ── LinkedIn status ─────────────────────────────────────────────
+async function checkLinkedinStatus() {
+  try {
+    const res = await fetch('/api/admin/linkedin/cookies');
+    const data = await res.json();
+    const el = document.getElementById('linkedinStatus');
+    if (data.configured && data.exists && data.fresh) {
+      el.textContent = L('linkedinOk');
+      el.style.color = '#166534';
+    } else {
+      el.textContent = L('linkedinNo');
+      el.style.color = '#808080';
+    }
+    el.style.display = 'block';
+  } catch(_) {}
+}
+
 // ── Init ──────────────────────────────────────────────────────
 applyI18n();
+checkLinkedinStatus();
 document.getElementById('usernameInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') doSearch();
 });

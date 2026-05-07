@@ -126,7 +126,7 @@ async def admin_panel():
 # ── SSE Search ─────────────────────────────────────────────────
 
 
-async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR0912, PLR0915
+async def _search_stream(username: str, request: Request, incremental: bool = False):  # noqa: PLR0911, PLR0912, PLR0915
     """SSE generator: yields events as the pipeline progresses."""
     trace_id = new_trace_id()
     log = get_logger(trace_id=trace_id, username=username)
@@ -170,6 +170,7 @@ async def _search_stream(username: str, request: Request):  # noqa: PLR0911, PLR
     pipeline = AsyncPipeline(
         sites, engines, extractors, cfg,
         cache=cache, llm_verifier=llm_verifier,
+        incremental=incremental,
     )
 
     # Pre-pipeline status so the user knows something is happening
@@ -323,8 +324,9 @@ async def search_stream(username: str, request: Request):
     ethics_param = request.query_params.get("ethics")
     if ethics_header != "true" and ethics_param != "true":
         return JSONResponse(status_code=400, content={"error": "Ethics acknowledgment required"})
+    incremental = request.query_params.get("incremental", "false") == "true"
     return StreamingResponse(
-        _search_stream(username, request),
+        _search_stream(username, request, incremental=incremental),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
