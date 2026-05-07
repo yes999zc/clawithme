@@ -315,7 +315,7 @@
     display:flex; align-items:center; justify-content:center;
   }
   .card-av img { width:100%; height:100%; object-fit:cover; }
-  .card-av-fallback { font-size:16px; font-weight:600; color:var(--text-tertiary); text-transform:uppercase; }
+  .card-av-fallback { font-size:16px; font-weight:600; color:var(--text-tertiary); text-transform:uppercase; display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:#f5f5f5; }
   .card-name { font-size:16px; font-weight:500; letter-spacing:-0.32px; }
   .card-site { font-size:12px; font-weight:400; color:var(--text-tertiary); }
   .card-bio { font-size:14px; color:var(--text-secondary); line-height:1.5; }
@@ -1053,14 +1053,12 @@ async function doSearch() {
       if (d.avatar_url) {
         const img = h('img', { src: d.avatar_url, alt: '' });
         img.onerror = function() {
-          const name = pickDisplayName(d.display_name, d.site_id);
           this.style.display = 'none';
-          avatarEl.appendChild(h('span', { className: 'card-av-fallback' }, name ? name[0] : '?'));
+          avatarEl.appendChild(siteIconEl(d.site_id));
         };
         avatarEl.appendChild(img);
       } else {
-        const name = pickDisplayName(d.display_name, d.site_id);
-        avatarEl.appendChild(h('span', { className: 'card-av-fallback' }, name ? name[0] : '?'));
+        avatarEl.appendChild(siteIconEl(d.site_id));
       }
 
       const completenessFields = [d.display_name, d.bio, d.location, d.avatar_url, d.follower_count];
@@ -1349,6 +1347,40 @@ function setLang(lang) {
   $('langToggleZh').className = lang === 'zh' ? 'active' : '';
   $('langToggleEn').className = lang === 'en' ? 'active' : '';
   applyI18n();
+}
+
+// ══════════════════════════════════════════════════════════════
+// Site favicon helper — Google favicons as avatar fallback
+// ══════════════════════════════════════════════════════════════
+const _SITE_DOMAINS = {
+  github:'github.com', zhihu:'zhihu.com', twitter:'twitter.com',
+  linkedin:'linkedin.com', instagram:'instagram.com', reddit:'reddit.com',
+  v2ex:'v2ex.com', bilibili:'bilibili.com', weibo:'weibo.com',
+  douban:'douban.com', csdn:'csdn.net', juejin:'juejin.cn',
+  jianshu:'jianshu.com', cnblogs:'cnblogs.com', coolapk:'coolapk.com',
+  steam:'steamcommunity.com', youtube:'youtube.com', medium:'medium.com',
+  hackernews:'news.ycombinator.com', telegram:'t.me', patreon:'patreon.com',
+  devto:'dev.to', gitee:'gitee.com', keybase:'keybase.io',
+  stackoverflow:'stackoverflow.com', flickr:'flickr.com', huaban:'huaban.com',
+  zcool:'zcool.com.cn', sspai:'sspai.com', netease_music:'music.163.com',
+  acfun:'acfun.cn', hupu:'hupu.com', twitch:'twitch.tv', spotify:'spotify.com',
+  pinterest:'pinterest.com', lofter:'lofter.com', oschina:'oschina.net',
+  quora:'quora.com', slideshare:'slideshare.net', tianya:'tianya.cn',
+  baidu_zhidao:'zhidao.baidu.com', leetcode:'leetcode.com', chess:'chess.com',
+  discogs:'discogs.com', codepen:'codepen.io', blogger:'blogger.com',
+  nm:'nm.com', wordpress:'wordpress.com',
+};
+function siteIconEl(siteId) {
+  const domain = _SITE_DOMAINS[siteId];
+  if (!domain) {
+    return h('span', { className:'card-av-fallback' }, (siteId[0]||'?').toUpperCase());
+  }
+  const img = h('img', { src:'https://www.google.com/s2/favicons?domain='+domain+'&sz=64', alt:'', style:'padding:4px;width:100%;height:100%;object-fit:contain' });
+  img.onerror = function() { this.style.display='none'; };
+  img.onload = function() { if (this.naturalWidth===0 || this.naturalHeight===0) this.style.display='none'; };
+  const wrap = h('div', { style:'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f5f5f5' });
+  wrap.appendChild(img);
+  return wrap;
 }
 
 // ══════════════════════════════════════════════════════════════
