@@ -9,7 +9,7 @@
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noarchive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{% endblock %}Clawith.me SEARCH</title>
+  <title>{% block title %}{% endblock %}{{ instance_name }}</title>
   <script type="module" src="{{ url_for('static', filename='sxng-core.min.js') }}" client_settings="{{ client_settings }}"></script>
   {% block meta %}{% endblock %}
   {% if rtl %}
