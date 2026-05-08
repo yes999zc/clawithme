@@ -22,7 +22,8 @@ services:
       - "8888:8080"
     volumes:
       - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
-      - ./searxng/templates/simple:/usr/local/searxng/searx/templates/simple:ro
+      - ./searxng/templates/simple/base.html:/usr/local/searxng/searx/templates/simple/base.html:ro
+      - ./searxng/clawithme-logo.png:/usr/local/searxng/searx/static/themes/simple/img/searxng.png:ro
     environment:
       - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
     restart: unless-stopped

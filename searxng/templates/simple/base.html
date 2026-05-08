@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="endpoint" content="{{ endpoint }}">
-  <meta name="description" content="Clawith.me SEARCH — Powered by SearXNG">
-  <meta name="keywords" content="Clawith.me, SearXNG, search, metasearch">
+  <meta name="description" content="SearXNG — a privacy-respecting, open metasearch engine">
+  <meta name="keywords" content="SearXNG, search, search engine, metasearch, meta search">
   <meta name="generator" content="searxng/{{ searxng_version }}">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noarchive">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{% endblock %}Clawith.me SEARCH</title>
+  <title>{% block title %}{% endblock %}{{ instance_name }}</title>
   <script type="module" src="{{ url_for('static', filename='sxng-core.min.js') }}" client_settings="{{ client_settings }}"></script>
   {% block meta %}{% endblock %}
   {% if rtl %}
@@ -65,7 +65,7 @@
     {% endblock %}
   </main>
   <footer>
-    <p>Powered by <a href="https://github.com/searxng/searxng">SearXNG</a></p>
+    <p>Powered by SearXNG — 尊重隐私的开源元搜索引擎 | <a href="https://clawith.me">返回CLAWITHME</a></p>
 </footer>
 </body>
 </html>
