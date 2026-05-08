@@ -24,6 +24,7 @@ services:
       - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
       - ./searxng/templates/simple/base.html:/usr/local/searxng/searx/templates/simple/base.html:ro
       - ./searxng/templates/simple/index.html:/usr/local/searxng/searx/templates/simple/index.html:ro
+      - ./searxng/templates/simple/search.html:/usr/local/searxng/searx/templates/simple/search.html:ro
       - ./searxng/clawithme-logo.png:/usr/local/searxng/searx/static/themes/simple/img/searxng.png:ro
     environment:
       - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
