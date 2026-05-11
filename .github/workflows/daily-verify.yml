@@ -22,8 +22,8 @@ jobs:
           pip install -e ".[dev]" jsonschema curl_cffi
           pip install playwright
           playwright install chromium --with-deps
-      - name: Verify all sites
-        run: python scripts/verify_site.py --all
+      - name: Verify all sites (exclude paid APIs)
+        run: python scripts/verify_site.py --all --exclude-paid
       - name: Extractor health check
         run: python scripts/extractor_health.py --json
         continue-on-error: true

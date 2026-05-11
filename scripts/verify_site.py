@@ -234,6 +234,8 @@ def main():
     parser = argparse.ArgumentParser(description="Verify site detection rules")
     parser.add_argument("site_id", nargs="?", help="Site ID to verify")
     parser.add_argument("--all", action="store_true", help="Verify all sites")
+    parser.add_argument("--exclude-paid", action="store_true",
+                        help="Exclude paid API sites (douyin, xiaohongshu, linkedin)")
     parser.add_argument("--auto-fix", action="store_true",
                         help="Auto-set health field in site JSONs based on verification results")
     args = parser.parse_args()
@@ -248,6 +250,8 @@ def main():
             if "migrated" in json_file.parts:
                 continue
             site = json.loads(json_file.read_text())
+            if args.exclude_paid and site.get("id") in {"douyin", "xiaohongshu", "linkedin"}:
+                continue
             result = verify_site(site, engines)
             print(format_result(result))
             print()
