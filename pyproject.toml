@@ -25,7 +25,6 @@ dependencies = [
     "pydantic>=2.0",
     "structlog>=24.0",
     "scrapling>=0.4",
-    "browserforge>=1.0",
     "imagehash>=4.3",
     "Pillow>=10.0",
     "jsonschema>=4.26.0",
@@ -107,6 +106,7 @@ pinterest = "clawithme.crawler.extractors.pinterest:PinterestExtractor"
 tumblr = "clawithme.crawler.extractors.tumblr:TumblrExtractor"
 soundcloud = "clawithme.crawler.extractors.soundcloud:SoundcloudExtractor"
 fiverr = "clawithme.crawler.extractors.fiverr:FiverrExtractor"
+discord = "clawithme.crawler.extractors.discord:DiscordExtractor"
 
 [project.urls]
 Homepage = "https://github.com/yes999zc/clawithme"

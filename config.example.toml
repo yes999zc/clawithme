@@ -27,6 +27,9 @@ hibp_api_key = ""
 dehashed_api_key = ""
 dehashed_email = ""
 
+# Discord Bot API (for Discord profile extraction)
+discord_bot_token = ""
+
 [cookies]
 # LinkedIn cookie file (JSON format, exported from browser DevTools).
 # Go to linkedin.com → F12 → Application → Cookies → select all → Copy as JSON.

@@ -3,6 +3,10 @@ FROM python:3.11-slim
 
 ENV PIP_PREFER_BINARY=1
 
+# ── Optional API tokens ──
+# Discord Bot Token for Discord profile extraction
+# ENV DISCORD_BOT_TOKEN=
+
 # System deps: libcurl + build tools for Scrapling
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libcurl4-openssl-dev libssl-dev build-essential \
