@@ -1,0 +1,36 @@
+{
+  "id": "discord",
+  "name": "Discord",
+  "primary": "social",
+  "canonical_url": "https://discord.com/",
+  "engine_ref": "base_http_status",
+  "classification": {
+    "primary": "social",
+    "identity_type": "virtual_social",
+    "geo_region": "global",
+    "user_scale": 500000000,
+    "tags": [
+      "chat",
+      "gaming",
+      "community"
+    ]
+  },
+  "rankings": {
+    "similarweb_global": 150
+  },
+  "check": {
+    "probe_url": "https://discord.com/api/v10/users/{username}",
+    "expected": 200,
+    "known_accounts": [
+      "270904126974590976",
+      "643945264868098049"
+    ],
+    "known_unclaimed": [
+      "99999999999999999999"
+    ]
+  },
+  "nsfw": false,
+  "deprecated": false,
+  "source": "manual",
+  "last_updated": "2026-05-11T00:00:00Z"
+}
