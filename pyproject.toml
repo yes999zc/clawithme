@@ -25,6 +25,7 @@ dependencies = [
     "pydantic>=2.0",
     "structlog>=24.0",
     "scrapling>=0.4",
+    "browserforge>=1.0",
     "imagehash>=4.3",
     "Pillow>=10.0",
     "jsonschema>=4.26.0",
