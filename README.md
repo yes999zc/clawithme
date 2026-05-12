@@ -1,203 +1,181 @@
 # clawithme
 
-<div align="center">
+<p align="center">
+  <a href="https://clawith.me"><img src="https://img.shields.io/badge/Web%20UI-clawith.me-16a34a?style=flat-square&labelColor=171717"/></a>
+  <a href="https://pypi.org/project/clawithme/"><img src="https://img.shields.io/pypi/v/clawithme?style=flat-square&labelColor=171717&color=16a34a"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-808080?style=flat-square&labelColor=171717"/></a>
+  <a href="https://github.com/yes999zc/clawithme/actions"><img src="https://img.shields.io/github/actions/workflow/status/yes999zc/clawithme/ci.yml?style=flat-square&labelColor=171717&color=16a34a"/></a>
+</p>
 
-[![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=flat-square)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![CI](https://github.com/yes999zc/clawithme/actions/workflows/ci.yml/badge.svg)](https://github.com/yes999zc/clawithme/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/clawithme?style=flat-square)](https://pypi.org/project/clawithme/)
-[![tests](https://img.shields.io/badge/tests-243%20passed-brightgreen?style=flat-square)](https://github.com/yes999zc/clawithme/actions)
+<p align="center">
+  <b>OSINT identity panorama scanner.</b><br>
+  Enter a username, email, or phone — discover presence across 3,200+ platforms,<br>
+  correlate identities, and export professional reports.
+</p>
 
-**Username to identity panorama — for the Chinese internet and beyond.**
-
-</div>
+<p align="center">
+  <a href="https://clawith.me"><b>Try the Web UI →</b></a>
+</p>
 
 ---
 
-Input a username. Discover their presence across 3000+ platforms — from social networks to dev communities, from Chinese local forums to global sites. Link identities through email, phone, avatar hashes, and leaked credentials. Export self-contained reports in HTML, PDF, JSON, or **Markdown**. All powered by an async pipeline with LLM identity verification.
+## Overview
+
+clawithme scans global platforms — from social networks and developer communities to Chinese forums and e-commerce sites — for a given identity signal, then cross-correlates the results to build a unified identity panorama.
+
+| Stage | What it does |
+|-------|-------------|
+| **Probe** | 3,200+ sites across 9 detection engines (HTTP status, body markers, CMS fingerprinting) |
+| **Extract** | 49 platform-specific extractors: GitHub, Zhihu, LinkedIn, HackerNews, Douban, etc. |
+| **Leak Check** | Cavalier infostealer records + HIBP breach database, parallel query |
+| **Correlate** | Multi-signal identity clustering: email, phone, avatar pHash, username similarity |
+| **Verify** | LLM-based confidence scoring across DeepSeek / Kimi / 百炼 |
+| **Report** | Self-contained HTML / PDF / JSON / Markdown export |
+
+---
 
 ## Quick Start
 
-### Docker
-
 ```bash
+# Via Docker
 docker pull ghcr.io/yes999zc/clawithme
 docker run -p 8000:8000 ghcr.io/yes999zc/clawithme
+
+# Open http://localhost:8000
+
+# CLI usage
+docker run ghcr.io/yes999zc/clawithme \
+  clawithme search <username> --acknowledge-ethical-use
+
+# Generate a report
+docker run ghcr.io/yes999zc/clawithme \
+  clawithme search <username> \
+  --report report.html --acknowledge-ethical-use
 ```
 
-Then open http://localhost:8000 to use the Web UI. For CLI usage:
-
 ```bash
-docker run ghcr.io/yes999zc/clawithme clawithme search <username> --acknowledge-ethical-use
-```
-
-### PyPI
-
-```bash
+# Via PyPI
 pip install clawithme[web]
-clawithme-web  # → http://localhost:8000
+clawithme-web                    # → http://localhost:8000
 clawithme search <username> --acknowledge-ethical-use
 ```
 
-### From Source
-
 ```bash
+# From source
 git clone https://github.com/yes999zc/clawithme.git
 cd clawithme
 pip install -e ".[dev]"
 clawithme search <username> --acknowledge-ethical-use
 ```
 
-### Generate Reports
-
-```bash
-clawithme search <username> --report report.html --acknowledge-ethical-use
-clawithme search <username> --report report.pdf --format pdf --acknowledge-ethical-use
-```
-
-## Pipeline
-
-```
-username
-  |
-  +-- Phase 1: Site probing (44 curated + 2487 migrated, 9 CMS engines)
-  |     |
-  |     +-- HTTP status code / body message / header matching
-  |     +-- Scrapling anti-bot fingerprinting
-  |     +-- SearXNG fallback for un-hit sites
-  |
-  +-- Phase 2: Profile extraction (49 extractors: GitHub, Zhihu, Reddit, LinkedIn, ...)
-  |     +-- CSS/XPath selectors, Playwright for JS-rendered pages
-  |     +-- Avatar perceptual hash (pHash)
-  |
-  +-- Phase 3: Leak database query (Cavalier + HIBP, parallel manager)
-  |
-  +-- Phase 4: Multi-signal correlation
-  |     +-- email (1.0) · phone (0.95) · avatar pHash (0.8) · username (0.7)
-  |     +-- Union-Find transitive closure + anti-merge gate
-  |
-  +-- Phase 5: Geist HTML / PDF report
-  |     +-- Platform distribution charts · Breach timeline
-  |     +-- Identity clusters with confidence badges · PII redaction
-  |
-  +-- Phase 6: LLM Verifier (DeepSeek/Kimi/百炼, provider-agnostic)
-  |     +-- SQLite result caching
-  |
-  +-- Phase 7: Async pipeline (asyncio.gather, 10 concurrent, 180s→14s)
-  |
-  +-- Phase 8: Web UI (FastAPI + SSE streaming) + PDF export (WeasyPrint)
-```
+---
 
 ## Features
 
-- **9 detection engines** — status code, body message, headers, plus XenForo/Discourse/phpBB/vBulletin/WordPress/Discuz! CMS
-- **3000+ sites** — 44 hand-curated + 2487 migrated from maigret_china, all engine-assigned
-- **49 profile extractors** — GitHub, Zhihu, Reddit, LinkedIn, HackerNews, Douban, Juejin, NGA, and more
-- **Async pipeline** — 10-concurrent asyncio.gather, cold search 180s→14s
-- **Leak database** — Cavalier infostealer records + HIBP breach database, parallel query with graceful degradation
-- **LLM verifier** — DeepSeek/Kimi/百炼 multi-provider, auto-discovery, structured confidence scoring
-- **Identity correlation** — Union-Find clustering across email, phone, avatar hash, and username similarity, with anti-merge gate
-- **Geist report** — self-contained HTML + PDF via WeasyPrint, grayscale design, CSS-only charts, PII redacted
-- **Web UI** — FastAPI + SSE streaming search, Geist frontend, zero-config deploy
-- **Plugin architecture** — Extractor discovery via `entry_points`; CN and international extractors unified in monorepo ([clawithme-cn](https://github.com/yes999zc/clawithme-cn) archived)
-- **Schema-first** — JSON Schema validation on every site definition, CI-enforced
-- **CI/CD** — PR schema validation + daily site verification + auto-release to PyPI
+- **3,200+ sites** — curated probes + migrated dataset, engine-classified
+- **9 detection engines** — status code, body markers, headers; CMS: XenForo, Discourse, phpBB, vBulletin, WordPress, Discuz!
+- **49 profile extractors** — GitHub, Zhihu, Reddit, LinkedIn, HackerNews, Douban, Juejin, NGA, Steam, and more
+- **Async pipeline** — 10-concurrent `asyncio.gather`, cold search 180s → 14s
+- **Leak database** — Cavalier infostealer + HIBP, parallel with graceful degradation
+- **LLM verification** — DeepSeek / Kimi / 百炼 multi-provider, structured confidence scoring
+- **Identity clustering** — Union-Find transitive closure across email, phone, pHash, username; anti-merge gate
+- **Professional reports** — Geist-designed HTML, PDF via WeasyPrint, grayscale aesthetic, PII-redacted
+- **Web UI** — FastAPI + SSE streaming, Geist frontend, zero-config deploy
+- **Paid API integrations** — Douyin / Xiaohongshu / LinkedIn via TikHub (optional, opt-in)
 
-## Screenshots
-
-> Screenshots coming soon — showing the Web UI with donut/bar charts, cluster cards, and report previews.
-
-## vs maigret
-
-| | maigret | clawithme |
-|---|---------|-----------|
-| Site storage | Monolithic `data.json` | One JSON per site + JSON Schema |
-| Detection | Hardcoded ~1200 lines | 9 pluggable engines in `engines.json` |
-| HTTP layer | aiohttp + requests | Scrapling (curl_cffi fingerprinting) |
-| Deep extraction | socid_extractor plugin | Built-in GitHub + Zhihu extractors |
-| Leak database | None | Cavalier + HIBP, parallel manager |
-| Correlation | None | Union-Find: email/phone/avatar/username |
-| Quality gate | None | CI: daily verify + Schema + Ruff |
-| Chinese sites | Limited | 16 CN platforms + Discuz! engine |
-
-## Installation
-
-### PyPI
-
-```bash
-pip install clawithme[web]
-```
-
-### Docker
-
-```bash
-docker pull ghcr.io/yes999zc/clawithme
-docker run -p 8000:8000 ghcr.io/yes999zc/clawithme
-```
-
-The image includes all dependencies (WeasyPrint, Noto CJK fonts) and runs the Web UI on port 8000. Override the entrypoint for CLI usage:
-
-```bash
-docker run ghcr.io/yes999zc/clawithme clawithme search <username> --acknowledge-ethical-use
-```
-
-### From Source
-
-```bash
-git clone https://github.com/yes999zc/clawithme.git
-cd clawithme
-pip install -e ".[dev]"
-```
-
-Requires Python 3.11+.
+---
 
 ## Usage
 
 ```bash
-# Basic search (curated 44 sites)
-clawithme search yes999zc --acknowledge-ethical-use
+# Basic search (curated sites)
+clawithme search <username> --acknowledge-ethical-use
 
-# Full search (all 3000+ sites)
-clawithme search yes999zc --include-migrated --acknowledge-ethical-use
+# Full search (all 3,200+ sites)
+clawithme search <username> --include-migrated --acknowledge-ethical-use
 
-# Generate HTML report
-clawithme search yes999zc --report report.html --acknowledge-ethical-use
+# Report formats
+clawithme search <username> --report report.html --acknowledge-ethical-use
+clawithme search <username> --report report.pdf --format pdf --acknowledge-ethical-use
+clawithme search <username> --report report.json --format json --acknowledge-ethical-use
+clawithme search <username> --report report.md --format md --acknowledge-ethical-use
 
-# Generate JSON / PDF / Markdown report
-clawithme search yes999zc --report report.json --format json --acknowledge-ethical-use
-clawithme search yes999zc --report report.pdf --format pdf --acknowledge-ethical-use
-clawithme search yes999zc --report report.md --format md --acknowledge-ethical-use
-
-# Validate site database
+# Validation & stats
 python scripts/validate.py
 python scripts/verify_site.py --all
 python scripts/stats.py
 
-# Run tests
+# Tests
 pytest tests/ -v
 ```
 
+---
+
+## Architecture
+
+```
+┌─ Input ─────────────────────────────┐
+│  username / email / phone           │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─ Phase 1: Probe ───────────────────┐
+│  3,200+ sites · 9 engines          │
+│  Scrapling fingerprinting          │
+│  SearXNG fallback                  │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─ Phase 2: Extract ─────────────────┐
+│  49 platform extractors            │
+│  CSS/XPath · Playwright            │
+│  Avatar pHash                      │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─ Phase 3: Leak Check ──────────────┐
+│  Cavalier + HIBP (parallel)        │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─ Phase 4: Correlate ───────────────┐
+│  Multi-signal Union-Find           │
+│  email(1.0)·phone(0.95)·pHash(0.8)│
+│  ·username(0.7)                    │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─ Phase 5: Verify ──────────────────┐
+│  LLM provider-agnostic verifier    │
+│  Structured confidence output      │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─ Phase 6: Report ──────────────────┐
+│  HTML / PDF / JSON / Markdown      │
+│  Identity clusters · PII redaction │
+│  Breach timeline · Distribution    │
+└────────────────────────────────────┘
+```
+
+---
+
+## vs Maigret
+
+| | maigret | clawithme |
+|---|---------|-----------|
+| **Site storage** | Monolithic `data.json` | One JSON per site + JSON Schema |
+| **Detection** | Hardcoded ~1,200 lines | 9 pluggable engines |
+| **HTTP layer** | aiohttp + requests | Scrapling (curl_cffi fingerprinting) |
+| **Deep extraction** | Plugin-based | Built-in extractors (GitHub, Zhihu, etc.) |
+| **Leak database** | None | Cavalier + HIBP, parallel |
+| **Identity correlation** | None | Union-Find: email/phone/avatar/username |
+| **Quality gate** | None | CI: daily verification + Schema + Ruff |
+| **Chinese platforms** | Limited | 16+ CN platforms + Discuz! engine |
+
+---
+
 ## Ethical Use
 
-**This tool queries public profiles and breach databases. Use only on accounts you own or have explicit authorization to investigate.** Unauthorized use may violate platform Terms of Service, privacy laws (GDPR, PIPL), and ethical norms.
+**This tool queries public profiles and breach databases. Use only on accounts you own or have explicit authorization to investigate.** Unauthorized use may violate platform Terms of Service, privacy regulations (GDPR, PIPL), and ethical norms.
 
-The CLI enforces an `--acknowledge-ethical-use` gate.
+The CLI enforces an `--acknowledge-ethical-use` flag. The Web UI requires an ethics checkbox before each search.
 
-## Creating a Release
-
-1. Ensure all changes are committed and pushed to `main`.
-2. Tag the release and push:
-
-   ```bash
-   git tag v0.2.0          # bump version in pyproject.toml first
-   git push --tags
-   ```
-
-3. The [Release workflow](.github/workflows/release.yml) automatically:
-   - Builds the wheel
-   - Runs a smoke test (import check)
-   - Publishes to PyPI (requires `PYPI_TOKEN` secret configured in repo)
-   - Creates a GitHub Release with auto-generated release notes
+---
 
 ## License
 
