@@ -6,7 +6,7 @@ Replaces maigret's native requests/httpx with anti-bot fingerprinting.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from scrapling import Fetcher
@@ -51,11 +51,10 @@ class HttpClient:
         from scrapling import Fetcher
 
         self._log = get_logger(trace_id=trace_id) if trace_id else logger
-        # Scrapling Fetcher auto-handles TLS fingerprints
-        fetcher_kwargs: dict[str, Any] = {}
-        if proxy:
-            fetcher_kwargs["proxy"] = proxy
-        self._fetcher: Fetcher = Fetcher(**fetcher_kwargs)
+        # Scrapling's Fetcher exposes class-level request methods; instantiating
+        # it only creates a deprecated compatibility shim.
+        self._fetcher = Fetcher
+        self._proxy = proxy
         self._timeout_ms = timeout_ms
 
     @property
@@ -72,9 +71,11 @@ class HttpClient:
         self._log.debug("http.get", url=url)
         effective_ms = timeout_ms if timeout_ms is not None else self._timeout_ms
         timeout = max(1, effective_ms // 1000)
-        kwargs: dict[str, Any] = {"timeout": timeout}
+        kwargs = {"timeout": timeout}
         if headers:
             kwargs["headers"] = headers
+        if self._proxy:
+            kwargs["proxy"] = self._proxy
         page = self._fetcher.get(url, **kwargs)
         return self._to_response(page)
 
@@ -86,9 +87,11 @@ class HttpClient:
         """
         self._log.debug("http.head", url=url)
         timeout = max(1, self._timeout_ms // 1000)
-        kwargs: dict[str, Any] = {"timeout": timeout}
+        kwargs = {"timeout": timeout}
         if headers:
             kwargs["headers"] = headers
+        if self._proxy:
+            kwargs["proxy"] = self._proxy
         # Scrapling Fetcher doesn't have a head() method; use GET with stream-ish
         # For our use case, HEAD ≈ lightweight GET (we only care about status)
         page = self._fetcher.get(url, **kwargs)
@@ -100,11 +103,13 @@ class HttpClient:
         """HTTP POST."""
         self._log.debug("http.post", url=url)
         timeout = max(1, self._timeout_ms // 1000)
-        kwargs: dict[str, Any] = {"timeout": timeout}
+        kwargs = {"timeout": timeout}
         if headers:
             kwargs["headers"] = headers
         if data:
             kwargs["data"] = data
+        if self._proxy:
+            kwargs["proxy"] = self._proxy
         page = self._fetcher.post(url, **kwargs)
         return self._to_response(page)
 

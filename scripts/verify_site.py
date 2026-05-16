@@ -39,9 +39,10 @@ def _fetch_dynamic_page(url: str) -> HttpResponse | None:
         return None
     try:
         from scrapling import DynamicFetcher
-        df = DynamicFetcher()
-        page = df.fetch(url, timeout=15000, headless=True,
-                        disable_resources=True, block_ads=True)
+        page = DynamicFetcher.fetch(
+            url, timeout=15000, headless=True,
+            disable_resources=True, block_ads=True,
+        )
         body = page.body if page.body else b""
         text = str(page.html_content) if page.html_content else ""
         if not text and body:

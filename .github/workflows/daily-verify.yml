@@ -9,8 +9,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Install system deps
@@ -25,10 +25,9 @@ jobs:
       - name: Verify all sites (exclude paid APIs)
         run: python scripts/verify_site.py --all --exclude-paid
       - name: Extractor health check
-        run: python scripts/extractor_health.py --json
-        continue-on-error: true
+        run: python scripts/extractor_health.py --json --soft-fail
       - name: Report failures
         if: failure()
         run: |
-          echo "⚠️ Some site detection rules have degraded."
+          echo "Some site detection rules have degraded."
           echo "Check the logs above for specific failures."

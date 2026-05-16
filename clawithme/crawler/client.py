@@ -138,7 +138,7 @@ class CrawlerClient:
             return None
         if self._dynamic is None:
             from scrapling import DynamicFetcher
-            self._dynamic = DynamicFetcher()
+            self._dynamic = DynamicFetcher
         return self._dynamic
 
     # ── Robots.txt compliance (optional, opt-in per extractor) ─

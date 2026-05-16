@@ -124,7 +124,7 @@ class Engine:
             return None
         if self._dynamic is None:
             from scrapling import DynamicFetcher
-            self._dynamic = DynamicFetcher()
+            self._dynamic = DynamicFetcher
         return self._dynamic
 
     def _fetch_dynamic(

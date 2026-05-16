@@ -47,17 +47,15 @@ class TestEngineTemplateSubstitution:
 
 
 class TestEngineProbe:
-    @patch("scrapling.Fetcher")
-    def test_status_code_probe_existing(self, mock_fetcher_class):
-        mock_fetcher = MagicMock()
+    @patch("scrapling.Fetcher.get")
+    def test_status_code_probe_existing(self, mock_get):
         mock_page = MagicMock()
         mock_page.status = 200
         mock_page.url = "https://example.com"
         mock_page.text = ""
         mock_page.headers = {}
         mock_page.body = b""
-        mock_fetcher.get.return_value = mock_page
-        mock_fetcher_class.return_value = mock_fetcher
+        mock_get.return_value = mock_page
 
         engine = Engine({"name": "test", "classifier": "status_code"})
         result = engine.probe(ZHIHU_SITE, "zhangjiawei")
@@ -66,17 +64,15 @@ class TestEngineProbe:
         assert result.status_code == 200
         assert result.classifier == "status_code"
 
-    @patch("scrapling.Fetcher")
-    def test_status_code_probe_missing(self, mock_fetcher_class):
-        mock_fetcher = MagicMock()
+    @patch("scrapling.Fetcher.get")
+    def test_status_code_probe_missing(self, mock_get):
         mock_page = MagicMock()
         mock_page.status = 404
         mock_page.url = "https://example.com"
         mock_page.text = ""
         mock_page.headers = {}
         mock_page.body = b""
-        mock_fetcher.get.return_value = mock_page
-        mock_fetcher_class.return_value = mock_fetcher
+        mock_get.return_value = mock_page
 
         engine = Engine({"name": "test", "classifier": "status_code"})
         result = engine.probe(ZHIHU_SITE, "nonexistent")
@@ -84,17 +80,15 @@ class TestEngineProbe:
         assert result.exists is False
         assert result.status_code == 404
 
-    @patch("scrapling.Fetcher")
-    def test_message_probe_presence(self, mock_fetcher_class):
-        mock_fetcher = MagicMock()
+    @patch("scrapling.Fetcher.get")
+    def test_message_probe_presence(self, mock_get):
         mock_page = MagicMock()
         mock_page.status = 200
         mock_page.url = "https://example.com"
         mock_page.text = "Welcome Alice! Edit your profile here."
         mock_page.headers = {}
         mock_page.body = b""
-        mock_fetcher.get.return_value = mock_page
-        mock_fetcher_class.return_value = mock_fetcher
+        mock_get.return_value = mock_page
 
         engine = Engine({"name": "test", "classifier": "message"})
         site = {
@@ -109,17 +103,15 @@ class TestEngineProbe:
         result = engine.probe(site, "alice")
         assert result.exists is True
 
-    @patch("scrapling.Fetcher")
-    def test_message_probe_absence(self, mock_fetcher_class):
-        mock_fetcher = MagicMock()
+    @patch("scrapling.Fetcher.get")
+    def test_message_probe_absence(self, mock_get):
         mock_page = MagicMock()
         mock_page.status = 200
         mock_page.url = "https://example.com"
         mock_page.text = "User not found. Please try again."
         mock_page.headers = {}
         mock_page.body = b""
-        mock_fetcher.get.return_value = mock_page
-        mock_fetcher_class.return_value = mock_fetcher
+        mock_get.return_value = mock_page
 
         engine = Engine({"name": "test", "classifier": "message"})
         site = {

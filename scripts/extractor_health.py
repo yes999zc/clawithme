@@ -73,6 +73,10 @@ def main():
         "--json", action="store_true",
         help="Output JSON report instead of human-readable table",
     )
+    parser.add_argument(
+        "--soft-fail", action="store_true",
+        help="Report degraded extractors without returning a non-zero exit code",
+    )
     args = parser.parse_args()
 
     setup_logging()
@@ -120,6 +124,9 @@ def main():
         total = len(results)
         print(f"Summary: {ok_count} OK, {len(degraded)} degraded, {len(failed)} failed / {total} total")
         print()
+
+    if args.soft_fail:
+        return
 
     if any(r["status"] == "FAILED" for r in results):
         sys.exit(2)

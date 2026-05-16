@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Open-source OSINT tool — username to identity panorama"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "9哥"}
 ]
@@ -16,7 +16,6 @@ keywords = ["osint", "username", "investigation", "privacy"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.11",
     "Topic :: Security",
 ]
@@ -128,6 +127,9 @@ include = ["clawithme*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+filterwarnings = [
+    "ignore:The 'strip_cdata' option of HTMLParser\\(\\) has never done anything and will eventually be removed\\.:DeprecationWarning:lxml.html",
+]
 
 [tool.ruff]
 target-version = "py311"

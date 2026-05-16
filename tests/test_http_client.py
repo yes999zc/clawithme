@@ -25,17 +25,15 @@ class TestHttpResponse:
 
 
 class TestHttpClient:
-    @patch("scrapling.Fetcher")
-    def test_get_returns_response(self, mock_fetcher_class):
-        mock_fetcher = MagicMock()
+    @patch("scrapling.Fetcher.get")
+    def test_get_returns_response(self, mock_get):
         mock_page = MagicMock()
         mock_page.status = 200
         mock_page.url = "http://example.com"
         mock_page.text = "hello"
         mock_page.headers = {"Content-Type": "text/html"}
         mock_page.body = b"hello"
-        mock_fetcher.get.return_value = mock_page
-        mock_fetcher_class.return_value = mock_fetcher
+        mock_get.return_value = mock_page
 
         client = HttpClient()
         resp = client.get("http://example.com")
@@ -44,17 +42,15 @@ class TestHttpClient:
         assert resp.text == "hello"
         assert resp.ok is True
 
-    @patch("scrapling.Fetcher")
-    def test_get_404(self, mock_fetcher_class):
-        mock_fetcher = MagicMock()
+    @patch("scrapling.Fetcher.get")
+    def test_get_404(self, mock_get):
         mock_page = MagicMock()
         mock_page.status = 404
         mock_page.url = "http://example.com/404"
         mock_page.text = ""
         mock_page.headers = {}
         mock_page.body = b""
-        mock_fetcher.get.return_value = mock_page
-        mock_fetcher_class.return_value = mock_fetcher
+        mock_get.return_value = mock_page
 
         client = HttpClient()
         resp = client.get("http://example.com/404")
@@ -62,3 +58,22 @@ class TestHttpClient:
         assert resp.status_code == 404
         assert resp.ok is False
         assert resp.is_not_found is True
+
+    @patch("scrapling.Fetcher.get")
+    def test_get_passes_proxy(self, mock_get):
+        mock_page = MagicMock()
+        mock_page.status = 200
+        mock_page.url = "http://example.com"
+        mock_page.text = "ok"
+        mock_page.headers = {}
+        mock_page.body = b"ok"
+        mock_get.return_value = mock_page
+
+        client = HttpClient(proxy="http://proxy.example:8080")
+        client.get("http://example.com")
+
+        mock_get.assert_called_once_with(
+            "http://example.com",
+            timeout=5,
+            proxy="http://proxy.example:8080",
+        )
