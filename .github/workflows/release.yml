@@ -21,8 +21,7 @@ jobs:
         run: python -m build
       - name: Run tests
         run: |
-          pip install dist/*.whl
-          pip install pytest
+          python -m pip install "$(ls dist/*.whl)[dev]"
           pytest tests/ -q
       - name: Publish to PyPI
         env:

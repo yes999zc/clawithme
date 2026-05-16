@@ -3,12 +3,15 @@ __pycache__
 *.pyc
 .DS_Store
 .env
+.venv/
+venv/
 *.egg-info
 build/
 dist/
 .gitignore
-pytest_cache/
+.pytest_cache/
 .ruff_cache/
+uv.lock
 tests/
 *report*.html
 *report*.json

@@ -14,6 +14,7 @@ services:
       - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY:-}
       - KIMI_API_KEY=${KIMI_API_KEY:-}
       - HIBP_API_KEY=${HIBP_API_KEY:-}
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN:-}
     restart: unless-stopped
 
   searxng:

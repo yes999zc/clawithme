@@ -1,7 +1,10 @@
 # clawithme — Docker image
 FROM python:3.11-slim
 
-ENV PIP_PREFER_BINARY=1
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_PREFER_BINARY=1 \
+    DEBIAN_FRONTEND=noninteractive
 
 # ── Optional API tokens ──
 # Discord Bot Token for Discord profile extraction
@@ -21,16 +24,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install --upgrade pip
 
-# Install Python deps (all have pre-built ARM64 wheels)
-RUN pip install --prefer-binary \
-    scrapling curl_cffi browserforge playwright fastapi uvicorn weasyprint slowapi \
-    pydantic structlog msgspec Pillow jsonschema imagehash
-RUN playwright install --with-deps chromium 2>&1 | tail -3
+WORKDIR /app
+
+# Install dependencies before copying source so code-only changes reuse this layer.
+COPY pyproject.toml README.md /app/
+RUN pip install --prefer-binary ".[web]"
+RUN playwright install --with-deps chromium
 
 # Install clawithme itself (pure Python, no compilation)
 COPY . /app
-WORKDIR /app
 RUN pip install --no-deps -e .
 
 EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).read()"
 ENTRYPOINT ["python", "-m", "clawithme.web.app"]
