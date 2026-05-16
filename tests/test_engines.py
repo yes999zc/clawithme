@@ -1,5 +1,7 @@
 """Tests for Engine — detection logic with template sandbox."""
 
+import sys
+from types import ModuleType
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -131,3 +133,62 @@ class TestEngineProbe:
         }
         result = engine.probe(site, "alice")
         assert result.exists is False
+
+    def test_playwright_fetch_closes_resources_on_page_error(self, monkeypatch):
+        mock_browser = MagicMock()
+        mock_context = MagicMock()
+        mock_page = MagicMock()
+        mock_page.goto.side_effect = TimeoutError("navigation timed out")
+        mock_context.new_page.return_value = mock_page
+        mock_browser.new_context.return_value = mock_context
+
+        mock_pw = MagicMock()
+        mock_pw.chromium.launch.return_value = mock_browser
+        mock_sync_playwright = MagicMock()
+        mock_sync_playwright.return_value.__enter__.return_value = mock_pw
+
+        playwright_module = ModuleType("playwright")
+        sync_api_module = ModuleType("playwright.sync_api")
+        sync_api_module.sync_playwright = mock_sync_playwright
+        monkeypatch.setitem(sys.modules, "playwright", playwright_module)
+        monkeypatch.setitem(sys.modules, "playwright.sync_api", sync_api_module)
+
+        engine = Engine({"name": "test", "classifier": "status_code"})
+        result = engine._fetch_playwright("https://example.com")
+
+        assert result is None
+        mock_context.close.assert_called_once()
+        mock_browser.close.assert_called_once()
+
+    def test_playwright_fetch_suppresses_close_errors(self, monkeypatch):
+        mock_browser = MagicMock()
+        mock_context = MagicMock()
+        mock_page = MagicMock()
+        mock_resp = MagicMock()
+        mock_resp.status = 200
+        mock_resp.headers = {}
+        mock_page.goto.return_value = mock_resp
+        mock_page.content.return_value = "ok"
+        mock_page.url = "https://example.com"
+        mock_context.close.side_effect = OSError("close failed")
+        mock_context.new_page.return_value = mock_page
+        mock_browser.new_context.return_value = mock_context
+
+        mock_pw = MagicMock()
+        mock_pw.chromium.launch.return_value = mock_browser
+        mock_sync_playwright = MagicMock()
+        mock_sync_playwright.return_value.__enter__.return_value = mock_pw
+
+        playwright_module = ModuleType("playwright")
+        sync_api_module = ModuleType("playwright.sync_api")
+        sync_api_module.sync_playwright = mock_sync_playwright
+        monkeypatch.setitem(sys.modules, "playwright", playwright_module)
+        monkeypatch.setitem(sys.modules, "playwright.sync_api", sync_api_module)
+
+        engine = Engine({"name": "test", "classifier": "status_code"})
+        result = engine._fetch_playwright("https://example.com")
+
+        assert result is not None
+        assert result.status_code == 200
+        mock_context.close.assert_called_once()
+        mock_browser.close.assert_called_once()

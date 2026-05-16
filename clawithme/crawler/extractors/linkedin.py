@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import re
+from contextlib import suppress
 from pathlib import Path
 from urllib.parse import quote
 
@@ -71,37 +72,46 @@ def _fetch_playwright_page(url: str, cookies: list[dict]) -> "HttpResponse | Non
 
     try:
         with sync_playwright() as pw:
+            browser = None
+            context = None
             browser = pw.chromium.launch(
                 headless=True,
                 args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
             )
-            context = browser.new_context(
-                viewport={"width": 1280, "height": 800},
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/131.0.0.0 Safari/537.36"
-                ),
-            )
-            page = context.new_page()
-            page.add_init_script("""
-                Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
-            """)
             try:
-                context.add_cookies(cookies)
-            except Exception:
-                pass
+                context = browser.new_context(
+                    viewport={"width": 1280, "height": 800},
+                    user_agent=(
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/131.0.0.0 Safari/537.36"
+                    ),
+                )
+                page = context.new_page()
+                page.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                """)
+                try:
+                    context.add_cookies(cookies)
+                except Exception:
+                    pass
 
-            resp = page.goto(url, wait_until="domcontentloaded", timeout=20000)
-            status = resp.status if resp else 0
-            text = page.content()
-            headers = dict(resp.headers) if resp and resp.headers else {}
+                resp = page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                status = resp.status if resp else 0
+                text = page.content()
+                headers = dict(resp.headers) if resp and resp.headers else {}
 
-            browser.close()
-            return HttpResponse(
-                status_code=status, url=page.url,
-                text=text, headers=headers,
-            )
+                return HttpResponse(
+                    status_code=status, url=page.url,
+                    text=text, headers=headers,
+                )
+            finally:
+                if context is not None:
+                    with suppress(Exception):
+                        context.close()
+                if browser is not None:
+                    with suppress(Exception):
+                        browser.close()
     except (OSError, TimeoutError) as e:
         logger.warning("playwright_fetch_failed", url=url, error=str(e))
         return None

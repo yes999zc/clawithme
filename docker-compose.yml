@@ -2,6 +2,7 @@ services:
   clawithme:
     build: .
     container_name: clawithme
+    init: true
     ports:
       - "8080:8000"
     volumes:
